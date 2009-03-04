@@ -122,6 +122,10 @@
 ;;yasnippet
 (require 'yasnippet-bundle)
 
+;;asciidoc markup mode
+(require 'asciidoc-mode)
+(autoload 'asciidoc-mode "asciidoc-mode")
+
 ;; mingus mpd controller
 (autoload 'mingus "mingus")
 
