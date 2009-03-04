@@ -1,0 +1,52 @@
+8
+
+dir
+113
+svn+ssh://qdot@nonpolynomial.com/home/npscm/svn/home-dir/.elisp/themes
+svn+ssh://qdot@nonpolynomial.com/home/npscm/svn
+
+
+
+2007-06-22T05:32:51.417275Z
+6
+qdot
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d11c8fc9-7733-0410-8fce-ca23d2b10411
+
+color-theme-library.el
+file
+
+
+
+
+2008-05-13T18:05:36.000000Z
+885ae7f72a6dfba0b3b4055add6caacd
+2007-06-22T05:32:51.417275Z
+6
+qdot
+
+color-theme-example.el
+file
+
+
+
+
+2008-05-13T18:05:36.000000Z
+59db97b984eaed8ba75757446f77cead
+2007-06-22T05:32:51.417275Z
+6
+qdot
+
