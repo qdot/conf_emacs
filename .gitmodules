@@ -1,0 +1,3 @@
+[submodule "elisp_local/cedet"]
+	path = elisp_local/cedet
+	url = git://github.com/emacs-pkg-mirrors/cedet.git
