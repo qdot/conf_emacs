@@ -34,6 +34,19 @@
 ;; Programming related stuff
 (load-file "~/.emacs_files/emacs_conf_programming.el")
 (load-file "~/.emacs_files/emacs_conf_ccmode.el")
-(load-file "~/.emacs_files/emacs_conf_cedet.el")
-(load-file "~/.emacs_files/emacs_conf_ede.el")
+
+;; Check to see if we've checked out cedet, if so, load
+(when (file-exists-p "~/.emacs_files/elisp_local/cedet/common/cedet.el")
+  (load-file "~/.emacs_files/emacs_conf_cedet.el")
+  (load-file "~/.emacs_files/emacs_conf_ede_home.el")
+  (when (file-exists-p "~/.emacs_files/emacs_conf_ede_work.el")
+    (load-file "~/.emacs_files/emacs_conf_ede_work.el")
+    )
+  )
+
+;; Check to see if we've checked out ecb, if so, load
+(when (file-exists-p "~/.emacs_files/elisp_local/ecb/ecb.el")
+   (load-file "~/.emacs_files/emacs_conf_ecb.el")
+)
+
 (load-file "~/.emacs_files/emacs_conf_python.el")

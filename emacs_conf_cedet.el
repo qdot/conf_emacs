@@ -30,7 +30,7 @@
 				 '(project unloaded system recursive))
 (setq-mode-local java-mode
 				 semanticdb-find-default-throttle
-				 '(project unloaded system recursive)) 
+				 '(project unloaded system recursive))
 
 
 (require 'semantic-lex-spp)
