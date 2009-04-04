@@ -1,8 +1,22 @@
 (load-file "~/.emacs_files/elisp_local/cedet/common/cedet.el")
 
+(global-ede-mode t)
+
+(setq-default semanticdb-default-save-directory "~/.emacs_meta/semanticdb/"
+              semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
+
 (global-srecode-minor-mode 1)            ; Enable template insertion menu
 
+(setq semantic-load-turn-useful-things-on 1)
 (semantic-load-enable-excessive-code-helpers)
+;;(semantic-load-enable-semantic-debugging-helpers)
+
+(global-semantic-idle-scheduler-mode 1)
+(global-semantic-idle-completions-mode 1)
+(global-semantic-idle-summary-mode 1)
+
+(custom-set-variables
+ '(semantic-idle-scheduler-idle-time 3))
 
 (require 'semantic-ia)
 
@@ -32,6 +46,11 @@
 (require 'semanticdb-global)
 (semanticdb-enable-gnu-global-databases 'c-mode)
 (semanticdb-enable-gnu-global-databases 'c++-mode)
+
+(semantic-add-system-include "/usr/local/include" 'c++-mode)
+(semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
+(semantic-add-system-include "/usr/local/include" 'c-mode)
+
 
 (defun my-cedet-hook ()
   (local-set-key [(control return)] 'semantic-ia-complete-symbol)
@@ -72,4 +91,3 @@
 (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "qconfig.h"))
 (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "qconfig-dist.h"))
 (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "qglobal.h"))
-

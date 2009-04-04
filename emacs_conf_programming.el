@@ -48,3 +48,22 @@
 		 ("ChangeLog\\.txt\\'" . change-log-mode)
 		 ) auto-mode-alist))
 
+;; gdb/gud
+(setq gdb-many-windows t)
+(setq gdb-show-main t)
+(setq gud-chdir-before-run nil)
+(setq gud-tooltip-mode t)
+
+;; gtags
+(autoload 'gtags-mode "gtags" "" t)
+
+;; clean trailing whitespaces automatically
+(setq my-trailing-whitespace-modes '(c++-mode 
+				     c-mode 
+				     haskell-mode 
+				     emacs-lisp-mode
+				     lisp-mode scheme-mode))
+(defun my-trailing-whitespace-hook ()
+  (when (member major-mode my-trailing-whitespace-modes)
+    (delete-trailing-whitespace)))
+(add-hook 'before-save-hook 'my-trailing-whitespace-hook)
