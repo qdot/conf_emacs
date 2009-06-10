@@ -19,10 +19,10 @@
 (autoload 'wikipedia-mode "wikipedia-mode"
   "Major mode for editing documents in Wikipedia markup." t)
 
-(autoload 'php-mode "php-mode" 
+(autoload 'php-mode "php-mode"
   "PHP editing mode" t)
 
-(autoload 'cmake-mode "cmake-mode" 
+(autoload 'cmake-mode "cmake-mode"
   "CMakeLists editing mode" t)
 
 (autoload 'json "json"
@@ -58,12 +58,15 @@
 (autoload 'gtags-mode "gtags" "" t)
 
 ;; clean trailing whitespaces automatically
-(setq my-trailing-whitespace-modes '(c++-mode 
-				     c-mode 
-				     haskell-mode 
+(setq my-trailing-whitespace-modes '(c++-mode
+				     c-mode
+				     haskell-mode
 				     emacs-lisp-mode
 				     lisp-mode scheme-mode))
 (defun my-trailing-whitespace-hook ()
   (when (member major-mode my-trailing-whitespace-modes)
     (delete-trailing-whitespace)))
 (add-hook 'before-save-hook 'my-trailing-whitespace-hook)
+
+(require 'magit)
+

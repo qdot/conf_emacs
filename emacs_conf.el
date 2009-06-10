@@ -6,6 +6,7 @@
 
 (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/magit/"))
 (add-to-list 'load-path (expand-file-name "/usr/local/share/emacs/site-lisp/"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -30,6 +31,7 @@
 (load-file "~/.emacs_files/emacs_conf_color_theme.el")
 (load-file "~/.emacs_files/emacs_conf_ido.el")
 (load-file "~/.emacs_files/emacs_conf_org_mode.el")
+;;(load-file "~/.emacs_files/emacs_conf_wanderlust.el")
 
 ;; Programming related stuff
 (load-file "~/.emacs_files/emacs_conf_programming.el")
@@ -50,3 +52,5 @@
 )
 
 (load-file "~/.emacs_files/emacs_conf_python.el")
+
+(load-file "~/.emacs_files/emacs_conf_anything.el")

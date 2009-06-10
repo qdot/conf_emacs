@@ -21,9 +21,9 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun toggle-max-window () 
+(defun toggle-max-window ()
   (interactive)
-  (set-frame-parameter nil 'fullscreen (if (frame-parameter nil 'fullscreen) 
+  (set-frame-parameter nil 'fullscreen (if (frame-parameter nil 'fullscreen)
 					   nil
 					 'fullboth)))
 
@@ -40,3 +40,14 @@
 )
 (add-hook 'kill-emacs-query-functions 'ask-before-quit)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Get IP Address
+;; http://emacs-fu.blogspot.com/2009/05/getting-your-ip-address.html
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun get-ip-address (&optional dev)
+  "get the IP-address for device DEV (default: eth0)"
+  (let ((dev (if dev dev "eth0")))
+    (format-network-address (car (network-interface-info dev)) t)))

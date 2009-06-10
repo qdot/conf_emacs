@@ -18,6 +18,11 @@
 ;;asciidoc markup mode
 (require 'asciidoc-mode)
 (autoload 'asciidoc-mode "asciidoc-mode")
+(add-hook 'asciidoc-mode-hook
+		  '(lambda ()
+			 (turn-on-auto-fill)
+			 (require 'asciidoc)))
+
 
 ;; mingus mpd controller
 (autoload 'mingus "mingus")
