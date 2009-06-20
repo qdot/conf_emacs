@@ -49,10 +49,10 @@
       (concat "\"" (replace-regexp-in-string "\"" "\\\\\"" s) "\"")
     s))
 
-(defun jekyll-draft-post (title)
+(defun jekyll-draft-post (blog-dir title)
   "Create a new Jekyll blog post."
-  (interactive "sPost Title: ")
-  (let ((draft-file (concat jekyll-directory jekyll-drafts-dir
+  (interactive "sBlog Directory: " "sPost Title: ")
+  (let ((draft-file (concat blog-dir jekyll-drafts-dir
                             (jekyll-make-slug title)
                             jekyll-post-ext)))
     (if (file-exists-p draft-file)
