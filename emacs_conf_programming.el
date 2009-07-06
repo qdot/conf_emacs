@@ -13,8 +13,8 @@
 (add-hook 'font-lock-mode-hook 'my-doxymacs-font-lock-hook)
 
 ;;add git hooks
-(add-to-list 'vc-handled-backends 'Git)
-(require 'git-emacs)
+;;(add-to-list 'vc-handled-backends 'Git)
+;;(require 'git-emacs)
 
 (autoload 'wikipedia-mode "wikipedia-mode"
   "Major mode for editing documents in Wikipedia markup." t)
@@ -67,6 +67,5 @@
   (when (member major-mode my-trailing-whitespace-modes)
     (delete-trailing-whitespace)))
 (add-hook 'before-save-hook 'my-trailing-whitespace-hook)
-
 (require 'magit)
 
