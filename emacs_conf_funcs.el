@@ -51,3 +51,19 @@
   "get the IP-address for device DEV (default: eth0)"
   (let ((dev (if dev dev "eth0")))
     (format-network-address (car (network-interface-info dev)) t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Reload current file with position saved
+;; http://www.thekidder.net/2008/10/21/emacs-reload-file/
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun reload-file ()
+  (interactive)
+  (let ((curr-scroll (window-vscroll)))
+    (find-file (buffer-name))
+    (set-window-vscroll nil curr-scroll)
+    (message "Reloaded file")))
+
+(global-set-key "\C-c\C-r" 'reload-file)

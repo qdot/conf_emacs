@@ -24,8 +24,17 @@
 			 (require 'asciidoc)))
 
 
+;; markdown mode
+(autoload 'markdown-mode "markdown-mode.el"
+   "Major mode for editing Markdown files" t)
+(setq auto-mode-alist
+   (cons '("\\.markdown" . markdown-mode) auto-mode-alist))
+
+;; jekyll
+(require 'jekyll)
+
 ;; mingus mpd controller
-(autoload 'mingus "mingus")
+(require 'mingus)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;

@@ -1,3 +1,6 @@
 [submodule "elisp_local/cedet"]
 	path = elisp_local/cedet
 	url = git://github.com/emacs-pkg-mirrors/cedet.git
+[submodule "elisp_local/magit"]
+	path = elisp_local/magit
+	url = http://git.gitorious.org/magit/mainline.git
