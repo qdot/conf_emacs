@@ -23,7 +23,7 @@
 
 (provide 'jekyll)
 
-(defvar jekyll-directory nil
+(defvar jekyll-directory "~/git-projects/slashdong.org/"
   "Path to Jekyll blog.")
 (defvar jekyll-drafts-dir "_drafts/"
   "Relative path to drafts directory.")
@@ -49,10 +49,10 @@
       (concat "\"" (replace-regexp-in-string "\"" "\\\\\"" s) "\"")
     s))
 
-(defun jekyll-draft-post (blog-dir title)
+(defun jekyll-draft-post (title)
   "Create a new Jekyll blog post."
-  (interactive "sBlog Directory: " "sPost Title: ")
-  (let ((draft-file (concat blog-dir jekyll-drafts-dir
+  (interactive "sPost Title: ")
+  (let ((draft-file (concat jekyll-directory jekyll-drafts-dir
                             (jekyll-make-slug title)
                             jekyll-post-ext)))
     (if (file-exists-p draft-file)
