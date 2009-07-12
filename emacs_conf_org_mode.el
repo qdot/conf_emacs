@@ -76,3 +76,22 @@
 
 ; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
 (setq org-outline-path-complete-in-steps t)
+
+;;
+;; Resume clocking tasks when emacs is restarted
+(setq org-clock-persistence-insinuate)
+;;
+;; Yes it's long... but more is better ;)
+(setq org-clock-history-length 35)
+;; Resume clocking task on clock-in if the clock is open
+(setq org-clock-in-resume t)
+;; Change task state to STARTED when clocking in
+(setq org-clock-in-switch-to-state "STARTED")
+;; Save clock data and notes in the LOGBOOK drawer
+(setq org-clock-into-drawer t)
+;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
+(setq org-clock-out-remove-zero-time-clocks t)
+;; Don't clock out when moving task to a done state
+(setq org-clock-out-when-done nil)
+;; Save the running clock and all clock history when exiting Emacs, load it on startup
+(setq org-clock-persist t)
