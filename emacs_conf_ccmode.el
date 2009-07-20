@@ -1,6 +1,6 @@
 (setq auto-mode-alist
       (append
-	   '(		 
+	   '(
 		 ("\\.h$"    . c++-mode)
 		 ("\\.H$"    . c++-mode)
 		 ) auto-mode-alist)
@@ -41,7 +41,7 @@
     )
   )
 
-(defun my-next-error () 
+(defun my-next-error ()
   "Move point to next error and highlight it"
   (interactive)
   (progn
@@ -51,7 +51,7 @@
     )
   )
 
-(defun my-previous-error () 
+(defun my-previous-error ()
   "Move point to previous error and highlight it"
   (interactive)
   (progn
@@ -62,7 +62,7 @@
   )
 (global-set-key (kbd "C-n") 'my-next-error)
 (global-set-key (kbd "C-p") 'my-previous-error)
-  
+
 (global-set-key [f5] 'my-recompile)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -72,7 +72,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-hook 'c-mode-common-hook
-		  (lambda() 
+		  (lambda()
 			(local-set-key  (kbd "C-c o") 'ff-find-other-file)))
 
 (setq cc-other-file-alist
@@ -87,4 +87,20 @@
 		)
       )
 
-(setq ff-search-directories '("." "../../src/*" "../../../src/*" "../../include/*" "../../include/geotools/*" "../include/*" "../src/*" "$HOME/build/*" "$HOME/git-projects/*" "/usr/*/include/*"))
+(setq ff-search-directories '(
+							  "."
+							  "../../src/*"
+							  "../../../src/*"
+							  "../../../src/geotools/*"
+							  "../../include/*"
+							  "../../include/geotools/*"
+							  "../../../include/geotools/*"
+							  "../../../include/*"
+							  "../include/geotools/*"
+							  "../include/*"
+							  "../src/*"
+							  "$HOME/build/*"
+							  "$HOME/git-projects/*"
+							  "/usr/*/include/*"
+							  )
+	  )

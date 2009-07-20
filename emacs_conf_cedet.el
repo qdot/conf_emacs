@@ -43,9 +43,9 @@
 (add-hook 'semantic-init-hooks 'my-semantic-hook)
 
 ;; gnu global support
-(require 'semanticdb-global)
-(semanticdb-enable-gnu-global-databases 'c-mode)
-(semanticdb-enable-gnu-global-databases 'c++-mode)
+;; (require 'semanticdb-global)
+;; (semanticdb-enable-gnu-global-databases 'c-mode)
+;; (semanticdb-enable-gnu-global-databases 'c++-mode)
 
 (semantic-add-system-include "/usr/local/include" 'c++-mode)
 (semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
