@@ -92,3 +92,16 @@
 ;; copy emacs clipboard to system
 (setq x-select-enable-clipboard t)
 (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Buffer switching - ibuffer is much better than the regular ol' buffer list
+;; http://nflath.com/2009/07/ibuffer-dired-for-buffers/
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'ibuffer)
+(setq ibuffer-default-sorting-mode 'major-mode)
+(setq ibuffer-always-show-last-buffer t)
+(setq ibuffer-view-ibuffer t)
+(global-set-key  (kbd "C-x C-b")        'ibuffer-other-window)

@@ -5,10 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; Add our prerequisites
-;; Available from http://kanji.zinbun.kyoto-u.ac.jp/~tomo/lemi/dist/apel/
-(add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp/emu"))
-(add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp/apel"))
+;; Make sure we include the apel autoloads before this file (emacs_conf_apel.el)
 
 ;; Set prefix key to `, just like in gnu screen
 (setq elscreen-prefix-key "`")

@@ -26,6 +26,7 @@
 (load-file "~/.emacs_files/emacs_conf_funcs.el")
 (load-file "~/.emacs_files/emacs_conf_binds.el")
 (load-file "~/.emacs_files/emacs_conf_mac.el")
+(load-file "~/.emacs_files/emacs_conf_apel.el")
 
 ;; Navigation and buffer setup
 (load-file "~/.emacs_files/emacs_conf_anything.el")
