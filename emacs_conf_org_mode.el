@@ -4,8 +4,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Most of this ripped from http://doc.norang.ca/org-mode.html
+;; Load in the orgmode code directly from the submodule directory
+(setq load-path (cons "~/.emacs_files/elisp_local/org_mode/lisp" load-path))
+(setq load-path (cons "~/.emacs_files/elisp_local/org_mode/contrib/lisp" load-path))
+(require 'org-install)
 
+;; Most of this ripped from http://doc.norang.ca/org-mode.html
 (setq auto-mode-alist
       (append
        '(("\\.org$"  . org-mode)

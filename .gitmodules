@@ -4,3 +4,6 @@
 [submodule "elisp_local/magit"]
 	path = elisp_local/magit
 	url = http://git.gitorious.org/magit/mainline.git
+[submodule "elisp_local/org_mode"]
+	path = elisp_local/org_mode
+	url = git://repo.or.cz/org-mode.git
