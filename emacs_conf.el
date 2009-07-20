@@ -19,6 +19,7 @@
 (defvar macosx-p (string-match "darwin" (symbol-name system-type)))
 (defvar aquamacs-p (string-match "Aquamacs" (version)))
 
+(set-default-font "consolas-11")
 
 ;; Basic emacs setup, personal functions and keybindings
 (load-file "~/.emacs_files/emacs_conf_setup.el")
@@ -31,7 +32,7 @@
 (load-file "~/.emacs_files/emacs_conf_color_theme.el")
 (load-file "~/.emacs_files/emacs_conf_ido.el")
 (load-file "~/.emacs_files/emacs_conf_org_mode.el")
-;;(load-file "~/.emacs_files/emacs_conf_wanderlust.el")
+(load-file "~/.emacs_files/emacs_conf_wanderlust.el")
 
 ;; Programming related stuff
 (load-file "~/.emacs_files/emacs_conf_programming.el")

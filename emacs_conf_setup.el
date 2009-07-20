@@ -78,7 +78,17 @@
 (setq display-time-day-and-date t)
 (display-time)
 
-;; turn on line numbers for all files
-(defun my-turn-on-line-number-mode () (line-number-mode 1))
-(add-hook 'text-mode-hook 'my-turn-on-line-number-mode)
+(line-number-mode t)
+(column-number-mode t)
+(tool-bar-mode -1)
+(global-font-lock-mode 1)
+(show-paren-mode t)
 
+(custom-set-variables
+ '(scroll-bar-mode 'right)
+ '(indent-tabs-mode nil))
+
+
+;; copy emacs clipboard to system
+(setq x-select-enable-clipboard t)
+(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
