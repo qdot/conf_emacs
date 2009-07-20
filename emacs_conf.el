@@ -27,6 +27,10 @@
 (load-file "~/.emacs_files/emacs_conf_binds.el")
 (load-file "~/.emacs_files/emacs_conf_mac.el")
 
+;; Navigation and buffer setup
+(load-file "~/.emacs_files/emacs_conf_anything.el")
+(load-file "~/.emacs_files/emacs_conf_elscreen.el")
+
 ;; Mode setup
 (load-file "~/.emacs_files/emacs_conf_exts.el")
 (load-file "~/.emacs_files/emacs_conf_color_theme.el")
@@ -37,6 +41,7 @@
 ;; Programming related stuff
 (load-file "~/.emacs_files/emacs_conf_programming.el")
 (load-file "~/.emacs_files/emacs_conf_ccmode.el")
+(load-file "~/.emacs_files/emacs_conf_python.el")
 
 ;; Check to see if we've checked out cedet, if so, load
 (when (file-exists-p "~/.emacs_files/elisp_local/cedet/common/cedet.el")
@@ -52,6 +57,5 @@
    (load-file "~/.emacs_files/emacs_conf_ecb.el")
 )
 
-(load-file "~/.emacs_files/emacs_conf_python.el")
 
-(load-file "~/.emacs_files/emacs_conf_anything.el")
+

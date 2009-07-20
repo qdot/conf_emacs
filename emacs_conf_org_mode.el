@@ -9,7 +9,7 @@
 (setq auto-mode-alist
       (append
        '(("\\.org$"  . org-mode)
-		 ) auto-mode-alist))
+	 ) auto-mode-alist))
 
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
@@ -17,16 +17,18 @@
 
 (setq org-log-done t)
 (setq org-agenda-files (list "~/emacs_org/notes.org"
-						     "~/emacs_org/tasks.org"
-							 "~/emacs_org/work/work.org"
-							 "~/emacs_org/work/geoviewer.org"
+			     "~/emacs_org/tasks.org"
+			     "~/emacs_org/work/work.org"
+			     "~/emacs_org/work/geoviewer.org"
+			     "~/emacs_org/work/geotools.org"
+			     "~/emacs_org/work/build_system.org"
                              "~/emacs_org/home/computer.org"
-							 "~/emacs_org/home/liblightstone.org"
-							 "~/emacs_org/home/libnifalcon.org"
-							 "~/emacs_org/home/libomron.org"
-							 "~/emacs_org/home/libtrancevibe.org"
-							 "~/emacs_org/home/someday.org"
-							 ))
+			     "~/emacs_org/home/liblightstone.org"
+			     "~/emacs_org/home/libnifalcon.org"
+			     "~/emacs_org/home/libomron.org"
+			     "~/emacs_org/home/libtrancevibe.org"
+			     "~/emacs_org/home/someday.org"
+			     ))
 
 ;;
 ;;;  Load Org Remember Stuff
@@ -62,19 +64,19 @@
                                      ("note" ?n "* %?                                        :NOTE:
   %u
   %a" "~/emacs_org/notes.org" bottom nil)
-									 )))
+				     )))
 
 
-; Use IDO for target completion
+					; Use IDO for target completion
 (setq org-completion-use-ido t)
 
-; Targets include this file and any file contributing to the agenda - up to 5 levels deep
+					; Targets include this file and any file contributing to the agenda - up to 5 levels deep
 (setq org-refile-targets (quote ((org-agenda-files :maxlevel . 5) (nil :maxlevel . 5))))
 
-; Targets start with the file name - allows creating level 1 tasks
+					; Targets start with the file name - allows creating level 1 tasks
 (setq org-refile-use-outline-path (quote file))
 
-; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
+					; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
 (setq org-outline-path-complete-in-steps t)
 
 ;;
