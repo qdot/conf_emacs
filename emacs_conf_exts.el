@@ -36,6 +36,9 @@
 ;; mingus mpd controller
 (require 'mingus)
 
+;; mediawiki editor
+(require 'mediawiki)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; active-menu, menu collapsing

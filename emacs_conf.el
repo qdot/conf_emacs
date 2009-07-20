@@ -21,8 +21,19 @@
 
 (set-default-font "consolas-11")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;Make sure we have good ol' LISP available
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'cl)
+
+(defvar *emacs-load-start* (current-time))
+
 ;; Basic emacs setup, personal functions and keybindings
 (load-file "~/.emacs_files/emacs_conf_setup.el")
+(load-file "~/.emacs_files/emacs_conf_custom.el")
 (load-file "~/.emacs_files/emacs_conf_funcs.el")
 (load-file "~/.emacs_files/emacs_conf_binds.el")
 (load-file "~/.emacs_files/emacs_conf_mac.el")
@@ -58,5 +69,11 @@
    (load-file "~/.emacs_files/emacs_conf_ecb.el")
 )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;Time ourselves to see how long loading takes
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
+(message "My .emacs loaded in %ds" (destructuring-bind (hi lo ms) (current-time)
+                           (- (+ hi lo) (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
