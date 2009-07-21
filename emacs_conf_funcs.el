@@ -37,7 +37,7 @@
   "Ask me before I quit emacs if I think that's a good thing to do"
   (interactive)
   (yes-or-no-p "Do you really want to quit Emacs?")
-)
+  )
 (add-hook 'kill-emacs-query-functions 'ask-before-quit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -67,3 +67,38 @@
     (message "Reloaded file")))
 
 (global-set-key "\C-c\C-r" 'reload-file)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Swap buffers in two windows
+;; http://www.emacswiki.org/emacs/TransposeWindows
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(setq swapping-buffer nil)
+(setq swapping-window nil)
+
+(defun swap-buffers-in-windows ()
+  "Swap buffers between two windows"
+  (interactive)
+  (if (and swapping-window
+           swapping-buffer)
+      (let ((this-buffer (current-buffer))
+            (this-window (selected-window)))
+        (if (and (window-live-p swapping-window)
+                 (buffer-live-p swapping-buffer))
+            (progn (switch-to-buffer swapping-buffer)
+                   (select-window swapping-window)
+                   (switch-to-buffer this-buffer)
+                   (select-window this-window)
+                   (message "Swapped buffers."))
+          (message "Old buffer/window killed.  Aborting."))
+        (setq swapping-buffer nil)
+        (setq swapping-window nil))
+    (progn
+      (setq swapping-buffer (current-buffer))
+      (setq swapping-window (selected-window))
+      (message "Buffer and window marked for swapping."))))
+
+(global-set-key (kbd "C-c p") 'swap-buffers-in-windows)
