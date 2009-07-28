@@ -51,3 +51,29 @@
   "active-menu"
   "Show menu only when mouse is at the top of the frame."
   t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Additions to dired
+;; http://nflath.com/2009/07/dired/
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'dired-x)
+(require 'wdired)
+(setq wdired-allow-to-change-permissions 'advanced)
+(define-key dired-mode-map	      	      (kbd "r")		'wdired-change-to-wdired-mode)
+
+;;Updated file system on all buffer switches if in dired mode
+(defadvice switch-to-buffer-other-window (after auto-refresh-dired (buffer &optional norecord) activate)
+  (if (equal major-mode 'dired-mode)
+      (revert-buffer)))
+(defadvice switch-to-buffer (after auto-refresh-dired (buffer &optional norecord) activate)
+  (if (equal major-mode 'dired-mode)
+      (revert-buffer)))
+(defadvice display-buffer (after auto-refresh-dired (buffer &optional not-this-window frame)  activate)
+  (if (equal major-mode 'dired-mode)
+      (revert-buffer)))
+(defadvice other-window (after auto-refresh-dired (arg &optional all-frame) activate)
+  (if (equal major-mode 'dired-mode)
+      (revert-buffer)))
