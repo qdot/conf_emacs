@@ -56,8 +56,28 @@
   (local-set-key [(control return)] 'semantic-ia-complete-symbol)
   (local-set-key "\C-c?" 'semantic-ia-complete-symbol-menu)
   (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
-  (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle))
+  (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle)
+  (local-set-key "\C-cj" 'semantic-ia-fast-jump)
+  (local-set-key "\C-cq" 'semantic-ia-show-doc)
+  (local-set-key "\C-cs" 'semantic-ia-show-summary)
+  (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle)
+  )
 (add-hook 'c-mode-common-hook 'my-cedet-hook)
+(add-hook 'lisp-mode-hook 'my-cedet-hook)
+(add-hook 'emacs-lisp-mode-hook 'my-cedet-hook)
+
+(defun my-c-mode-cedet-hook ()
+
+ ;; Uncomment these for full intellisense typeahead
+ ;; Currently very slow
+ ;; (local-set-key "." 'semantic-complete-self-insert)
+ ;; (local-set-key ">" 'semantic-complete-self-insert)
+  (local-set-key "\C-ct" 'eassist-switch-h-cpp)
+  (local-set-key "\C-xt" 'eassist-switch-h-cpp)
+  (local-set-key "\C-ce" 'eassist-list-methods)
+  (local-set-key "\C-c\C-r" 'semantic-symref)
+  )
+(add-hook 'c-mode-common-hook 'my-c-mode-cedet-hook)
 
 (defun my-ede-get-local-var (fname var)
   "fetch given variable var from :local-variables of project of file fname"
