@@ -39,6 +39,14 @@
 ;; mediawiki editor
 (require 'mediawiki)
 
+
+;; icomplete and icomplete+
+;; Via http://nflath.com/2009/07/icomplete/
+
+(icomplete-mode 1)
+(setq icomplete-compute-delay 0)
+(require 'icomplete+)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; active-menu, menu collapsing
