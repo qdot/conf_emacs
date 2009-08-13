@@ -114,3 +114,17 @@
 (setq ibuffer-always-show-last-buffer t)
 (setq ibuffer-view-ibuffer t)
 (global-set-key  (kbd "C-x C-b")        'ibuffer-other-window)
+
+
+;; Transparently open compressed files
+(auto-compression-mode t)
+;; Save a list of recent files visited.
+(recentf-mode 1)
+(set-default 'indicate-empty-lines t)
+(setq auto-mode-alist
+      (append '(("\\.\\(xml\\|mxml\\|html\\|htm\\)$" . nxml-mode)
+                ("\\.css$" . css-mode)) auto-mode-alist))
+
+;; always turn on lienum
+(global-linum-mode 1)
+(setq linum-format "%d ")

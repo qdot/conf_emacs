@@ -101,6 +101,12 @@
       (setq swapping-window (selected-window))
       (message "Buffer and window marked for swapping."))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Show just matches instead of everything in occur buffer
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun occurrences (regexp &rest ignore)
   "Show all matches for REGEXP in an `occur' buffer."
   ;; keep text covered by occur-prefix and match text-properties
@@ -125,12 +131,52 @@
 		(insert " ")))
 	    (setq delete-from nil)))))))
 
+;; (defun smart-tab ()
+;;   "This smart tab is minibuffer compliant: it acts as usual in
+;;     the minibuffer. Else, if mark is active, indents region. Else if
+;;     point is at the end of a symbol, expands it. Else indents the
+;;     current line."
+;;   (interactive)
+;;   (if (minibufferp)
+;;       (unless (minibuffer-complete)
+;;         (dabbrev-expand nil))
+;;     (if mark-active
+;;         (indent-region (region-beginning)
+;;                        (region-end))
+;;       (if (looking-at "\\_>")
+;;           (dabbrev-expand nil)
+;;         (indent-for-tab-command)))))
+
+
+(defadvice kill-ring-save (before slick-copy activate compile)
+  "When called interactively with no active region, copy a single line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+	 (message "Copied line")
+	 (list (line-beginning-position)
+		   (line-beginning-position 2)))))
+(defadvice kill-region (before slick-cut activate compile)
+  "When called interactively with no active region, kill a single line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+	 (list (line-beginning-position)
+		   (line-beginning-position 2)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Show just matches instead of everything in occur buffer
+;; Edit files as root
+;; http://nflath.com/2009/08/tramp/
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(global-set-key (kbd "C-c p") 'swap-buffers-in-windows)
+(defun sudo-edit (&optional arg)
+  (interactive "p")
+  (if arg
+      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+ 
+(defun sudo-edit-current-file ()
+  (interactive)
+  (find-alternate-file (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer)))))
+(global-set-key (kbd "C-c C-r") 'sudo-edit-current-file)
