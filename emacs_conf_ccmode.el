@@ -60,8 +60,8 @@
     (beginning-of-line-mark)
     )
   )
-(global-set-key (kbd "C-n") 'my-next-error)
-(global-set-key (kbd "C-p") 'my-previous-error)
+;; (global-set-key (kbd "C-n") 'my-next-error)
+;; (global-set-key (kbd "C-p") 'my-previous-error)
 
 (global-set-key [f5] 'my-recompile)
 
