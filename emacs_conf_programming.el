@@ -58,14 +58,18 @@
 (autoload 'gtags-mode "gtags" "" t)
 
 ;; clean trailing whitespaces automatically
-;; (setq my-trailing-whitespace-modes '(c++-mode
-;; 				     c-mode
-;; 				     haskell-mode
-;; 				     emacs-lisp-mode
-;; 				     lisp-mode scheme-mode))
-;; (defun my-trailing-whitespace-hook ()
-;;   (when (member major-mode my-trailing-whitespace-modes)
-;;     (delete-trailing-whitespace)))
+(setq my-trailing-whitespace-modes '(c++-mode
+				     c-mode
+                                     xml-mode
+                                     nxml-mode
+                                     pythom-mode
+				     haskell-mode
+				     emacs-lisp-mode
+				     lisp-mode scheme-mode))
+(defun my-trailing-whitespace-hook ()
+  (when (member major-mode my-trailing-whitespace-modes)
+    (delete-trailing-whitespace)))
+;; Changing too many files and making my commits messy
 ;; (add-hook 'before-save-hook 'my-trailing-whitespace-hook)
 (require 'magit)
 

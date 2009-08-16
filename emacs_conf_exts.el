@@ -46,6 +46,28 @@
 (setq icomplete-compute-delay 0)
 (require 'icomplete+)
 
+;; one dired buffer, damnit
+;; taken from http://bitbucket.org/kcfelix/emacsd/src/tip/init.el
+(require 'dired-single)
+(defun my-dired-init ()
+  "Bunch of stuff to run for dired, either immediately or when it's
+        loaded."
+  (define-key dired-mode-map (kbd "C-s") 'dired-isearch-filenames-regexp)
+  (define-key dired-mode-map (kbd "C-M-s") 'dired-isearch-filenames)
+  (define-key dired-mode-map [return] 'joc-dired-single-buffer)
+  (define-key dired-mode-map "v" 'joc-dired-single-buffer)
+  (define-key dired-mode-map [mouse-1] 'joc-dired-single-buffer-mouse)
+  (define-key dired-mode-map "^"
+    (function
+     (lambda nil (interactive) (joc-dired-single-buffer "..")))))
+
+;; if dired's already loaded, then the keymap will be bound
+(if (boundp 'dired-mode-map)
+    ;; we're good to go; just add our bindings
+    (my-dired-init)
+  ;; it's not loaded yet, so add our bindings to the load-hook
+  (add-hook 'dired-load-hook 'my-dired-init))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; active-menu, menu collapsing

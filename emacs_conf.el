@@ -35,7 +35,7 @@
 (load-file "~/.emacs_files/emacs_conf_setup.el")
 (load-file "~/.emacs_files/emacs_conf_custom.el")
 (load-file "~/.emacs_files/emacs_conf_funcs.el")
-(load-file "~/.emacs_files/emacs_conf_binds.el")
+
 (load-file "~/.emacs_files/emacs_conf_mac.el")
 (load-file "~/.emacs_files/emacs_conf_apel.el")
 
@@ -69,9 +69,13 @@
    (load-file "~/.emacs_files/emacs_conf_ecb.el")
 )
 
+;; Bind as late as possible, so we already have everything in
+;; that we're going to load
+(load-file "~/.emacs_files/emacs_conf_binds.el")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;Time ourselves to see how long loading takes
+;; Time ourselves to see how long loading takes
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
