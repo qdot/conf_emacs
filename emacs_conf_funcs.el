@@ -180,3 +180,22 @@
   (interactive)
   (find-alternate-file (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer)))))
 (global-set-key (kbd "C-c C-r") 'sudo-edit-current-file)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Expand subdirectories for ede
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun expand-include-directory (base)
+  (let (dir-list)
+    (dolist (f (directory-files base))
+      (let ((name (concat base "/" f)))
+        (when (and (file-directory-p name) 
+                   (not (equal f ".."))
+                   (not (equal f ".")))
+          (add-to-list 'dir-list name))))
+    dir-list)
+  )
+
+

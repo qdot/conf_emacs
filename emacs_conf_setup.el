@@ -144,3 +144,12 @@
 ;; always turn on lienum
 (global-linum-mode 1)
 (setq linum-format "%d ")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; ANSI terminal support
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'ansi-color)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
