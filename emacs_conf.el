@@ -34,6 +34,7 @@
 ;; Basic emacs setup, personal functions and keybindings
 (load-file "~/.emacs_files/emacs_conf_setup.el")
 (load-file "~/.emacs_files/emacs_conf_custom.el")
+;; Always load functions before binds, since we bind to functions somewhat often
 (load-file "~/.emacs_files/emacs_conf_funcs.el")
 
 (load-file "~/.emacs_files/emacs_conf_mac.el")

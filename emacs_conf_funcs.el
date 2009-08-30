@@ -179,7 +179,7 @@
 (defun sudo-edit-current-file ()
   (interactive)
   (find-alternate-file (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer)))))
-(global-set-key (kbd "C-c C-r") 'sudo-edit-current-file)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -199,3 +199,18 @@
   )
 
 
+(defun eval-and-replace ()
+  "Replace the preceding sexp with its value."
+  (interactive)
+  (backward-kill-sexp)
+  (condition-case nil
+      (prin1 (eval (read (current-kill 0)))
+             (current-buffer))
+    (error (message "Invalid expression")
+           (insert (current-kill 0)))))
+
+ 
+(defun shell-current-directory ( )
+  "Opens a shell in the current directory"
+  (interactive)
+  (shell (concat "shell-" default-directory "-shell" )))
