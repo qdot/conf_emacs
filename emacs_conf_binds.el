@@ -8,15 +8,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; reload .emacs with M-r
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(global-set-key "\M-r"
-				'(lambda () (interactive) (load-file "~/.emacs")))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;; Add c-c c-x or c-m c-x as meta triggers
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -40,5 +31,6 @@
 
 (defalias 'rs 'replace-string)
 (defalias 'xp 'replace-regexp)
+(defalias 'qr 'query-replace)
 (defalias 'is 'ispell)
-(defalias 'll 'longlines-mode)
+(defalias 'll 'visual-line-mode)

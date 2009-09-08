@@ -3,8 +3,8 @@
 (setq auto-mode-alist
       (append
        '(
-		 ("\\.py$"   . python-mode)
-		 ) auto-mode-alist))
+         ("\\.py$"   . python-mode)
+         ) auto-mode-alist))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -25,12 +25,33 @@
     (insert "self.")))
 (define-key	python-mode-map	(kbd "C-;")	'my-insert-self)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Flymake + pyflakes syntax checking for python
+;; http://plope.com/Members/chrism/flymake-mode
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(when (load "flymake" t)
+  (defun flymake-pyflakes-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list "pyflakes" (list local-file))))
+   (add-to-list 'flymake-allowed-file-name-masks
+                '("\\.py\\'" flymake-pyflakes-init)))
+;; (add-hook 'find-file-hook 'flymake-find-file-hook)
+
 (defun my-python-mode-hook()
   (font-lock-mode 1)
   (font-lock-fontify-buffer)
   (set-variable 'indent-tabs-mode nil)
   (set-variable 'py-indent-offset 4)
   (lambda () (eldoc-mode 1))
-)
-(add-hook 'python-mode-hook 'my-python-mode-hook)
+  )
+
+
 
