@@ -8,7 +8,9 @@
 (global-srecode-minor-mode 1)            ; Enable template insertion menu
 
 (setq semantic-load-turn-useful-things-on 1)
-(semantic-load-enable-code-helpers)
+;;(semantic-load-enable-code-helpers)
+(semantic-load-enable-gaudy-code-helpers)
+;;(semantic-load-enable-excessive-code-helpers)
 ;;(semantic-load-enable-semantic-debugging-helpers)
 
 (global-semantic-idle-scheduler-mode 1)
@@ -41,15 +43,17 @@
   (imenu-add-to-menubar "TAGS")
  )
 (add-hook 'semantic-init-hooks 'my-semantic-hook)
+(global-semantic-tag-folding-mode 1)
 
 ;; gnu global support
 ;; (require 'semanticdb-global)
 ;; (semanticdb-enable-gnu-global-databases 'c-mode)
 ;; (semanticdb-enable-gnu-global-databases 'c++-mode)
 
-(semantic-add-system-include "/usr/local/include" 'c++-mode)
-(semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
-(semantic-add-system-include "/usr/local/include" 'c-mode)
+(semantic-add-system-include "~/git-projects/library/usr_darwin_10.5_x86/include" 'c++-mode)
+(semantic-add-system-include "~/git-projects/library/usr_darwin_10.5_x86/include/boost" 'c++-mode)
+(semantic-add-system-include "~/git-projects/library/usr_darwin_10.5_x86/include" 'c-mode)
+(semantic-add-system-include "~/git-projects/library/usr_darwin_10.5_x86/include/boost" 'c-mode)
 
 
 (defun my-cedet-hook ()

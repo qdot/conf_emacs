@@ -65,10 +65,10 @@
     )
   )
 
-;; Check to see if we've checked out ecb, if so, load
-;; (when (file-exists-p "~/.emacs_files/elisp_local/ecb/ecb.el")
-;;    (load-file "~/.emacs_files/emacs_conf_ecb.el")
-;; )
+;; Check to see if we've checked out ecb, if so, load 
+(when (file-exists-p "~/.emacs_files/elisp_src/ecb-2.40/ecb.el") 
+   (load-file "~/.emacs_files/emacs_conf_ecb.el")
+)
 
 ;; bind as late as possible, so we already have everything in
 ;; that we're going to load
