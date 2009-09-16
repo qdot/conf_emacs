@@ -8,7 +8,7 @@
 (global-srecode-minor-mode 1)            ; Enable template insertion menu
 
 (setq semantic-load-turn-useful-things-on 1)
-(semantic-load-enable-excessive-code-helpers)
+(semantic-load-enable-code-helpers)
 ;;(semantic-load-enable-semantic-debugging-helpers)
 
 (global-semantic-idle-scheduler-mode 1)

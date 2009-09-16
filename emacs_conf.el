@@ -56,7 +56,7 @@
 (load-file "~/.emacs_files/emacs_conf_ccmode.el")
 (load-file "~/.emacs_files/emacs_conf_python.el")
 
-;; Check to see if we've checked out cedet, if so, load
+;; Check to see if we've checked out cedet, if so, load 
 (when (file-exists-p "~/.emacs_files/elisp_local/cedet/common/cedet.el")
   (load-file "~/.emacs_files/emacs_conf_cedet.el")
   (load-file "~/.emacs_files/emacs_conf_ede_home.el")
@@ -66,11 +66,11 @@
   )
 
 ;; Check to see if we've checked out ecb, if so, load
-(when (file-exists-p "~/.emacs_files/elisp_local/ecb/ecb.el")
-   (load-file "~/.emacs_files/emacs_conf_ecb.el")
-)
+;; (when (file-exists-p "~/.emacs_files/elisp_local/ecb/ecb.el")
+;;    (load-file "~/.emacs_files/emacs_conf_ecb.el")
+;; )
 
-;; Bind as late as possible, so we already have everything in
+;; bind as late as possible, so we already have everything in
 ;; that we're going to load
 (load-file "~/.emacs_files/emacs_conf_binds.el")
 

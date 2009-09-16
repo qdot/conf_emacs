@@ -20,19 +20,28 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 
 (setq org-log-done t)
-(setq org-agenda-files (list "~/emacs_org/notes.org"
-			     "~/emacs_org/tasks.org"
-			     "~/emacs_org/work/work.org"
-			     "~/emacs_org/work/geoviewer.org"
-			     "~/emacs_org/work/geotools.org"
-			     "~/emacs_org/work/build_system.org"
-                             "~/emacs_org/home/computer.org"
-			     "~/emacs_org/home/liblightstone.org"
-			     "~/emacs_org/home/libnifalcon.org"
-			     "~/emacs_org/home/libomron.org"
-			     "~/emacs_org/home/libtrancevibe.org"
-			     "~/emacs_org/home/someday.org"
-			     ))
+(setq org-agenda-files 
+      (list "~/emacs_org/notes.org"
+            "~/emacs_org/tasks.org"
+            "~/emacs_org/work/work.org"
+            "~/emacs_org/work/geoviewer.org"
+            "~/emacs_org/work/geotools.org"
+            "~/emacs_org/work/build_system.org"
+            "~/emacs_org/work/licensing.org"
+            "~/emacs_org/work/libdss.org"
+            "~/emacs_org/work/camera.org"
+            "~/emacs_org/work/sigma_filter.org"
+            "~/emacs_org/home/home.org"
+            "~/emacs_org/home/computer.org"
+            "~/emacs_org/home/conferences.org"
+            "~/emacs_org/home/liblightstone.org"
+            "~/emacs_org/home/libnifalcon.org"
+            "~/emacs_org/home/libomron.org"
+            "~/emacs_org/home/libtrancevibe.org"
+            "~/emacs_org/home/someday.org"
+            "~/emacs_org/home/vienna.org"
+            )
+      )
 
 ;;
 ;;;  Load Org Remember Stuff
