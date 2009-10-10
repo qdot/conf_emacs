@@ -49,7 +49,6 @@
 ;; Code:
 
 
-(setq debug-on-error t)
 (require 'easymenu)
 (require 'cl)
 (require 'apropos)

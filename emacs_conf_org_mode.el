@@ -31,6 +31,7 @@
             "~/emacs_org/work/libdss.org"
             "~/emacs_org/work/camera.org"
             "~/emacs_org/work/sigma_filter.org"
+            "~/emacs_org/work/interviews.org"
             "~/emacs_org/home/home.org"
             "~/emacs_org/home/computer.org"
             "~/emacs_org/home/conferences.org"
@@ -40,6 +41,7 @@
             "~/emacs_org/home/libtrancevibe.org"
             "~/emacs_org/home/someday.org"
             "~/emacs_org/home/vienna.org"
+            "~/emacs_org/home/neurosky.org"
             )
       )
 
