@@ -7,6 +7,8 @@
  '(global-font-lock-mode t nil (font-lock))
  '(indent-tabs-mode nil)
  '(mediawiki-site-alist (quote (("Wikipedia" "http://en.wikipedia.org/wiki/index.php" "username" "password" "Main Page") ("OpenDildonics" "http://www.opendildonics.org/" "QDot" "" "Main Page"))))
+ '(sclang-program "/Applications/SuperCollider/sclang")
+ '(sclang-runtime-directory "/Applications/SuperCollider/")
  '(scroll-bar-mode (quote right))
  '(semantic-idle-scheduler-idle-time 3)
  '(standard-indent 3))

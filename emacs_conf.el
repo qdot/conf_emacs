@@ -6,7 +6,6 @@
 
 (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/"))
-(add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/magit/"))
 (add-to-list 'load-path (expand-file-name "/usr/local/share/emacs/site-lisp/"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -57,7 +56,7 @@
 (load-file "~/.emacs_files/emacs_conf_python.el")
 
 ;; Check to see if we've checked out cedet, if so, load 
-(when (file-exists-p "~/.emacs_files/elisp_local/cedet/common/cedet.el")
+(when (file-exists-p "~/.emacs_files/elisp_local/cedet/")
   (load-file "~/.emacs_files/emacs_conf_cedet.el")
   (load-file "~/.emacs_files/emacs_conf_ede_home.el")
   (when (file-exists-p "~/.emacs_files/emacs_conf_ede_work.el")

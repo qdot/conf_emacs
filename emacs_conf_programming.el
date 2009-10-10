@@ -72,8 +72,10 @@
     (delete-trailing-whitespace)))
 ;; Changing too many files and making my commits messy
 ;; (add-hook 'before-save-hook 'my-trailing-whitespace-hook)
-(require 'magit)
-
+(when (file-exists-p "~/.emacs_files/elisp_local/magit")
+ (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/magit/"))
+ (require 'magit)
+)
 
 ;; eldoc mode for showing function calls in mode line
 (setq eldoc-idle-delay 0)

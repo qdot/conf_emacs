@@ -19,15 +19,15 @@
 (require 'asciidoc-mode)
 (autoload 'asciidoc-mode "asciidoc-mode")
 (add-hook 'asciidoc-mode-hook
-		  '(lambda ()
-			 (require 'asciidoc)))
+          '(lambda ()
+             (require 'asciidoc)))
 
 
 ;; markdown mode
 (autoload 'markdown-mode "markdown-mode.el"
-   "Major mode for editing Markdown files" t)
+  "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
-   (cons '("\\.markdown" . markdown-mode) auto-mode-alist))
+      (cons '("\\.markdown" . markdown-mode) auto-mode-alist))
 
 ;; jekyll
 (require 'jekyll)
@@ -106,3 +106,21 @@
 (defadvice other-window (after auto-refresh-dired (arg &optional all-frame) activate)
   (if (equal major-mode 'dired-mode)
       (revert-buffer)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Supercollider Mode
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (file-exists-p "~/.emacs_files/elisp_local/scel")
+
+  ;;Assume we're on a mac with SuperCollider in the normal spot
+  (when (file-exists-p "/Applications/SuperCollider/sclang")
+    (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/scel/el"))
+    (custom-set-variables
+     '(sclang-program "/Applications/SuperCollider/sclang")
+     )
+    (require 'sclang)
+    )
+  )
