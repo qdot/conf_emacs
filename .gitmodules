@@ -7,6 +7,3 @@
 [submodule "elisp_local/org_mode"]
 	path = elisp_local/org_mode
 	url = git://repo.or.cz/org-mode.git
-[submodule "elisp_local/wanderlust"]
-	path = elisp_local/wanderlust
-	url = git://github.com/qdot/wanderlust.git
