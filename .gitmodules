@@ -10,3 +10,6 @@
 [submodule "elisp_local/wanderlust"]
 	path = elisp_local/wanderlust
 	url = git://github.com/qdot/wanderlust.git
+[submodule "elisp_local/scel"]
+	path = elisp_local/scel
+	url = git://github.com/qdot/scel.git
