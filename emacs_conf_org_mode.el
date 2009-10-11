@@ -20,30 +20,19 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 
 (setq org-log-done t)
-(setq org-agenda-files 
-      (list "~/emacs_org/notes.org"
-            "~/emacs_org/tasks.org"
-            "~/emacs_org/work/work.org"
-            "~/emacs_org/work/geoviewer.org"
-            "~/emacs_org/work/geotools.org"
-            "~/emacs_org/work/build_system.org"
-            "~/emacs_org/work/licensing.org"
-            "~/emacs_org/work/libdss.org"
-            "~/emacs_org/work/camera.org"
-            "~/emacs_org/work/sigma_filter.org"
-            "~/emacs_org/work/interviews.org"
-            "~/emacs_org/home/home.org"
-            "~/emacs_org/home/computer.org"
-            "~/emacs_org/home/conferences.org"
-            "~/emacs_org/home/liblightstone.org"
-            "~/emacs_org/home/libnifalcon.org"
-            "~/emacs_org/home/libomron.org"
-            "~/emacs_org/home/libtrancevibe.org"
-            "~/emacs_org/home/someday.org"
-            "~/emacs_org/home/vienna.org"
-            "~/emacs_org/home/neurosky.org"
-            )
-      )
+
+(defun reload-org-files ()
+  (interactive)
+  (setq org-agenda-files 
+        (append
+         (file-expand-wildcards "~/emacs_org/*.org")
+         (file-expand-wildcards "~/emacs_org/work/*.org")
+         (file-expand-wildcards "~/emacs_org/home/*.org")
+         )
+        ) 
+  )
+
+(reload-org-files)
 
 ;;
 ;;;  Load Org Remember Stuff
@@ -59,6 +48,9 @@
     (when (re-search-forward " *:CLOCK-IN: *" nil t)
       (replace-match "")
       (org-clock-in))))
+
+(setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d!/!)")
+ (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)"))))
 
 ;; I use C-M-r to start org-remember
 (global-set-key (kbd "C-M-r") 'org-remember)
@@ -112,3 +104,9 @@
 (setq org-clock-out-when-done nil)
 ;; Save the running clock and all clock history when exiting Emacs, load it on startup
 (setq org-clock-persist t)
+
+(setq org-agenda-custom-commands
+      (quote (("h" "Tasks for home" tags-todo "HOME" nil)
+              ("w" "Tasks for work" tags-todo "WORK" nil)
+              ("p" "Tasks for personal projects" tags-todo "PROJECTS" nil)
+              )))
