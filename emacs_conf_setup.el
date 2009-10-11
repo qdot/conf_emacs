@@ -141,10 +141,6 @@
       (append '(("\\.\\(xml\\|mxml\\|html\\|htm\\)$" . nxml-mode)
                 ("\\.css$" . css-mode)) auto-mode-alist))
 
-;; always turn on lienum
-(global-linum-mode 1)
-(setq linum-format "%d ")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; ANSI terminal support

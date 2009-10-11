@@ -82,3 +82,14 @@
 (autoload 'turn-on-eldoc-mode "eldoc" nil t)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+
+;; turn on linum mode for programming
+(setq linum-format "%d ")
+
+(add-hook 'emacs-lisp-mode-hook 'linum-mode)
+(add-hook 'python-mode-hook 'linum-mode)
+(add-hook 'cmake-mode-hook 'linum-mode)
+(add-hook 'c++-mode-hook 'linum-mode)
+(add-hook 'c-mode-hook 'linum-mode)
+
+
