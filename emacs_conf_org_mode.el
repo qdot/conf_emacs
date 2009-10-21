@@ -20,6 +20,8 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 
 (setq org-log-done t)
+(setq org-indent-mode t)
+
 
 (defun reload-org-files ()
   (interactive)
@@ -110,3 +112,7 @@
               ("w" "Tasks for work" tags-todo "WORK" nil)
               ("p" "Tasks for personal projects" tags-todo "PROJECTS" nil)
               )))
+
+;; Always hide stars
+(setq org-hide-leading-stars t)
+
