@@ -20,8 +20,9 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 
 (setq org-log-done t)
-(setq org-indent-mode t)
 
+(setq org-indent-mode t)
+;; (setq org-hide-leading-stars t)
 
 (defun reload-org-files ()
   (interactive)
@@ -52,7 +53,7 @@
       (org-clock-in))))
 
 (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d!/!)")
- (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)"))))
+                                (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)"))))
 
 ;; I use C-M-r to start org-remember
 (global-set-key (kbd "C-M-r") 'org-remember)
@@ -76,16 +77,17 @@
 				     )))
 
 
-					; Use IDO for target completion
+
+;; Use IDO for target completion
 (setq org-completion-use-ido t)
 
-					; Targets include this file and any file contributing to the agenda - up to 5 levels deep
+;; Targets include this file and any file contributing to the agenda - up to 5 levels deep
 (setq org-refile-targets (quote ((org-agenda-files :maxlevel . 5) (nil :maxlevel . 5))))
 
-					; Targets start with the file name - allows creating level 1 tasks
+;; Targets start with the file name - allows creating level 1 tasks
 (setq org-refile-use-outline-path (quote file))
 
-					; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
+;; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
 (setq org-outline-path-complete-in-steps t)
 
 ;;
@@ -107,12 +109,10 @@
 ;; Save the running clock and all clock history when exiting Emacs, load it on startup
 (setq org-clock-persist t)
 
+;; Personal agenda modes
 (setq org-agenda-custom-commands
       (quote (("h" "Tasks for home" tags-todo "HOME" nil)
               ("w" "Tasks for work" tags-todo "WORK" nil)
               ("p" "Tasks for personal projects" tags-todo "PROJECTS" nil)
               )))
-
-;; Always hide stars
-(setq org-hide-leading-stars t)
 

@@ -9,9 +9,6 @@
 (require 'tramp)
 (setq tramp-default-method "ssh")
 
-;; converts unix/windows line ending
-;;(require 'eol-conversion)
-
 ;; use M-y and M-n in y-or-n minibuffer prompts
 (require 'quick-yes)
 
@@ -37,6 +34,18 @@
 
 ;; mediawiki editor
 (require 'mediawiki)
+
+;; anything (quicksilverishness for emacs) setup
+(require 'anything-config)
+
+;; elscreen
+;; Set prefix key to `, just like in gnu screen
+(setq elscreen-prefix-key "`")
+
+(require 'elscreen)
+(require 'elscreen-dired)
+(require 'elscreen-color-theme)
+(require 'elscreen-server)
 
 
 ;; icomplete and icomplete+
@@ -124,3 +133,41 @@
     (require 'sclang)
     )
   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; color-theme Mode
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'color-theme)
+(color-theme-initialize)
+(color-theme-dark-laptop)
+(custom-set-variables
+ '(global-font-lock-mode t nil (font-lock)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; ido Mode
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'ido)
+(ido-mode t)
+(ido-everywhere t)
+(setq ido-enable-flex-matching t)
+(setq ido-execute-command-cache nil)
+(setq ido-create-new-buffer 'always)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; uniquify Mode for buffer name seperation
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'reverse)
+(setq uniquify-separator "|")
+(setq uniquify-after-kill-buffer-p t)
+(setq uniquify-ignore-buffers-re "^\\*")
+

@@ -17,18 +17,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; set window to full screen using meta-return
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun toggle-max-window ()
-  (interactive)
-  (set-frame-parameter nil 'fullscreen (if (frame-parameter nil 'fullscreen)
-					   nil
-					 'fullboth)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;; Don't quit without asking first
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -49,6 +37,7 @@
 
 (defun get-ip-address (&optional dev)
   "get the IP-address for device DEV (default: eth0)"
+  (interactive)  
   (let ((dev (if dev dev "eth0")))
     (format-network-address (car (network-interface-info dev)) t)))
 
@@ -66,15 +55,12 @@
     (set-window-vscroll nil curr-scroll)
     (message "Reloaded file")))
 
-(global-set-key "\C-c\C-r" 'reload-file)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Swap buffers in two windows
 ;; http://www.emacswiki.org/emacs/TransposeWindows
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 (setq swapping-buffer nil)
 (setq swapping-window nil)
@@ -199,7 +185,6 @@
     dir-list)
   )
 
-
 (defun eval-and-replace ()
   "Replace the preceding sexp with its value."
   (interactive)
@@ -209,7 +194,6 @@
              (current-buffer))
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
-
  
 (defun shell-current-directory ( )
   "Opens a shell in the current directory"

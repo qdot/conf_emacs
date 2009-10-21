@@ -1,8 +1,13 @@
-;; wanderlust
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Wanderlust Email Client
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/wanderlust/wl"))
 (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/wanderlust/elmo"))
 (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/wanderlust/utils"))
+
 (autoload 'wl "wl" "Wanderlust" t)
 (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
 (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
@@ -40,3 +45,6 @@
       'wl-draft-send
       'wl-draft-kill
       'mail-send-hook))
+
+;; Turn on elscreen's wl handling
+(require 'elscreen-wl)

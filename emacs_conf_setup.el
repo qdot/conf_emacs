@@ -66,15 +66,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; When custom decides to add things, have it do so in something other than
-;; .emacs
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(setq custom-file "~/.emacs_files/emacs_conf_custom.el")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;; show marks for regions
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -131,9 +122,9 @@
 (setq ibuffer-view-ibuffer t)
 (global-set-key  (kbd "C-x C-b")        'ibuffer-other-window)
 
-
 ;; Transparently open compressed files
 (auto-compression-mode t)
+
 ;; Save a list of recent files visited.
 (recentf-mode 1)
 (set-default 'indicate-empty-lines t)

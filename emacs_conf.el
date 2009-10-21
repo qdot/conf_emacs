@@ -16,9 +16,11 @@
 
 (defvar mswindows-p (string-match "windows" (symbol-name system-type)))
 (defvar macosx-p (string-match "darwin" (symbol-name system-type)))
-(defvar aquamacs-p (string-match "Aquamacs" (version)))
 
-(set-default-font "consolas-11")
+;; We know we have consolas on OS X, so use it
+(if macosx-p
+    (set-default-font "consolas-11")
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -32,23 +34,30 @@
 
 ;; Basic emacs setup, personal functions and keybindings
 (load-file "~/.emacs_files/emacs_conf_setup.el")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; When custom decides to add things, have it do so in something other than
+;; .emacs
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq custom-file "~/.emacs_files/emacs_conf_custom.el")
 (load-file "~/.emacs_files/emacs_conf_custom.el")
+
 ;; Always load functions before binds, since we bind to functions somewhat often
 (load-file "~/.emacs_files/emacs_conf_funcs.el")
 
 (load-file "~/.emacs_files/emacs_conf_mac.el")
 (load-file "~/.emacs_files/emacs_conf_apel.el")
 
-;; Navigation and buffer setup
-(load-file "~/.emacs_files/emacs_conf_anything.el")
-(load-file "~/.emacs_files/emacs_conf_elscreen.el")
-
 ;; Mode setup
 (load-file "~/.emacs_files/emacs_conf_exts.el")
-(load-file "~/.emacs_files/emacs_conf_color_theme.el")
-(load-file "~/.emacs_files/emacs_conf_ido.el")
 (load-file "~/.emacs_files/emacs_conf_org_mode.el")
-(load-file "~/.emacs_files/emacs_conf_wanderlust.el")
+
+(when (file-exists-p "~/.emacs_files/elisp_local/wanderlust/wl/wl-news.el")
+  (load-file "~/.emacs_files/emacs_conf_wanderlust.el")
+  )
 
 ;; Programming related stuff
 (load-file "~/.emacs_files/emacs_conf_programming.el")

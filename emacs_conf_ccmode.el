@@ -1,10 +1,10 @@
 (setq auto-mode-alist
       (append
-	   '(
-		 ("\\.h$"    . c++-mode)
-		 ("\\.H$"    . c++-mode)
-		 ) auto-mode-alist)
-	  )
+       '(
+         ("\\.h$"    . c++-mode)
+         ("\\.H$"    . c++-mode)
+         ) auto-mode-alist)
+      )
 
 (defun my-cc-code-mode-hook ()
   (define-key c-mode-base-map "\C-m" 'newline-and-indent)
@@ -16,7 +16,7 @@
   (font-lock-mode 1)
   (font-lock-fontify-buffer)
   (local-set-key [(control tab)] 'semantic-complete-self-insert)
-)
+  )
 (add-hook 'c-mode-hook 'my-cc-code-mode-hook)
 (add-hook 'c++-mode-hook 'my-cc-code-mode-hook)
 
@@ -31,10 +31,10 @@
   (interactive)
   (progn
     (if (get-buffer "*compilation*")	; If old compile window exists
-		(progn
-		  (delete-windows-on (get-buffer "*compilation*")) ; Delete the compilation windows
-		  (kill-buffer "*compilation*") ; and kill the buffers
-		  )
+        (progn
+          (delete-windows-on (get-buffer "*compilation*")) ; Delete the compilation windows
+          (kill-buffer "*compilation*") ; and kill the buffers
+          )
       )
     (call-interactively 'compile)
     (enlarge-window 30)
@@ -72,35 +72,35 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (add-hook 'c-mode-common-hook
-		  (lambda()
-			(local-set-key  (kbd "C-c o") 'ff-find-other-file)))
+          (lambda()
+            (local-set-key  (kbd "C-c o") 'ff-find-other-file)))
 
 (setq cc-other-file-alist
       '(
-		("\\.cpp$" (".h" ".hpp" ".hh"))
-		("\\.cxx$" (".hpp" ".h" ".hh"))
-		("\\.h$" (".c" ".cpp" ".cc" ".cxx"))
-		("\\.c$" (".hpp" ".h" ".hh" ".hxx"))
-		("\\.hpp$" (".cpp" ".c" ".cc" ".cxx"))
-		("\\.hh$" (".cc"))
-		("\\.cc$" (".hh"))
-		)
+        ("\\.cpp$" (".h" ".hpp" ".hh"))
+        ("\\.cxx$" (".hpp" ".h" ".hh"))
+        ("\\.h$" (".c" ".cpp" ".cc" ".cxx"))
+        ("\\.c$" (".hpp" ".h" ".hh" ".hxx"))
+        ("\\.hpp$" (".cpp" ".c" ".cc" ".cxx"))
+        ("\\.hh$" (".cc"))
+        ("\\.cc$" (".hh"))
+        )
       )
 
 (setq ff-search-directories '(
-							  "."
-							  "../../src/*"
-							  "../../../src/*"
-							  "../../../src/geotools/*"
-							  "../../include/*"
-							  "../../include/geotools/*"
-							  "../../../include/geotools/*"
-							  "../../../include/*"
-							  "../include/geotools/*"
-							  "../include/*"
-							  "../src/*"
-							  "$HOME/build/*"
-							  "$HOME/git-projects/*"
-							  "/usr/*/include/*"
-							  )
-	  )
+                              "."
+                              "../../src/*"
+                              "../../../src/*"
+                              "../../../src/geotools/*"
+                              "../../include/*"
+                              "../../include/geotools/*"
+                              "../../../include/geotools/*"
+                              "../../../include/*"
+                              "../include/geotools/*"
+                              "../include/*"
+                              "../src/*"
+                              "$HOME/build/*"
+                              "$HOME/git-projects/*"
+                              "/usr/*/include/*"
+                              )
+      )
