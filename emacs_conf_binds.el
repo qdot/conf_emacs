@@ -4,7 +4,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(global-set-key (kbd "C-h") 'delete-backward-char)
+;;(global-set-key (kbd "C-h") 'delete-backward-char)
 (global-set-key (kbd "C-w") 'backward-kill-word)
 (global-set-key (kbd "C-c p") 'swap-buffers-in-windows)
 (global-set-key (kbd "C-c r") 'revert-buffer)

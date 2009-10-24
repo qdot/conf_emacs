@@ -18,9 +18,12 @@
 (defvar macosx-p (string-match "darwin" (symbol-name system-type)))
 
 ;; We know we have consolas on OS X, so use it
+;; We also need to do this as near the beginning as possible, since it crashes
+;; otherwise?
 (if macosx-p
-    (set-default-font "consolas-11")
-  )
+   (set-frame-font "consolas-11")
+ )
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
