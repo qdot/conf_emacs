@@ -24,8 +24,8 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-(setq-default command-frequency-table-file "~/.emacs.d/frequencies")
+(setq-default command-frequency-table-file 
+              (concat emacs-local-dir "frequencies"))
 (require 'command-frequency)
 (command-frequency-table-load)
 (command-frequency-mode 1)
@@ -46,7 +46,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar autosave-dir "~/.emacs_meta/autosaves/")
+(defvar autosave-dir (concat emacs-local-dir "autosaves/"))
 
 (make-directory autosave-dir t)
 
@@ -55,10 +55,10 @@
 
 (defun make-auto-save-file-name ()
   (concat autosave-dir
-		  (if buffer-file-name
-			  (concat "#" (file-name-nondirectory buffer-file-name) "#")
-			(expand-file-name
-			 (concat "#%" (buffer-name) "#")))))
+          (if buffer-file-name
+              (concat "#" (file-name-nondirectory buffer-file-name) "#")
+            (expand-file-name
+             (concat "#%" (buffer-name) "#")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -68,7 +68,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar backup-dir "~/.emacs_meta/backups")
+(defvar backup-dir (concat emacs-local-dir "backups/"))
 (make-directory backup-dir t)
 (setq backup-directory-alist (list (cons "." backup-dir)))
 
@@ -128,7 +128,6 @@
 (setq ibuffer-default-sorting-mode 'major-mode)
 (setq ibuffer-always-show-last-buffer t)
 (setq ibuffer-view-ibuffer t)
-(global-set-key  (kbd "C-x C-b")        'ibuffer-other-window)
 
 ;; Transparently open compressed files
 (auto-compression-mode t)

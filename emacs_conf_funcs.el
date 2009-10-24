@@ -165,7 +165,8 @@
 (defun sudo-edit-current-file ()
   (interactive)
   (let ((pos (point)))
-    (find-alternate-file (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer))))
+    (find-alternate-file 
+     (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer))))
     (goto-char pos)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -36,7 +36,7 @@
 (require 'mediawiki)
 
 ;; anything (quicksilverishness for emacs) setup
-(require 'anything-config)
+;;(require 'anything-config)
 
 ;; elscreen
 ;; Set prefix key to `, just like in gnu screen

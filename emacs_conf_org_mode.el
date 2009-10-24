@@ -116,3 +116,14 @@
               ("p" "Tasks for personal projects" tags-todo "PROJECTS" nil)
               )))
 
+;; org mobile setup, for when it comes out
+;; (setq org-mobile-directory "~/emacs_org/")
+;; (add-hook 'org-mobile-post-push-hook
+;;           (lambda ()
+;;             (shell-command "scp ~/emacs_org/* user@nonpolynomial.com:~/mobile/")))
+;; (add-hook 'org-mobile-pre-pull-hook
+;;           (lambda ()
+;;             (shell-command "scp user@webdavhost:mobile/mobileorg.org ~/stage/ ")))
+;; (add-hook 'org-mobile-post-pull-hook
+;;           (lambda ()
+;;             (shell-command "scp ~/stage/mobileorg.org user@webdavhost:mobile/")))

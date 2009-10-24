@@ -13,12 +13,14 @@
 (global-set-key (kbd "C-c s") 'shell-current-directory)
 (global-set-key (kbd "C-x C-m") 'execute-extended-command)
 (global-set-key (kbd "C-x C-k") 'kill-region)
+(global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
 (global-set-key (kbd "C-c C-m") 'execute-extended-command)
 (global-set-key (kbd "C-c C-k") 'kill-region)
 (global-set-key (kbd "C-c C-s") 'sudo-edit-current-file)
 (global-set-key (kbd "C-c C-r") 'reload-file)
 (global-set-key (kbd "C-M-g") 'goto-line)
 (global-set-key (kbd "M-g s") 'magit-status)
+
 ;;(define-key global-map " C-" 'previous-buffer)
 ;;(define-key global-map [C-}] 'next-buffer)
 
