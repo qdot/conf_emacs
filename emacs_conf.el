@@ -31,6 +31,9 @@
 (if macosx-p
     (set-frame-font "consolas-11")
   )
+(if mswindows-p
+    (set-frame-font "consolas-8")
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
