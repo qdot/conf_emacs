@@ -38,6 +38,10 @@
 ;; anything (quicksilverishness for emacs) setup
 ;;(require 'anything-config)
 
+
+;; alist from apel is required for elscreen
+(add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_src/apel-10.7"))
+
 ;; elscreen
 ;; Set prefix key to `, just like in gnu screen
 (setq elscreen-prefix-key "`")

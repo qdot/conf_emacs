@@ -31,6 +31,7 @@
          (file-expand-wildcards "~/emacs_org/*.org")
          (file-expand-wildcards "~/emacs_org/work/*.org")
          (file-expand-wildcards "~/emacs_org/home/*.org")
+         (file-expand-wildcards "~/emacs_org/projects/*.org")
          )
         ) 
   )
