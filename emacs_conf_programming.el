@@ -27,6 +27,10 @@
 (autoload 'js2-mode "js2"
   "JS2 Javascript Editing" t)
 
+(setq auto-mode-alist (cons  auto-mode-alist))
+(autoload 'lua-mode "lua-mode" 
+  "Lua editing mode." t)
+
 ;; file extension mode recognition
 (setq auto-mode-alist
       (append
@@ -42,6 +46,7 @@
          ("\\.asciidoc$" . asciidoc-mode)
          ("CMakeLists\\.txt\\'" . cmake-mode)
          ("ChangeLog\\.txt\\'" . change-log-mode)
+         ("\\.lua$" . lua-mode)
          ) auto-mode-alist))
 
 ;; gdb/gud
@@ -88,5 +93,4 @@
 (add-hook 'cmake-mode-hook 'linum-mode)
 (add-hook 'c++-mode-hook 'linum-mode)
 (add-hook 'c-mode-hook 'linum-mode)
-
 

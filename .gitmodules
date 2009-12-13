@@ -11,3 +11,6 @@
 	path = elisp_local/scel
 	url = git://github.com/qdot/scel.git
 
+[submodule "elisp_local/pylookup"]
+	path = elisp_local/pylookup
+	url = git://github.com/tsgates/pylookup.git

@@ -24,6 +24,7 @@
 
 (setq mswindows-p (string-match "windows" (symbol-name system-type)))
 (setq macosx-p (string-match "darwin" (symbol-name system-type)))
+(setq linux-p (string-match "gnu/linux" (symbol-name system-type)))
 
 ;; We know we have consolas on OS X, so use it
 ;; We also need to do this as near the beginning as possible, since it crashes
@@ -31,7 +32,12 @@
 (if macosx-p
     (set-frame-font "consolas-11")
   )
-
+(if mswindows-p
+    (set-frame-font "consolas-8")
+  )
+(if linux-p
+    (set-frame-font "inconsolata-9")
+  )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;Make sure we have good ol' LISP available
@@ -53,7 +59,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq custom-file (concat emacs-local-dir "emacs_conf_custom.el"))
-(load-library "emacs_conf_custom.el")
+(when (file-exists-p custom-file)
+      (load-library "emacs_conf_custom.el")
+)
 
 ;; Always load functions before binds, since we bind to functions somewhat often
 (load-library "emacs_conf_funcs.el")
