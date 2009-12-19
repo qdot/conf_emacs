@@ -27,7 +27,6 @@
 (autoload 'js2-mode "js2"
   "JS2 Javascript Editing" t)
 
-(setq auto-mode-alist (cons  auto-mode-alist))
 (autoload 'lua-mode "lua-mode" 
   "Lua editing mode." t)
 
