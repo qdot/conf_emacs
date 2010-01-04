@@ -60,7 +60,7 @@
 
 (setq custom-file (concat emacs-local-dir "emacs_conf_custom.el"))
 (when (file-exists-p custom-file)
-      (load-library "emacs_conf_custom.el")
+      (load-library custom-file)
 )
 
 ;; Always load functions before binds, since we bind to functions somewhat often

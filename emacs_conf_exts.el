@@ -50,7 +50,7 @@
 (require 'elscreen-dired)
 (require 'elscreen-color-theme)
 (require 'elscreen-server)
-
+(require 'elscreen-buffer-list)
 
 ;; icomplete and icomplete+
 ;; Via http://nflath.com/2009/07/icomplete/
@@ -175,3 +175,20 @@
 (setq uniquify-after-kill-buffer-p t)
 (setq uniquify-ignore-buffers-re "^\\*")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Twitter mode
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'todochiku)
+(require 'twit)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Frame maximizer
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'maxframe)
+(add-hook 'window-setup-hook 'maximize-frame t)
