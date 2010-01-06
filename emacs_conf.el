@@ -30,13 +30,13 @@
 ;; We also need to do this as near the beginning as possible, since it crashes
 ;; otherwise?
 (if macosx-p
-    (set-frame-font "consolas-11")
+    (set-face-font 'default "consolas-11")
   )
 (if mswindows-p
-    (set-frame-font "consolas-8")
+    (set-face-font 'default "consolas-8")
   )
 (if linux-p
-    (set-frame-font "inconsolata-9")
+    (set-face-font 'default "inconsolata-9")
   )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
