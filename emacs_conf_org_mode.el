@@ -22,7 +22,7 @@
 (setq org-log-done t)
 
 (setq org-indent-mode t)
-;; (setq org-hide-leading-stars t)
+(setq org-hide-leading-stars t)
 
 (defun reload-org-files ()
   (interactive)

@@ -21,6 +21,10 @@
 (global-set-key (kbd "C-M-g") 'goto-line)
 (global-set-key (kbd "M-g s") 'magit-status)
 
+;; shift-arrow key binding for frame movement
+
+(when (fboundp 'windmove-default-keybindings)
+      (windmove-default-keybindings))
 ;;(define-key global-map " C-" 'previous-buffer)
 ;;(define-key global-map [C-}] 'next-buffer)
 
