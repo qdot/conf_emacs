@@ -30,6 +30,8 @@
 (autoload 'lua-mode "lua-mode" 
   "Lua editing mode." t)
 
+(load-library "flymake_cursor.el")
+
 ;; file extension mode recognition
 (setq auto-mode-alist
       (append

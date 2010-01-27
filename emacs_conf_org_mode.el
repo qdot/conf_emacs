@@ -23,6 +23,7 @@
 
 (setq org-indent-mode t)
 (setq org-hide-leading-stars t)
+(setq org-agenda-ndays 1)
 
 (defun reload-org-files ()
   (interactive)
