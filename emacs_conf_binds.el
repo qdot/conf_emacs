@@ -20,6 +20,8 @@
 (global-set-key (kbd "C-c C-r") 'reload-file)
 (global-set-key (kbd "C-M-g") 'goto-line)
 (global-set-key (kbd "M-g s") 'magit-status)
+(global-set-key (kbd "C-x C-p") 'previous-multiframe-window)
+(global-set-key (kbd "C-x C-n") 'next-multiframe-window)
 
 ;; shift-arrow key binding for frame movement
 

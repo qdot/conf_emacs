@@ -129,13 +129,13 @@
 (when (file-exists-p "~/.emacs_files/elisp_local/scel")
 
   ;;Assume we're on a mac with SuperCollider in the normal spot
-  (when (file-exists-p "/Applications/SuperCollider/sclang")
-    (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/scel/el"))
-    (custom-set-variables
-     '(sclang-program "/Applications/SuperCollider/sclang")
-     )
-    (require 'sclang)
-    )
+  ;; (when (file-exists-p "/Applications/SuperCollider/sclang")
+  ;;   (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/scel/el"))
+  ;;   (custom-set-variables
+  ;;    '(sclang-program "/Applications/SuperCollider/sclang")
+  ;;    )
+  ;;   (require 'sclang)
+  ;;   )
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

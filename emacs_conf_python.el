@@ -37,10 +37,10 @@
            (local-file (file-relative-name
                         temp-file
                         (file-name-directory buffer-file-name))))
-      (list "pyflakes" (list local-file))))
-   (add-to-list 'flymake-allowed-file-name-masks
-                '("\\.py\\'" flymake-pyflakes-init)))
-;; (add-hook 'find-file-hook 'flymake-find-file-hook)
+      (list "/usr/local/bin/pyflakes" (list local-file))))
+  (add-to-list 'flymake-allowed-file-name-masks
+               '("\\.py\\'" flymake-pyflakes-init)))
+(add-hook 'find-file-hook 'flymake-find-file-hook)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -102,11 +102,11 @@
   (if (not ropemacs-loaded) (load-ropemacs))
   )
 
-
 (defun my-python-mode-hook()
   (font-lock-mode 1)
   (font-lock-fontify-buffer)
   (set-variable 'indent-tabs-mode nil)
+  (set-variable 'tab-width 4)
   (set-variable 'py-indent-offset 4)
   (lambda () (eldoc-mode 1))
   (local-set-key "\C-ch" 'pylookup-lookup)

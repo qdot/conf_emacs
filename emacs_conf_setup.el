@@ -121,6 +121,22 @@
 (setq ibuffer-always-show-last-buffer t)
 (setq ibuffer-view-ibuffer t)
 
+;; Set up buffer groups
+(setq ibuffer-saved-filter-groups
+      (quote (("default"
+               ("Org" (mode . org-mode))
+               ("ERC" (mode . erc-mode))
+               ("Emacs Setup" (filename . "/.emacs_files/"))
+               ("dired" (mode . dired-mode))
+               ("emacs" (or
+                         (name . "^\\*scratch\\*$")
+                         (name . "^\\*Messages\\*$")))
+))))
+
+(add-hook 'ibuffer-mode-hook
+          (lambda ()
+            (ibuffer-switch-to-saved-filter-groups "default")))
+
 ;; Transparently open compressed files
 (auto-compression-mode t)
 

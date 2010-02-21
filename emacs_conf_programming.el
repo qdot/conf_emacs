@@ -60,19 +60,19 @@
 (autoload 'gtags-mode "gtags" "" t)
 
 ;; clean trailing whitespaces automatically
-(setq my-trailing-whitespace-modes '(c++-mode
-				     c-mode
-                                     xml-mode
-                                     nxml-mode
-                                     python-mode
-				     haskell-mode
-				     emacs-lisp-mode
-				     lisp-mode 
-                                     scheme-mode))
+;; (setq my-trailing-whitespace-modes '(c++-mode
+;;                                      c-mode
+;;                                      xml-mode
+;;                                      nxml-mode
+;;                                      python-mode
+;;                                      haskell-mode
+;;                                      emacs-lisp-mode
+;;                                      lisp-mode 
+;;                                      scheme-mode))
 
-(defun my-trailing-whitespace-hook ()
-  (when (member major-mode my-trailing-whitespace-modes)
-    (delete-trailing-whitespace)))
+;; (defun my-trailing-whitespace-hook ()
+;;   (when (member major-mode my-trailing-whitespace-modes)
+;;     (delete-trailing-whitespace)))
 ;; Changing too many files and making my commits messy
 ;; (add-hook 'before-save-hook 'my-trailing-whitespace-hook)
 (when (file-exists-p "~/.emacs_files/elisp_local/magit")
@@ -95,3 +95,17 @@
 (add-hook 'c++-mode-hook 'linum-mode)
 (add-hook 'c-mode-hook 'linum-mode)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; flymake with mode fixes
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'flymake)
+(defun my-flymake-off-hook ()
+  (flymake-mode 0)
+)
+(add-hook 'nxml-mode-hook 'my-flymake-off-hook)
+(add-hook 'c++-mode-hook 'my-flymake-off-hook)
+(add-hook 'c-mode-hook 'my-flymake-off-hook)
+(add-hook 'xml-mode-hook 'my-flymake-off-hook)
