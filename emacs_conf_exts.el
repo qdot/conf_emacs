@@ -29,16 +29,6 @@
 ;; jekyll
 (require 'jekyll)
 
-;; mingus mpd controller
-(require 'mingus)
-
-;; mediawiki editor
-(require 'mediawiki)
-
-;; anything (quicksilverishness for emacs) setup
-;;(require 'anything-config)
-
-
 ;; alist from apel is required for elscreen
 (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_src/apel-10.7"))
 
@@ -145,8 +135,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'color-theme)
-(color-theme-initialize)
-(color-theme-dark-laptop)
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)
+     (color-theme-dark-laptop)     
+))
 (custom-set-variables
  '(global-font-lock-mode t nil (font-lock)))
 
@@ -192,3 +185,21 @@
 
 (require 'maxframe)
 (add-hook 'window-setup-hook 'maximize-frame t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Frame change to work with/like windmove
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'framemove)
+(windmove-default-keybindings)
+(setq framemove-hook-into-windmove t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Frame maximizer
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'frame-cmds)

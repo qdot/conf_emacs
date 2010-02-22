@@ -4,16 +4,29 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; The base conf directory
 (setq emacs-repo-conf-dir (expand-file-name "~/.emacs_files/"))
+
+;; For manually installed elisp
 (setq emacs-repo-elisp-dir (expand-file-name 
                              (concat emacs-repo-conf-dir "elisp/")))
+
+;; For auto-install.el elisp
+(setq emacs-repo-autoinst-elisp-dir (expand-file-name 
+                             (concat emacs-repo-conf-dir "elisp_auto/")))
+
+;; For git tracked submodules
 (setq emacs-repo-elisp-submodule-dir 
       (expand-file-name 
        (concat emacs-repo-conf-dir "elisp-local/")))
+
+;; Local stuff (autosaves, backups, etc...)
 (setq emacs-local-dir (expand-file-name "~/emacs.d/"))
 
 (add-to-list 'load-path (expand-file-name emacs-repo-conf-dir))
 (add-to-list 'load-path (expand-file-name emacs-repo-elisp-dir))
+(add-to-list 'load-path (expand-file-name emacs-repo-autoinst-elisp-dir))
+(add-to-list 'load-path (expand-file-name emacs-repo-autoinst-elisp-dir))
 (add-to-list 'load-path (expand-file-name emacs-repo-elisp-submodule-dir))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -68,6 +81,9 @@
 
 (load-library "emacs_conf_mac.el")
 (load-library "emacs_conf_apel.el")
+
+;; Make sure we pick up autoinstall
+(load-library "emacs_conf_autoinstall.el")
 
 ;; Mode setup
 (load-library "emacs_conf_exts.el")
