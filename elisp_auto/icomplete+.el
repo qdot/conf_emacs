@@ -4,15 +4,15 @@
 ;; Description: Extensions to `icomplete.el'.
 ;; Author: Drew Adams
 ;; Maintainer: Drew Adams
-;; Copyright (C) 1996-2009, Drew Adams, all rights reserved.
+;; Copyright (C) 1996-2010, Drew Adams, all rights reserved.
 ;; Created: Mon Oct 16 13:33:18 1995
 ;; Version: 21.0
-;; Last-Updated: Sat Dec 27 10:09:30 2008 (-0800)
+;; Last-Updated: Fri Jan 15 13:21:51 2010 (-0800)
 ;;           By: dradams
-;;     Update #: 867
+;;     Update #: 880
 ;; URL: http://www.emacswiki.org/cgi-bin/wiki/icomplete+.el
 ;; Keywords: help, abbrev, internal, extensions, local
-;; Compatibility: GNU Emacs 20.x, GNU Emacs 21.x, GNU Emacs 22.x
+;; Compatibility: GNU Emacs: 20.x, 21.x, 22.x, 23.x
 ;;
 ;; Features that might be required by this library:
 ;;
@@ -62,6 +62,8 @@
 ;;
 ;;; Change log:
 ;;
+;; 2009/08/06 dadams
+;;     icomplete-completions (Emacs < 23): Bind, don't set, to initialize nb-candidates.
 ;; 2008/06/01 dadams
 ;;     icomplete-completions (Emacs 23): Set candidates to nil if ((nil)).
 ;;     Commented out vanilla Emacs code that's not used (last, base-size).
@@ -142,7 +144,11 @@
 ;;; Code:
 
 (require 'icomplete)
-(and (< emacs-major-version 20) (eval-when-compile (require 'cl))) ;; when, unless
+
+;; Quiet the byte-compiler.
+(defvar icomplete-eoinput)
+(defvar icompletep-prospects-length)
+(defvar icicle-nb-of-other-cycle-candidates)
 
 ;;;;;;;;;;;;;;;;;;;
 
@@ -380,12 +386,12 @@ following the rest of the icomplete info:
   M-x forward-line   [Matched]  (13 more)."
     ;; `all-completions' doesn't like empty `minibuffer-completion-table's (ie: (nil))
     (when (and (listp candidates) (null (car candidates))) (setq candidates nil))
-    (let ((comps (all-completions name candidates predicate))
-          (open-bracket-determined (if require-match "(" " ["))
-          (close-bracket-determined (if require-match ") " "] "))
-          (keys nil)
-          nb-candidates-string)
-      (setq nb-candidates (length comps))
+    (let* ((comps (all-completions name candidates predicate))
+           (open-bracket-determined (if require-match "(" " ["))
+           (close-bracket-determined (if require-match ") " "] "))
+           (keys nil)
+           (nb-candidates (length comps))
+           nb-candidates-string)
       ;; `concat'/`mapconcat' is the slow part.  With the introduction of
       ;; `icompletep-prospects-length', there is no need for `catch'/`throw'.
       (if (null comps) (format (if (fboundp 'icicle-apropos-complete)
