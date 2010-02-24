@@ -10,3 +10,6 @@
 [submodule "elisp_local/pylookup"]
 	path = elisp_local/pylookup
 	url = git://github.com/tsgates/pylookup.git
+[submodule "elisp_local/cedet"]
+	path = elisp_local/cedet
+	url = git://github.com/emacsmirror/cedet.git
