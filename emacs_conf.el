@@ -18,7 +18,7 @@
 ;; For git tracked submodules
 (setq emacs-repo-elisp-submodule-dir 
       (expand-file-name 
-       (concat emacs-repo-conf-dir "elisp-local/")))
+       (concat emacs-repo-conf-dir "elisp_local/")))
 
 ;; Local stuff (autosaves, backups, etc...)
 (setq emacs-local-dir (expand-file-name "~/emacs.d/"))
@@ -109,9 +109,9 @@
   )
 
 ;; Check to see if we've checked out ecb, if so, load 
-;;(when (file-exists-p "elisp_src/ecb-2.40/ecb.el") 
-;;   (load-library "emacs_conf_ecb.el")
-;;)
+(when (file-exists-p (concat emacs-repo-elisp-submodule-dir "ecb/"))
+  (load-library "emacs_conf_ecb.el")
+)
 
 ;; bind as late as possible, so we already have everything in
 ;; that we're going to load
