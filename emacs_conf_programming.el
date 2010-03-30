@@ -87,7 +87,7 @@
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 
 ;; turn on linum mode for programming
-(setq linum-format "%d ")
+(setq linum-format "%4d")
 
 (add-hook 'emacs-lisp-mode-hook 'linum-mode)
 (add-hook 'python-mode-hook 'linum-mode)
