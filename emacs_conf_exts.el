@@ -29,10 +29,21 @@
 ;; jekyll
 (require 'jekyll)
 
-;; alist from apel is required for elscreen
-(add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_src/apel-10.7"))
+;; icomplete and icomplete+
+;; Via http://nflath.com/2009/07/icomplete/
 
+(icomplete-mode 1)
+(setq icomplete-compute-delay 0)
+(require 'icomplete+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; elscreen
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+
 ;; Set prefix key to `, just like in gnu screen
 (setq elscreen-prefix-key "`")
 
@@ -42,12 +53,13 @@
 (require 'elscreen-server)
 (require 'elscreen-buffer-list)
 
-;; icomplete and icomplete+
-;; Via http://nflath.com/2009/07/icomplete/
+(setq elscreen-buffer-list-enabled t)
 
-(icomplete-mode 1)
-(setq icomplete-compute-delay 0)
-(require 'icomplete+)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; dired modifications
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; one dired buffer, damnit
 ;; taken from http://bitbucket.org/kcfelix/emacsd/src/tip/init.el
@@ -139,7 +151,7 @@
   '(progn
      (color-theme-initialize)
      (color-theme-dark-laptop)     
-))
+     ))
 (custom-set-variables
  '(global-font-lock-mode t nil (font-lock)))
 
@@ -203,3 +215,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'frame-cmds)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Modeline decorator to get rid of the scrollbar
+;; Via http://emacs-fu.blogspot.com/2010/03/showing-buffer-position-in-mode-line.html
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(if (require 'sml-modeline nil 'noerror)    ;; use sml-modeline if available
+    (progn 
+      (sml-modeline-mode 1)                   ;; show buffer pos in the mode line
+      (scroll-bar-mode -1))                   ;; turn off the scrollbar
+  (scroll-bar-mode 1)                       ;; otherwise, show a scrollbar...
+  (set-scroll-bar-mode 'right))             ;; ... on the right
+
+(when (file-exists-p (concat emacs-repo-elisp-submodule-dir "auto-complete/"))
+  (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "auto-complete/")))
+  (require 'auto-complete-config)
+  (ac-config-default)
+  )
+

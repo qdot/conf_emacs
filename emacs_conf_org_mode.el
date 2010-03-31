@@ -37,6 +37,8 @@
         ) 
   )
 
+(require 'org-checklist)
+
 (reload-org-files)
 
 ;;
@@ -44,8 +46,23 @@
 (require 'remember)
 (org-remember-insinuate)
 
+;; Uses tags from all agenda files in remember mode
+;; Taken from org mode manual
+(add-hook 'org-remember-mode-hook
+          (lambda ()
+            (set (make-local-variable
+                  'org-complete-tags-always-offer-all-agenda-tags)
+                 t)))
+
 ;; Start clock if a remember buffer includes :CLOCK-IN:
 (add-hook 'remember-mode-hook 'my-start-clock-if-needed 'append)
+
+;; Turn off ede mode in org mode so we get C-c . commands back
+(add-hook 'org-mode-hook
+          (lambda ()
+            (ede-minor-mode -1)
+            )
+          )
 
 (defun my-start-clock-if-needed ()
   (save-excursion
@@ -113,9 +130,9 @@
 
 ;; Personal agenda modes
 (setq org-agenda-custom-commands
-      (quote (("h" "Tasks for home" tags-todo "HOME" nil)
-              ("w" "Tasks for work" tags-todo "WORK" nil)
-              ("p" "Tasks for personal projects" tags-todo "PROJECTS" nil)
+      (quote (("h" "Tasks for home" tags-todo "+HOME-someday" nil)
+              ("w" "Tasks for work" tags-todo "+WORK-someday" nil)
+              ("p" "Tasks for personal projects" tags-todo "+PROJECTS-someday" nil)
               )))
 
 ;; org mobile setup, for when it comes out
@@ -129,3 +146,4 @@
 ;; (add-hook 'org-mobile-post-pull-hook
 ;;           (lambda ()
 ;;             (shell-command "scp ~/stage/mobileorg.org user@webdavhost:mobile/")))
+
