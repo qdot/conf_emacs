@@ -120,14 +120,22 @@
 (setq ibuffer-default-sorting-mode 'major-mode)
 (setq ibuffer-always-show-last-buffer t)
 (setq ibuffer-view-ibuffer t)
+(setq ibuffer-show-empty-filter-groups nil)
 
 ;; Set up buffer groups
 (setq ibuffer-saved-filter-groups
       (quote (("default"
                ("Org" (mode . org-mode))
                ("ERC" (mode . erc-mode))
-               ("Emacs Setup" (filename . "/.emacs_files/"))
+               ("Emacs Setup" (or
+                               (filename . "/.emacs_files/")
+                               (filename . "/.emacs_d/")
+                               (filename . "/emacs_d/")
+                               ))
+               ("magit" (name . "magit"))
                ("dired" (mode . dired-mode))
+               ("work projects" (filename . "/build/"))
+               ("home projects" (filename . "/git-projects/"))
                ("emacs" (or
                          (name . "^\\*scratch\\*$")
                          (name . "^\\*Messages\\*$")))
