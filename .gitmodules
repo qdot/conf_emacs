@@ -13,6 +13,18 @@
 [submodule "elisp_local/cedet"]
 	path = elisp_local/cedet
 	url = git://github.com/emacsmirror/cedet.git
+[submodule "elisp_local/auto-complete"]
+	path = elisp_local/auto-complete
+	url = git://github.com/m2ym/auto-complete.git
+[submodule "elisp_local/pymacs"]
+	path = elisp_local/pymacs
+	url = git://github.com/pinard/Pymacs.git
+[submodule "elisp_local/ecb"]
+	path = elisp_local/ecb
+	url = git://github.com/emacsmirror/ecb.git
+[submodule "elisp_local/wanderlust"]
+	path = elisp_local/wanderlust
+	url = git://github.com/dabrahams/wanderlust.git
 [submodule "elisp_local/semi"]
 	path = elisp_local/semi
 	url = git://github.com/dabrahams/semi.git
@@ -22,9 +34,3 @@
 [submodule "elisp_local/apel"]
 	path = elisp_local/apel
 	url = git://github.com/dabrahams/apel.git
-[submodule "elisp_local/wanderlust"]
-	path = elisp_local/wanderlust
-	url = git://github.com/dabrahams/wanderlust.git
-[submodule "elisp_local/ecb"]
-	path = elisp_local/ecb
-	url = git://github.com/emacsmirror/ecb.git
