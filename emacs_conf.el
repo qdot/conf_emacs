@@ -23,6 +23,10 @@
 ;; Local stuff (autosaves, backups, etc...)
 (setq emacs-local-dir (expand-file-name "~/emacs.d/"))
 
+;; File for customizations
+
+(setq custom-file (concat emacs-local-dir "emacs_conf_custom.el"))
+
 (add-to-list 'load-path (expand-file-name emacs-repo-conf-dir))
 (add-to-list 'load-path (expand-file-name emacs-repo-elisp-dir))
 (add-to-list 'load-path (expand-file-name emacs-repo-autoinst-elisp-dir))
@@ -31,7 +35,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; See if we're on MS Windows or Mac OS X
+;; Platforms and fonts
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -51,6 +55,7 @@
 (if linux-p
     (set-face-font 'default "inconsolata-9")
   )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;Make sure we have good ol' LISP available
@@ -61,61 +66,44 @@
 
 (defvar *emacs-load-start* (current-time))
 
-;; Basic emacs setup, personal functions and keybindings
-(load-library "emacs_conf_setup.el")
+(setq lib-files
+      (list 
+       ;; Basic emacs setup, personal functions and keybindings
+       "emacs_conf_setup.el"
+       custom-file
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; When custom decides to add things, have it do so in something other than
-;; .emacs
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+       ;; Always load functions before binds, since we bind to functions 
+       ;; somewhat often       
+       "emacs_conf_funcs.el"
 
-(setq custom-file (concat emacs-local-dir "emacs_conf_custom.el"))
-(when (file-exists-p custom-file)
-      (load-library custom-file)
-)
+       ;; Mac crap
+       "emacs_conf_mac.el"
 
-;; Always load functions before binds, since we bind to functions somewhat often
-(load-library "emacs_conf_funcs.el")
+       ;; Japan!
+       "emacs_conf_apel.el"
 
-(load-library "emacs_conf_mac.el")
-(load-library "emacs_conf_apel.el")
+       ;; Make sure we pick up autoinstall
+       "emacs_conf_autoinstall.el"
 
-;; Make sure we pick up autoinstall
-(load-library "emacs_conf_autoinstall.el")
+       ;; Mode setup and random externals
+       "emacs_conf_exts.el"
+       "emacs_conf_org_mode.el"
+       "emacs_conf_wanderlust.el"
 
-;; Mode setup
-(load-library "emacs_conf_exts.el")
-(load-library "emacs_conf_org_mode.el")
+       ;; Programming related stuff
+       "emacs_conf_programming.el"
+       "emacs_conf_ccmode.el"
+       "emacs_conf_python.el"
+       "emacs_conf_cedet.el"
+       "emacs_conf_ecb.el"
 
-;; (when (file-exists-p 
-;; "elisp_local/wanderlust/wl/wl-news.el")
-;;   (load-library "emacs_conf_wanderlust.el")
-;;   )
+       ;; bind as late as possible, so we already have everything in
+       ;; that we're going to load
+       "emacs_conf_binds.el"
+       )
+      )
 
-;; Programming related stuff
-(load-library "emacs_conf_programming.el")
-(load-library "emacs_conf_ccmode.el")
-(load-library "emacs_conf_python.el")
-
-;; Check to see if we've checked out cedet, if so, load 
-(when (file-exists-p (concat emacs-repo-elisp-submodule-dir "cedet/"))
-  (load-library "emacs_conf_cedet.el")
-  (load-library "emacs_conf_ede_home.el")
-  (when (file-exists-p "emacs_conf_ede_work.el")
-    (load-library "emacs_conf_ede_work.el")
-    )
-  )
-
-;; Check to see if we've checked out ecb, if so, load 
-(when (file-exists-p (concat emacs-repo-elisp-submodule-dir "ecb/"))
-  (load-library "emacs_conf_ecb.el")
-)
-
-;; bind as late as possible, so we already have everything in
-;; that we're going to load
-(load-library "emacs_conf_binds.el")
+(mapcar 'load-library lib-files)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
