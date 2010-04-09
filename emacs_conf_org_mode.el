@@ -147,3 +147,19 @@
 ;;           (lambda ()
 ;;             (shell-command "scp ~/stage/mobileorg.org user@webdavhost:mobile/")))
 
+
+
+;; Org mode notifications via appt
+
+;; the appointment notification facility
+(setq
+  appt-message-warning-time 15 ;; warn 15 min in advance
+  appt-display-interval 5      ;; warn every 5 minutes
+  appt-display-mode-line t     ;; show in the modeline
+  appt-display-format 'window) ;; use our func
+(appt-activate 1)              ;; active appt (appointment notification)
+(display-time)                 ;; time display is required for this...
+
+ ;; update appt each time agenda opened
+
+(add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)

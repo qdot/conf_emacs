@@ -18,13 +18,22 @@
 (add-hook 'asciidoc-mode-hook
           '(lambda ()
              (require 'asciidoc)))
-
+(setq auto-mode-alist
+      (append
+       '(
+         ("\\.testdoc$" . asciidoc-mode)
+         ("\\.archdoc$" . asciidoc-mode)
+         ("\\.doc$" . asciidoc-mode)         
+         ) auto-mode-alist))
 
 ;; markdown mode
 (autoload 'markdown-mode "markdown-mode.el"
   "Major mode for editing Markdown files" t)
 (setq auto-mode-alist
-      (cons '("\\.markdown" . markdown-mode) auto-mode-alist))
+      (append
+       '(
+         ("\\.markdown$" . markdown-mode)
+         ) auto-mode-alist))
 
 ;; jekyll
 (require 'jekyll)
@@ -235,4 +244,62 @@
   (require 'auto-complete-config)
   (ac-config-default)
   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Todochiku notifier
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'todochiku)
+(setq 
+ todochiku-message-too t
+ todochiku-icons-directory (expand-file-name (concat emacs-repo-elisp-dir "todochiku-icons/"))
+ todochiku-icons (quote ((alarm . "alarm.png") (mail . "mail.png")))
+ )
+ 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Yasnippets
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(add-to-list 'load-path
+             (expand-file-name (concat emacs-repo-elisp-src-dir "yasnippet-0.6.1c/")))
+(require 'yasnippet)
+
+(defvar snippet-directories nil)
+
+(mapc '(lambda (path)
+         (and
+          (file-accessible-directory-p path)
+          (add-to-list 'snippet-directories
+                       (expand-file-name path))))
+      (list (expand-file-name (concat emacs-repo-conf-dir "snippets/"))
+            (expand-file-name (concat emacs-repo-elisp-src-dir "yasnippet-0.6.1c/snippets"))
+                               ))
+
+(setq yas/root-directory
+      (list (expand-file-name (expand-file-name (concat emacs-repo-conf-dir "snippets/")))))
+
+(defun yas/load-all-directories ()
+  (interactive)
+  (yas/reload-all)
+  (mapc 'yas/load-directory-1 snippet-directories))
+
+(yas/initialize)
+(yas/load-all-directories)
+
+
+
+
+
+
+
+
+
+
+
+
+
 

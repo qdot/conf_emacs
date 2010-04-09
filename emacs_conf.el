@@ -11,6 +11,10 @@
 (setq emacs-repo-elisp-dir (expand-file-name 
                              (concat emacs-repo-conf-dir "elisp/")))
 
+;; For versioned installed
+(setq emacs-repo-elisp-src-dir (expand-file-name 
+                                (concat emacs-repo-conf-dir "elisp_src/")))
+
 ;; For auto-install.el elisp
 (setq emacs-repo-autoinst-elisp-dir (expand-file-name 
                              (concat emacs-repo-conf-dir "elisp_auto/")))
