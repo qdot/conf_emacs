@@ -1,6 +1,6 @@
 [submodule "elisp_local/magit"]
 	path = elisp_local/magit
-	url = http://git.gitorious.org/magit/mainline.git
+	url = http://github.com/philjackson/magit.git
 [submodule "elisp_local/org_mode"]
 	path = elisp_local/org_mode
 	url = git://repo.or.cz/org-mode.git
@@ -34,3 +34,12 @@
 [submodule "elisp_local/apel"]
 	path = elisp_local/apel
 	url = git://github.com/dabrahams/apel.git
+[submodule "elisp_local/yasnippet"]
+	path = elisp_local/yasnippet
+	url = git://github.com/emacsmirror/yasnippet.git
+[submodule "elisp_local/doxymacs"]
+	path = elisp_local/doxymacs
+	url = git://doxymacs.git.sourceforge.net/gitroot/doxymacs/doxymacs
+[submodule "elisp_local/mingus"]
+	path = elisp_local/mingus
+	url = http://github.com/pft/mingus.git
