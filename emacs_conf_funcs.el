@@ -52,6 +52,51 @@
   (let ((dev (if dev dev "eth0")))
     (format-network-address (car (network-interface-info dev)) t)))
 
+;; http://snipplr.com/view.php?codeview&id=34032
+
+(defun get-ip-addresses ()
+  "Returns the current system IPv4 addresses as a list of
+strings"
+  (let* ((start 0)
+;	 (match-positions ())
+	 (ip-re  "[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?")
+	 ;; The rest of these variables try to make this platform agnostic.
+	 ;; Add more on to the cond statements if you need
+	 (ipconfig (cond ((eq system-type 'windows-nt)
+			  "ipconfig")
+			 ((eq system-type 'gnu/linux)
+			  "/sbin/ifconfig")
+			 ((eq system-type 'darwin)
+			  "/sbin/ifconfig")
+			 (t (error "Don't know how to get-ip-address for %s"
+				   system-type))))
+	 (line-re (cond ((eq system-type 'windows-nt)
+			 "IPv4 Address.*")
+			((eq system-type 'gnu/linux)
+			 (concat "inet addr:" ip-re))
+			((eq system-type 'darwin)
+			 (concat "inet " ip-re))
+			(t (error "Don't know how regex out ip line for %s"
+				  system-type))))
+	 ;; I lied, not all of the rest of the variables are to make it
+	 ;; platform agnostic.  This is where we grab the output
+	 (output (shell-command-to-string ipconfig)))
+
+    ;; The inner loop is a bit funky since I can't seem to get it to behave
+    ;; exactly like Common Lisp
+    (loop for pos in
+	  (loop named inner
+		with match-positions = ()
+		do (let ((ret (string-match line-re output start)))
+		     (if ret
+			 (setq start (1+ ret))
+		       (return-from inner match-positions))
+		     (setq match-positions
+			   (append match-positions (list ret)))))
+	  collect (progn
+		    (string-match ip-re output pos)
+		    (match-string 0 output)))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Reload current file with position saved
@@ -234,3 +279,33 @@
                (rename-buffer new-name)
                (set-visited-file-name new-name)
                (set-buffer-modified-p nil)))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Abort minibuffer when mousing
+;; http://trey-jackson.blogspot.com/2010/04/emacs-tip-36-abort-minibuffer-when.html
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun stop-using-minibuffer ()
+  "kill the minibuffer"
+  (when (>= (recursion-depth) 1)
+    (abort-recursive-edit)))
+
+(add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
+
+
+(define-generic-mode 'nsis-generic-mode
+  nil ;;'(";")
+  '("Section" "SectionEnd" "Function" "FunctionEnd" "Call" "Goto")
+  '(("!\\([A-Za-z]+\\)" (1 'font-lock-builtin-face))
+    ("$[({]?\\([A-Za-z0-9_]+\\)[)}]?" (1 'font-lock-variable-name-face))
+    )
+  (list "\\.\\(nsi\\|nsh\\)$")    
+  nil
+  "Generic mode for nsis files.")
+
+;; http://www.emacswiki.org/emacs/ElispCookbook
+(defun qdot/filter (condp lst)
+    (delq nil
+          (mapcar (lambda (x) (and (funcall condp x) x)) lst)))
+
