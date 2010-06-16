@@ -49,19 +49,19 @@
 ;; Uses tags from all agenda files in remember mode
 ;; Taken from org mode manual
 (add-hook 'org-remember-mode-hook
-          (lambda ()
-            (set (make-local-variable
-                  'org-complete-tags-always-offer-all-agenda-tags)
-                 t)))
+          '(lambda ()
+             (set (make-local-variable
+                   'org-complete-tags-always-offer-all-agenda-tags)
+                  t)))
 
 ;; Start clock if a remember buffer includes :CLOCK-IN:
 (add-hook 'remember-mode-hook 'my-start-clock-if-needed 'append)
 
 ;; Turn off ede mode in org mode so we get C-c . commands back
 (add-hook 'org-mode-hook
-          (lambda ()
-            (ede-minor-mode -1)
-            )
+          '(lambda ()
+             (ede-minor-mode -1)
+             )
           )
 
 (defun my-start-clock-if-needed ()
@@ -128,11 +128,18 @@
 ;; Save the running clock and all clock history when exiting Emacs, load it on startup
 (setq org-clock-persist t)
 
+
 ;; Personal agenda modes
 (setq org-agenda-custom-commands
       (quote (("h" "Tasks for home" tags-todo "+HOME-someday" nil)
               ("w" "Tasks for work" tags-todo "+WORK-someday" nil)
               ("p" "Tasks for personal projects" tags-todo "+PROJECTS-someday" nil)
+              ("X" agenda ""
+               (;;(org-agenda-prefix-format " [ ] ")
+                (org-agenda-with-colors nil)
+                (org-agenda-remove-tags t)
+                )               
+               ("~/emacs_org/agenda.txt"))
               )))
 
 ;; org mobile setup, for when it comes out
@@ -163,3 +170,4 @@
  ;; update appt each time agenda opened
 
 (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
+
