@@ -51,18 +51,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
 ;; Set prefix key to `, just like in gnu screen
-(setq elscreen-prefix-key "`")
+;; (setq elscreen-prefix-key "`")
 
-(require 'elscreen)
-(require 'elscreen-dired)
-(require 'elscreen-color-theme)
-(require 'elscreen-server)
-(require 'elscreen-buffer-list)
+;; (require 'elscreen)
+;; (require 'elscreen-dired)
+;; (require 'elscreen-color-theme)
+;; (require 'elscreen-server)
+;; (require 'elscreen-buffer-list)
 
-(setq elscreen-buffer-list-enabled t)
+;; (setq elscreen-buffer-list-enabled t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -239,12 +237,6 @@
   (scroll-bar-mode 1)                       ;; otherwise, show a scrollbar...
   (set-scroll-bar-mode 'right))             ;; ... on the right
 
-(when (file-exists-p (concat emacs-repo-elisp-submodule-dir "auto-complete/"))
-  (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "auto-complete/")))
-  (require 'auto-complete-config)
-  (ac-config-default)
-  )
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Todochiku notifier
@@ -253,9 +245,8 @@
 
 (require 'todochiku)
 (setq 
- todochiku-message-too t
  todochiku-icons-directory (expand-file-name (concat emacs-repo-elisp-dir "todochiku-icons/"))
- todochiku-icons (quote ((alarm . "alarm.png") (mail . "mail.png")))
+ todochiku-icons (quote ((alarm . "alarm.png") (mail . "mail.png") (irc . "irc.png")))
  )
  
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -264,42 +255,63 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defvar yas-directory (expand-file-name (concat emacs-repo-elisp-submodule-dir "yasnippet/")))
+
 (add-to-list 'load-path
-             (expand-file-name (concat emacs-repo-elisp-src-dir "yasnippet-0.6.1c/")))
+             yas-directory)
 (require 'yasnippet)
-
-(defvar snippet-directories nil)
-
-(mapc '(lambda (path)
-         (and
-          (file-accessible-directory-p path)
-          (add-to-list 'snippet-directories
-                       (expand-file-name path))))
-      (list (expand-file-name (concat emacs-repo-conf-dir "snippets/"))
-            (expand-file-name (concat emacs-repo-elisp-src-dir "yasnippet-0.6.1c/snippets"))
-                               ))
-
-(setq yas/root-directory
-      (list (expand-file-name (expand-file-name (concat emacs-repo-conf-dir "snippets/")))))
-
-(defun yas/load-all-directories ()
-  (interactive)
-  (yas/reload-all)
-  (mapc 'yas/load-directory-1 snippet-directories))
-
+(setq yas/root-directory '("~/.emacs_files/snippets"
+                           "~/.emacs_files/elisp_local/yasnippet/snippets"))
 (yas/initialize)
-(yas/load-all-directories)
+(mapc 'yas/load-directory yas/root-directory)
+(yas/global-mode t)
 
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Make sure I always come back to the same place in a file
+;; http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setq-default save-place t) 
+(require 'saveplace) 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; auto-complete
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(when (file-exists-p (concat emacs-repo-elisp-submodule-dir "auto-complete/"))
+  (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "auto-complete/")))
+  (require 'auto-complete-config)
+  (ac-config-default)
 
+  (defun qdot/ac-config-python ()
+    ;;(ac-ropemacs-require)
+    ;;((setq ac-sources (append '(ac-source-yasnippet ac-source-ropemacs) ac-sources))))
+    )
 
+  (add-hook 'python-mode-hook 'qdot/ac-config-python)
 
+  (global-auto-complete-mode t)
+  (setq ac-auto-start 3)
+  (setq ac-dwim t)
+  (set-default 'ac-sources '(ac-source-yasnippet ac-source-abbrev ac-source-words-in-buffer ac-source-files-in-current-dir ac-source-symbols))
+  )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; mingus
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(when (file-exists-p (concat emacs-repo-elisp-submodule-dir "mingus/"))
+  (add-to-list 'load-path (concat emacs-repo-elisp-submodule-dir "mingus/"))
+  (require 'mingus-stays-home)
+  )
 
 
