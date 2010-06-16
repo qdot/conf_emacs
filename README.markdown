@@ -20,7 +20,7 @@ git submodule --init update
 
 To get the latest submodules. Thanks goes to whoever runs
 
-[http://github.com/emacs-pkg-mirrors](http://github.com/emacs-pkg-mirrors)
+[http://github.com/emacsmirror](http://github.com/emacsmirror)
 
 For keeping git versions of the cedet and w3m repos
 
