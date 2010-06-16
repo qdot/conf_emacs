@@ -15,6 +15,9 @@
 
 (setq inhibit-splash-screen t)
 
+(setq visible-bell nil) 
+(setq ring-bell-function 'ignore)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Command Frequency Recording Mode
