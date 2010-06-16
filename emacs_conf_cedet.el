@@ -5,7 +5,7 @@
     (load-file "~/.emacs_files/elisp_local/cedet/common/cedet.el")
 
     ;; Remember to turn this off in org mode, since it binds C-c ., ruining date entry
-    (global-ede-mode t)
+    ;;(global-ede-mode t)
 
     (setq-default semanticdb-default-save-directory "~/.emacs_meta/semanticdb/"
                   semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
@@ -109,16 +109,18 @@
     (global-set-key [f5] 'My-Compile)
 
     (if macosx-p    
-        (setq qt4-base-dir "/Library/Frameworks/QtCore.framework/Headers")
-      (setq qt4-gui-dir "/Library/Frameworks/QtGui.framework/Headers")
-      (setq qt4-opengl-dir "/Library/Frameworks/QtOpenGL.framework/Headers")
-      (semantic-add-system-include qt4-base-dir 'c++-mode)
-      (semantic-add-system-include qt4-gui-dir 'c++-mode)
-      (semantic-add-system-include qt4-opengl-dir 'c++-mode)
-      (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
-      (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "qconfig.h"))
-      (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "qconfig-dist.h"))
-      (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "qglobal.h"))
+        (progn
+          (setq qt4-base-dir "/Library/Frameworks/QtCore.framework/Headers")
+          (setq qt4-gui-dir "/Library/Frameworks/QtGui.framework/Headers")
+          (setq qt4-opengl-dir "/Library/Frameworks/QtOpenGL.framework/Headers")
+          (semantic-add-system-include qt4-base-dir 'c++-mode)
+          (semantic-add-system-include qt4-gui-dir 'c++-mode)
+          (semantic-add-system-include qt4-opengl-dir 'c++-mode)
+          (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
+          (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "qconfig.h"))
+          (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "qconfig-dist.h"))
+          (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "qglobal.h"))
+          )
       )
 
     (setq-mode-local c-mode semanticdb-find-default-throttle
