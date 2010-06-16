@@ -77,6 +77,11 @@
 (when (file-exists-p "~/.emacs_files/elisp_local/magit")
   (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/magit/"))
   (require 'magit)
+  (if macosx-p
+      (custom-set-variables
+       '(magit-git-executable "/usr/local/git/bin/git")
+       )
+    )
   )
 
 ;; eldoc mode for showing function calls in mode line
@@ -100,11 +105,17 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'flymake)
-(defun my-flymake-off-hook ()
-  (flymake-mode 0)
-)
-(add-hook 'nxml-mode-hook 'my-flymake-off-hook)
-(add-hook 'c++-mode-hook 'my-flymake-off-hook)
-(add-hook 'c-mode-hook 'my-flymake-off-hook)
-(add-hook 'xml-mode-hook 'my-flymake-off-hook)
+;; (require 'flymake)
+;; (defun my-flymake-off-hook ()
+;;   (flymake-mode 0)
+;; )
+;; (add-hook 'nxml-mode-hook 'my-flymake-off-hook)
+;; (add-hook 'c++-mode-hook 'my-flymake-off-hook)
+;; (add-hook 'c-mode-hook 'my-flymake-off-hook)
+;; (add-hook 'xml-mode-hook 'my-flymake-off-hook)
+
+(autoload 'paredit-mode "paredit"
+  "Minor mode for pseudo-structurally editing Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
+(add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
+(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
