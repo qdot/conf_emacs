@@ -89,10 +89,14 @@
        ;; Make sure we pick up autoinstall
        "emacs_conf_autoinstall.el"
 
+       ;; Windows mode (for restoring buffer configurations)
+       "emacs_conf_windows.el"
+
        ;; Mode setup and random externals
        "emacs_conf_exts.el"
        "emacs_conf_org_mode.el"
        "emacs_conf_wanderlust.el"
+       "emacs_conf_erc.el"
 
        ;; Programming related stuff
        "emacs_conf_programming.el"
