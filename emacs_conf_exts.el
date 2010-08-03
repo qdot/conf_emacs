@@ -52,15 +52,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Set prefix key to `, just like in gnu screen
-;; (setq elscreen-prefix-key "`")
+(setq elscreen-prefix-key "`")
 
-;; (require 'elscreen)
-;; (require 'elscreen-dired)
-;; (require 'elscreen-color-theme)
-;; (require 'elscreen-server)
-;; (require 'elscreen-buffer-list)
+(require 'elscreen)
+(require 'elscreen-dired)
+(require 'elscreen-color-theme)
+(require 'elscreen-server)
+(require 'elscreen-buffer-list)
 
-;; (setq elscreen-buffer-list-enabled t)
+(setq elscreen-buffer-list-enabled t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -136,15 +136,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (when (file-exists-p "~/.emacs_files/elisp_local/scel")
-
-  ;;Assume we're on a mac with SuperCollider in the normal spot
-  ;; (when (file-exists-p "/Applications/SuperCollider/sclang")
-  ;;   (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/scel/el"))
-  ;;   (custom-set-variables
-  ;;    '(sclang-program "/Applications/SuperCollider/sclang")
-  ;;    )
-  ;;   (require 'sclang)
-  ;;   )
+  ;; Assume we're on a mac with SuperCollider in the normal spot
+  (when (file-exists-p "/Applications/SuperCollider/sclang")
+    (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/scel/el"))
+    (custom-set-variables
+     '(sclang-auto-scroll-post-buffer t)
+     '(sclang-eval-line-forward nil)
+     '(sclang-help-path (quote ("/Applications/SuperCollider/Help")))
+     '(sclang-runtime-directory "~/.sclang/")
+     '(sclang-program "/Applications/SuperCollider/sclang")
+     )
+    (require 'sclang)
+    )
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -266,9 +269,6 @@
 (mapc 'yas/load-directory yas/root-directory)
 (yas/global-mode t)
 
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Make sure I always come back to the same place in a file
@@ -285,22 +285,24 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "pymacs")))
+
 (when (file-exists-p (concat emacs-repo-elisp-submodule-dir "auto-complete/"))
   (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "auto-complete/")))
   (require 'auto-complete-config)
   (ac-config-default)
-
+  (ac-flyspell-workaround)
+  
   (defun qdot/ac-config-python ()
-    ;;(ac-ropemacs-require)
-    ;;((setq ac-sources (append '(ac-source-yasnippet ac-source-ropemacs) ac-sources))))
-    )
+    (ac-ropemacs-require)
+    (setq ac-sources (append '(ac-source-yasnippet ac-source-ropemacs) ac-sources)))
 
   (add-hook 'python-mode-hook 'qdot/ac-config-python)
 
   (global-auto-complete-mode t)
   (setq ac-auto-start 3)
   (setq ac-dwim t)
-  (set-default 'ac-sources '(ac-source-yasnippet ac-source-abbrev ac-source-words-in-buffer ac-source-files-in-current-dir ac-source-symbols))
+  (set-default 'ac-sources '(ac-source-yasnippet ac-source-semantic))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -321,3 +323,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'mud)
+
+(add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/emacs-w3m"))
+
+(require 'w3m-load)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; rudel
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(load-file (expand-file-name (concat emacs-repo-elisp-submodule-dir "rudel/rudel-loaddefs.el")))

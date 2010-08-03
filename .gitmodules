@@ -43,3 +43,6 @@
 [submodule "elisp_local/mingus"]
 	path = elisp_local/mingus
 	url = http://github.com/pft/mingus.git
+[submodule "elisp_local/rudel"]
+	path = elisp_local/rudel
+	url = git://github.com/scymtym/rudel.git
