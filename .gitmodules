@@ -24,16 +24,16 @@
 	url = git://github.com/emacsmirror/ecb.git
 [submodule "elisp_local/wanderlust"]
 	path = elisp_local/wanderlust
-	url = git://github.com/dabrahams/wanderlust.git
+	url = git://github.com/wanderlust/wanderlust.git
 [submodule "elisp_local/semi"]
 	path = elisp_local/semi
-	url = git://github.com/dabrahams/semi.git
+	url = git://github.com/wanderlust/semi.git
 [submodule "elisp_local/flim"]
 	path = elisp_local/flim
-	url = git://github.com/dabrahams/flim.git
+	url = git://github.com/wanderlust/flim.git
 [submodule "elisp_local/apel"]
 	path = elisp_local/apel
-	url = git://github.com/dabrahams/apel.git
+	url = git://github.com/wanderlust/apel.git
 [submodule "elisp_local/yasnippet"]
 	path = elisp_local/yasnippet
 	url = git://github.com/emacsmirror/yasnippet.git
