@@ -1824,8 +1824,8 @@ Non-nil for optional argument PRESERVE keeps all current buffers."
 	(or (eq t (frame-visible-p goal))
 	    (make-frame-visible goal))
 	(while (not (frame-visible-p goal)) (sit-for 0))
+        (select-frame-by-name (get-frame-name goal))
 	(raise-frame goal)
-	(select-frame goal)
 	(if (not (eq (selected-frame) goal))
 	    nil
 	  (or win:xemacs-p (unfocus-frame))
