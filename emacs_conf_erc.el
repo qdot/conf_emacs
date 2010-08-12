@@ -19,7 +19,7 @@
 
 (load-library "erc-highlight-nicknames")
 (add-to-list 'erc-modules 'highlight-nicknames)
-(add-to-list 'erc-modules 'scrolltobottom)
+;; (add-to-list 'erc-modules 'scrolltobottom)
 (add-to-list 'erc-modules 'match)
 (erc-update-modules)
 
@@ -40,14 +40,18 @@
       erc-fill-prefix "      "
       erc-timestamp-mode t
       erc-max-buffer-size 20000
-      erc-interpret-mirc-color t
+      erc-interpret-mirc-color nil
       erc-insert-timestamp-function 'erc-insert-timestamp-left)
-(erc-scrolltobottom-enable)
-(setq erc-keywords '((".*Online.*" (:foreground "green"))
-                     (".*Busy" (:foreground "red"))
-                     (".*Away" (:foreground "red"))
-                     (".*Idle" (:foreground "orange"))
-                     ))
+;; (erc-scrolltobottom-enable)
+;;  (erc-scrolltobottom-disable)
+;; (add-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
+;; (setq erc-keywords '((".*Online.*" (:foreground "green"))
+;;                      (".*Busy" (:foreground "red"))
+;;                      (".*Away" (:foreground "red"))
+;;                      (".*Idle" (:foreground "orange"))
+;;                      ))
+
+(setq erc-keywords nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -82,8 +86,7 @@
        "ERC Mention"
        (concat "ERC: name mentioned on: " (buffer-name (current-buffer)))
        (todochiku-icon 'irc)
-       )
-    ))
+       )))
 (add-hook 'erc-text-matched-hook 'qdot/text-match-erc-hook)
 
 (defvar qdot/erc-nopage-nick-list nil 
@@ -116,9 +119,7 @@ that can occur between two notifications.  The default is
             (setcdr cur-assoc cur-time)
             (> (abs (- cur-time last-time)) delay))
         (push (cons nick cur-time) qdot/erc-page-nick-alist)
-        t))
-    )
-  )
+        t))))
 
 (defun qdot/erc-page-popup-notification (nick)
   (when window-system
@@ -128,10 +129,7 @@ that can occur between two notifications.  The default is
         (todochiku-message
          "ERC Mention"
          (concat "ERC: priv-msg from " nick)
-         (todochiku-icon 'irc)
-         ))    
-    )  
-  )
+         (todochiku-icon 'irc)))))
 
 ;; The hook for figuring out whether or not we should be paged
 (defun qdot/erc-page-me-PRIVMSG (proc parsed)
@@ -174,22 +172,15 @@ that can occur between two notifications.  The default is
 (defun qdot/free-query-window-p (window)
   (let ((r nil))
     (if (string= "bitlbee-placeholder" (buffer-name (window-buffer window)))
-        (setq r t)
-      )
-    r)
-  )
+        (setq r t))
+    r))
 
 
 
 (defun qdot/erc-move-query-to-placeholder (buffer)
   (if (get-buffer-window "&bitlbee" t)
-      (let* 
-          ((free-window-list (qdot/filter 'qdot/free-query-window-p (window-list (window-frame (get-buffer-window "&bitlbee" t)))))
-           )
-          (set-window-buffer (car free-window-list) buffer)
-          )
-    )
-  )
+      (let* ((free-window-list (qdot/filter 'qdot/free-query-window-p (window-list (window-frame (get-buffer-window "&bitlbee" t))))))
+        (set-window-buffer (car free-window-list) buffer))))
 
 (defun qdot/erc-privmsg-query-allocate (proc parsed)
   ;; Find the frame holding the bitlbee& buffer. We'll consider that our privmsg window
@@ -205,22 +196,16 @@ that can occur between two notifications.  The default is
 		       nick
 		     (if (erc-current-nick-p target)
 			 nick
-		       target)))
-           )
+		       target))))
 
         ;;If the buffer doesn't even exist yet, go ahead and run auto-query to make it happen
         (if (not (erc-get-buffer query proc))
             (erc-auto-query proc parsed))
-        ;;If we find one, allocate into that
+        ;;If we find one, allocate into that, otherwise, commense undefined behavior
         (when (and (erc-current-nick-p target)
                    (not (erc-is-message-ctcp-and-not-action-p msg))
-                   (not (get-buffer-window (erc-get-buffer query proc) t))
-                   )
-          (qdot/erc-move-query-to-placeholder (erc-get-buffer query proc))
-          )
-        ;;If we're all full, uh...
-        )
-    )
+                   (not (get-buffer-window (erc-get-buffer query proc) t)))
+          (qdot/erc-move-query-to-placeholder (erc-get-buffer query proc)))))
   nil
   )
 
@@ -230,8 +215,7 @@ that can occur between two notifications.  The default is
 
 (defun qdot/erc-query-buffer-recycle ()
   (if (erc-query-buffer-p (current-buffer))
-      (set-window-buffer (get-buffer-window (current-buffer)) (get-buffer "bitlbee-placeholder"))
-    )
+      (set-window-buffer (get-buffer-window (current-buffer)) (get-buffer "bitlbee-placeholder")))
   nil)
 
 (add-hook 'kill-buffer-hook 'qdot/erc-query-buffer-recycle)
@@ -256,8 +240,7 @@ that can occur between two notifications.  The default is
 (defun qdot/erc-set-tunnel-flag ()
   (setq qdot/erc-znc-tunnel-flag nil)
   (if (not (qdot/filter (lambda (arg) (if (string-match qdot/erc-znc-home-prefix arg) arg nil)) (get-ip-addresses)))      
-      (setq qdot/erc-znc-tunnel-flag t)
-    ))
+      (setq qdot/erc-znc-tunnel-flag t)))
 
 (defun qdot/erc-znc-connect (nick)
   (interactive "ZNC Nick:")
@@ -267,24 +250,19 @@ that can occur between two notifications.  The default is
 
 (defun qdot/erc-znc-rename-server-buffer ()
   (interactive)
-
   (let ((current-network (caddr (split-string (erc-current-nick) "-"))))
     (save-excursion
       (set-buffer (erc-server-buffer))
       (rename-buffer (concat "znc-" current-network))
       (message (format "Renamed buffer to %s" (concat "znc-" current-network)))
-      )
-    )
-  )
+      )))
 
 (defun qdot/erc-znc-initialize (proc parsed)
   ;; Prepend all ZNC buffers with znc-
   (if (and (not (string-match "znc-" (buffer-name (erc-server-buffer)))) (string-match "qdot-znc" (erc-current-nick)))
       (progn
         (qdot/erc-znc-rename-server-buffer)
-        (erc-server-send (format "PASS %s:%s" (erc-current-nick) qdot/erc-znc-password))
-        )
-    )
+        (erc-server-send (format "PASS %s:%s" (erc-current-nick) qdot/erc-znc-password))))
   nil)
 
 (add-hook 'erc-server-NOTICE-functions 'qdot/erc-znc-initialize)
@@ -295,9 +273,9 @@ that can occur between two notifications.  The default is
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar qdot/erc-znc-nicks '("qdot-znc-anthrochat" "qdot-znc-freenode" "qdot-znc-electricrain" "qdot-znc-510"))
+(defvar qdot/erc-znc-nicks '("qdot-znc-freenode" "qdot-znc-electricrain" "qdot-znc-510"))
 (defvar qdot/erc-znc-tunnel-flag nil "*Non-nil means use tunnel")
-(defvar qdot/erc-znc-password "NOTMYPASS")
+(defvar qdot/erc-znc-password "ircfox")
 (defvar qdot/erc-znc-home-server "192.168.123.75")
 (defvar qdot/erc-znc-home-prefix "192.168.123.")
 (defvar qdot/erc-znc-remote-server "localhost")
@@ -306,14 +284,12 @@ that can occur between two notifications.  The default is
 (defun qdot/erc-znc-start ()
   (interactive)
   (qdot/erc-set-tunnel-flag)
-  (mapcar 'qdot/erc-znc-connect qdot/erc-znc-nicks)
-  )
+  (mapcar 'qdot/erc-znc-connect qdot/erc-znc-nicks))
 
 (defun qdot/bitlbee-connect ()
   (interactive)
   (qdot/erc-set-tunnel-flag)
-  (qdot/erc-znc-connect "qdot-znc-bitlbee")
-  )
+  (qdot/erc-znc-connect "qdot-znc-bitlbee"))
 
 (defun qdot/bitlbee-resume-layout ()
   (interactive)
@@ -322,11 +298,11 @@ that can occur between two notifications.  The default is
   (save-excursion
     ;; Bring up the bitlbee nicklist
     (set-buffer "&bitlbee")
-    (erc-nicklist)
-    )
+    (erc-nicklist))
   (qdot/resume-layout-file "~/.emacs_files/layouts/bitlbee_layout.el")
   ;; For each already opened query window, reallocate
-)
+  (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf)) (qdot/filter 'erc-query-buffer-p (buffer-list)))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -348,20 +324,13 @@ that can occur between two notifications.  The default is
            (if (get-buffer-process (window-buffer))
                (delete-process (get-buffer-process (window-buffer))))
            (kill-buffer (window-buffer))
-           )
-       )
-     )
-   nil nil
-   )
+           )))
+   nil nil)
   (walk-windows
    (lambda (arg) 
-            (if (or (erc-server-buffer-p (window-buffer arg)) (erc-channel-p (window-buffer arg)))
-                (kill-buffer (window-buffer arg))
-              )
-            )
-   nil nil
-   )
-  )
+     (if (or (erc-server-buffer-p (window-buffer arg)) (erc-channel-p (window-buffer arg)))
+         (kill-buffer (window-buffer arg))))
+   nil nil))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
