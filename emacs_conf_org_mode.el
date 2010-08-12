@@ -43,57 +43,61 @@
 
 ;;
 ;;;  Load Org Remember Stuff
-(require 'remember)
-(org-remember-insinuate)
+;; (require 'remember)
+;; (org-remember-insinuate)
 
 ;; Uses tags from all agenda files in remember mode
 ;; Taken from org mode manual
-(add-hook 'org-remember-mode-hook
-          '(lambda ()
-             (set (make-local-variable
-                   'org-complete-tags-always-offer-all-agenda-tags)
-                  t)))
+;; (add-hook 'org-remember-mode-hook
+;;           '(lambda ()
+;;              (set (make-local-variable
+;;                    'org-complete-tags-always-offer-all-agenda-tags)
+;;                   t)))
 
 ;; Start clock if a remember buffer includes :CLOCK-IN:
-(add-hook 'remember-mode-hook 'my-start-clock-if-needed 'append)
+;; (add-hook 'remember-mode-hook 'my-start-clock-if-needed 'append)
 
 ;; Turn off ede mode in org mode so we get C-c . commands back
 (add-hook 'org-mode-hook
           '(lambda ()
-             (ede-minor-mode -1)
+             (ede-minor-mode nil)
              )
           )
 
-(defun my-start-clock-if-needed ()
-  (save-excursion
-    (goto-char (point-min))
-    (when (re-search-forward " *:CLOCK-IN: *" nil t)
-      (replace-match "")
-      (org-clock-in))))
+;; (defun my-start-clock-if-needed ()
+;;   (save-excursion
+;;     (goto-char (point-min))
+;;     (when (re-search-forward " *:CLOCK-IN: *" nil t)
+;;       (replace-match "")
+;;       (org-clock-in))))
 
 (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d!/!)")
                                 (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)"))))
 
 ;; I use C-M-r to start org-remember
-(global-set-key (kbd "C-M-r") 'org-remember)
+;; (setq org-default-notes-file (concat org-directory "/notes.org"))
+(global-set-key (kbd "C-M-r") 'org-capture)
 
 ;; Keep clocks running
-(setq org-remember-clock-out-on-exit nil)
-
-;; C-c C-c stores the note immediately
-(setq org-remember-store-without-prompt t)
+;; (setq org-remember-clock-out-on-exit nil)
 
 ;; I don't use this -- but set it in case I forget to specify a location in a future template
-(setq org-remember-default-headline "Tasks")
+;; (setq org-remember-default-headline "Tasks")
 
 ;; 3 remember templates for TODO tasks, Notes, and Phone calls
-(setq org-remember-templates (quote (("todo" ?t "* TODO %?
+;; (setq org-remember-templates (quote (("todo" ?t "* TODO %?
+;;   %u
+;;   %a" "~/emacs_org/tasks.org" bottom nil)
+;;                                      ("note" ?n "* %?                                        :NOTE:
+;;   %u
+;;   %a" "~/emacs_org/notes.org" bottom nil)
+;; 				     )))
+
+(setq org-capture-templates (quote (("t" "todo" entry (file "~/emacs_org/tasks.org") "* TODO %?
   %u
-  %a" "~/emacs_org/tasks.org" bottom nil)
-                                     ("note" ?n "* %?                                        :NOTE:
+  %a") ("n" "note" entry (file "~/emacs_org/notes.org") "* %?                                        :NOTE:
   %u
-  %a" "~/emacs_org/notes.org" bottom nil)
-				     )))
+  %a"))))
 
 
 
@@ -154,6 +158,11 @@
 ;;           (lambda ()
 ;;             (shell-command "scp ~/stage/mobileorg.org user@webdavhost:mobile/")))
 
+(setq org-directory "~/emacs_org")
+;; Set to the name of the file where new notes will be stored
+(setq org-mobile-inbox-for-pull "~/emacs_org/mobile.org")
+;; Set to <your Dropbox root directory>/MobileOrg.
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
 
 
 ;; Org mode notifications via appt
@@ -163,7 +172,7 @@
   appt-message-warning-time 15 ;; warn 15 min in advance
   appt-display-interval 5      ;; warn every 5 minutes
   appt-display-mode-line t     ;; show in the modeline
-  appt-display-format 'window) ;; use our func
+  appt-display-format 'nil) ;; use our func
 (appt-activate 1)              ;; active appt (appointment notification)
 (display-time)                 ;; time display is required for this...
 
