@@ -167,3 +167,12 @@
 (require 'ansi-color)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Browser setup for linux
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(if linux-p
+    (setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "google-chrome"))

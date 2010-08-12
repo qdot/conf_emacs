@@ -33,6 +33,9 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; TODO This freaks out if pyflakes isn't available on the system
+(if macosx-p
+    (setq flyflakes-pyflakes-command "/Library/Frameworks/Python.app/Versions/Current/bin/pyflakes"))
 (require 'flyflakes)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -68,17 +71,23 @@
 
 (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "pymacs")))
 
-(require 'pymacs)
-(autoload 'pymacs-apply "pymacs")
-(autoload 'pymacs-call "pymacs")
-(autoload 'pymacs-eval "pymacs" nil t)
-(autoload 'pymacs-exec "pymacs" nil t)
-(autoload 'pymacs-load "pymacs" nil t)
-;;(eval-after-load "pymacs"
-;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
-(pymacs-load "ropemacs" "rope-")
-(setq ropemacs-enable-autoimport t)
-;; loading of ropemacs is taken care of by auto-complete
+(defun qdot/ac-config-python ()
+  (ac-ropemacs-require)
+  (setq ac-sources (append '(ac-source-yasnippet ac-source-ropemacs) ac-sources)))
+(add-hook 'python-mode-hook 'qdot/ac-config-python)
+
+(defun load-python-ac-reqs()
+  (require 'pymacs)
+  (autoload 'pymacs-apply "pymacs")
+  (autoload 'pymacs-call "pymacs")
+  (autoload 'pymacs-eval "pymacs" nil t)
+  (autoload 'pymacs-exec "pymacs" nil t)
+  (autoload 'pymacs-load "pymacs" nil t)
+  ;;(eval-after-load "pymacs"
+  ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
+  ;;(pymacs-load "ropemacs" "rope-")
+  (setq ropemacs-enable-autoimport t))
+
 
 (defun my-python-mode-hook()
   (font-lock-mode 1)
@@ -87,7 +96,7 @@
   (set-variable 'tab-width 4)
   (set-variable 'py-indent-offset 4)
   (lambda () (eldoc-mode 1))
-  (local-set-key "\C-ch" 'pylookup-lookup)
+  ;; (local-set-key "\C-ch" 'pylookup-lookup)
   )
 
 (add-hook 'python-mode-hook 'my-python-mode-hook)

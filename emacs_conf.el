@@ -27,9 +27,14 @@
 ;; Local stuff (autosaves, backups, etc...)
 (setq emacs-local-dir (expand-file-name "~/emacs.d/"))
 
-;; File for customizations
+(if (not (file-exists-p emacs-local-dir))
+    (make-directory emacs-local-dir))
 
 (setq custom-file (concat emacs-local-dir "emacs_conf_custom.el"))
+
+(if (not (file-exists-p custom-file))
+    (with-temp-buffer
+      (write-file custom-file)))
 
 (add-to-list 'load-path (expand-file-name emacs-repo-conf-dir))
 (add-to-list 'load-path (expand-file-name emacs-repo-elisp-dir))

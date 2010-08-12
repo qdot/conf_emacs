@@ -293,12 +293,6 @@
   (ac-config-default)
   (ac-flyspell-workaround)
   
-  (defun qdot/ac-config-python ()
-    (ac-ropemacs-require)
-    (setq ac-sources (append '(ac-source-yasnippet ac-source-ropemacs) ac-sources)))
-
-  (add-hook 'python-mode-hook 'qdot/ac-config-python)
-
   (global-auto-complete-mode t)
   (setq ac-auto-start 3)
   (setq ac-dwim t)

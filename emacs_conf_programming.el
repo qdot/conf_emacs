@@ -32,6 +32,16 @@
 
 (load-library "flymake_cursor.el")
 
+(when (file-exists-p (concat emacs-repo-elisp-src-dir "haskell-mode/"))
+  (add-to-list 'load-path (concat emacs-repo-elisp-src-dir "haskell-mode/"))
+  (require 'haskell-mode)
+  (require 'inf-haskell)
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+  (add-hook 'haskell-mode-hook 'font-lock-mode)
+  (setq haskell-font-lock-symbols t)
+)
+
 ;; file extension mode recognition
 (setq auto-mode-alist
       (append
@@ -44,6 +54,7 @@
          ("\\.wiki$" . wikipedia-mode)
          ("\\.json$" . python-mode)
          ("\\.cmake$" . cmake-mode)
+         ("\\.hs$" . haskell-mode)
          ("CMakeLists\\.txt\\'" . cmake-mode)
          ("ChangeLog\\.txt\\'" . change-log-mode)
          ("\\.lua$" . lua-mode)
@@ -98,6 +109,7 @@
 (add-hook 'cmake-mode-hook 'linum-mode)
 (add-hook 'c++-mode-hook 'linum-mode)
 (add-hook 'c-mode-hook 'linum-mode)
+(add-hook 'haskell-mode-hook 'linum-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -105,17 +117,34 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (require 'flymake)
-;; (defun my-flymake-off-hook ()
-;;   (flymake-mode 0)
-;; )
-;; (add-hook 'nxml-mode-hook 'my-flymake-off-hook)
-;; (add-hook 'c++-mode-hook 'my-flymake-off-hook)
-;; (add-hook 'c-mode-hook 'my-flymake-off-hook)
-;; (add-hook 'xml-mode-hook 'my-flymake-off-hook)
+(require 'flymake)
+(defun my-flymake-off-hook ()
+  (flymake-mode 0)
+)
+(add-hook 'haskell-mode-hook 'my-flymake-off-hook)
+(add-hook 'nxml-mode-hook 'my-flymake-off-hook)
+(add-hook 'c++-mode-hook 'my-flymake-off-hook)
+(add-hook 'c-mode-hook 'my-flymake-off-hook)
+(add-hook 'xml-mode-hook 'my-flymake-off-hook)
 
-(autoload 'paredit-mode "paredit"
-  "Minor mode for pseudo-structurally editing Lisp code." t)
-(add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
-(add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
-(add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
+;; (autoload 'paredit-mode "paredit"
+;;   "Minor mode for pseudo-structurally editing Lisp code." t)
+;; (add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
+;; (add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
+;; (add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; smerge mode for looking at inline conflicts
+;; http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun sm-try-smerge ()
+  (save-excursion
+    (goto-char (point-min))
+    (when (re-search-forward "^<<<<<<< " nil t)
+      (smerge-mode 1))))
+
+(add-hook 'find-file-hook 'sm-try-smerge t)
+
