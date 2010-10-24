@@ -55,6 +55,11 @@
 ;;; History:
 ;;
 
+;; Changes by Kyle Machulis <kyle@nonpolynomial.com>
+;; Jun 25 2005:
+;;     - Added more icons for bitlbee
+;;     - /
+
 ;; Changes by Edgar Gonçalves <edgar.goncalves@inesc-id.pt>
 ;; Jun 25 2005:
 ;;     - images are changed to a standard set of names.
@@ -101,7 +106,7 @@ Icons are displayed if `erc-nicklist-use-icons' is non-nil."
   :group 'erc-nicklist
   :type 'directory)
 
-(defcustom erc-nicklist-voiced-position 'bottom
+(defcustom erc-nicklist-voiced-position 'top
   "*Position of voiced nicks in the nicklist.
 The value can be `top', `bottom' or nil (don't sort)."
   :group 'erc-nicklist
@@ -153,6 +158,42 @@ This is configured using `erc-nicklist-use-icons' and
 		     (string-match "\\`&bitlbee\\b"
 				   (buffer-name channel)))))
     (cond ((and bitlbee-p
+		(string= "oscar" host))
+	   (if erc-nicklist-use-icons
+	       (if is-away
+		   (insert-image (cdr (assoc 'aim-away
+					     erc-nicklist-images-alist)))
+		 (insert-image (cdr (assoc 'aim
+					   erc-nicklist-images-alist))))
+	     (insert "AIM")))
+	  ((and bitlbee-p
+		(string= "chat.facebook.com" host))
+	   (if erc-nicklist-use-icons
+	       (if is-away
+		   (insert-image (cdr (assoc 'facebook-away
+					     erc-nicklist-images-alist)))
+		 (insert-image (cdr (assoc 'facebook
+					   erc-nicklist-images-alist))))
+	     (insert "Facebook")))
+	  ((and bitlbee-p
+		(string= "510systems.com" host))
+	   (if erc-nicklist-use-icons
+	       (if is-away
+		   (insert-image (cdr (assoc 'fiveten-away
+					     erc-nicklist-images-alist)))
+		 (insert-image (cdr (assoc 'fiveten
+					   erc-nicklist-images-alist))))
+	     (insert "Fiveten")))
+	  ((and bitlbee-p
+		(string= "yahoo" host))
+	   (if erc-nicklist-use-icons
+	       (if is-away
+		   (insert-image (cdr (assoc 'yim-away
+					     erc-nicklist-images-alist)))
+		 (insert-image (cdr (assoc 'yim
+					   erc-nicklist-images-alist))))
+	     (insert "YIM")))
+	  ((and bitlbee-p
 		(string= "login.icq.com" host))
 	   (if erc-nicklist-use-icons
 	       (if is-away
@@ -246,6 +287,22 @@ Seach for the BBDB record of this contact.  If not found, return nil."
 						 "irc-online.png")))
 	      (irc-away . ,(create-image (concat erc-nicklist-icons-directory
 						 "irc-offline.png")))
+	      (aim      . ,(create-image (concat erc-nicklist-icons-directory
+						 "aim-online.png")))
+	      (aim-away . ,(create-image (concat erc-nicklist-icons-directory
+						 "aim-offline.png")))
+	      (fiveten      . ,(create-image (concat erc-nicklist-icons-directory
+						 "fiveten-online.png")))
+	      (fiveten-away . ,(create-image (concat erc-nicklist-icons-directory
+						 "fiveten-offline.png")))
+	      (yim      . ,(create-image (concat erc-nicklist-icons-directory
+						 "yim-online.png")))
+	      (yim-away . ,(create-image (concat erc-nicklist-icons-directory
+						 "yim-offline.png")))
+	      (facebook      . ,(create-image (concat erc-nicklist-icons-directory
+						 "facebook-online.png")))
+	      (facebook-away . ,(create-image (concat erc-nicklist-icons-directory
+						 "facebook-offline.png")))
 	      (icq      . ,(create-image (concat erc-nicklist-icons-directory
 						 "icq-online.png")))
 	      (icq-away . ,(create-image (concat erc-nicklist-icons-directory

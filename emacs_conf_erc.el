@@ -273,9 +273,9 @@ that can occur between two notifications.  The default is
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar qdot/erc-znc-nicks '("qdot-znc-freenode" "qdot-znc-electricrain" "qdot-znc-510"))
+(defvar qdot/erc-znc-nicks '("qdot-znc-freenode" "qdot-znc-510")) ;;"qdot-znc-electricrain" "qdot-znc-anthrochat"
 (defvar qdot/erc-znc-tunnel-flag nil "*Non-nil means use tunnel")
-(defvar qdot/erc-znc-password "ircfox")
+(defvar qdot/erc-znc-password "doesnotmatter")
 (defvar qdot/erc-znc-home-server "192.168.123.75")
 (defvar qdot/erc-znc-home-prefix "192.168.123.")
 (defvar qdot/erc-znc-remote-server "localhost")
