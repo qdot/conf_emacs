@@ -46,3 +46,15 @@
 [submodule "elisp_local/rudel"]
 	path = elisp_local/rudel
 	url = git://github.com/scymtym/rudel.git
+[submodule "elisp_local/google-weather-el"]
+	path = elisp_local/google-weather-el
+	url = git://git.naquadah.org/google-weather-el.git
+[submodule "elisp_local/bbdb"]
+	path = elisp_local/bbdb
+	url = http://github.com/emacsmirror/bbdb.git
+[submodule "elisp_local/workgroups"]
+	path = elisp_local/workgroups
+	url = http://github.com/tlh/workgroups.el.git
+[submodule "elisp_local/w3"]
+	path = elisp_local/w3
+	url = git://git.sv.gnu.org/w3.git
