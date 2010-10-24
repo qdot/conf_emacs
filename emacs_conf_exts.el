@@ -13,17 +13,13 @@
 (require 'quick-yes)
 
 ;;asciidoc markup mode
-(require 'asciidoc-mode)
-(autoload 'asciidoc-mode "asciidoc-mode")
-(add-hook 'asciidoc-mode-hook
-          '(lambda ()
-             (require 'asciidoc)))
+(require 'adoc-mode)
 (setq auto-mode-alist
       (append
        '(
-         ("\\.testdoc$" . asciidoc-mode)
-         ("\\.archdoc$" . asciidoc-mode)
-         ("\\.doc$" . asciidoc-mode)         
+         ("\\.testdoc$" . adoc-mode)
+         ("\\.archdoc$" . adoc-mode)
+         ("\\.asciidoc$" . adoc-mode)
          ) auto-mode-alist))
 
 ;; markdown mode

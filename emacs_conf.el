@@ -42,6 +42,13 @@
 (add-to-list 'load-path (expand-file-name emacs-repo-autoinst-elisp-dir))
 (add-to-list 'load-path (expand-file-name emacs-repo-elisp-submodule-dir))
 
+;; (setq warning-suppress-types nil)
+;; (setq byte-compile-warnings nil)
+;; (setq byte-compile-verbose nil)
+
+;; (require 'byte-code-cache)
+;; (add-to-list 'bcc-blacklist "emacs_conf_cedet.el$")
+;; (add-to-list 'bcc-blacklist "tokochiku.*")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Platforms and fonts

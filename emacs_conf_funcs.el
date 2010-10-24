@@ -309,3 +309,14 @@ strings"
     (delq nil
           (mapcar (lambda (x) (and (funcall condp x) x)) lst)))
 
+;; http://stackoverflow.com/questions/2238418/emacs-lisp-how-to-get-buffer-major-mode
+(defun qdot/buffer-mode (buffer-or-string)
+  "Returns the major mode associated with a buffer."
+  (save-excursion
+     (set-buffer buffer-or-string)
+     major-mode))
+
+(defun qdot/open-in-browser()
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (browse-url (concat "file://" filename))))

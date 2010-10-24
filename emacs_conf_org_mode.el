@@ -24,6 +24,8 @@
 (setq org-indent-mode t)
 (setq org-hide-leading-stars t)
 (setq org-agenda-ndays 1)
+(setq org-indent-indentation-per-level 2)
+(setq org-archive-location "~/emacs_org/archives/%s_archive::")
 
 (defun reload-org-files ()
   (interactive)
@@ -32,6 +34,8 @@
          (file-expand-wildcards "~/emacs_org/*.org")
          (file-expand-wildcards "~/emacs_org/work/*.org")
          (file-expand-wildcards "~/emacs_org/home/*.org")
+         (file-expand-wildcards "~/emacs_org/nplabs/*.org")
+         (file-expand-wildcards "~/emacs_org/travel/*.org")
          (file-expand-wildcards "~/emacs_org/projects/*.org")
          )
         ) 
@@ -40,22 +44,6 @@
 (require 'org-checklist)
 
 (reload-org-files)
-
-;;
-;;;  Load Org Remember Stuff
-;; (require 'remember)
-;; (org-remember-insinuate)
-
-;; Uses tags from all agenda files in remember mode
-;; Taken from org mode manual
-;; (add-hook 'org-remember-mode-hook
-;;           '(lambda ()
-;;              (set (make-local-variable
-;;                    'org-complete-tags-always-offer-all-agenda-tags)
-;;                   t)))
-
-;; Start clock if a remember buffer includes :CLOCK-IN:
-;; (add-hook 'remember-mode-hook 'my-start-clock-if-needed 'append)
 
 ;; Turn off ede mode in org mode so we get C-c . commands back
 (add-hook 'org-mode-hook
@@ -75,31 +63,13 @@
                                 (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)"))))
 
 ;; I use C-M-r to start org-remember
-;; (setq org-default-notes-file (concat org-directory "/notes.org"))
 (global-set-key (kbd "C-M-r") 'org-capture)
-
-;; Keep clocks running
-;; (setq org-remember-clock-out-on-exit nil)
-
-;; I don't use this -- but set it in case I forget to specify a location in a future template
-;; (setq org-remember-default-headline "Tasks")
-
-;; 3 remember templates for TODO tasks, Notes, and Phone calls
-;; (setq org-remember-templates (quote (("todo" ?t "* TODO %?
-;;   %u
-;;   %a" "~/emacs_org/tasks.org" bottom nil)
-;;                                      ("note" ?n "* %?                                        :NOTE:
-;;   %u
-;;   %a" "~/emacs_org/notes.org" bottom nil)
-;; 				     )))
 
 (setq org-capture-templates (quote (("t" "todo" entry (file "~/emacs_org/tasks.org") "* TODO %?
   %u
   %a") ("n" "note" entry (file "~/emacs_org/notes.org") "* %?                                        :NOTE:
   %u
   %a"))))
-
-
 
 ;; Use IDO for target completion
 (setq org-completion-use-ido t)
@@ -136,14 +106,17 @@
 ;; Personal agenda modes
 (setq org-agenda-custom-commands
       (quote (("h" "Tasks for home" tags-todo "+HOME-someday" nil)
-              ("w" "Tasks for work" tags-todo "+WORK-someday" nil)
+              ("5" "Tasks for work" tags-todo "+WORK-someday" nil)
               ("p" "Tasks for personal projects" tags-todo "+PROJECTS-someday" nil)
               ("X" agenda ""
                (;;(org-agenda-prefix-format " [ ] ")
                 (org-agenda-with-colors nil)
-                (org-agenda-remove-tags t)
-                )               
+                (org-agenda-remove-tags t))  
                ("~/emacs_org/agenda.txt"))
+              ("w" agenda "Week with events and no daily/chores"
+               ((org-agenda-ndays-to-span 7)
+                (org-agenda-ndays 7)
+                (org-agenda-filter-preset '("-daily"))))
               )))
 
 ;; org mobile setup, for when it comes out
@@ -180,3 +153,26 @@
 
 (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 
+
+;; google-weather/org-google-weather mode
+(setq load-path (cons "~/.emacs_files/elisp_local/google-weather-el" load-path))
+(require 'google-weather)
+(require 'org-google-weather)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; http://kanis.fr/blog-emacs.html#%20Diary%20block%20without%20week%2Dend
+;; %%(diary-block-no-week-end 15 9 2010 30 10 2010) block without week-end
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun qdot/diary-block-no-week-end (m1 d1 y1 m2 d2 y2 &optional mark)
+  "Block diary entry.
+Entry applies if date is between two dates and not in the
+weekend."
+  (let ((date1 (calendar-absolute-from-gregorian
+                (diary-make-date m1 d1 y1)))
+        (date2 (calendar-absolute-from-gregorian
+                (diary-make-date m2 d2 y2)))
+        (day (calendar-day-of-week date))
+        (d (calendar-absolute-from-gregorian date)))
+    (and (<= date1 d) (<= d date2) (not (= day 6)) (not (= day 0))
+         (cons mark entry))))
