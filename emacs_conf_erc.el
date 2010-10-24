@@ -214,7 +214,7 @@ that can occur between two notifications.  The default is
 ;; Once we close a query window, return it to being a query placeholder window
 
 (defun qdot/erc-query-buffer-recycle ()
-  (if (erc-query-buffer-p (current-buffer))
+  (if (and (erc-query-buffer-p (current-buffer)) (get-buffer "bitlbee-placeholder"))
       (set-window-buffer (get-buffer-window (current-buffer)) (get-buffer "bitlbee-placeholder")))
   nil)
 
