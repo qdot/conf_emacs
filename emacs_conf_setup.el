@@ -28,7 +28,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq-default command-frequency-table-file 
-              (concat emacs-local-dir "frequencies"))
+              (concat user-emacs-directory "frequencies"))
 (require 'command-frequency)
 (command-frequency-table-load)
 (command-frequency-mode 1)
@@ -41,7 +41,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar autosave-dir (concat emacs-local-dir "autosaves/"))
+(defvar autosave-dir (concat user-emacs-directory "autosaves/"))
 
 (make-directory autosave-dir t)
 
@@ -63,7 +63,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar backup-dir (concat emacs-local-dir "backups/"))
+(defvar backup-dir (concat user-emacs-directory "backups/"))
 (make-directory backup-dir t)
 (setq backup-directory-alist (list (cons "." backup-dir)))
 

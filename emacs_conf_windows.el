@@ -2,7 +2,7 @@
 (require 'revive)
 
 (custom-set-variables 
- '(revive:configuration-file (concat emacs-local-dir "revive.el")) 
+ '(revive:configuration-file (concat user-emacs-directory "revive.el")) 
  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -46,7 +46,7 @@
 (defun emacs-save-layout ();TODO: handle eshell
   "save the frame and window layout to ~/.emacs-layout. Requires revive.el."
 (interactive)
-(let ((out-name (concat emacs-local-dir "/.emacs-layout"))
+(let ((out-name (concat user-emacs-directory "/.emacs-layout"))
       (frames (frame-list))
       (configs nil)
       (buffs (sorted-buffer-list))
@@ -67,7 +67,7 @@
 (defun emacs-load-layout ();TODO: handle eshell buffers.
   "Load the layout saved by emacs-save-layout. Requires revive.el."
 (interactive)
-(let* ((in-name (concat emacs-local-dir "/.emacs-layout"))
+(let* ((in-name (concat user-emacs-directory "/.emacs-layout"))
       (config-count 0)
       (frames (frame-list))
       (configs nil)

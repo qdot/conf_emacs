@@ -11,7 +11,7 @@
 (setq emacs-repo-elisp-dir (expand-file-name 
                              (concat emacs-repo-conf-dir "elisp/")))
 
-;; For versioned installed
+;; For source installs (no repo available to track)
 (setq emacs-repo-elisp-src-dir (expand-file-name 
                                 (concat emacs-repo-conf-dir "elisp_src/")))
 
@@ -24,13 +24,8 @@
       (expand-file-name 
        (concat emacs-repo-conf-dir "elisp_local/")))
 
-;; Local stuff (autosaves, backups, etc...)
-(setq emacs-local-dir (expand-file-name "~/emacs.d/"))
-
-(if (not (file-exists-p emacs-local-dir))
-    (make-directory emacs-local-dir))
-
-(setq custom-file (concat emacs-local-dir "emacs_conf_custom.el"))
+;; As of emacs 23, ~/.emacs.d is user-emacs-directory
+(setq custom-file (concat user-emacs-directory "emacs_conf_custom.el"))
 
 (if (not (file-exists-p custom-file))
     (with-temp-buffer
@@ -68,9 +63,9 @@
 (if mswindows-p
     (set-face-font 'default "consolas-8")
   )
-(if linux-p
-    (set-face-font 'default "inconsolata-9")
-  )
+;; (if linux-p
+;;     ;;(set-face-font 'default "inconsolata-11")
+;;   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -120,6 +115,7 @@
        ;; bind as late as possible, so we already have everything in
        ;; that we're going to load
        "emacs_conf_binds.el"
+       "emacs_conf_mud.el"
        )
       )
 
