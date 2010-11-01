@@ -37,13 +37,6 @@
 (add-to-list 'load-path (expand-file-name emacs-repo-autoinst-elisp-dir))
 (add-to-list 'load-path (expand-file-name emacs-repo-elisp-submodule-dir))
 
-;; (setq warning-suppress-types nil)
-;; (setq byte-compile-warnings nil)
-;; (setq byte-compile-verbose nil)
-
-;; (require 'byte-code-cache)
-;; (add-to-list 'bcc-blacklist "emacs_conf_cedet.el$")
-;; (add-to-list 'bcc-blacklist "tokochiku.*")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Platforms and fonts
@@ -58,14 +51,16 @@
 ;; We also need to do this as near the beginning as possible, since it crashes
 ;; otherwise?
 (if macosx-p
-    (set-face-font 'default "consolas-11")
+    (when (member "Consolas" (font-family-list))
+      (set-face-font 'default "consolas-11"))
   )
 (if mswindows-p
     (set-face-font 'default "consolas-8")
   )
-;; (if linux-p
-;;     ;;(set-face-font 'default "inconsolata-11")
-;;   )
+(if linux-p
+    (when (member "Inconsolata" (font-family-list))
+      (set-face-font 'default "inconsolata-11"))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;

@@ -22,6 +22,10 @@
          ("\\.asciidoc$" . adoc-mode)
          ) auto-mode-alist))
 
+(setq auto-mode-alist
+      (append '(("\\.\\(xml\\|mxml\\|html\\|htm\\)$" . nxml-mode)
+                ("\\.css$" . css-mode)) auto-mode-alist))
+
 ;; markdown mode
 (autoload 'markdown-mode "markdown-mode.el"
   "Major mode for editing Markdown files" t)
@@ -40,6 +44,50 @@
 (icomplete-mode 1)
 (setq icomplete-compute-delay 0)
 (require 'icomplete+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Buffer switching - ibuffer is much better than the regular ol' buffer list
+;; http://nflath.com/2009/07/ibuffer-dired-for-buffers/
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'ibuffer)
+(setq ibuffer-default-sorting-mode 'major-mode)
+(setq ibuffer-always-show-last-buffer t)
+(setq ibuffer-view-ibuffer t)
+(setq ibuffer-show-empty-filter-groups nil)
+
+;; Set up buffer groups based on file and mode types
+(setq ibuffer-saved-filter-groups
+      (quote (("default"
+               ("Org" (mode . org-mode))
+               ("ERC" (mode . erc-mode))
+               ("Emacs Setup" (or
+                               (filename . "/.emacs_files/")
+                               (filename . "/.emacs_d/")
+                               (filename . "/emacs_d/")))
+               ("magit" (name . "magit"))
+               ("dired" (mode . dired-mode))
+               ("work projects" (filename . "/build/"))
+               ("home projects" (filename . "/git-projects/"))
+               ("emacs" (or
+                         (name . "^\\*scratch\\*$")
+                         (name . "^\\*Messages\\*$")))))))
+
+;; Make sure we're always using our buffer groups
+(add-hook 'ibuffer-mode-hook
+          (lambda ()
+            (ibuffer-switch-to-saved-filter-groups "default")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; ANSI comint support
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'ansi-color)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -67,7 +115,7 @@
 ;; one dired buffer, damnit
 ;; taken from http://bitbucket.org/kcfelix/emacsd/src/tip/init.el
 (require 'dired-single)
-(defun my-dired-init ()
+(defun qdot/dired-init ()
   "Bunch of stuff to run for dired, either immediately or when it's
         loaded."
   (define-key dired-mode-map (kbd "C-s") 'dired-isearch-filenames-regexp)
@@ -82,22 +130,9 @@
 ;; if dired's already loaded, then the keymap will be bound
 (if (boundp 'dired-mode-map)
     ;; we're good to go; just add our bindings
-    (my-dired-init)
+    (qdot/dired-init)
   ;; it's not loaded yet, so add our bindings to the load-hook
-  (add-hook 'dired-load-hook 'my-dired-init))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; active-menu, menu collapsing
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; If you turn active-menu on and off frequently, you might want to use
-;;
-(autoload 'active-menu
-  "active-menu"
-  "Show menu only when mouse is at the top of the frame."
-  t)
+  (add-hook 'dired-load-hook 'qdot/dired-init))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -124,6 +159,19 @@
 (defadvice other-window (after auto-refresh-dired (arg &optional all-frame) activate)
   (if (equal major-mode 'dired-mode)
       (revert-buffer)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; active-menu, menu collapsing
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; If you turn active-menu on and off frequently, you might want to use
+;;
+(autoload 'active-menu
+  "active-menu"
+  "Show menu only when mouse is at the top of the frame."
+  t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -158,8 +206,6 @@
      (color-theme-initialize)
      (color-theme-dark-laptop)     
      ))
-(custom-set-variables
- '(global-font-lock-mode t nil (font-lock)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -192,17 +238,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;(require 'todochiku)
 (require 'twit)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Frame maximizer
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'maxframe)
-(add-hook 'window-setup-hook 'maximize-frame t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -221,10 +257,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'frame-cmds)
+(add-hook 'window-setup-hook 'maximize-frame t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Modeline decorator to get rid of the scrollbar
+;; Modeline decorator to get rid of the horizontal scrollbar
 ;; Via http://emacs-fu.blogspot.com/2010/03/showing-buffer-position-in-mode-line.html
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -281,7 +318,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "pymacs")))
+;; (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "pymacs")))
 
 (when (file-exists-p (concat emacs-repo-elisp-submodule-dir "auto-complete/"))
   (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "auto-complete/")))
@@ -308,14 +345,11 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; mud
+;; w3m
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'mud)
-
-(add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/emacs-w3m"))
-
+(add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "emacs-w3m")))
 (require 'w3m-load)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -324,4 +358,31 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-file (expand-file-name (concat emacs-repo-elisp-submodule-dir "rudel/rudel-loaddefs.el")))
+;; (load-file (expand-file-name (concat emacs-repo-elisp-submodule-dir "rudel/rudel-loaddefs.el")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; workgroups
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (when (file-exists-p (concat emacs-repo-elisp-submodule-dir "workgroups/"))
+;;   (add-to-list 'load-path (concat emacs-repo-elisp-submodule-dir "workgroups/"))
+;;   (require 'workgroups-mode)
+;;   (make-directory (concat emacs-repo-elisp-submodule-dir "workgroups") t)
+;;   (if macosx-p
+;;       (setq workgroups-default-file (concat emacs-repo-conf-dir "workgroups/workgroups-osx.el"))
+;;     )
+;;   (if linux-p
+;;       (setq workgroups-default-file (concat emacs-repo-conf-dir "workgroups/workgroups-linux.el"))
+;;     )
+
+;;   )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; HURF DURF
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'jerkcity)

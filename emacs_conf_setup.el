@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;turn off start message
+;; Turn off start message
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -8,12 +8,18 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;Emacs22 doesn't actually seem to have splash-screen aliased to start-message
-;;like it says it does in the docs?
+;; Emacs22 doesn't actually seem to have splash-screen aliased to start-message
+;; like it says it does in the docs?
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq inhibit-splash-screen t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Bells? Who needs them
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq visible-bell nil) 
 (setq ring-bell-function 'ignore)
@@ -37,7 +43,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Put autosave files (ie #foo#) in one place, *not*
-;; scattered all over the file system!
+;; scattered all over the file system
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -88,91 +94,35 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Modeline setup
+;; Modeline and display setup
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; display time in the modeline
-(setq display-time-24hr-format t)
-(setq display-time-day-and-date t)
+(setq
+ display-time-24hr-format t
+ display-time-day-and-date t
+ indent-tabs-mode nil
+ ;; copy emacs clipboard to system
+ x-select-enable-clipboard t
+ interprogram-paste-function 'x-cut-buffer-or-selection-value)
+(set-default 'indicate-empty-lines t)
 (display-time)
-
 (line-number-mode t)
 (column-number-mode t)
 (tool-bar-mode -1)
 (global-font-lock-mode 1)
+
+;; This is handy most of the time when programming
+;; We make it opt-out instead of opt-in
 (show-paren-mode t)
-
-(custom-set-variables
- '(scroll-bar-mode 'right)
- '(indent-tabs-mode nil))
-
-
-;; copy emacs clipboard to system
-(setq x-select-enable-clipboard t)
-(setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Buffer switching - ibuffer is much better than the regular ol' buffer list
-;; http://nflath.com/2009/07/ibuffer-dired-for-buffers/
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'ibuffer)
-(setq ibuffer-default-sorting-mode 'major-mode)
-(setq ibuffer-always-show-last-buffer t)
-(setq ibuffer-view-ibuffer t)
-(setq ibuffer-show-empty-filter-groups nil)
-
-;; Set up buffer groups
-(setq ibuffer-saved-filter-groups
-      (quote (("default"
-               ("Org" (mode . org-mode))
-               ("ERC" (mode . erc-mode))
-               ("Emacs Setup" (or
-                               (filename . "/.emacs_files/")
-                               (filename . "/.emacs_d/")
-                               (filename . "/emacs_d/")
-                               ))
-               ("magit" (name . "magit"))
-               ("dired" (mode . dired-mode))
-               ("work projects" (filename . "/build/"))
-               ("home projects" (filename . "/git-projects/"))
-               ("emacs" (or
-                         (name . "^\\*scratch\\*$")
-                         (name . "^\\*Messages\\*$")))
-))))
-
-(add-hook 'ibuffer-mode-hook
-          (lambda ()
-            (ibuffer-switch-to-saved-filter-groups "default")))
 
 ;; Transparently open compressed files
 (auto-compression-mode t)
 
 ;; Save a list of recent files visited.
 (recentf-mode 1)
-(set-default 'indicate-empty-lines t)
-(setq auto-mode-alist
-      (append '(("\\.\\(xml\\|mxml\\|html\\|htm\\)$" . nxml-mode)
-                ("\\.css$" . css-mode)) auto-mode-alist))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; ANSI terminal support
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'ansi-color)
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Browser setup for linux
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;; If we're in linux, assume we have chrome
 (if linux-p
     (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "google-chrome"))
