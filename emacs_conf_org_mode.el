@@ -45,20 +45,6 @@
 
 (reload-org-files)
 
-;; Turn off ede mode in org mode so we get C-c . commands back
-(add-hook 'org-mode-hook
-          '(lambda ()
-             (ede-minor-mode nil)
-             )
-          )
-
-;; (defun my-start-clock-if-needed ()
-;;   (save-excursion
-;;     (goto-char (point-min))
-;;     (when (re-search-forward " *:CLOCK-IN: *" nil t)
-;;       (replace-match "")
-;;       (org-clock-in))))
-
 (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d!/!)")
                                 (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)"))))
 
