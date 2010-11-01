@@ -91,6 +91,21 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Japan! (APEL/FLIM/SEMI for Wanderlust, elscreen, and other things)
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; If you don't require mailcap first, symbols get redefined weird and
+;; it'll miss some stuff and it's hard to debug. Comment it out and
+;; see. No, really.
+(require 'mailcap)
+
+(when (file-exists-p (concat emacs-repo-elisp-submodule-dir "apel/"))
+  (add-to-list 'load-path (concat emacs-repo-elisp-submodule-dir "apel/"))
+)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; elscreen
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -386,3 +401,26 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'jerkcity)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Super simple generic mode for nsis editing
+;; God forbid I have to do that often
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define-generic-mode 'nsis-generic-mode
+  nil ;;'(";")
+  '("Section" "SectionEnd" "Function" "FunctionEnd" "Call" "Goto")
+  '(("!\\([A-Za-z]+\\)" (1 'font-lock-builtin-face))
+    ("$[({]?\\([A-Za-z0-9_]+\\)[)}]?" (1 'font-lock-variable-name-face))
+    )
+  (list "\\.\\(nsi\\|nsh\\)$")    
+  nil
+  "Generic mode for nsis files.")
+
+;; Setting up load directories for apel/flim/semi that a lot of japanese emacs modules use
+
+;; We must require mailcap /before/ flim to make sure we get the right one, 
+;; since it comes with a super old version
+

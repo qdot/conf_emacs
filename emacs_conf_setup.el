@@ -26,6 +26,40 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Platform fonts and meta keys
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq mswindows-p (string-match "windows" (symbol-name system-type)))
+(setq macosx-p (string-match "darwin" (symbol-name system-type)))
+(setq linux-p (string-match "gnu/linux" (symbol-name system-type)))
+
+;; We know we have consolas on OS X, so use it
+;; We also need to do this as near the beginning as possible, since it crashes
+;; otherwise?
+(if macosx-p
+    (when (member "Consolas" (font-family-list))
+      (set-face-font 'default "consolas-11"))
+  )
+(if mswindows-p
+    (set-face-font 'default "consolas-8")
+  )
+(if linux-p
+    (when (member "Inconsolata" (font-family-list))
+      (set-face-font 'default "inconsolata-11"))
+  )
+
+(if macosx-p
+    ;;Change meta to alt
+    (setq mac-command-modifier 'meta)
+  ;;avoid hiding with M-h
+  (setq mac-pass-command-to-system nil))
+
+(if linux-p
+    (setq x-alt-keysym 'meta))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; Command Frequency Recording Mode
 ;; Put before autosave
 ;; http://xahlee.org/emacs/command-frequency.html

@@ -1,16 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Fullscreen mode
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun fullscreen (&optional f)
-      (interactive)
-      (set-frame-parameter f 'fullscreen
-                           (if (frame-parameter f 'fullscreen) nil 'fullboth)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;; kill all open buffers
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -113,38 +102,6 @@ strings"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Swap buffers in two windows
-;; http://www.emacswiki.org/emacs/TransposeWindows
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(setq swapping-buffer nil)
-(setq swapping-window nil)
-
-(defun swap-buffers-in-windows ()
-  "Swap buffers between two windows"
-  (interactive)
-  (if (and swapping-window
-           swapping-buffer)
-      (let ((this-buffer (current-buffer))
-            (this-window (selected-window)))
-        (if (and (window-live-p swapping-window)
-                 (buffer-live-p swapping-buffer))
-            (progn (switch-to-buffer swapping-buffer)
-                   (select-window swapping-window)
-                   (switch-to-buffer this-buffer)
-                   (select-window this-window)
-                   (message "Swapped buffers."))
-          (message "Old buffer/window killed.  Aborting."))
-        (setq swapping-buffer nil)
-        (setq swapping-window nil))
-    (progn
-      (setq swapping-buffer (current-buffer))
-      (setq swapping-window (selected-window))
-      (message "Buffer and window marked for swapping."))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;; Show just matches instead of everything in occur buffer
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -173,23 +130,6 @@ strings"
 		(insert " ")))
 	    (setq delete-from nil)))))))
 
-;; (defun smart-tab ()
-;;   "This smart tab is minibuffer compliant: it acts as usual in
-;;     the minibuffer. Else, if mark is active, indents region. Else if
-;;     point is at the end of a symbol, expands it. Else indents the
-;;     current line."
-;;   (interactive)
-;;   (if (minibufferp)
-;;       (unless (minibuffer-complete)
-;;         (dabbrev-expand nil))
-;;     (if mark-active
-;;         (indent-region (region-beginning)
-;;                        (region-end))
-;;       (if (looking-at "\\_>")
-;;           (dabbrev-expand nil)
-;;         (indent-for-tab-command)))))
-
-
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
   (interactive
@@ -211,7 +151,6 @@ strings"
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (defun sudo-edit (&optional arg)
   (interactive "p")
   (if arg
@@ -224,38 +163,6 @@ strings"
     (find-alternate-file 
      (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer))))
     (goto-char pos)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Expand subdirectories for ede
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun expand-include-directory (base)
-  (let (dir-list)
-    (dolist (f (directory-files base))
-      (let ((name (concat base "/" f)))
-        (when (and (file-directory-p name) 
-                   (not (equal f ".."))
-                   (not (equal f ".")))
-          (add-to-list 'dir-list name))))
-    dir-list)
-  )
-
-(defun eval-and-replace ()
-  "Replace the preceding sexp with its value."
-  (interactive)
-  (backward-kill-sexp)
-  (condition-case nil
-      (prin1 (eval (read (current-kill 0)))
-             (current-buffer))
-    (error (message "Invalid expression")
-           (insert (current-kill 0)))))
- 
-(defun shell-current-directory ( )
-  "Opens a shell in the current directory"
-  (interactive)
-  (shell (concat "shell-" default-directory "-shell" )))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -286,6 +193,7 @@ strings"
 ;; http://trey-jackson.blogspot.com/2010/04/emacs-tip-36-abort-minibuffer-when.html
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun stop-using-minibuffer ()
   "kill the minibuffer"
   (when (>= (recursion-depth) 1)
@@ -293,16 +201,11 @@ strings"
 
 (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 
-
-(define-generic-mode 'nsis-generic-mode
-  nil ;;'(";")
-  '("Section" "SectionEnd" "Function" "FunctionEnd" "Call" "Goto")
-  '(("!\\([A-Za-z]+\\)" (1 'font-lock-builtin-face))
-    ("$[({]?\\([A-Za-z0-9_]+\\)[)}]?" (1 'font-lock-variable-name-face))
-    )
-  (list "\\.\\(nsi\\|nsh\\)$")    
-  nil
-  "Generic mode for nsis files.")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Random crap
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; http://www.emacswiki.org/emacs/ElispCookbook
 (defun qdot/filter (condp lst)
@@ -320,3 +223,18 @@ strings"
   (interactive)
   (let ((filename (buffer-file-name)))
     (browse-url (concat "file://" filename))))
+
+(defun eval-and-replace ()
+  "Replace the preceding sexp with its value."
+  (interactive)
+  (backward-kill-sexp)
+  (condition-case nil
+      (prin1 (eval (read (current-kill 0)))
+             (current-buffer))
+    (error (message "Invalid expression")
+           (insert (current-kill 0)))))
+ 
+(defun shell-current-directory ()
+  "Opens a shell in the current directory"
+  (interactive)
+  (shell (concat "shell-" default-directory "-shell" )))

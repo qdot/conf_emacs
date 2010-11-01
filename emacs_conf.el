@@ -39,31 +39,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Platforms and fonts
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(setq mswindows-p (string-match "windows" (symbol-name system-type)))
-(setq macosx-p (string-match "darwin" (symbol-name system-type)))
-(setq linux-p (string-match "gnu/linux" (symbol-name system-type)))
-
-;; We know we have consolas on OS X, so use it
-;; We also need to do this as near the beginning as possible, since it crashes
-;; otherwise?
-(if macosx-p
-    (when (member "Consolas" (font-family-list))
-      (set-face-font 'default "consolas-11"))
-  )
-(if mswindows-p
-    (set-face-font 'default "consolas-8")
-  )
-(if linux-p
-    (when (member "Inconsolata" (font-family-list))
-      (set-face-font 'default "inconsolata-11"))
-  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;;Make sure we have good ol' LISP available
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -81,12 +56,6 @@
        ;; Always load functions before binds, since we bind to functions 
        ;; somewhat often       
        "emacs_conf_funcs.el"
-
-       ;; Mac crap
-       "emacs_conf_mac.el"
-
-       ;; Japan!
-       "emacs_conf_apel.el"
 
        ;; Make sure we pick up autoinstall
        "emacs_conf_autoinstall.el"

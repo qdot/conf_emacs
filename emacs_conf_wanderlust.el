@@ -1,4 +1,11 @@
 (when (file-exists-p (concat emacs-repo-elisp-submodule-dir "wanderlust/wl"))
+  (when (file-exists-p (concat emacs-repo-elisp-submodule-dir "flim/"))
+    (add-to-list 'load-path (concat emacs-repo-elisp-submodule-dir "flim/")))
+  
+  (when (file-exists-p (concat emacs-repo-elisp-submodule-dir "semi/"))
+    (add-to-list 'load-path (concat emacs-repo-elisp-submodule-dir "semi/")))
+
+
   (add-to-list 'load-path (concat emacs-repo-elisp-submodule-dir "wanderlust/wl"))
   (add-to-list 'load-path (concat emacs-repo-elisp-submodule-dir "wanderlust/elmo"))
   (add-to-list 'load-path (concat emacs-repo-elisp-submodule-dir "wanderlust/utils"))
