@@ -33,9 +33,10 @@
 
 (add-to-list 'load-path (expand-file-name emacs-repo-conf-dir))
 (add-to-list 'load-path (expand-file-name emacs-repo-elisp-dir))
-(add-to-list 'load-path (expand-file-name emacs-repo-autoinst-elisp-dir))
-(add-to-list 'load-path (expand-file-name emacs-repo-autoinst-elisp-dir))
-(add-to-list 'load-path (expand-file-name emacs-repo-elisp-submodule-dir))
+
+(setq mswindows-p (string-match "windows" (symbol-name system-type)))
+(setq macosx-p (string-match "darwin" (symbol-name system-type)))
+(setq linux-p (string-match "gnu/linux" (symbol-name system-type)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -49,37 +50,36 @@
 
 (setq lib-files
       (list 
+	   ;; Before we do anything, pull all modules
+       "emacs_conf_elget.el"
+
        ;; Basic emacs setup, personal functions and keybindings
        "emacs_conf_setup.el"
        custom-file
+
+       ;; Mode setup and random externals
+       "emacs_conf_exts.el"
 
        ;; Always load functions before binds, since we bind to functions 
        ;; somewhat often       
        "emacs_conf_funcs.el"
 
-       ;; Make sure we pick up autoinstall
-       "emacs_conf_autoinstall.el"
-
-       ;; Windows mode (for restoring buffer configurations)
-       "emacs_conf_windows.el"
-
-       ;; Mode setup and random externals
-       "emacs_conf_exts.el"
        "emacs_conf_org_mode.el"
-       "emacs_conf_wanderlust.el"
+       ;; "emacs_conf_wanderlust.el"
        "emacs_conf_erc.el"
 
        ;; Programming related stuff
+
        "emacs_conf_programming.el"
        "emacs_conf_ccmode.el"
        "emacs_conf_python.el"
        "emacs_conf_cedet.el"
-       "emacs_conf_ecb.el"
 
        ;; bind as late as possible, so we already have everything in
        ;; that we're going to load
        "emacs_conf_binds.el"
        "emacs_conf_mud.el"
+       "emacs_conf_automode.el"
        )
       )
 

@@ -30,9 +30,6 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq mswindows-p (string-match "windows" (symbol-name system-type)))
-(setq macosx-p (string-match "darwin" (symbol-name system-type)))
-(setq linux-p (string-match "gnu/linux" (symbol-name system-type)))
 
 ;; We know we have consolas on OS X, so use it
 ;; We also need to do this as near the beginning as possible, since it crashes

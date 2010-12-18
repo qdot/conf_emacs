@@ -13,37 +13,22 @@
 (require 'quick-yes)
 
 ;;asciidoc markup mode
-(require 'adoc-mode)
-(setq auto-mode-alist
-      (append
-       '(
-         ("\\.testdoc$" . adoc-mode)
-         ("\\.archdoc$" . adoc-mode)
-         ("\\.asciidoc$" . adoc-mode)
-         ) auto-mode-alist))
-
-(setq auto-mode-alist
-      (append '(("\\.\\(xml\\|mxml\\|html\\|htm\\)$" . nxml-mode)
-                ("\\.css$" . css-mode)) auto-mode-alist))
-
-;; markdown mode
-(autoload 'markdown-mode "markdown-mode.el"
-  "Major mode for editing Markdown files" t)
-(setq auto-mode-alist
-      (append
-       '(
-         ("\\.markdown$" . markdown-mode)
-         ) auto-mode-alist))
+;; (require 'adoc-mode)
+;; (setq auto-mode-alist
+;;       (append
+;;        '(
+;;          ("\\.testdoc$" . adoc-mode)
+;;          ("\\.archdoc$" . adoc-mode)
+;;          ("\\.asciidoc$" . adoc-mode)
+;;          ) auto-mode-alist))
 
 ;; jekyll
-(require 'jekyll)
-
-;; icomplete and icomplete+
-;; Via http://nflath.com/2009/07/icomplete/
+;; (require 'jekyll)
 
 (icomplete-mode 1)
 (setq icomplete-compute-delay 0)
-(require 'icomplete+)
+
+(setq revive:configuration-file (concat user-emacs-directory "revive.el")) 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -102,7 +87,7 @@
 
 (when (file-exists-p (concat emacs-repo-elisp-submodule-dir "apel/"))
   (add-to-list 'load-path (concat emacs-repo-elisp-submodule-dir "apel/"))
-)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -129,7 +114,6 @@
 
 ;; one dired buffer, damnit
 ;; taken from http://bitbucket.org/kcfelix/emacsd/src/tip/init.el
-(require 'dired-single)
 (defun qdot/dired-init ()
   "Bunch of stuff to run for dired, either immediately or when it's
         loaded."
@@ -177,19 +161,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; active-menu, menu collapsing
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; If you turn active-menu on and off frequently, you might want to use
-;;
-(autoload 'active-menu
-  "active-menu"
-  "Show menu only when mouse is at the top of the frame."
-  t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;; Supercollider Mode
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -215,12 +186,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'color-theme)
-(eval-after-load "color-theme"
-  '(progn
-     (color-theme-initialize)
-     (color-theme-dark-laptop)     
-     ))
+(color-theme-dark-laptop)     
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -249,29 +215,19 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Twitter mode
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'twit)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;; Frame change to work with/like windmove
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'framemove)
-(windmove-default-keybindings)
-(setq framemove-hook-into-windmove t)
-
+(require 'windmove)
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Frame maximizer
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'frame-cmds)
 (add-hook 'window-setup-hook 'maximize-frame t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -294,12 +250,11 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'todochiku)
 (setq 
  todochiku-icons-directory (expand-file-name (concat emacs-repo-elisp-dir "todochiku-icons/"))
  todochiku-icons (quote ((alarm . "alarm.png") (mail . "mail.png") (irc . "irc.png")))
  )
- 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Yasnippets
@@ -310,9 +265,8 @@
 
 (add-to-list 'load-path
              yas-directory)
-(require 'yasnippet)
 (setq yas/root-directory '("~/.emacs_files/snippets"
-                           "~/.emacs_files/elisp_local/yasnippet/snippets"))
+                           "~/.emacs_files/elisp_auto/yasnippet/snippets"))
 (yas/initialize)
 (mapc 'yas/load-directory yas/root-directory)
 (yas/global-mode t)
@@ -335,45 +289,27 @@
 
 ;; (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "pymacs")))
 
-(when (file-exists-p (concat emacs-repo-elisp-submodule-dir "auto-complete/"))
-  (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "auto-complete/")))
-  (require 'auto-complete-config)
-  (ac-config-default)
-  (ac-flyspell-workaround)
-  
-  (global-auto-complete-mode t)
-  (setq ac-auto-start 3)
-  (setq ac-dwim t)
-  (set-default 'ac-sources '(ac-source-yasnippet ac-source-semantic))
-  )
+;; (when (file-exists-p (concat emacs-repo-elisp-submodule-dir "auto-complete/"))
+(add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "auto-complete/")))
+(require 'auto-complete-config)
+(ac-config-default)
+(ac-flyspell-workaround)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; mingus
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(when (file-exists-p (concat emacs-repo-elisp-submodule-dir "mingus/"))
-  (add-to-list 'load-path (concat emacs-repo-elisp-submodule-dir "mingus/"))
-  (require 'mingus-stays-home)
-  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; w3m
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "emacs-w3m")))
-(require 'w3m-load)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; rudel
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (load-file (expand-file-name (concat emacs-repo-elisp-submodule-dir "rudel/rudel-loaddefs.el")))
+(global-auto-complete-mode t)
+(setq ac-auto-start 3)
+(setq ac-dwim t)
+(set-default 'ac-sources '(ac-source-yasnippet ac-source-semantic))
+(defun ielm-auto-complete ()
+  "Enables `auto-complete' support in \\[ielm]."
+  (setq ac-sources '(ac-source-functions
+		     ac-source-variables
+		     ac-source-features
+		     ac-source-symbols
+		     ac-source-words-in-same-mode-buffers))
+  (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
+  (auto-complete-mode 1))
+(add-hook 'ielm-mode-hook 'ielm-auto-complete)
+;; )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -418,9 +354,4 @@
   (list "\\.\\(nsi\\|nsh\\)$")    
   nil
   "Generic mode for nsis files.")
-
-;; Setting up load directories for apel/flim/semi that a lot of japanese emacs modules use
-
-;; We must require mailcap /before/ flim to make sure we get the right one, 
-;; since it comes with a super old version
 
