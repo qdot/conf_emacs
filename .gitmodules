@@ -58,3 +58,6 @@
 [submodule "elisp_local/w3"]
 	path = elisp_local/w3
 	url = git://git.sv.gnu.org/w3.git
+[submodule "elisp_local/google-maps"]
+	path = elisp_local/google-maps
+	url = git://git.naquadah.org/google-maps.git
