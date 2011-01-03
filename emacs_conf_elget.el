@@ -97,6 +97,8 @@
 	org-contacts
 	org-buffers
 	cedet
+	deldo
+	jerkcity
 	))
 
 (add-to-list 'load-path (expand-file-name (concat emacs-repo-autoinst-elisp-dir "el-get")))
