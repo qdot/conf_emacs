@@ -56,9 +56,7 @@
 ;;
 
 ;; Changes by Kyle Machulis <kyle@nonpolynomial.com>
-;; Jun 25 2005:
 ;;     - Added more icons for bitlbee
-;;     - /
 
 ;; Changes by Edgar Gonçalves <edgar.goncalves@inesc-id.pt>
 ;; Jun 25 2005:
