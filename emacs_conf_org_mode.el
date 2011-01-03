@@ -5,8 +5,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Load in the orgmode code directly from the submodule directory
-(setq load-path (cons "~/.emacs_files/elisp_local/org_mode/lisp" load-path))
-(setq load-path (cons "~/.emacs_files/elisp_local/org_mode/contrib/lisp" load-path))
+(setq load-path (cons (expand-file-name (concat emacs-repo-autoinst-elisp-dir "org-mode/lisp")) load-path))
+(setq load-path (cons (expand-file-name (concat emacs-repo-autoinst-elisp-dir "org-mode/contrib/lisp")) load-path))
 (require 'org-install)
 
 ;; Most of this ripped from http://doc.norang.ca/org-mode.html
@@ -32,7 +32,7 @@
   (setq org-agenda-files 
         (append
          (file-expand-wildcards "~/emacs_org/*.org")
-         (file-expand-wildcards "~/emacs_org/work/*.org")
+         ;; (file-expand-wildcards "~/emacs_org/work/*.org")
          (file-expand-wildcards "~/emacs_org/home/*.org")
          (file-expand-wildcards "~/emacs_org/nplabs/*.org")
          (file-expand-wildcards "~/emacs_org/travel/*.org")
@@ -51,11 +51,20 @@
 ;; I use C-M-r to start org-remember
 (global-set-key (kbd "C-M-r") 'org-capture)
 
-(setq org-capture-templates (quote (("t" "todo" entry (file "~/emacs_org/tasks.org") "* TODO %?
+(setq org-capture-templates 
+      (quote (("t" "todo" entry (file "~/emacs_org/tasks.org") 
+"* TODO %?
   %u
-  %a") ("n" "note" entry (file "~/emacs_org/notes.org") "* %?                                        :NOTE:
+  %a") 
+	      ("n" "note" entry (file "~/emacs_org/notes.org") 
+"* %?                                        :NOTE:
   %u
-  %a"))))
+  %a")
+	      ("m" "megaprojects" entry (file "~/emacs_org/megaprojects.org") 
+"* TODO %?
+  %u
+  %a") 
+)))
 
 ;; Use IDO for target completion
 (setq org-completion-use-ido t)
@@ -88,7 +97,7 @@
 ;; Save the running clock and all clock history when exiting Emacs, load it on startup
 (setq org-clock-persist t)
 
-
+(setq org-habit-graph-column 50)
 ;; Personal agenda modes
 (setq org-agenda-custom-commands
       (quote (("h" "Tasks for home" tags-todo "+HOME-someday" nil)
@@ -162,3 +171,10 @@ weekend."
         (d (calendar-absolute-from-gregorian date)))
     (and (<= date1 d) (<= d date2) (not (= day 6)) (not (= day 0))
          (cons mark entry))))
+
+(setq calendar-location-name "Home")
+(setq calendar-latitude 37.870975)
+(setq calendar-longitude -122.288813)
+
+
+(require 'org-location-google-maps)

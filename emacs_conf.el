@@ -9,7 +9,7 @@
 
 ;; For manually installed elisp
 (setq emacs-repo-elisp-dir (expand-file-name 
-                             (concat emacs-repo-conf-dir "elisp/")))
+			    (concat emacs-repo-conf-dir "elisp/")))
 
 ;; For source installs (no repo available to track)
 (setq emacs-repo-elisp-src-dir (expand-file-name 
@@ -17,7 +17,7 @@
 
 ;; For auto-install.el elisp
 (setq emacs-repo-autoinst-elisp-dir (expand-file-name 
-                             (concat emacs-repo-conf-dir "elisp_auto/")))
+				     (concat emacs-repo-conf-dir "elisp_auto/")))
 
 ;; For git tracked submodules
 (setq emacs-repo-elisp-submodule-dir 
@@ -49,12 +49,13 @@
 (defvar *emacs-load-start* (current-time))
 
 (setq lib-files
-      (list 
-	   ;; Before we do anything, pull all modules
+      (list
+       ;; Basic emacs setup
+       "emacs_conf_setup.el"
+
+       ;; Before we do anything, pull all modules
        "emacs_conf_elget.el"
 
-       ;; Basic emacs setup, personal functions and keybindings
-       "emacs_conf_setup.el"
        custom-file
 
        ;; Mode setup and random externals
@@ -69,7 +70,6 @@
        "emacs_conf_erc.el"
 
        ;; Programming related stuff
-
        "emacs_conf_programming.el"
        "emacs_conf_ccmode.el"
        "emacs_conf_python.el"
@@ -79,9 +79,7 @@
        ;; that we're going to load
        "emacs_conf_binds.el"
        "emacs_conf_mud.el"
-       "emacs_conf_automode.el"
-       )
-      )
+       "emacs_conf_automode.el"))
 
 (mapcar 'load-library lib-files)
 
@@ -95,3 +93,9 @@
          (destructuring-bind (hi lo ms) (current-time)
            (- (+ hi lo) 
               (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
+
+;; Something in el-get is setting debug-on-error to t. 
+;; Not cool.
+(if debug-on-error
+    (setq debug-on-error nil))
+

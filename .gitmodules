@@ -1,27 +1,6 @@
-[submodule "elisp_local/magit"]
-	path = elisp_local/magit
-	url = http://github.com/philjackson/magit.git
-[submodule "elisp_local/org_mode"]
-	path = elisp_local/org_mode
-	url = git://repo.or.cz/org-mode.git
 [submodule "elisp_local/scel"]
 	path = elisp_local/scel
 	url = git://github.com/qdot/scel.git
-[submodule "elisp_local/pylookup"]
-	path = elisp_local/pylookup
-	url = git://github.com/tsgates/pylookup.git
-[submodule "elisp_local/cedet"]
-	path = elisp_local/cedet
-	url = git://github.com/emacsmirror/cedet.git
-[submodule "elisp_local/auto-complete"]
-	path = elisp_local/auto-complete
-	url = git://github.com/m2ym/auto-complete.git
-[submodule "elisp_local/pymacs"]
-	path = elisp_local/pymacs
-	url = git://github.com/pinard/Pymacs.git
-[submodule "elisp_local/ecb"]
-	path = elisp_local/ecb
-	url = git://github.com/emacsmirror/ecb.git
 [submodule "elisp_local/wanderlust"]
 	path = elisp_local/wanderlust
 	url = git://github.com/wanderlust/wanderlust.git
@@ -34,30 +13,3 @@
 [submodule "elisp_local/apel"]
 	path = elisp_local/apel
 	url = git://github.com/wanderlust/apel.git
-[submodule "elisp_local/yasnippet"]
-	path = elisp_local/yasnippet
-	url = git://github.com/emacsmirror/yasnippet.git
-[submodule "elisp_local/doxymacs"]
-	path = elisp_local/doxymacs
-	url = git://doxymacs.git.sourceforge.net/gitroot/doxymacs/doxymacs
-[submodule "elisp_local/mingus"]
-	path = elisp_local/mingus
-	url = http://github.com/pft/mingus.git
-[submodule "elisp_local/rudel"]
-	path = elisp_local/rudel
-	url = git://github.com/scymtym/rudel.git
-[submodule "elisp_local/google-weather-el"]
-	path = elisp_local/google-weather-el
-	url = git://git.naquadah.org/google-weather-el.git
-[submodule "elisp_local/bbdb"]
-	path = elisp_local/bbdb
-	url = http://github.com/emacsmirror/bbdb.git
-[submodule "elisp_local/workgroups"]
-	path = elisp_local/workgroups
-	url = http://github.com/tlh/workgroups.el.git
-[submodule "elisp_local/w3"]
-	path = elisp_local/w3
-	url = git://git.sv.gnu.org/w3.git
-[submodule "elisp_local/google-maps"]
-	path = elisp_local/google-maps
-	url = git://git.naquadah.org/google-maps.git
