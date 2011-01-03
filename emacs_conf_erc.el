@@ -175,8 +175,6 @@ that can occur between two notifications.  The default is
         (setq r t))
     r))
 
-
-
 (defun qdot/erc-move-query-to-placeholder (buffer)
   (if (get-buffer-window "&bitlbee" t)
       (let* ((free-window-list (qdot/filter 'qdot/free-query-window-p (window-list (window-frame (get-buffer-window "&bitlbee" t))))))
@@ -331,6 +329,11 @@ that can occur between two notifications.  The default is
      (if (or (erc-server-buffer-p (window-buffer arg)) (erc-channel-p (window-buffer arg)))
          (kill-buffer (window-buffer arg))))
    nil nil))
+
+;; (add-hook 'after-change-major-mode-hook 
+;; 	  (lambda () 
+;; 	    ((when (or (erc-query-buffer-p (current-buffer)) (erc-server-buffer-p (current-buffer)))
+;; 	       (set (make-variable-buffer-local 'show-paren-mode) nil)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
