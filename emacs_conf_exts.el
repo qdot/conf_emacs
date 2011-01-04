@@ -4,8 +4,6 @@
 (icomplete-mode 1)
 (setq icomplete-compute-delay 0)
 
-(setq revive:configuration-file (concat user-emacs-directory "revive.el")) 
-
 ;; Supercollider Mode
 
 (when (file-exists-p "~/.emacs_files/elisp_local/scel")
