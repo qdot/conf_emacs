@@ -203,37 +203,6 @@ strings"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Functions for loading layouts from specific files instead of just
-;; using "revive.el"
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun qdot/save-layout-file ()
-  "Save frame layout to a specifically named file instead of numbering buffers"
-  (interactive)
-  (let ((new-name (read-file-name "Filename to save layout to: ")))     
-    (setq revive:configuration-file new-name)
-    (save-current-configuration)
-  )
-)
-
-(defun qdot/resume-layout-file (layout-file)
-    (setq revive:configuration-file layout-file)
-    (resume)
-    ;; go to the bottom of all resumed windows
-    (walk-windows (lambda (arg) (select-window arg) (goto-char (point-max))) nil nil)
-  )
-
-(defun qdot/resume-layout ()
-  "Load frame layout from specifically named file instead of numbering buffers"
-  (interactive)
-  (let ((new-name (read-file-name "Filename to resume layout from: " (concat emacs-repo-conf-dir "layouts/"))))
-    (qdot/resume-layout-file new-name)
-    )
-  )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;; Random crap
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

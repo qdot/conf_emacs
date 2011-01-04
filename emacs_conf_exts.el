@@ -79,7 +79,9 @@
   (auto-complete-mode 1))
 (add-hook 'ielm-mode-hook 'ielm-auto-complete)
 
-;; HURF DURF
+;; Workgroups
 
-(require 'jerkcity)
-
+(workgroups-mode 1)
+(setq wg-morph-on nil)
+(setq wg-prefix-key "`")
+(wg-set-prefix-key)

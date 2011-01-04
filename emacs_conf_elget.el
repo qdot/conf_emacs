@@ -60,9 +60,7 @@
 	osc
 	flymake-point
 	paredit
-	revive
 	sml-modeline
-	windows
 	workgroups
 	processing-mode
 	color-theme

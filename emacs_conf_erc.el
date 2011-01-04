@@ -176,9 +176,14 @@ that can occur between two notifications.  The default is
     r))
 
 (defun qdot/erc-move-query-to-placeholder (buffer)
-  (if (get-buffer-window "&bitlbee" t)
-      (let* ((free-window-list (qdot/filter 'qdot/free-query-window-p (window-list (window-frame (get-buffer-window "&bitlbee" t))))))
-        (set-window-buffer (car free-window-list) buffer))))
+  (let* 
+      ((bitlbee-window (get-buffer-window "&bitlbee" t)))
+    (when bitlbee-window
+      (let*
+	  ((bitlbee-window-list (window-list (window-frame bitlbee-window)))
+	   (free-window-list (qdot/filter 'qdot/free-query-window-p bitlbee-window-list)))
+	(when (not (memq buffer (mapcar 'window-buffer bitlbee-window-list)))
+	  (set-window-buffer (car free-window-list) buffer))))))
 
 (defun qdot/erc-privmsg-query-allocate (proc parsed)
   ;; Find the frame holding the bitlbee& buffer. We'll consider that our privmsg window
@@ -208,6 +213,8 @@ that can occur between two notifications.  The default is
   )
 
 (add-hook 'erc-server-PRIVMSG-functions 'qdot/erc-privmsg-query-allocate)
+
+(add-hook 'wg-switch-hook 'qdot/bitlbee-reallocate-query-buffers)
 
 ;; Once we close a query window, return it to being a query placeholder window
 
@@ -289,6 +296,12 @@ that can occur between two notifications.  The default is
   (qdot/erc-set-tunnel-flag)
   (qdot/erc-znc-connect "qdot-znc-bitlbee"))
 
+(defun qdot/bitlbee-reallocate-query-buffers ()
+  (interactive)
+  ;; For each already opened query window, reallocate
+  (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf)) (qdot/filter 'erc-query-buffer-p (buffer-list)))
+)
+
 (defun qdot/bitlbee-resume-layout ()
   (interactive)
   ;; If we havn't created a placeholder buffer yet, do so now
@@ -298,8 +311,7 @@ that can occur between two notifications.  The default is
     (set-buffer "&bitlbee")
     (erc-nicklist))
   (qdot/resume-layout-file "~/.emacs_files/layouts/bitlbee_layout.el")
-  ;; For each already opened query window, reallocate
-  (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf)) (qdot/filter 'erc-query-buffer-p (buffer-list)))
+  (qdot/bitlbee-reallocate-query-buffers)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
