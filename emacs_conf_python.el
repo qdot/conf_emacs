@@ -50,24 +50,24 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "pymacs")))
+;; (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "pymacs")))
 
-(defun qdot/ac-config-python ()
-  (ac-ropemacs-require)
-  (setq ac-sources (append '(ac-source-yasnippet ac-source-ropemacs) ac-sources))
-  )
+;; (defun qdot/ac-config-python ()
+;;   (ac-ropemacs-require)
+;;   (setq ac-sources (append '(ac-source-yasnippet ac-source-ropemacs) ac-sources))
+;;   )
 
-(defun load-python-ac-reqs()
-  (require 'pymacs)
-  (autoload 'pymacs-apply "pymacs")
-  (autoload 'pymacs-call "pymacs")
-  (autoload 'pymacs-eval "pymacs" nil t)
-  (autoload 'pymacs-exec "pymacs" nil t)
-  (autoload 'pymacs-load "pymacs" nil t)
-  ;;(eval-after-load "pymacs"
-  ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
-  ;;(pymacs-load "ropemacs" "rope-")
-  (setq ropemacs-enable-autoimport t))
+;; (defun load-python-ac-reqs()
+;;   (require 'pymacs)
+;;   (autoload 'pymacs-apply "pymacs")
+;;   (autoload 'pymacs-call "pymacs")
+;;   (autoload 'pymacs-eval "pymacs" nil t)
+;;   (autoload 'pymacs-exec "pymacs" nil t)
+;;   (autoload 'pymacs-load "pymacs" nil t)
+;;   ;;(eval-after-load "pymacs"
+;;   ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
+;;   ;;(pymacs-load "ropemacs" "rope-")
+;;   (setq ropemacs-enable-autoimport t))
 
 
 (defun my-python-mode-hook()
@@ -80,5 +80,5 @@
   (local-set-key "\C-ch" 'pylookup-lookup)
   )
 
-(add-hook 'python-mode-hook 'qdot/ac-config-python)
+;; (add-hook 'python-mode-hook 'qdot/ac-config-python)
 (add-hook 'python-mode-hook 'my-python-mode-hook)

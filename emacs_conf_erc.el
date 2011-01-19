@@ -60,15 +60,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (make-variable-buffer-local 'erc-fill-column)
-(add-hook 'window-configuration-change-hook 
-          '(lambda ()
-             (save-excursion
-               (walk-windows
-                (lambda (w)
-                  (let ((buffer (window-buffer w)))
-                    (set-buffer buffer)
-                    (when (eq major-mode 'erc-mode)
-                      (setq erc-fill-column (- (window-width w) 2)))))))))
+
+(defun qdot/erc-set-fill-columns ()
+  (interactive)
+  (save-excursion
+    (walk-windows
+     (lambda (w)
+       (let ((buffer (window-buffer w)))
+	 (set-buffer buffer)
+	 (when (eq major-mode 'erc-mode)
+	   (message "Window size: %d" (window-width w))
+	   (setq erc-fill-column (- (window-width w) 2)))))))
+  )
+
+(setq window-configuration-change-hook (cddr window-configuration-change-hook))
+
+;;(add-hook 'window-configuration-change-hook 'qdot/erc-set-fill-columns)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -310,7 +317,8 @@ that can occur between two notifications.  The default is
     ;; Bring up the bitlbee nicklist
     (set-buffer "&bitlbee")
     (erc-nicklist))
-  (qdot/resume-layout-file "~/.emacs_files/layouts/bitlbee_layout.el")
+  (wg-revert-workgroup (wg-get-workgroup 'name "bitlbee"))
+  ;; (qdot/resume-layout-file "~/.emacs_files/layouts/bitlbee_layout.el")
   (qdot/bitlbee-reallocate-query-buffers)
   )
 
@@ -392,3 +400,6 @@ that can occur between two notifications.  The default is
 ;;         )
 ;;       )
 
+
+(setq erc-fill-function 'erc-fill-static)
+(setq erc-fill-static-center 0)
