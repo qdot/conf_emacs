@@ -1,48 +1,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Python stuff
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
 ;; Flymake + pyflakes syntax checking for python
 ;; http://plope.com/Members/chrism/flymake-mode
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; TODO This freaks out if pyflakes isn't available on the system
-(when macosx-p
+(if macosx-p
     ;;(setq flyflakes-pyflakes-command '("/Library/Frameworks/Python.framework/Versions/Current/bin/pyflakes")))
-    (setq flyflakes-pyflakes-command '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes")))
+    (setq flyflakes-pyflakes-command '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
+  (setq flyflakes-pyflakes-command '("/usr/local/bin/pyflakes")))
 (require 'flyflakes)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; pylookup for python documentation
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; ======================================================================
-;; add pylookup to your loadpath, ex) ~/.emacs.d/pylookup
-;; (setq pylookup-dir "~/.emacs_files/elisp_local/pylookup")
-;; (add-to-list 'load-path pylookup-dir)
-
-;; ;; load pylookup when compile time
-;; (eval-when-compile (require 'pylookup))
-
-;; ;; set executable file and db file
-;; (setq pylookup-program (concat pylookup-dir "/pylookup.py"))
-;; (setq pylookup-db-file (concat pylookup-dir "/pylookup.db"))
-
-;; ;; to speedup, just load it on demand
-;; (autoload 'pylookup-lookup "pylookup"
-;;   "Lookup SEARCH-TERM in the Python HTML indexes." t)
-
-;; (autoload 'pylookup-update "pylookup" 
-;;   "Run pylookup-update and create the database at `pylookup-db-file'." t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -50,25 +18,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "pymacs")))
+;; Initialize Pymacs
+(require 'pymacs)
 
-;; (defun qdot/ac-config-python ()
-;;   (ac-ropemacs-require)
-;;   (setq ac-sources (append '(ac-source-yasnippet ac-source-ropemacs) ac-sources))
-;;   )
+(autoload 'pymacs-apply "pymacs")
+(autoload 'pymacs-call "pymacs")
+(autoload 'pymacs-eval "pymacs" nil t)
+(autoload 'pymacs-exec "pymacs" nil t)
+(autoload 'pymacs-load "pymacs" nil t)
+(pymacs-load "ropemacs" "rope-")
+(setq ropemacs-enable-autoimport t)
 
-;; (defun load-python-ac-reqs()
-;;   (require 'pymacs)
-;;   (autoload 'pymacs-apply "pymacs")
-;;   (autoload 'pymacs-call "pymacs")
-;;   (autoload 'pymacs-eval "pymacs" nil t)
-;;   (autoload 'pymacs-exec "pymacs" nil t)
-;;   (autoload 'pymacs-load "pymacs" nil t)
-;;   ;;(eval-after-load "pymacs"
-;;   ;;  '(add-to-list 'pymacs-load-path YOUR-PYMACS-DIRECTORY"))
-;;   ;;(pymacs-load "ropemacs" "rope-")
-;;   (setq ropemacs-enable-autoimport t))
-
+(ac-ropemacs-require)
 
 (defun my-python-mode-hook()
   (font-lock-mode 1)
@@ -78,6 +39,11 @@
   (set-variable 'py-indent-offset 4)
   (lambda () (eldoc-mode 1))
   (local-set-key "\C-ch" 'pylookup-lookup)
+  (auto-complete-mode nil)
+  (set (make-local-variable 'ac-sources)
+       (setq ac-sources (append '(ac-source-ropemacs) ac-sources))
+       )
+  ;; (set (make-local-variable 'ac-find-function) 'ac-python-find)
   )
 
 ;; (add-hook 'python-mode-hook 'qdot/ac-config-python)

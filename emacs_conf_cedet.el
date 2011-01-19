@@ -13,7 +13,7 @@
 (setq-default semanticdb-default-save-directory "~/.emacs_meta/semanticdb/"
 	      semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
 
-(global-srecode-minor-mode 1)            ; Enable template insertion menu
+;; (global-srecode-minor-mode 1)            ; Enable template insertion menu
 
 (setq semantic-load-turn-useful-things-on 1)
 ;;(semantic-load-enable-code-helpers)

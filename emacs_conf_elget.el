@@ -40,9 +40,10 @@
 	;; (:name quick-yes
 	;;        :type http
 	;;        :url "ftp://download.tuxfamily.org/user42/quick-yes.el")
-	;; (:name pycomplete+
-	;;        :type emacswiki)
-	;;python-mode
+	python-mode
+	pycomplete+
+	ropemacs
+	;;el-get
 	icomplete+
 	xml-parse
 	frame-fns

@@ -21,4 +21,7 @@
          ("CMakeLists\\.txt\\'" . cmake-mode)
          ("ChangeLog\\.txt\\'" . change-log-mode)
          ("\\.lua$" . lua-mode)
+         ("\\.h$"    . c++-mode)
+         ("\\.H$"    . c++-mode)
+	 ("\\.org$"  . org-mode)
          ) auto-mode-alist))
