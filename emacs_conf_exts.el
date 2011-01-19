@@ -23,10 +23,6 @@
 
 (color-theme-dark-laptop)     
 
-;; Maximize frames on creation
-
-(add-hook 'window-setup-hook 'maximize-frame t)
-
 ;; Modeline decorator to get rid of the horizontal scrollbar
 ;; Via http://emacs-fu.blogspot.com/2010/03/showing-buffer-position-in-mode-line.html
 
@@ -57,7 +53,6 @@
 
 ;; auto-complete
 
-(add-to-list 'load-path (expand-file-name (concat emacs-repo-elisp-submodule-dir "auto-complete/")))
 (require 'auto-complete-config)
 (ac-config-default)
 (ac-flyspell-workaround)
