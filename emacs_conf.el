@@ -45,7 +45,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'cl)
-
+(require 'compile)
 (defvar *emacs-load-start* (current-time))
 
 (setq lib-files
@@ -55,7 +55,6 @@
 
        ;; Before we do anything, pull all modules
        "emacs_conf_elget.el"
-
        custom-file
 
        ;; Mode setup and random externals
@@ -72,7 +71,7 @@
        ;; Programming related stuff
        "emacs_conf_programming.el"
        "emacs_conf_ccmode.el"
-       "emacs_conf_python.el"
+       ;;"emacs_conf_python.el"
        "emacs_conf_cedet.el"
 
        ;; bind as late as possible, so we already have everything in
@@ -99,3 +98,5 @@
 (if debug-on-error
     (setq debug-on-error nil))
 
+(org-agenda-list)
+(delete-other-windows)
