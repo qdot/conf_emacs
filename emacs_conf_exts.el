@@ -17,7 +17,7 @@
        '(sclang-help-path (quote ("/Applications/SuperCollider/Help")))
        '(sclang-runtime-directory "~/.sclang/")
        '(sclang-program "/Applications/SuperCollider/sclang"))
-    (require 'sclang))))
+      (require 'sclang))))
 
 ;; color-theme setup
 
@@ -78,3 +78,63 @@
 (setq wg-morph-on nil)
 (setq wg-prefix-key "`")
 (wg-set-prefix-key)
+
+;; Adoc customization
+(setq adoc-insert-replacement nil)
+
+
+;; http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
+
+(require 'recentf)
+
+;; get rid of `find-file-read-only' and replace it with something
+;; more useful.
+(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+
+;; enable recent files mode.
+(recentf-mode t)
+
+					; 50 files ought to be enough.
+(setq recentf-max-saved-items 50)
+
+(defun ido-recentf-open ()
+  "Use `ido-completing-read' to \\[find-file] a recent file"
+  (interactive)
+  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+      (message "Opening file...")
+    (message "Aborting")))
+
+
+;; eshell + autocomplete
+;; From http://paste.lisp.org/display/120731
+
+(require 'pcomplete)
+(add-to-list 'ac-modes 'eshell-mode)
+(ac-define-source pcomplete
+  '((candidates . pcomplete-completions)))
+
+(defun nm-eshell-pcomplete ()
+  (interactive)
+  (let ((ac-sources '(ac-source-pcomplete
+		      ac-source-filename)))
+    (auto-complete)))
+
+(defun nm-eshell-auto-complete ()
+  (interactive)
+  (let ((ac-sources '(ac-source-functions
+		      ac-source-variables
+		      ac-source-features
+		      ac-source-symbols
+		      ac-source-words-in-same-mode-buffers)))
+    (auto-complete)))
+
+(defun nm-eshell-mode-hook ()
+  (local-unset-key (kbd "M-?"))
+
+  ;; (local-set-key (kbd "TAB") 'nm-eshell-pcomplete)
+  ;; (local-set-key [tab] 'nm-eshell-pcomplete)
+
+  (local-set-key (kbd "TAB") 'nm-eshell-auto-complete)
+  (local-set-key [tab] 'nm-eshell-auto-complete))
+
+(add-hook 'eshell-mode-hook 'nm-eshell-mode-hook)
