@@ -4,10 +4,12 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Load in the orgmode code directly from the submodule directory
-(setq load-path (cons (expand-file-name (concat emacs-repo-autoinst-elisp-dir "org-mode/lisp")) load-path))
-(setq load-path (cons (expand-file-name (concat emacs-repo-autoinst-elisp-dir "org-mode/contrib/lisp")) load-path))
-(require 'org-install)
+(require 'org-contacts)
+
+(setq org-modules (quote (org-bibtex org-crypt org-gnus org-id org-info org-jsinfo org-habit org-inlinetask org-irc org-protocol org-w3m)))
+
+; global STYLE property values for completion
+(setq org-global-properties (quote (("STYLE_ALL" . "habit"))))
 
 ;; Most of this ripped from http://doc.norang.ca/org-mode.html
 (setq auto-mode-alist
@@ -53,18 +55,35 @@
 
 (setq org-capture-templates 
       (quote (("t" "todo" entry (file "~/emacs_org/tasks.org") 
-"* TODO %?
+	       "* TODO %?
   %u
   %a") 
 	      ("n" "note" entry (file "~/emacs_org/notes.org") 
-"* %?                                        :NOTE:
+	       "* %?                                        :NOTE:
   %u
   %a")
-	      ("m" "megaprojects" entry (file "~/emacs_org/megaprojects.org") 
-"* TODO %?
-  %u
-  %a") 
-)))
+	      ("c" "contact" entry (file "~/emacs_org/contacts.org")
+	       "* %^{Name}
+:PROPERTIES:
+:EMAIL: %^{Email}
+:BIRTHDAY: %^{Birthday}
+:NICKNAME: %^{IRC or AIM nick}
+:PHONE_HOME: %^{Phone (home)}
+:PHONE_WORK: %^{Phone (work)}
+:PHONE_MOBILE: %^{Phone (cell)}
+:SKYPE: %^{Skype-Name}
+:URL: %^{Web}
+:COMPANY: %^{Company Name}
+:POSITION: %^{Position}
+:COUNTRY: %^{Country}
+:STREET: %^{Street Address}
+:CITY: %^{City}
+:POSTCODE: %^{Postcode}
+:AIM: %^{AIM}
+:TWITTER: %^{Twitter}
+:END:"
+	       )
+	      )))
 
 ;; Use IDO for target completion
 (setq org-completion-use-ido t)
@@ -97,6 +116,12 @@
 ;; Save the running clock and all clock history when exiting Emacs, load it on startup
 (setq org-clock-persist t)
 
+;; Don't use priorities and accidentally set them all the time, so just turn them off.
+(setq org-enable-priority-commands nil)
+
+;; Don't use super/subscript, makes exports weird.
+(setq org-use-sub-superscripts nil)
+
 (setq org-habit-graph-column 50)
 ;; Personal agenda modes
 (setq org-agenda-custom-commands
@@ -114,44 +139,26 @@
                 (org-agenda-filter-preset '("-daily"))))
               )))
 
-;; org mobile setup, for when it comes out
-;; (setq org-mobile-directory "~/emacs_org/")
-;; (add-hook 'org-mobile-post-push-hook
-;;           (lambda ()
-;;             (shell-command "scp ~/emacs_org/* user@nonpolynomial.com:~/mobile/")))
-;; (add-hook 'org-mobile-pre-pull-hook
-;;           (lambda ()
-;;             (shell-command "scp user@webdavhost:mobile/mobileorg.org ~/stage/ ")))
-;; (add-hook 'org-mobile-post-pull-hook
-;;           (lambda ()
-;;             (shell-command "scp ~/stage/mobileorg.org user@webdavhost:mobile/")))
-
 (setq org-directory "~/emacs_org")
 ;; Set to the name of the file where new notes will be stored
 (setq org-mobile-inbox-for-pull "~/emacs_org/mobile.org")
 ;; Set to <your Dropbox root directory>/MobileOrg.
 (setq org-mobile-directory "~/Dropbox/MobileOrg")
 
-
-;; Org mode notifications via appt
-
+;; Org mode notifications via aptp
 ;; the appointment notification facility
 (setq
-  appt-message-warning-time 15 ;; warn 15 min in advance
-  appt-display-interval 5      ;; warn every 5 minutes
-  appt-display-mode-line t     ;; show in the modeline
-  appt-display-format 'nil) ;; use our func
+ appt-message-warning-time 15 ;; warn 15 min in advance
+ appt-display-interval 5      ;; warn every 5 minutes
+ appt-display-mode-line t     ;; show in the modeline
+ appt-display-format 'nil) ;; use our func
 (appt-activate 1)              ;; active appt (appointment notification)
 (display-time)                 ;; time display is required for this...
 
- ;; update appt each time agenda opened
+;; update appt each time agenda opened
 
 (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 
-
-;; google-weather/org-google-weather mode
-(setq load-path (cons "~/.emacs_files/elisp_local/google-weather-el" load-path))
-(require 'google-weather)
 (require 'org-google-weather)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -178,3 +185,7 @@ weekend."
 
 
 (require 'org-location-google-maps)
+
+(setq org-latex-to-pdf-process 
+  '("xelatex -interaction nonstopmode %f"
+     "xelatex -interaction nonstopmode %f")) ;; for multiple passes
