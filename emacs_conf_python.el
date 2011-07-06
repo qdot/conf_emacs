@@ -33,6 +33,7 @@
 
 (defun my-python-mode-hook()
   (font-lock-mode 1)
+  (linum-mode 1)
   (font-lock-fontify-buffer)
   (set-variable 'indent-tabs-mode nil)
   (set-variable 'tab-width 4)
