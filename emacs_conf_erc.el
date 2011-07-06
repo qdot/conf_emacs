@@ -242,23 +242,14 @@ that can occur between two notifications.  The default is
 ;; ZNC divides up networks to be one per account, so we have to start once ERC
 ;; instance per network we want to connect to.
 ;;
-;; We also need to figure out whether we're at home, or tunneling home, in
-;; order to know what server address to use.
-;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq qdot/erc-znc-server-rename-list (list))
 
-(defun qdot/erc-set-tunnel-flag ()
-  (setq qdot/erc-znc-tunnel-flag nil)
-  (if (not (qdot/filter (lambda (arg) (if (string-match qdot/erc-znc-home-prefix arg) arg nil)) (get-ip-addresses)))      
-      (setq qdot/erc-znc-tunnel-flag t)))
-
 (defun qdot/erc-znc-connect (nick)
   (interactive "ZNC Nick:")
-  (if qdot/erc-znc-tunnel-flag
-      (erc :server qdot/erc-znc-remote-server :port qdot/erc-znc-port :nick nick :full-name nick)
-    (erc :server qdot/erc-znc-home-server :port qdot/erc-znc-port :nick nick :full-name nick)))
+  (erc :server qdot/erc-znc-remote-server :port qdot/erc-znc-port :nick nick :full-name nick)
+  )
 
 (defun qdot/erc-znc-rename-server-buffer ()
   (interactive)
@@ -285,26 +276,20 @@ that can occur between two notifications.  The default is
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar qdot/erc-znc-nicks '("qdot-znc-freenode" "qdot-znc-510")) ;;"qdot-znc-electricrain" "qdot-znc-anthrochat"
-(defvar qdot/erc-znc-tunnel-flag nil "*Non-nil means use tunnel")
+(setq qdot/erc-znc-nicks '("qdot-znc-freenode"))
 (defvar qdot/erc-znc-password "doesnotmatter")
-(defvar qdot/erc-znc-home-server "192.168.123.75")
-(defvar qdot/erc-znc-home-prefix "192.168.123.")
 (defvar qdot/erc-znc-remote-server "localhost")
 (defvar qdot/erc-znc-port 9999)
 
 (defun qdot/erc-znc-start ()
   (interactive)
-  (qdot/erc-set-tunnel-flag)
   (mapcar 'qdot/erc-znc-connect qdot/erc-znc-nicks))
 
 (defun qdot/bitlbee-connect ()
   (interactive)
-  (qdot/erc-set-tunnel-flag)
   (qdot/erc-znc-connect "qdot-znc-bitlbee"))
 
 (defun qdot/bitlbee-reallocate-query-buffers ()
-  (interactive)
   ;; For each already opened query window, reallocate
   (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf)) (qdot/filter 'erc-query-buffer-p (buffer-list)))
 )
@@ -331,75 +316,20 @@ that can occur between two notifications.  The default is
 ;; Walk all of the server buffers first
 ;; Close those first, which autodetaches us from channels
 ;; Then go back through and close everything
+
 (defun qdot/kill-erc ()
   (interactive)
-  (walk-windows 
+  (mapcar 
    (lambda (arg) 
-     (if (erc-server-buffer-p (window-buffer arg)) 
-         (progn 
-           (select-window arg) 
+     (if (erc-server-buffer-p arg) 
+         (save-excursion
+	   (set-buffer arg)
            (erc-quit-server "Wheee.")
-           (if (get-buffer-process (window-buffer))
-               (delete-process (get-buffer-process (window-buffer))))
-           (kill-buffer (window-buffer))
-           )))
-   nil nil)
-  (walk-windows
-   (lambda (arg) 
-     (if (or (erc-server-buffer-p (window-buffer arg)) (erc-channel-p (window-buffer arg)))
-         (kill-buffer (window-buffer arg))))
-   nil nil))
-
-;; (add-hook 'after-change-major-mode-hook 
-;; 	  (lambda () 
-;; 	    ((when (or (erc-query-buffer-p (current-buffer)) (erc-server-buffer-p (current-buffer)))
-;; 	       (set (make-variable-buffer-local 'show-paren-mode) nil)))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Code left over from when I tried ezbounce 
-;; Needs to be integrated back into emacs trunk
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (erc-ezb-initialize)
-
-;; The expected string format for detached sessions has changed
-;; Therefore, we need our own session addition function
-
-;; (defun qdot/erc-ezb-add-session (message)
-;;   "Add an EZBounce session to the session list."
-;;   (when (and erc-ezb-inside-session-listing
-;; 	     (string-match "^\\([^ \n]+\\) +\\([^ \n]+\\) +\\([^ \n]+\\) +\\([^ \n]+\\) +\\([^ \n]+\\)$" message))
-;;     (let ((id (match-string 1 message))
-;; 	  (nick (match-string 2 message))
-;; 	  (to   (match-string 3 message)))
-;;       (add-to-list 'erc-ezb-session-list (list id nick to)))))
-
-;; (defun qdot/reattach-ezb ()
-;;   (when (or (string-match "192.168.123.75" erc-session-server) (string-match "localhost" erc-session-server))
-;;     (erc-server-send "REATTACH 1")
-;;     )
-;; )
-
-;; (defvar qdot/suppress-ezb-reattach-query nil "Don't show the reattach query when connecting to ezb servers")
-
-;; (defun qdot/erc-ezb-select (message)
-;;   (if (equal qdot/suppress-ezb-reattach-query nil)      
-;;       (erc-ezb-select message)
-;;     (qdot/reattach-ezb)
-;;     )
-;;   )
-
-;; (setq qdot/ezb-action-list
-;;       '(("^\\[awaiting login/pass command\\]$"  . erc-ezb-identify)
-;;         ("^\\[use /quote CONN <server> to connect\\]$"    . qdot/erc-ezb-select)
-;;         ("^# +IRC NICK +TO +TIME +REAL ID$" . erc-ezb-init-session-list)
-;;         ("^ $" . erc-ezb-end-of-session-list)
-;;         (".*" . qdot/erc-ezb-add-session)
-;;         )
-;;       )
-
+           (if (get-buffer-process arg)
+               (delete-process (get-buffer-process arg)))
+           (kill-buffer arg)
+           ))) (buffer-list)))
 
 (setq erc-fill-function 'erc-fill-static)
 (setq erc-fill-static-center 0)
+
