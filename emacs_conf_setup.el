@@ -169,16 +169,6 @@
           (lambda ()
             (ibuffer-switch-to-saved-filter-groups "default")))
 
-(add-to-list 'ibuffer-formats '(mark modified read-only git-status-mini " "
-				     (name 18 18 :left :elide)
-				     " "
-				     (size 9 -1 :right)
-				     " "
-				     (mode 16 16 :left :elide)
-				     " "
-				     (git-status 8 8 :left)
-				     " " filename-and-process))
-
 ;; ANSI comint support
 
 (require 'ansi-color)
@@ -236,3 +226,7 @@
 (if macosx-p
     (custom-set-variables
      '(magit-git-executable "/usr/local/git/bin/git")))
+
+;; If something updates under us and we haven't changed the buffer
+;; ourselves, reload without asking. Handy for git.
+(setq global-auto-revert-mode t)
