@@ -23,6 +23,7 @@
 (global-set-key (kbd "C-x C-p") 'previous-multiframe-window)
 (global-set-key (kbd "C-x C-n") 'next-multiframe-window)
 
+;; Bind smex over M-x, deals with sorting most used commands to front of IDO
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
