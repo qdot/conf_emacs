@@ -40,49 +40,28 @@
 	;; (:name quick-yes
 	;;        :type http
 	;;        :url "ftp://download.tuxfamily.org/user42/quick-yes.el")
-	python-mode
-	pycomplete+
-	ropemacs
-	;;el-get
+	python
 	icomplete+
-	xml-parse
-	frame-fns
-	frame-cmds
 	dired-single
 	active-menu
 	adoc-mode
-	;;erc-extras
 	cmake-mode 
 	gravatar 
 	gnus-gravatar
-	mo-git-blame
-	lua-mode 
-	circe
-	osc
 	flymake-point
-	paredit
 	sml-modeline
 	workgroups
-	processing-mode
 	color-theme
-	bbdb
 	auto-complete
-	emacs-w3m	
 	erc-highlight-nicknames
-	;;gist
 	google-maps
 	google-weather
 	haskell-mode
 	highlight-parentheses
 	ido-hacks
 	ioccur
-	lisppaste
 	magit
 	nxhtml
-	offlineimap
-	org-mode
-	pastebin
-	;;slime
 	todochiku
 	undo-tree
 	yasnippet
@@ -92,12 +71,36 @@
 	mingus
 	doxymacs
 	pymacs
-	ibuffer-git
-	org-contacts
+	org-mode
 	org-buffers
 	cedet
-	deldo
-	jerkcity
+	wanderlust
+	smex
+	rainbow-delimiters
+	;; pycomplete+
+	;; ropemacs
+	;; el-get
+	;; xml-parse
+	;; frame-fns
+	;; frame-cmds
+	;; erc-extras
+	;; mo-git-blame
+	;; lua-mode 
+	;; circe
+	;; osc
+	;; paredit
+	;; processing-mode
+	;; bbdb
+	;; emacs-w3m	
+	;; gist
+	;; lisppaste
+	;; offlineimap
+	;; pastebin
+	;; slime
+	;; ibuffer-git
+	;; twittering-mode
+	;; deldo
+	;; jerkcity
 	))
 
 (add-to-list 'load-path (expand-file-name (concat emacs-repo-autoinst-elisp-dir "el-get")))
