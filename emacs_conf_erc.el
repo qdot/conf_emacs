@@ -276,7 +276,7 @@ that can occur between two notifications.  The default is
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq qdot/erc-znc-nicks '("qdot-znc-freenode"))
+(setq qdot/erc-znc-nicks '("qdot-znc-freenode" "qdot-znc-mozilla"))
 (defvar qdot/erc-znc-password "doesnotmatter")
 (defvar qdot/erc-znc-remote-server "localhost")
 (defvar qdot/erc-znc-port 9999)
@@ -333,3 +333,4 @@ that can occur between two notifications.  The default is
 (setq erc-fill-function 'erc-fill-static)
 (setq erc-fill-static-center 0)
 
+(add-hook 'kill-emacs-hook 'qdot/kill-erc)
