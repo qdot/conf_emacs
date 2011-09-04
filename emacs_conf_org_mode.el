@@ -58,9 +58,6 @@
  ;; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
  org-outline-path-complete-in-steps t
 
- ;; Resume clocking tasks when emacs is restarted
- org-clock-persistence-insinuate
-
  ;; Yes it's long... but more is better ;
  org-clock-history-length 35
 
@@ -102,6 +99,10 @@
 
  ;; use our func  
  appt-display-format 'nil) 
+
+;; Resume clocking tasks when emacs is restarted
+(org-clock-persistence-insinuate)
+
 
 ;; 3 different stage setups. First two are from norang, final is for
 ;; events, so I can search for things like "all concerts I attended
