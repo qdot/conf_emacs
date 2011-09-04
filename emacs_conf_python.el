@@ -34,6 +34,7 @@
     (pymacs-load "ropemacs" "rope-")
     (setq ropemacs-enable-autoimport t)
     (ac-ropemacs-require)
+    (setq qdot/pymacs-loaded t)
     )
 )
 
