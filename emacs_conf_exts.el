@@ -36,7 +36,7 @@
 ;; Todochiku notifier setup
 
 (setq 
- todochiku-icons-directory (expand-file-name (concat emacs-repo-elisp-dir "todochiku-icons/"))
+ todochiku-icons-directory (expand-file-name (concat qdot/emacs-elisp-dir "todochiku-icons/"))
  todochiku-icons (quote ((alarm . "alarm.png") (mail . "mail.png") (irc . "irc.png"))))
 
 ;; Yasnippets

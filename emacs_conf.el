@@ -5,24 +5,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; The base conf directory
-(setq emacs-repo-conf-dir (expand-file-name "~/.emacs_files/"))
+(setq qdot/emacs-conf-dir (expand-file-name "~/.emacs_files/"))
 
 ;; For manually installed elisp
-(setq emacs-repo-elisp-dir (expand-file-name 
-			    (concat emacs-repo-conf-dir "elisp/")))
+(setq qdot/emacs-elisp-dir (expand-file-name 
+			    (concat qdot/emacs-conf-dir "elisp/")))
 
 ;; For source installs (no repo available to track)
-(setq emacs-repo-elisp-src-dir (expand-file-name 
-                                (concat emacs-repo-conf-dir "elisp_src/")))
+(setq qdot/emacs-elisp-src-dir (expand-file-name 
+                                (concat qdot/emacs-conf-dir "elisp_src/")))
 
 ;; For auto-install.el elisp
-(setq emacs-repo-autoinst-elisp-dir (expand-file-name 
-				     (concat emacs-repo-conf-dir "elisp_auto/")))
-
-;; For git tracked submodules
-(setq emacs-repo-elisp-submodule-dir 
-      (expand-file-name 
-       (concat emacs-repo-conf-dir "elisp_local/")))
+(setq qdot/emacs-autoinst-elisp-dir (expand-file-name 
+				     (concat qdot/emacs-conf-dir "elisp_auto/")))
 
 ;; As of emacs 23, ~/.emacs.d is user-emacs-directory
 (setq custom-file (concat user-emacs-directory "emacs_conf_custom.el"))
@@ -31,8 +26,8 @@
     (with-temp-buffer
       (write-file custom-file)))
 
-(add-to-list 'load-path (expand-file-name emacs-repo-conf-dir))
-(add-to-list 'load-path (expand-file-name emacs-repo-elisp-dir))
+(add-to-list 'load-path (expand-file-name qdot/emacs-conf-dir))
+(add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 
 (setq mswindows-p (string-match "windows" (symbol-name system-type)))
 (setq macosx-p (string-match "darwin" (symbol-name system-type)))
