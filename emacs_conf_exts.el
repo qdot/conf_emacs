@@ -41,10 +41,6 @@
 
 ;; Yasnippets
 
-(defvar yas-directory (expand-file-name (concat emacs-repo-elisp-submodule-dir "yasnippet/")))
-
-(add-to-list 'load-path
-             yas-directory)
 (setq yas/root-directory '("~/.emacs_files/snippets"
                            "~/.emacs_files/elisp_auto/yasnippet/snippets"))
 (yas/initialize)
