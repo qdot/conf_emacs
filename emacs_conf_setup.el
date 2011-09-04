@@ -14,6 +14,8 @@
 (setq visible-bell nil) 
 (setq ring-bell-function 'ignore)
 
+(setq message-log-max 5000)
+
 ;; Platform fonts and meta keys
 
 ;; We know we have consolas on OS X, so use it
