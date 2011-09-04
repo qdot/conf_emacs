@@ -60,7 +60,6 @@
        "emacs_conf_funcs.el"
 
        "emacs_conf_org_mode.el"
-       ;; "emacs_conf_wanderlust.el"
        "emacs_conf_erc.el"
 
        ;; Programming related stuff
@@ -72,7 +71,6 @@
        ;; bind as late as possible, so we already have everything in
        ;; that we're going to load
        "emacs_conf_binds.el"
-       "emacs_conf_mud.el"
        "emacs_conf_automode.el"))
 
 (mapcar 'load-library lib-files)
