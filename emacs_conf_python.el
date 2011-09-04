@@ -44,8 +44,9 @@
   (set (make-local-variable 'ac-sources)
        (setq ac-sources (append '(ac-source-ropemacs) ac-sources))
        )
-  ;; (set (make-local-variable 'ac-find-function) 'ac-python-find)
+  (set (make-local-variable 'ac-find-function) 'ac-python-find)
   )
 
 ;; (add-hook 'python-mode-hook 'qdot/ac-config-python)
 (add-hook 'python-mode-hook 'my-python-mode-hook)
+(remove-hook 'python-mode-hook 'wisent-python-default-setup)

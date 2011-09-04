@@ -230,3 +230,6 @@
 ;; If something updates under us and we haven't changed the buffer
 ;; ourselves, reload without asking. Handy for git.
 (setq global-auto-revert-mode t)
+
+;; Turn on narrowing
+(put 'narrow-to-region 'disabled nil)

@@ -63,7 +63,6 @@
 (setq linum-format "%4d")
 
 (add-hook 'emacs-lisp-mode-hook 'linum-mode)
-(add-hook 'python-mode-hook 'linum-mode)
 (add-hook 'cmake-mode-hook 'linum-mode)
 (add-hook 'c++-mode-hook 'linum-mode)
 (add-hook 'c-mode-hook 'linum-mode)
@@ -84,12 +83,6 @@
 (add-hook 'c++-mode-hook 'my-flymake-off-hook)
 (add-hook 'c-mode-hook 'my-flymake-off-hook)
 (add-hook 'xml-mode-hook 'my-flymake-off-hook)
-
-;; (autoload 'paredit-mode "paredit"
-;;   "Minor mode for pseudo-structurally editing Lisp code." t)
-;; (add-hook 'emacs-lisp-mode-hook       (lambda () (paredit-mode +1)))
-;; (add-hook 'lisp-mode-hook             (lambda () (paredit-mode +1)))
-;; (add-hook 'lisp-interaction-mode-hook (lambda () (paredit-mode +1)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;

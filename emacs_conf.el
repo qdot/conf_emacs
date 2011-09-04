@@ -71,8 +71,8 @@
        ;; Programming related stuff
        "emacs_conf_programming.el"
        "emacs_conf_ccmode.el"
-       ;;"emacs_conf_python.el"
        "emacs_conf_cedet.el"
+       "emacs_conf_python.el"
 
        ;; bind as late as possible, so we already have everything in
        ;; that we're going to load

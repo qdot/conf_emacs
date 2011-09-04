@@ -5,6 +5,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'org-contacts)
+(require 'org-checklist)
+(require 'org-screen)
 
 (setq org-modules (quote (org-bibtex org-crypt org-gnus org-id org-info org-jsinfo org-habit org-inlinetask org-irc org-protocol org-w3m)))
 
@@ -22,33 +24,36 @@
 (global-set-key "\C-cb" 'org-iswitchb)
 
 (setq org-log-done t)
-
 (setq org-indent-mode t)
 (setq org-hide-leading-stars t)
 (setq org-agenda-ndays 1)
 (setq org-indent-indentation-per-level 2)
 (setq org-archive-location "~/emacs_org/archives/%s_archive::")
+(setq org-enable-priority-commands nil)
+(setq org-confirm-elisp-link-function nil)
 
 (defun reload-org-files ()
   (interactive)
   (setq org-agenda-files 
         (append
-         (file-expand-wildcards "~/emacs_org/*.org")
+         (file-expand-wildcards "~/emacs_org/tasks.org")
          ;; (file-expand-wildcards "~/emacs_org/work/*.org")
          (file-expand-wildcards "~/emacs_org/home/*.org")
          (file-expand-wildcards "~/emacs_org/nplabs/*.org")
          (file-expand-wildcards "~/emacs_org/travel/*.org")
          (file-expand-wildcards "~/emacs_org/projects/*.org")
          )
-        ) 
+        )  
   )
 
-(require 'org-checklist)
+
+
 
 (reload-org-files)
 
 (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d!/!)")
-                                (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)"))))
+                                (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)")
+				(sequence "EVENT(e)" "|" "ATTENDED(a!)" "SKIPPED(k!)"))))
 
 ;; I use C-M-r to start org-remember
 (global-set-key (kbd "C-M-r") 'org-capture)
@@ -87,20 +92,14 @@
 
 ;; Use IDO for target completion
 (setq org-completion-use-ido t)
-
 ;; Targets include this file and any file contributing to the agenda - up to 5 levels deep
 (setq org-refile-targets (quote ((org-agenda-files :maxlevel . 5) (nil :maxlevel . 5))))
-
 ;; Targets start with the file name - allows creating level 1 tasks
 (setq org-refile-use-outline-path (quote file))
-
 ;; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
 (setq org-outline-path-complete-in-steps t)
-
-;;
 ;; Resume clocking tasks when emacs is restarted
 (setq org-clock-persistence-insinuate)
-;;
 ;; Yes it's long... but more is better ;)
 (setq org-clock-history-length 35)
 ;; Resume clocking task on clock-in if the clock is open
@@ -156,7 +155,6 @@
 (display-time)                 ;; time display is required for this...
 
 ;; update appt each time agenda opened
-
 (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 
 (require 'org-google-weather)
@@ -189,3 +187,4 @@ weekend."
 (setq org-latex-to-pdf-process 
   '("xelatex -interaction nonstopmode %f"
      "xelatex -interaction nonstopmode %f")) ;; for multiple passes
+
