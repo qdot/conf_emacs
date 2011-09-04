@@ -75,24 +75,12 @@
 (setq wg-prefix-key "`")
 (wg-set-prefix-key)
 
-;; Adoc customization
-(setq adoc-insert-replacement nil)
-
-
 ;; http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
 
 (require 'recentf)
 
 ;; get rid of `find-file-read-only' and replace it with something
 ;; more useful.
-(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
-
-;; enable recent files mode.
-(recentf-mode t)
-
-					; 50 files ought to be enough.
-(setq recentf-max-saved-items 50)
-
 (defun ido-recentf-open ()
   "Use `ido-completing-read' to \\[find-file] a recent file"
   (interactive)
@@ -100,6 +88,13 @@
       (message "Opening file...")
     (message "Aborting")))
 
+(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+
+;; enable recent files mode.
+(recentf-mode t)
+
+;; 50 files ought to be enough.
+(setq recentf-max-saved-items 50)
 
 ;; eshell + autocomplete
 ;; From http://paste.lisp.org/display/120731
