@@ -3,8 +3,9 @@
       (append
        '(
          ("\\.py$"   . python-mode)
-	 ("\\.\\(xml\\|mxml\\|html\\|htm\\)$" . nxml-mode)
-	 ("\\.css$" . css-mode)
+	 ("\\.\\(xml\\|mxml\\)$" . nxml-mode)
+	 ("\\.\\(html\\|htm\\)$" . nxhtml-mode)
+	 ("\\.css$" . css-mode)	 
          ("\\.markdown$" . markdown-mode)
          ("\\.testdoc$" . adoc-mode)
          ("\\.archdoc$" . adoc-mode)
