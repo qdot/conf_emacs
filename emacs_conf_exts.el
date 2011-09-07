@@ -68,13 +68,6 @@
   (auto-complete-mode 1))
 (add-hook 'ielm-mode-hook 'ielm-auto-complete)
 
-;; Workgroups
-
-(workgroups-mode 1)
-(setq wg-morph-on nil)
-(setq wg-prefix-key "`")
-(wg-set-prefix-key)
-
 ;; http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
 
 (require 'recentf)

@@ -59,14 +59,12 @@
        ;; somewhat often       
        "emacs_conf_funcs.el"
 
+       "emacs_conf_wg.el"
        "emacs_conf_org_mode.el"
        "emacs_conf_erc.el"
 
        ;; Programming related stuff
        "emacs_conf_programming.el"
-       "emacs_conf_ccmode.el"
-       "emacs_conf_cedet.el"
-       "emacs_conf_python.el"
 
        ;; bind as late as possible, so we already have everything in
        ;; that we're going to load

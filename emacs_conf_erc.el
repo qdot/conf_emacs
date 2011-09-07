@@ -302,7 +302,7 @@ that can occur between two notifications.  The default is
     ;; Bring up the bitlbee nicklist
     (set-buffer "&bitlbee")
     (erc-nicklist))
-  (wg-revert-workgroup (wg-get-workgroup 'name "bitlbee"))
+  (wg-revert-workgroup (wg-get-workgroup "bitlbee"))
   ;; (qdot/resume-layout-file "~/.emacs_files/layouts/bitlbee_layout.el")
   (qdot/bitlbee-reallocate-query-buffers)
   )
