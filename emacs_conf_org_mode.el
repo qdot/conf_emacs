@@ -112,7 +112,7 @@
 				(sequence "EVENT(e)" "|" "ATTENDED(a!)" "SKIPPED(k!)"))))
 
 ;; I use C-M-r to start org-remember
-(global-set-key (kbd "C-M-r") 'org-capture)
+(global-set-key (kbd "C-M-R") 'org-capture)
 
 ;; Once again, stolen from norang, except for the contacts one, which
 ;; was taken from the org-mode list.

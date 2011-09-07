@@ -27,11 +27,5 @@
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
-;; shift-arrow key binding for frame movement
 
 
-(defalias 'rs 'replace-string)
-(defalias 'xp 'replace-regexp)
-(defalias 'qr 'query-replace)
-(defalias 'is 'ispell)
-(defalias 'll 'visual-line-mode)
