@@ -11,6 +11,10 @@
 (setq qdot/emacs-elisp-dir (expand-file-name 
 			    (concat qdot/emacs-conf-dir "elisp/")))
 
+;; For manually installed elisp
+(setq qdot/emacs-scripts-dir (expand-file-name 
+			      (concat qdot/emacs-conf-dir "scripts/")))
+
 ;; For source installs (no repo available to track)
 (setq qdot/emacs-elisp-src-dir (expand-file-name 
                                 (concat qdot/emacs-conf-dir "elisp_src/")))
@@ -26,6 +30,7 @@
     (with-temp-buffer
       (write-file custom-file)))
 
+(add-to-list 'exec-path (expand-file-name qdot/emacs-scripts-dir))
 (add-to-list 'load-path (expand-file-name qdot/emacs-conf-dir))
 (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 
