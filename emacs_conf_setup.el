@@ -87,6 +87,7 @@
 (line-number-mode t)
 (column-number-mode t)
 (tool-bar-mode -1)
+(menu-bar-mode -1)
 (global-font-lock-mode 1)
 (show-paren-mode t)
 
