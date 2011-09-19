@@ -21,6 +21,11 @@
   "Return only those buffers in BUFFER-LIST in `erc-mode'."
   (qdot/wg-filter-buffer-list-by-not-major-mode 'erc-mode buffer-list))
 
+(defun qdot/wg-buffer-list-filter-associated-not-irc (workgroup buffer-list)
+  "Return only those buffers in BUFFER-LIST in `erc-mode'."
+  (qdot/wg-filter-buffer-list-by-not-major-mode 'erc-mode (wg-buffer-list-filter-associated workgroup buffer-list)))
+
+
 (defun qdot/wg-buffer-list-filter-erc-channel (workgroup buffer-list)
   "Return only those buffers in BUFFER-LIST in `erc-mode'."
   (wg-filter-buffer-list-by-regexp "^#"
@@ -40,9 +45,14 @@
  'wg-buffer-list-filter-definitions
  '(qdot/not-irc "qdot/not-irc" qdot/wg-buffer-list-filter-not-irc))
 
-(wg-set-workgroup-parameter (wg-get-workgroup "erc") 'wg-buffer-list-filter-order-alist '((default qdot/erc-irc all)))
-(wg-set-workgroup-parameter (wg-get-workgroup "work") 'wg-buffer-list-filter-order-alist '((default qdot/not-irc all)))
-(wg-set-workgroup-parameter (wg-get-workgroup "bitlbee") 'wg-buffer-list-filter-order-alist '((default qdot/erc-query all)))
+(add-to-list
+ 'wg-buffer-list-filter-definitions
+ '(qdot/associated-not-irc "qdot/associated-not-irc" qdot/wg-buffer-list-filter-associated-not-irc))
+
+(defun qdot/wg-set-buffer-lists ()
+  (wg-set-workgroup-parameter (wg-get-workgroup "work") 'wg-buffer-list-filter-order-alist '((default qdot/associated-not-irc qdot/not-irc all)))
+  (wg-set-workgroup-parameter (wg-get-workgroup "erc") 'wg-buffer-list-filter-order-alist '((default qdot/erc-irc all)))
+  (wg-set-workgroup-parameter (wg-get-workgroup "bitlbee") 'wg-buffer-list-filter-order-alist '((default qdot/erc-query all))))
 
 ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
 ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))
