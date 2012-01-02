@@ -41,11 +41,13 @@
 
 ;; Yasnippets
 
-(setq yas/root-directory '("~/.emacs_files/snippets"
-                           "~/.emacs_files/elisp_auto/yasnippet/snippets"))
-(yas/initialize)
-(mapc 'yas/load-directory yas/root-directory)
-(yas/global-mode t)
+;; (setq yas/root-directory '("~/.emacs_files/snippets"
+;;                            "~/.emacs_files/elisp_auto/yasnippet/snippets"))
+;; (yas/initialize)
+;; (mapc 'yas/load-directory yas/root-directory)
+;; (yas/global-mode t)
+
+
 
 ;; auto-complete
 
@@ -122,3 +124,13 @@
   (local-set-key [tab] 'nm-eshell-auto-complete))
 
 (add-hook 'eshell-mode-hook 'nm-eshell-mode-hook)
+
+;; link numbering for twittering mode
+
+
+(require 'twittering-numbering)
+(add-hook 'twittering-mode-hook 'twittering-numbering)
+(setq twittering-icon-mode t)
+(setq twittering-timer-interval 120)
+(setq twittering-url-show-status nil)
+(add-hook 'twittering-edit-mode-hook (lambda () (ispell-minor-mode) (flyspell-mode)))
