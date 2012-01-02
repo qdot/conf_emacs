@@ -18,7 +18,7 @@
          ("\\.wiki$" . wikipedia-mode)
          ("\\.json$" . python-mode)
          ("\\.cmake$" . cmake-mode)
-         ("\\.hs$" . haskell-mode)
+         ;;("\\.hs$" . haskell-mode)
          ("CMakeLists\\.txt\\'" . cmake-mode)
          ("ChangeLog\\.txt\\'" . change-log-mode)
          ("\\.lua$" . lua-mode)
