@@ -12,12 +12,12 @@
       (doxymacs-font-lock)))
 (add-hook 'font-lock-mode-hook 'qdot/doxymacs-font-lock-hook)
 
-(require 'haskell-mode)
-(require 'inf-haskell)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-(add-hook 'haskell-mode-hook 'font-lock-mode)
-(setq haskell-font-lock-symbols t)
+;;(require 'haskell-mode)
+;;(require 'inf-haskell)
+;;(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+;;(add-hook 'haskell-mode-hook 'font-lock-mode)
+;;(setq haskell-font-lock-symbols t)
 
 ;; gdb/gud
 (setq gdb-many-windows t)
@@ -42,6 +42,8 @@
 (add-hook 'c++-mode-hook 'linum-mode)
 (add-hook 'c-mode-hook 'linum-mode)
 (add-hook 'haskell-mode-hook 'linum-mode)
+(add-hook 'java-mode-hook 'linum-mode)
+(add-hook 'js2-mode-hook 'linum-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -152,6 +154,7 @@
   (setq indent-tabs-mode t)
   (setq-default tab-width 4)
   (c-set-style "qdot/cc-code-style")
+  (c-set-offset 'innamespace 0)
   (font-lock-mode 1)
   (font-lock-fontify-buffer)
   (local-set-key [(control tab)] 'semantic-complete-self-insert)
@@ -243,7 +246,7 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-file "~/.emacs_files/elisp_auto/cedet/common/cedet.el")
+;; (load-file "~/.emacs_files/elisp_auto/cedet/common/cedet.el")
 
 ;; Emacs freaks out if this isn't set.
 (setq warning-suppress-types nil) 
@@ -389,3 +392,10 @@
 (add-hook 'python-mode-hook 'qdot/python-mode-hook)
 (remove-hook 'python-mode-hook 'wisent-python-default-setup)
 
+;; Javascript
+(setq js-indent-level 2)
+(setq
+ js2-auto-indent-p t
+ js2-basic-offset 2
+ js2-enter-indents-newline t
+ js2-indent-on-enter-key t)
