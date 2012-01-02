@@ -28,7 +28,6 @@
 
 (erc-timestamp-mode t)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; ERC setup
@@ -53,14 +52,15 @@
 ;;                      (".*Idle" (:foreground "orange"))
 ;;                      ))
 
+(setq erc-keywords nil)
+(make-variable-buffer-local 'erc-fill-column)
+(make-variable-buffer-local 'erc-hide-list)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Change fill column on resize
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(make-variable-buffer-local 'erc-fill-column)
 
 (defun qdot/erc-set-fill-columns ()
   (interactive)
@@ -303,7 +303,6 @@ that can occur between two notifications.  The default is
     (set-buffer "&bitlbee")
     (erc-nicklist))
   (wg-revert-workgroup (wg-get-workgroup "bitlbee"))
-  ;; (qdot/resume-layout-file "~/.emacs_files/layouts/bitlbee_layout.el")
   (qdot/bitlbee-reallocate-query-buffers)
   )
 
@@ -330,7 +329,82 @@ that can occur between two notifications.  The default is
            (kill-buffer arg)
            ))) (buffer-list)))
 
+(add-hook 'kill-emacs-hook 'qdot/kill-erc)
+
 (setq erc-fill-function 'erc-fill-static)
 (setq erc-fill-static-center 0)
 
-(add-hook 'kill-emacs-hook 'qdot/kill-erc)
+;; Don't track common events
+(setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+				"324" "329" "332" "333" "353" "477"))
+
+(setq erc-current-nick-highlight-type 'nick)
+;; (setq erc-keywords '("\\berc[-a-z]*\\b" "\\bemms[-a-z]*\\b"))
+
+(setq erc-track-use-faces t)
+(setq erc-track-faces-priority-list
+      '(erc-current-nick-face erc-keyword-face))
+(setq erc-track-priority-faces-only 'all)
+
+;; Make erc-hide-list buffer-local
+;; http://web.archiveorange.com/archive/v/rByihNiNJaOnTUlfaxLs
+
+(defun erc-display-buffer-list (buffer)
+  "Sanitize a 'buffer' name or list, and convert to a buffer-name list."
+  (cond ((bufferp buffer) (list buffer))
+	((listp buffer) buffer)
+	((processp buffer) (list (process-buffer buffer)))
+	((eq 'all buffer)
+	 ;; Hmm, or all of the same session server?
+	 (erc-buffer-list nil erc-server-process))
+	((and (eq 'active buffer) (erc-active-buffer))
+	 (list (erc-active-buffer)))
+	((erc-server-buffer-live-p)
+	 (list (process-buffer erc-server-process)))
+	(t (list (current-buffer)))))
+
+(defun erc-display-message (parsed type buffer msg &rest args)
+  "Display MSG in BUFFER.
+
+ARGS, PARSED, and TYPE are used to format MSG sensibly.
+
+See also `erc-format-message' and `erc-display-line'.
+
+NOTE: PATCHED VERSION that takes into account that erc-hide-list
+is buffer local"
+  (let ((string (if (symbolp msg)
+		    (apply 'erc-format-message msg args)
+		  msg)))
+    (setq string
+	  (cond
+	   ((null type)
+	    string)
+	   ((listp type)
+	    (mapc (lambda (type)
+		    (setq string
+			  (erc-display-message-highlight type string)))
+		  type)
+	    string)
+	   ((symbolp type)
+	    (erc-display-message-highlight type string))))
+
+    (if (not (erc-response-p parsed))
+	(erc-display-line string buffer)
+      (erc-put-text-property 0 (length string) 'erc-parsed parsed string)
+      (erc-put-text-property 0 (length string) 'rear-sticky t string)
+      (dolist (buf (erc-display-buffer-list buffer))
+	(unless (member (erc-response.command parsed)
+			(if (bufferp buf)
+			    (with-current-buffer buf erc-hide-list)
+			  erc-hide-list))
+	  (erc-display-line string buffer))))))
+
+(setq qdot/erc-event-channels "&bitlbee")
+
+(add-to-list 'erc-join-hook 
+	     (lambda () 
+	       "Only show joins/hides/quits for channels we
+specify in qdot/erc-event-channels"
+	       (when (not (member (buffer-name (current-buffer))
+				  qdot/erc-event-channels))
+		 (setq erc-hide-list '( "PART" "QUIT" "JOIN")))))
