@@ -262,3 +262,9 @@ strings"
         ((and (looking-at "\\_>") (not (looking-at "end")))
          (hippie-expand nil))
         (t (indent-for-tab-command))))
+
+(defun eval-and-replace (value)
+  "Evaluate the sexp at point and replace it with its value"
+  (interactive (list (eval-last-sexp nil)))
+  (kill-sexp -1)
+  (insert (format "%S" value)))
