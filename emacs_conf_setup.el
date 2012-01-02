@@ -21,14 +21,19 @@
 ;; We know we have consolas on OS X, so use it
 ;; We also need to do this as near the beginning as possible, since it crashes
 ;; otherwise?
-(when (and macosx-p
-  (when (member "Consolas" (font-family-list))
-    (set-face-font 'default "consolas-11"))))
-(when mswindows-p
-  (set-face-font 'default "consolas-8"))
-(when linux-p
-  (when (member "Inconsolata" (font-family-list))
-    (set-face-font 'default "inconsolata-11")))
+(defun qdot/set-platform-font ()
+  "Set the default font for the system type."
+  (interactive)
+  (when (and macosx-p
+	     (when (member "Consolas" (font-family-list))
+	       (set-face-font 'default "consolas-11"))))
+  (when mswindows-p
+    (set-face-font 'default "consolas-8"))
+  (when linux-p
+    (when (member "Inconsolata" (font-family-list))
+      (set-face-font 'default "inconsolata-11"))))
+
+(qdot/set-platform-font)
 
 (when macosx-p
   ;;Change meta to alt    
@@ -81,7 +86,12 @@
  indent-tabs-mode nil
  ;; copy emacs clipboard to system
  x-select-enable-clipboard t
- interprogram-paste-function 'x-cut-buffer-or-selection-value)
+ interprogram-paste-function 'x-cut-buffer-or-selection-value
+ ;; http://www.masteringemacs.org/articles/2011/10/02/improving-performance-emacs-display-engine/
+ redisplay-dont-pause t
+ ;; period single space ends sentence
+ sentence-end-double-space nil
+)
 (set-default 'indicate-empty-lines t)
 (display-time)
 (line-number-mode t)
