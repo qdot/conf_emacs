@@ -41,7 +41,9 @@
       erc-timestamp-mode t
       erc-max-buffer-size 20000
       erc-interpret-mirc-color nil
-      erc-insert-timestamp-function 'erc-insert-timestamp-left)
+      erc-insert-timestamp-function 'erc-insert-timestamp-left
+      erc-kill-queries-on-quit nil
+      erc-keywords nil)
 ;; (erc-scrolltobottom-enable)
 ;;  (erc-scrolltobottom-disable)
 ;; (add-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
@@ -51,7 +53,6 @@
 ;;                      (".*Idle" (:foreground "orange"))
 ;;                      ))
 
-(setq erc-keywords nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -70,8 +71,7 @@
 	 (set-buffer buffer)
 	 (when (eq major-mode 'erc-mode)
 	   (message "Window size: %d" (window-width w))
-	   (setq erc-fill-column (- (window-width w) 2)))))))
-  )
+	   (setq erc-fill-column (- (window-width w) 2))))))))
 
 (setq window-configuration-change-hook (cddr window-configuration-change-hook))
 
@@ -87,7 +87,8 @@
 
 ;; Todochiku notifier for priv messages
 (defun qdot/text-match-erc-hook (match-type nick msg)
-  "Shows a growl notification, when user's nick was mentioned. If the buffer is currently not visible, makes it sticky."
+  "Shows a growl notification, when user's nick was mentioned. If
+the buffer is currently not visible, makes it sticky."
   (if (featurep 'todochiku)
       (todochiku-message
        "ERC Mention"
@@ -291,8 +292,7 @@ that can occur between two notifications.  The default is
 
 (defun qdot/bitlbee-reallocate-query-buffers ()
   ;; For each already opened query window, reallocate
-  (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf)) (qdot/filter 'erc-query-buffer-p (buffer-list)))
-)
+  (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf)) (qdot/filter 'erc-query-buffer-p (buffer-list))))
 
 (defun qdot/bitlbee-resume-layout ()
   (interactive)
