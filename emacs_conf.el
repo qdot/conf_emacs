@@ -5,7 +5,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; The base conf directory
-(setq qdot/emacs-conf-dir (expand-file-name "~/.emacs_files/"))
+(setq qdot/emacs-conf-dir (expand-file-name "~/.emacs_files_24/"))
 
 ;; For manually installed elisp
 (setq qdot/emacs-elisp-dir (expand-file-name 
@@ -47,6 +47,11 @@
 (require 'cl)
 (require 'compile)
 (defvar *emacs-load-start* (current-time))
+
+;;(require 'inversion)
+
+(load-file "~/.emacs_files/elisp_auto/cedet/common/cedet.el")
+
 
 (setq lib-files
       (list
