@@ -219,9 +219,7 @@ weekend."
          (file-expand-wildcards "~/emacs_org/nplabs/*.org")
          (file-expand-wildcards "~/emacs_org/travel/*.org")
          (file-expand-wildcards "~/emacs_org/projects/*.org")
-         )
-        )  
-  )
+         (file-expand-wildcards "~/emacs_org/personal/*.org"))))
 
 (reload-org-files)
 
