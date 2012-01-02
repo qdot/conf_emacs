@@ -399,7 +399,7 @@ is buffer local"
 			  erc-hide-list))
 	  (erc-display-line string buffer))))))
 
-(setq qdot/erc-event-channels "&bitlbee")
+(setq qdot/erc-event-channels '("&bitlbee"))
 
 (add-to-list 'erc-join-hook 
 	     (lambda () 
