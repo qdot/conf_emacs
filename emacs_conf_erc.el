@@ -408,3 +408,15 @@ specify in qdot/erc-event-channels"
 	       (when (not (member (buffer-name (current-buffer))
 				  qdot/erc-event-channels))
 		 (setq erc-hide-list '( "PART" "QUIT" "JOIN")))))
+
+(defun qdot/clear-irc-buffer ()
+  "If the current buffer is and ERC buffer, clear all text out of
+it. 
+
+This function exists due to the fact that calling /CLEAR only
+recenters the buffer so that prior history cannot be seen.
+"
+  (interactive)
+  (when (member (current-buffer) (erc-buffer-list))
+    (erc-truncate-buffer-to-size 0)))
+
