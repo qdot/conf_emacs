@@ -48,10 +48,7 @@
 (require 'compile)
 (defvar *emacs-load-start* (current-time))
 
-;;(require 'inversion)
-
-(load-file "~/.emacs_files/elisp_auto/cedet/common/cedet.el")
-
+(load-file (expand-file-name (concat qdot/emacs-autoinst-elisp-dir "cedet/common/cedet.el")))
 
 (setq lib-files
       (list
