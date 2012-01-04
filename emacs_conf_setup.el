@@ -99,7 +99,6 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (global-font-lock-mode 1)
-(show-paren-mode t)
 
 ;; Transparently open compressed files
 (auto-compression-mode t)
