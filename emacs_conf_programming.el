@@ -12,13 +12,6 @@
       (doxymacs-font-lock)))
 (add-hook 'font-lock-mode-hook 'qdot/doxymacs-font-lock-hook)
 
-;;(require 'haskell-mode)
-;;(require 'inf-haskell)
-;;(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-;;(add-hook 'haskell-mode-hook 'font-lock-mode)
-;;(setq haskell-font-lock-symbols t)
-
 ;; gdb/gud
 (setq gdb-many-windows t)
 (setq gdb-show-main t)
@@ -75,54 +68,67 @@
 (add-hook 'c-mode-hook 'qdot/flymake-off-hook)
 (add-hook 'xml-mode-hook 'qdot/flymake-off-hook)
 
-(defun flymake-Haskell-init ()
-  (flymake-simple-make-init-impl
-   'flymake-create-temp-with-folder-structure nil nil
-   (file-name-nondirectory buffer-file-name)
-   'flymake-get-Haskell-cmdline))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; haskell
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun flymake-get-Haskell-cmdline (source base-dir)
-  (list "flycheck_haskell.pl"
-	(list source base-dir)))
+;;(require 'haskell-mode)
+;;(require 'inf-haskell)
+;;(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+;;(add-hook 'haskell-mode-hook 'font-lock-mode)
+;;(setq haskell-font-lock-symbols t)
 
-(push '(".+\\.hs$" flymake-Haskell-init flymake-simple-java-cleanup)
-      flymake-allowed-file-name-masks)
-(push '(".+\\.lhs$" flymake-Haskell-init flymake-simple-java-cleanup)
-      flymake-allowed-file-name-masks)
-(push
- '("^\\(\.+\.hs\\|\.lhs\\):\\([0-9]+\\):\\([0-9]+\\):\\(.+\\)"
-   1 2 3 4) flymake-err-line-patterns)
+;; (defun flymake-Haskell-init ()
+;;   (flymake-simple-make-init-impl
+;;    'flymake-create-temp-with-folder-structure nil nil
+;;    (file-name-nondirectory buffer-file-name)
+;;    'flymake-get-Haskell-cmdline))
 
-(add-hook
- 'haskell-mode-hook
- '(lambda ()
-    (if (not (null buffer-file-name)) (flymake-mode))))
+;; (defun flymake-get-Haskell-cmdline (source base-dir)
+;;   (list "flycheck_haskell.pl"
+;; 	(list source base-dir)))
+
+;; (push '(".+\\.hs$" flymake-Haskell-init flymake-simple-java-cleanup)
+;;       flymake-allowed-file-name-masks)
+;; (push '(".+\\.lhs$" flymake-Haskell-init flymake-simple-java-cleanup)
+;;       flymake-allowed-file-name-masks)
+;; (push
+;;  '("^\\(\.+\.hs\\|\.lhs\\):\\([0-9]+\\):\\([0-9]+\\):\\(.+\\)"
+;;    1 2 3 4) flymake-err-line-patterns)
+
+;; (add-hook
+;;  'haskell-mode-hook
+;;  '(lambda ()
+;;     (if (not (null buffer-file-name)) (flymake-mode))))
 
 ;; Taken from http://www.credmp.org/index.php/2007/07/20/on-the-fly-syntax-checking-java-in-emacs/
 
-(defun qdot/flymake-display-err-minibuf () 
-  "Displays the error/warning for the current line in the minibuffer"
-  (interactive)
-  (let* ((line-no             (flymake-current-line-no))
-	 (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
-	 (count               (length line-err-info-list))
-	 )
-    (while (> count 0)
-      (when line-err-info-list
-	(let* ((file       (flymake-ler-file (nth (1- count) line-err-info-list)))
-	       (full-file  (flymake-ler-full-file (nth (1- count) line-err-info-list)))
-	       (text (flymake-ler-text (nth (1- count) line-err-info-list)))
-	       (line       (flymake-ler-line (nth (1- count) line-err-info-list))))
-	  (message "[%s] %s" line text)
-	  )
-	)
-      (setq count (1- count)))))
+;; (defun qdot/flymake-display-err-minibuf () 
+;;   "Displays the error/warning for the current line in the minibuffer"
+;;   (interactive)
+;;   (let* ((line-no             (flymake-current-line-no))
+;; 	 (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
+;; 	 (count               (length line-err-info-list))
+;; 	 )
+;;     (while (> count 0)
+;;       (when line-err-info-list
+;; 	(let* ((file       (flymake-ler-file (nth (1- count) line-err-info-list)))
+;; 	       (full-file  (flymake-ler-full-file (nth (1- count) line-err-info-list)))
+;; 	       (text (flymake-ler-text (nth (1- count) line-err-info-list)))
+;; 	       (line       (flymake-ler-line (nth (1- count) line-err-info-list))))
+;; 	  (message "[%s] %s" line text)
+;; 	  )
+;; 	)
+;;       (setq count (1- count)))))
 
-(add-hook
- 'haskell-mode-hook
- '(lambda ()
-    (define-key haskell-mode-map "\C-cd"
-      'qdot/flymake-display-err-minibuf)))
+;; (add-hook
+;;  'haskell-mode-hook
+;;  '(lambda ()
+;;     (define-key haskell-mode-map "\C-cd"
+;;       'qdot/flymake-display-err-minibuf)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -170,8 +176,6 @@
   (setq-default tab-width 4)
   (c-set-style "qdot/cc-code-style")
   (c-set-offset 'innamespace 0)
-  (font-lock-mode 1)
-  (font-lock-fontify-buffer)
   (local-set-key [(control tab)] 'semantic-complete-self-insert)
   )
 
@@ -251,7 +255,7 @@
 
 (setq ff-search-directories '(
                               "."
-                              "$HOME/git-projects/*"
+                              "$HOME/code/git-projects/*"
                               "/usr/*/include/*"
                               ))
 
@@ -260,8 +264,6 @@
 ;; CEDET settings
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (load-file "~/.emacs_files/elisp_auto/cedet/common/cedet.el")
 
 ;; Emacs freaks out if this isn't set.
 (setq warning-suppress-types nil) 
@@ -307,11 +309,6 @@
 (add-hook 'semantic-init-hooks 'qdot/semantic-hook)
 (global-semantic-tag-folding-mode 1)
 
-;; gnu global support
-;; (require 'semanticdb-global)
-;; (semanticdb-enable-gnu-global-databases 'c-mode)
-;; (semanticdb-enable-gnu-global-databases 'c++-mode)
-
 (defun qdot/cedet-hook ()
   (local-set-key [(control return)] 'semantic-ia-complete-symbol)
   (local-set-key "\C-c?" 'semantic-ia-complete-symbol-menu)
@@ -354,9 +351,13 @@
 ;; TODO This freaks out if pyflakes isn't available on the system
 (if macosx-p
     ;;(setq flyflakes-pyflakes-command '("/Library/Frameworks/Python.framework/Versions/Current/bin/pyflakes")))
-    (setq flyflakes-pyflakes-command '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
-  (setq flyflakes-pyflakes-command '("/usr/local/bin/pyflakes")))
-(require 'flyflakes)
+    ;; Usually using homebrew on OS X
+    (when (file-exists-p "/opt/homebrew/Cellar/python/2.7/bin/pyflakes")
+	(setq flyflakes-pyflakes-command '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
+	(require 'flyflakes))
+  (when (file-exists-p "/usr/local/bin/pyflakes")
+	(setq flyflakes-pyflakes-command '("/usr/local/bin/pyflakes"))
+	(require 'flyflakes)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
