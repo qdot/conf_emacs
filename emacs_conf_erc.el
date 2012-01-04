@@ -401,6 +401,8 @@ is buffer local"
 
 (setq qdot/erc-event-channels '("&bitlbee"))
 
+
+
 (add-hook 'erc-join-hook 
 	     (lambda ()
 	       (make-local-variable 'blink-matching-paren)
@@ -422,3 +424,8 @@ recenters the buffer so that prior history cannot be seen.
   (when (member (current-buffer) (erc-buffer-list))
     (erc-truncate-buffer-to-size 0)))
 
+(defun qdot/erc-turn-off-parens ()
+  (when (member (current-buffer) (erc-buffer-list))
+    (setq blink-matching-paren nil)))
+
+(add-hook 'after-change-major-mode-hook 'qdot/erc-turn-off-parens)
