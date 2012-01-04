@@ -37,13 +37,28 @@
 ;; turn on linum mode for programming
 (setq linum-format "%4d")
 
-(add-hook 'emacs-lisp-mode-hook 'linum-mode)
-(add-hook 'cmake-mode-hook 'linum-mode)
-(add-hook 'c++-mode-hook 'linum-mode)
-(add-hook 'c-mode-hook 'linum-mode)
-(add-hook 'haskell-mode-hook 'linum-mode)
-(add-hook 'java-mode-hook 'linum-mode)
-(add-hook 'js2-mode-hook 'linum-mode)
+;; I don't always show parens, but when I do...
+(setq show-paren-delay 0)
+(setq show-paren-style 'expression)
+(set-face-background 'show-paren-match-face "#222")
+(set-face-attribute 'show-paren-match-face nil 
+		    :weight 'bold :underline nil :overline nil :slant 'normal)
+
+(defun qdot/programming-mode-hook ()
+  (linum-mode 1)
+  (make-variable-buffer-local 'show-paren-mode)
+  (show-paren-mode 1))
+
+(add-hook 'emacs-lisp-mode-hook 'qdot/programming-mode-hook)
+(add-hook 'cmake-mode-hook 'qdot/programming-mode-hook)
+(add-hook 'c-mode-common-hook 'qdot/programming-mode-hook)
+(add-hook 'haskell-mode-hook 'qdot/programming-mode-hook)
+(add-hook 'java-mode-hook 'qdot/programming-mode-hook)
+(add-hook 'js2-mode-hook 'qdot/programming-mode-hook)
+(add-hook 'nxml-mode-hook 'qdot/programming-mode-hook)
+(add-hook 'xml-mode-hook 'qdot/programming-mode-hook)
+(add-hook 'nxhtml-mode-hook 'qdot/programming-mode-hook)
+(add-hook 'python-mode-hook 'qdot/programming-mode-hook)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -366,20 +381,13 @@
     (setq ropemacs-enable-autoimport t)
     (ac-ropemacs-require)
     (setq qdot/pymacs-loaded t)
-    )
-)
-
-
+    ))
 
 (defun qdot/python-mode-hook()
-  (font-lock-mode 1)
-  (linum-mode 1)
-  (font-lock-fontify-buffer)
   (set-variable 'indent-tabs-mode nil)
   (set-variable 'tab-width 4)
   (set-variable 'py-indent-offset 4)
   (lambda () (eldoc-mode 1))
-  (local-set-key "\C-ch" 'pylookup-lookup)
   (qdot/load-pymacs)
   (auto-complete-mode nil)
   (set (make-local-variable 'ac-sources)

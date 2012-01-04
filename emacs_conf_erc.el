@@ -401,8 +401,10 @@ is buffer local"
 
 (setq qdot/erc-event-channels '("&bitlbee"))
 
-(add-to-list 'erc-join-hook 
-	     (lambda () 
+(add-hook 'erc-join-hook 
+	     (lambda ()
+	       (make-local-variable 'blink-matching-paren)
+	       (setq blink-matching-paren nil)
 	       "Only show joins/hides/quits for channels we
 specify in qdot/erc-event-channels"
 	       (when (not (member (buffer-name (current-buffer))
