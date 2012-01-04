@@ -28,8 +28,14 @@
  ;; Always make sure indentation is on
  org-indent-mode t
 
- ;; I think just showing the last star looks cleaner
- org-hide-leading-stars t
+ ;; Start indented
+ org-startup-indented t
+
+ ;; Hide blank lines inside folded nodes
+ org-cycle-separator-lines 0
+
+ ;; Show notes in a task first
+ org-reverse-note-order nil
 
  ;; Just show one day on the agenda
  org-agenda-ndays 1
@@ -98,11 +104,36 @@
  appt-display-mode-line t  
 
  ;; use our func  
- appt-display-format 'nil) 
+ appt-display-format 'nil
+
+ ;; use speed commands
+ org-use-speed-commands t
+
+ ;; I like links being active ret
+ org-return-follows-link t
+
+ ;; Make lists cycle whether they're nodes or plain
+ org-cycle-include-plain-lists t
+
+ ;; Fontify org-src blocks like their language mode
+ org-src-fontify-natively t
+)
+
+;; flyspell mode for spell checking everywhere
+(add-hook 'org-mode-hook 'turn-on-flyspell 'append)
+
+;; Disable C-c [ and C-c ] in org-mode
+(add-hook 'org-mode-hook
+          (lambda ()
+            ;; Undefine C-c [ and C-c ] since this breaks my
+            ;; org-agenda files when directories are include It
+            ;; expands the files in the directories individually
+            (org-defkey org-mode-map "\C-c["    'undefined)
+            (org-defkey org-mode-map "\C-c]"    'undefined))
+          'append)
 
 ;; Resume clocking tasks when emacs is restarted
 (org-clock-persistence-insinuate)
-
 
 ;; 3 different stage setups. First two are from norang, final is for
 ;; events, so I can search for things like "all concerts I attended
@@ -223,3 +254,14 @@ weekend."
 
 (reload-org-files)
 
+;; Always hilight the current agenda line
+(add-hook 'org-agenda-mode-hook
+          '(lambda () (hl-line-mode 1))
+          'append)
+
+;; The following custom-set-faces create the highlights
+(custom-set-faces
+ '(org-mode-line-clock ((t (:background "grey75" :foreground "red" :box (:line-width -1 :style released-button)))) t))
+
+;; Turn habits on at 6am every morning
+(run-at-time "06:00" 86400 '(lambda () (setq org-habit-show-habits t)))
