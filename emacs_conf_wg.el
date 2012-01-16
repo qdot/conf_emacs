@@ -66,8 +66,8 @@
 ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))
 
 ;; Auto-place IM windows when switching to bitlbee workgroup
-(add-to-list 'wg-switch-to-workgroup-hook 
-	     (lambda () 
-	       (if (eq (wg-get-workgroup "bitlbee") (wg-current-workgroup))
-		   (qdot/bitlbee-resume-layout))))
+(add-hook 'wg-switch-to-workgroup-hook 
+	  (lambda () 
+	    (if (eq (wg-get-workgroup "bitlbee") (wg-current-workgroup))
+		(qdot/bitlbee-resume-layout))))
 

@@ -265,3 +265,8 @@ weekend."
 
 ;; Turn habits on at 6am every morning
 (run-at-time "06:00" 86400 '(lambda () (setq org-habit-show-habits t)))
+
+(setq org-ghi-interesting-repos '("qdot/libnifalcon" "qdot/liblightstone" "qdot/libtrancevibe" "qdot/emokit" "qdot/libomron" "qdot/libfitbit"))
+(setq org-ghi-org-file "~/emacs_org/github.org")
+(setq org-ghi-file-under-repo-headline t)
+

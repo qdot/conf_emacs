@@ -33,14 +33,13 @@
 ;; I don't always show parens, but when I do...
 (setq show-paren-delay 0)
 (setq show-paren-style 'expression)
-(set-face-background 'show-paren-match-face "#222")
-(set-face-attribute 'show-paren-match-face nil 
-		    :weight 'bold :underline nil :overline nil :slant 'normal)
-
 (defun qdot/programming-mode-hook ()
   (linum-mode 1)
   (make-variable-buffer-local 'show-paren-mode)
-  (show-paren-mode 1))
+  (show-paren-mode 1)
+  (set-face-background 'show-paren-match-face "#222")
+  (set-face-attribute 'show-paren-match-face nil 
+		      :weight 'bold :underline nil :overline nil :slant 'normal))
 
 (add-hook 'emacs-lisp-mode-hook 'qdot/programming-mode-hook)
 (add-hook 'cmake-mode-hook 'qdot/programming-mode-hook)

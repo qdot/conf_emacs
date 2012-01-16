@@ -263,3 +263,8 @@ strings"
          (hippie-expand nil))
         (t (indent-for-tab-command))))
 
+(defun qdot/insert-uuid ()
+  (interactive)
+  (shell-command-on-region (point) (point) "uuidgen" t)
+  (delete-backward-char 1))
+
