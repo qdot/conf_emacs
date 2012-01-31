@@ -108,6 +108,17 @@ the buffer is currently not visible, makes it sticky."
   "Number of seconds that must elapse between notifications from the same 
 person.")
 
+(defvar qdot/erc-no-page nil
+  "List of muted nicks that will repage until removed or session is reset")
+
+(defun qdot/erc-add-no-page (nick)
+  (interactive "sNick: ")
+  (push nick qdot/erc-no-page))
+
+(defun qdot/erc-remove-no-page (nick) 
+  (interactive "sNick: ")
+  (setq qdot/erc-no-page (remove nick qdot/erc-no-page)))
+
 (defun qdot/erc-page-allowed (nick &optional delay)
   "Return non-nil if a notification should be made for NICK.
 If DELAY is specified, it will be the minimum time in seconds
@@ -116,7 +127,7 @@ that can occur between two notifications.  The default is
 
   ;; Check to see if we even want to page about this nick
   ;; We want to make sure the nick isn't in the list, so negate
-  (when (not (member nick qdot/erc-nopage-nick-list))
+  (when (and (not (member nick qdot/erc-nopage-nick-list)) (not (member nick qdot/erc-no-page)))
     (unless delay (setq delay qdot/erc-page-timeout))    
     (let ((cur-time (time-to-seconds (current-time)))
           (cur-assoc (assoc nick qdot/erc-page-nick-alist))
