@@ -408,7 +408,7 @@ is buffer local"
 			(if (bufferp buf)
 			    (with-current-buffer buf erc-hide-list)
 			  erc-hide-list))
-	  (erc-display-line string buffer))))))
+	  (erc-display-line string buf))))))
 
 (setq qdot/erc-event-channels '("&bitlbee"))
 
