@@ -307,8 +307,10 @@ that can occur between two notifications.  The default is
 
 (defun qdot/bitlbee-resume-layout ()
   (interactive)
-  ;; If we havn't created a placeholder buffer yet, do so now
-  (get-buffer-create "bitlbee-placeholder")
+  ;; If we havn't created a placeholder buffer yet, do so now, make it
+  ;; readonly.
+  (with-current-buffer (get-buffer-create "bitlbee-placeholder")
+    (setq buffer-read-only t))
   (save-excursion
     ;; Bring up the bitlbee nicklist
     (set-buffer "&bitlbee")
@@ -415,14 +417,14 @@ is buffer local"
 
 
 (add-hook 'erc-join-hook 
-	     (lambda ()
-	       (make-local-variable 'blink-matching-paren)
-	       (setq blink-matching-paren nil)
-	       "Only show joins/hides/quits for channels we
+	  (lambda ()
+	    (make-local-variable 'blink-matching-paren)
+	    (setq blink-matching-paren nil)
+	    "Only show joins/hides/quits for channels we
 specify in qdot/erc-event-channels"
-	       (when (not (member (buffer-name (current-buffer))
-				  qdot/erc-event-channels))
-		 (setq erc-hide-list '( "PART" "QUIT" "JOIN")))))
+	    (when (not (member (buffer-name (current-buffer))
+			       qdot/erc-event-channels))
+	      (setq erc-hide-list '( "PART" "QUIT" "JOIN")))))
 
 (defun qdot/clear-irc-buffer ()
   "If the current buffer is and ERC buffer, clear all text out of
@@ -435,8 +437,12 @@ recenters the buffer so that prior history cannot be seen.
   (when (member (current-buffer) (erc-buffer-list))
     (erc-truncate-buffer-to-size 0)))
 
+(defun erc-cmd-CLEAR ()
+  (qdot/clear-irc-buffer))
+
 (defun qdot/erc-turn-off-parens ()
   (when (member (current-buffer) (erc-buffer-list))
+    (setq completion-auto-help nil)
     (setq blink-matching-paren nil)))
 
 (add-hook 'after-change-major-mode-hook 'qdot/erc-turn-off-parens)
