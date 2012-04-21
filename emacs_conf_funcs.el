@@ -47,7 +47,7 @@
   "Returns the current system IPv4 addresses as a list of
 strings"
   (let* ((start 0)
-;	 (match-positions ())
+					;	 (match-positions ())
 	 (ip-re  "[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?\.[1-9][0-9]?[0-9]?")
 	 ;; The rest of these variables try to make this platform agnostic.
 	 ;; Add more on to the cond statements if you need
@@ -134,15 +134,15 @@ strings"
   "When called interactively with no active region, copy a single line instead."
   (interactive
    (if mark-active (list (region-beginning) (region-end))
-	 (message "Copied line")
-	 (list (line-beginning-position)
-		   (line-beginning-position 2)))))
+     (message "Copied line")
+     (list (line-beginning-position)
+	   (line-beginning-position 2)))))
 (defadvice kill-region (before slick-cut activate compile)
   "When called interactively with no active region, kill a single line instead."
   (interactive
    (if mark-active (list (region-beginning) (region-end))
-	 (list (line-beginning-position)
-		   (line-beginning-position 2)))))
+     (list (line-beginning-position)
+	   (line-beginning-position 2)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -156,7 +156,7 @@ strings"
   (if arg
       (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
- 
+
 (defun sudo-edit-current-file ()
   (interactive)
   (let ((pos (point)))
@@ -209,15 +209,15 @@ strings"
 
 ;; http://www.emacswiki.org/emacs/ElispCookbook
 (defun qdot/filter (condp lst)
-    (delq nil
-          (mapcar (lambda (x) (and (funcall condp x) x)) lst)))
+  (delq nil
+	(mapcar (lambda (x) (and (funcall condp x) x)) lst)))
 
 ;; http://stackoverflow.com/questions/2238418/emacs-lisp-how-to-get-buffer-major-mode
 (defun qdot/buffer-mode (buffer-or-string)
   "Returns the major mode associated with a buffer."
   (save-excursion
-     (set-buffer buffer-or-string)
-     major-mode))
+    (set-buffer buffer-or-string)
+    major-mode))
 
 (defun qdot/open-in-browser()
   (interactive)
@@ -233,7 +233,7 @@ strings"
              (current-buffer))
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
- 
+
 (defun shell-current-directory ()
   "Opens a shell in the current directory"
   (interactive)
@@ -268,3 +268,25 @@ strings"
   (shell-command-on-region (point) (point) "uuidgen" t)
   (delete-backward-char 1))
 
+
+(defun delete-horizontal-space-forward () ; adapted from `delete-horizontal-space'
+  "*Delete all spaces and tabs after point."
+  (interactive "*")
+  (delete-region (point) (progn (skip-chars-forward " \t") (point))))
+
+(defun backward-delete-char-hungry (arg &optional killp)
+  "*Delete characters backward in \"hungry\" mode.
+    See the documentation of `backward-delete-char-untabify' and
+    `backward-delete-char-untabify-method' for details."
+  (interactive "*p\nP")
+  (let ((backward-delete-char-untabify-method 'hungry))
+    (backward-delete-char-untabify arg killp)))
+
+(defun toggle-fullscreen (&optional f)
+  (interactive)
+  (let ((current-value (frame-parameter nil 'fullscreen)))
+    (set-frame-parameter nil 'fullscreen
+			 (if (equal 'fullboth current-value)
+			     (if (boundp 'old-fullscreen) old-fullscreen nil)
+			   (progn (setq old-fullscreen current-value)
+				  'fullboth)))))
