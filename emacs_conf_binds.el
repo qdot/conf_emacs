@@ -28,4 +28,4 @@
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
-
+(define-key global-map (kbd "C-x SPC") 'ace-jump-mode)
