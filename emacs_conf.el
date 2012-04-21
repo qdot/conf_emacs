@@ -45,17 +45,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'cl)
-(require 'compile)
+;; We need compile before CEDET, and compile+ before compile, so just
+;; do compile+, which also picks up compile- in the correct order. Oi.
+(require 'compile+)
 (defvar *emacs-load-start* (current-time))
 
+;; Load cedet first, since so many things depend on it
 (load-file (expand-file-name (concat qdot/emacs-autoinst-elisp-dir "cedet/common/cedet.el")))
 
 (setq lib-files
       (list
-       ;; Basic emacs setup
+       ;; Basic emacs setup. Anything that needs to happen before the
+       ;; huge el-get package load happens here
        "emacs_conf_setup.el"
 
-       ;; Before we do anything, pull all modules
+       ;; Pull all modules now
        "emacs_conf_elget.el"
        custom-file
 
@@ -66,15 +70,17 @@
        ;; somewhat often       
        "emacs_conf_funcs.el"
 
+       ;; Package specific setup
        "emacs_conf_wg.el"
        "emacs_conf_org_mode.el"
        "emacs_conf_erc.el"
+       "emacs_conf_autocomplete.el"
 
        ;; Programming related stuff
        "emacs_conf_programming.el"
 
-       ;; bind as late as possible, so we already have everything in
-       ;; that we're going to load
+       ;; bind/automodes as late as possible, so we already have
+       ;; everything in that we're going to load
        "emacs_conf_binds.el"
        "emacs_conf_automode.el"))
 
@@ -95,6 +101,3 @@
 ;; Not cool.
 (if debug-on-error
     (setq debug-on-error nil))
-
-(org-agenda-list)
-(delete-other-windows)
