@@ -7,10 +7,12 @@
 (require 'org-contacts)
 (require 'org-checklist)
 (require 'org-screen)
+(require 'org-protocol)
+(require 'org-mobile)
 
 (setq org-modules (quote (org-bibtex org-crypt org-gnus org-id org-info org-jsinfo org-habit org-inlinetask org-irc org-protocol org-w3m)))
 
-; global STYLE property values for completion
+					; global STYLE property values for completion
 (setq org-global-properties (quote (("STYLE_ALL" . "habit"))))
 
 ;; Most of this ripped from http://doc.norang.ca/org-mode.html
@@ -18,7 +20,7 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cb" 'org-iswitchb)
 
-(setq 
+(setq
  ;; Use ~/emacs_org for storing files. Usually symlinked to Dropbox
  org-directory "~/emacs_org"
 
@@ -53,13 +55,13 @@
  org-confirm-elisp-link-function 'y-or-n-p
 
  ;; Use IDO for target completion
- org-completion-use-ido t 
+ org-completion-use-ido t
 
  ;; Targets include this file and any file contributing to the agenda - up to 5 levels deep
- org-refile-targets (quote ((org-agenda-files :maxlevel . 5) (nil :maxlevel . 5))) 
+ org-refile-targets (quote ((org-agenda-files :maxlevel . 5) (nil :maxlevel . 5)))
 
  ;; Targets start with the file name - allows creating level 1 tasks
- org-refile-use-outline-path (quote file) 
+ org-refile-use-outline-path (quote file)
 
  ;; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
  org-outline-path-complete-in-steps t
@@ -98,12 +100,12 @@
  appt-message-warning-time 15
 
  ;; warn every 5 minutes
- appt-display-interval 5     
+ appt-display-interval 5
 
  ;; show in the modeline
- appt-display-mode-line t  
+ appt-display-mode-line t
 
- ;; use our func  
+ ;; use our func
  appt-display-format 'nil
 
  ;; use speed commands
@@ -117,7 +119,10 @@
 
  ;; Fontify org-src blocks like their language mode
  org-src-fontify-natively t
-)
+
+ ;; Turn on sticky agendas so we don't have to regenerate them
+ org-agenda-sticky t
+ )
 
 ;; flyspell mode for spell checking everywhere
 (add-hook 'org-mode-hook 'turn-on-flyspell 'append)
@@ -147,36 +152,25 @@
 
 ;; Once again, stolen from norang, except for the contacts one, which
 ;; was taken from the org-mode list.
-(setq org-capture-templates 
-      (quote (("t" "todo" entry (file "~/emacs_org/tasks.org") 
-	       "* TODO %?
-  %u
-  %a") 
-	      ("n" "note" entry (file "~/emacs_org/notes.org") 
-	       "* %?                                        :NOTE:
+(setq org-capture-templates
+      (quote
+       (("t" "todo" entry (file "~/emacs_org/tasks.org")
+	 "* TODO %?
   %u
   %a")
-	      ("c" "contact" entry (file "~/emacs_org/contacts.org")
-	       "* %^{Name}
-:PROPERTIES:
-:EMAIL: %^{Email}
-:BIRTHDAY: %^{Birthday}
-:NICKNAME: %^{IRC or AIM nick}
-:PHONE_HOME: %^{Phone (home)}
-:PHONE_WORK: %^{Phone (work)}
-:PHONE_MOBILE: %^{Phone (cell)}
-:SKYPE: %^{Skype-Name}
-:URL: %^{Web}
-:COMPANY: %^{Company Name}
-:POSITION: %^{Position}
-:COUNTRY: %^{Country}
-:STREET: %^{Street Address}
-:CITY: %^{City}
-:POSTCODE: %^{Postcode}
-:AIM: %^{AIM}
-:TWITTER: %^{Twitter}
-:END:"
-	       ))))
+	("n" "note" entry (file "~/emacs_org/notes.org")
+	 "* %?                                        :NOTE:
+  %u
+  %a")
+	("r" "reply" entry (file+headline "~/emacs_org/tasks.org" "Email")
+	 "* [[gnus:%:group#%:message-id]]                                        :email:"
+	 :immediate-finish t)
+	("w" "link" entry (file+headline "~/emacs_org/links.org" "Links")
+	 "* %c                                        :link:"
+	 :immediate-finish t)
+	("s" "snowmew link" entry (file+headline "~/emacs_org/links.org" "Snowmew Links")
+	 "* %c                                        :link:"
+	 :immediate-finish t))))
 
 ;; Personal agenda modes
 (setq org-agenda-custom-commands
@@ -186,12 +180,19 @@
               ("X" agenda ""
                (;;(org-agenda-prefix-format " [ ] ")
                 (org-agenda-with-colors nil)
-                (org-agenda-remove-tags t))  
+                (org-agenda-remove-tags t))
                ("~/emacs_org/agenda.txt"))
               ("w" agenda "Week with events and no daily/chores"
                ((org-agenda-ndays-to-span 7)
                 (org-agenda-ndays 7)
-                (org-agenda-filter-preset '("-daily")))))))
+                (org-agenda-filter-preset '("-daily"))))
+	      (" " "Agenda"
+               ((agenda "" nil)
+                (tags "email"
+                      ((org-agenda-overriding-header "Emails")
+                       (org-tags-match-list-sublevels nil)
+		       (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))))
+		nil)))))
 
 ;; Org mode notifications via aptp
 ;; the appointment notification facility
@@ -204,7 +205,7 @@
 ;; Show the weather, set in the main task file via:
 ;;* Weather
 ;;%%(org-google-weather "XXXXX")
-;; 
+;;
 ;; (XXXXX being zip code)
 
 (require 'org-google-weather)
@@ -235,14 +236,14 @@ weekend."
     (and (<= date1 d) (<= d date2) (not (= day 6)) (not (= day 0))
          (cons mark entry))))
 
-(setq org-latex-to-pdf-process 
-  '("xelatex -interaction nonstopmode %f"
-     "xelatex -interaction nonstopmode %f")) ;; for multiple passes
+(setq org-latex-to-pdf-process
+      '("xelatex -interaction nonstopmode %f"
+	"xelatex -interaction nonstopmode %f")) ;; for multiple passes
 
 
-(defun reload-org-files ()
+(defun qdot/reload-org-files ()
   (interactive)
-  (setq org-agenda-files 
+  (setq org-agenda-files
         (append
          (file-expand-wildcards "~/emacs_org/tasks.org")
          ;; (file-expand-wildcards "~/emacs_org/work/*.org")
@@ -252,7 +253,7 @@ weekend."
          (file-expand-wildcards "~/emacs_org/projects/*.org")
          (file-expand-wildcards "~/emacs_org/personal/*.org"))))
 
-(reload-org-files)
+(qdot/reload-org-files)
 
 ;; Always hilight the current agenda line
 (add-hook 'org-agenda-mode-hook
@@ -270,3 +271,18 @@ weekend."
 (setq org-ghi-org-file "~/emacs_org/github.org")
 (setq org-ghi-file-under-repo-headline t)
 
+(setq org-mobile-inbox-for-pull "~/emacs_org/tasks.org")
+(setq org-mobile-directory "~/Dropbox/MobileOrg")
+(setq org-mobile-files '("~/emacs_org/tasks.org" "~/emacs_org/mozilla/B2G.org"))
+(setq org-mobile-agendas nil)
+
+(defvar org-agenda-no-resize nil
+  "When non-nil, don't let org-mode resize windows for you")
+
+(setq org-agenda-no-resize t)
+
+(defadvice org-fit-agenda-window (around org-fit-agenda-window-select)
+  "Will not let org-fit-agenda-window resize if
+org-agenda-no-resize is non-nil"
+  (when (not org-agenda-no-resize)
+    ad-do-it))
