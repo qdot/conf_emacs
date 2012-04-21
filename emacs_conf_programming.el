@@ -12,6 +12,10 @@
       (doxymacs-font-lock)))
 (add-hook 'font-lock-mode-hook 'qdot/doxymacs-font-lock-hook)
 
+;; Set defaults we expect
+(setq-default c-basic-offset 2)
+(setq-default py-indent-offset 2)
+
 ;; gdb/gud
 (setq gdb-many-windows t)
 (setq gdb-show-main t)
@@ -60,8 +64,7 @@
 
 (require 'flymake)
 (defun qdot/flymake-off-hook ()
-  (flymake-mode 0)
-)
+  (flymake-mode 0))
 (add-hook 'nxml-mode-hook 'qdot/flymake-off-hook)
 (add-hook 'c++-mode-hook 'qdot/flymake-off-hook)
 (add-hook 'c-mode-hook 'qdot/flymake-off-hook)
@@ -170,13 +173,13 @@
 
 (defun qdot/cc-code-mode-hook ()
   (define-key c-mode-base-map "\C-m" 'newline-and-indent)
-  (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 4)))
+  (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 2)))
   (setq indent-tabs-mode t)
-  (setq-default tab-width 4)
+  (setq-default tab-width 2)
   (c-set-style "qdot/cc-code-style")
   (c-set-offset 'innamespace 0)
   (local-set-key [(control tab)] 'semantic-complete-self-insert)
-  )
+  (subword-mode 1))
 
 (add-hook 'c-mode-hook 'qdot/cc-code-mode-hook)
 (add-hook 'c++-mode-hook 'qdot/cc-code-mode-hook)
@@ -239,6 +242,7 @@
 
 (add-hook 'c-mode-common-hook
           (lambda()
+	    (setq indent-tabs-mode nil)
             (local-set-key  (kbd "C-c o") 'ff-find-other-file)))
 
 (setq cc-other-file-alist
@@ -254,7 +258,7 @@
 
 (setq ff-search-directories '(
                               "."
-                              "$HOME/code/git-projects/*"
+                              "$HOME/code/*"
                               "/usr/*/include/*"
                               ))
 
@@ -267,21 +271,26 @@
 ;; Emacs freaks out if this isn't set.
 (setq warning-suppress-types nil) 
 
+(global-ede-mode 1)
+
 (setq-default semanticdb-default-save-directory "~/.emacs_meta/semanticdb/"
 	      semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
 
 (setq semantic-load-turn-useful-things-on 1)
-;;(semantic-load-enable-code-helpers)
-;;(semantic-load-enable-gaudy-code-helpers)
 (semantic-load-enable-excessive-code-helpers)
-;;(semantic-load-enable-semantic-debugging-helpers)
+(global-srecode-minor-mode 1)
+(global-semantic-folding-mode 1)
+(global-semantic-mru-bookmark-mode 1)
 
 (custom-set-variables
  '(semantic-idle-scheduler-idle-time 3))
 
+(require 'semantic-decorate-include)
 (require 'semantic-ia)
 (require 'semantic-gcc)
-(require 'semantic-decorate-include)
+
+(semantic-add-system-include "~/usr/include" 'c++-mode)
+(semantic-add-system-include "~/usr/include" 'c-mode)
 
 (setq-mode-local c-mode
 		 semanticdb-find-default-throttle
@@ -290,23 +299,28 @@
 		 semanticdb-find-default-throttle
 		 '(project unloaded system recursive))
 
-;; (defun qdot/cc-mode-cedet-idle-hook()
-;;   (semantic-idle-scheduler-mode 1)
-;;   (semantic-idle-completions-mode 1)
-;;   (semantic-idle-summary-mode 1))
+;; (ede-cpp-root-project "MozillaCentral"
+;;                 :file "~/code/mozbuild/mozilla-central/Makefile"
+;; 		:ede-cpp-root "~/code/mozbuild/mozilla-central/Makefile"
+;;                 :include-path '("/"))
 
-;; (add-hook 'c-mode-hook 'qdot/cc-mode-cedet-idle-hook)
-;; (add-hook 'c++-mode-hook 'qdot/cc-mode-cedet-idle-hook)
+;; (defun qdot/cc-mode-cedet-idle-hook()
+;;   (semantic-idle-scheduler-mode 3)
+;;   (semantic-idle-completions-mode 3)
+;;   (semantic-idle-summary-mode 3))
+
+;; (add-hook 'c-mode-common-hook
+;; 	  'qdot/cc-mode-cedet-idle-hook)
 
 (require 'semantic-lex-spp)
 
 ;; hooks, specific for semantic
-(defun qdot/semantic-hook ()
-  ;; (semantic-tag-folding-mode 1)
-  (imenu-add-to-menubar "TAGS")
-  )
-(add-hook 'semantic-init-hooks 'qdot/semantic-hook)
-(global-semantic-tag-folding-mode 1)
+;; (defun qdot/semantic-hook ()
+;;   ;; (semantic-tag-folding-mode 1)
+;;   (imenu-add-to-menubar "TAGS")
+;;   )
+;; (add-hook 'semantic-init-hooks 'qdot/semantic-hook)
+;; (global-semantic-tag-folding-mode 1)
 
 (defun qdot/cedet-hook ()
   (local-set-key [(control return)] 'semantic-ia-complete-symbol)
@@ -352,11 +366,11 @@
     ;;(setq flyflakes-pyflakes-command '("/Library/Frameworks/Python.framework/Versions/Current/bin/pyflakes")))
     ;; Usually using homebrew on OS X
     (when (file-exists-p "/opt/homebrew/Cellar/python/2.7/bin/pyflakes")
-	(setq flyflakes-pyflakes-command '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
-	(require 'flyflakes))
+      (setq flyflakes-pyflakes-command '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
+      (require 'flyflakes))
   (when (file-exists-p "/usr/local/bin/pyflakes")
-	(setq flyflakes-pyflakes-command '("/usr/local/bin/pyflakes"))
-	(require 'flyflakes)))
+    (setq flyflakes-pyflakes-command '("/usr/local/bin/pyflakes"))
+    (require 'flyflakes)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -384,22 +398,25 @@
     ))
 
 (defun qdot/python-mode-hook()
-  (set-variable 'indent-tabs-mode nil)
-  (set-variable 'tab-width 4)
-  (set-variable 'py-indent-offset 4)
   (lambda () (eldoc-mode 1))
+  (setq tab-width 2)
+  (setq indent-tabs-mode nil)
+  (setq py-indent-offset 2)
+  (setq python-indent-offset 2)
   (qdot/load-pymacs)
   (auto-complete-mode nil)
   (set (make-local-variable 'ac-sources)
-       (setq ac-sources (append '(ac-source-ropemacs) ac-sources))
-       )
-  (set (make-local-variable 'ac-find-function) 'ac-python-find)
-  )
+       (setq ac-sources (append '(ac-source-ropemacs) ac-sources)))
+  (set (make-local-variable 'ac-find-function) 'ac-python-find))
 
 ;; (add-hook 'python-mode-hook 'qdot/ac-config-python)
 (add-hook 'python-mode-hook 'qdot/python-mode-hook)
-(remove-hook 'python-mode-hook 'wisent-python-default-setup)
 
+;; Guess tabs/spaces for python mode indentation
+;; (add-hook 'python-mode-hook guess-style-guess-tabs-mode)
+(add-hook 'python-mode-hook (lambda ()
+			      (when indent-tabs-mode
+				(guess-style-guess-tab-width))))
 ;; Javascript
 (setq js-indent-level 2)
 (setq
@@ -407,3 +424,15 @@
  js2-basic-offset 2
  js2-enter-indents-newline t
  js2-indent-on-enter-key t)
+
+(add-hook 'compilation-mode-hook
+	  (lambda ()
+	    (setq comint-buffer-maximum-size 10240)))
+;; (add-hook 'comint-output-filter-functions 'comint-truncate-buffer)))
+
+;; Fix for .js files that have Java set as the mode (I'm looking at
+;; you, mozilla-central)
+(add-hook 'java-mode-hook
+	  (lambda ()
+	    (when (string-match "\\.js\\'" buffer-file-name)
+	      (js2-mode))))
