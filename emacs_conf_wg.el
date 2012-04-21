@@ -4,6 +4,39 @@
 (setq wg-morph-on nil)
 ;; Turn off saving on exit
 (setq wg-emacs-exit-save-behavior nil)
+;; Turn off reloading of workgroup file lists
+(setq wg-restore-associated-buffers nil)
+
+(setq wg-switch-to-first-workgroup-on-find-session-file nil)
+
+;; Due to some buffers having issues when reloading (erc), uids start
+;; to mismatch which massively trips up workgroups. This is function
+;; redefinition allows us to set the action when a mismatch happens.
+
+(defvar wg-error-on-uid-mismatch t
+  "Whether or not we should throw an error when buffer uids
+mismatch, or just throw a message and reset them to what we think
+they should be.")
+
+(setq wg-error-on-uid-mismatch nil)
+
+(defun wg-set-buffer-uid-or-error (uid &optional buffer)
+  "Set BUFFER's buffer local value of `wg-buffer-uid' to UID.
+If BUFFER already has a buffer local value of `wg-buffer-uid',
+and it's not equal to UID, error."
+  (if wg-buffer-uid
+      (if (string= wg-buffer-uid uid) uid
+	(if wg-error-on-uid-mismatch
+	    (error "uids don't match %S and %S for %S" 
+		   uid wg-buffer-uid
+		   (if buffer (buffer-name buffer) 
+		     (buffer-name (current-buffer))))
+	  (setq wg-buffer-uid uid)
+	  (message "uids don't match %S and %S for %S" 
+		   uid wg-buffer-uid
+		   (if buffer (buffer-name buffer) 
+		     (buffer-name (current-buffer))))))
+    (setq wg-buffer-uid uid)))
 
 (workgroups-mode 1)
 
@@ -55,12 +88,21 @@
   ;; (wg-set-workgroup-parameter (wg-get-workgroup "work") 
   ;; 			      'wg-buffer-list-filter-order-alist 
   ;; 			      '((default qdot/associated-not-irc qdot/not-irc all)))
+  (wg-set-workgroup-parameter (wg-get-workgroup "scratch")
+			      'wg-buffer-list-filter-order-alist 
+			      '((qdot/not-irc all)))
   (wg-set-workgroup-parameter (wg-get-workgroup "erc") 
 			      'wg-buffer-list-filter-order-alist 
 			      '((default qdot/erc-irc all)))
   (wg-set-workgroup-parameter (wg-get-workgroup "bitlbee") 
 			      'wg-buffer-list-filter-order-alist 
 			      '((default qdot/erc-query all))))
+
+
+(defun qdot/wg-load ()
+  (interactive)
+  (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el"))
+  (qdot/wg-set-buffer-lists))
 
 ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
 ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))
@@ -71,3 +113,5 @@
 	    (if (eq (wg-get-workgroup "bitlbee") (wg-current-workgroup))
 		(qdot/bitlbee-resume-layout))))
 
+
+			    
