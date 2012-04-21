@@ -91,6 +91,8 @@
  redisplay-dont-pause t
  ;; period single space ends sentence
  sentence-end-double-space nil
+ default-directory "~"
+ message-log-max 1024
 )
 (set-default 'indicate-empty-lines t)
 (display-time)
@@ -107,9 +109,11 @@
 (recentf-mode 1)
 
 ;; If we're in linux, assume we have chrome
-(if linux-p
-    (setq browse-url-browser-function 'browse-url-generic
-	  browse-url-generic-program "google-chrome"))
+(defun qdot/set-firefox-trunk ()
+  (interactive)
+  (if linux-p
+      (setq browse-url-browser-function 'browse-url-generic
+	    browse-url-generic-program "firefox-trunk")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -245,3 +249,18 @@
 
 ;; Turn on narrowing
 (put 'narrow-to-region 'disabled nil)
+
+;; Turn on easy-pg
+;; (require 'epa-file)
+;; (epa-file-enable)
+;; (setq epa-file-cache-passphrase-for-symmetric-encryption t)
+
+;; Twittering additions
+(add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
+
+
+;; offline imap setup
+
+(setq sauron-separate-frame nil)
+
+(require 'memory-usage)
