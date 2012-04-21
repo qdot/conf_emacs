@@ -156,7 +156,7 @@ This is configured using `erc-nicklist-use-icons' and
 		     (string-match "\\`&bitlbee\\b"
 				   (buffer-name channel)))))
     (cond ((and bitlbee-p
-		(string= "oscar" host))
+		(or (string= "oscar" host) (string= "mac.com" host)))
 	   (if erc-nicklist-use-icons
 	       (if is-away
 		   (insert-image (cdr (assoc 'aim-away
@@ -174,14 +174,14 @@ This is configured using `erc-nicklist-use-icons' and
 					   erc-nicklist-images-alist))))
 	     (insert "Facebook")))
 	  ((and bitlbee-p
-		(string= "510systems.com" host))
+		(or (string= "public.talk.google.com" host) (string= "gmail.com" host)))
 	   (if erc-nicklist-use-icons
 	       (if is-away
-		   (insert-image (cdr (assoc 'fiveten-away
+		   (insert-image (cdr (assoc 'gtalk-away
 					     erc-nicklist-images-alist)))
-		 (insert-image (cdr (assoc 'fiveten
+		 (insert-image (cdr (assoc 'gtalk
 					   erc-nicklist-images-alist))))
-	     (insert "Fiveten")))
+	     (insert "Gtalk")))
 	  ((and bitlbee-p
 		(string= "yahoo" host))
 	   (if erc-nicklist-use-icons
@@ -301,6 +301,10 @@ Seach for the BBDB record of this contact.  If not found, return nil."
 						 "facebook-online.png")))
 	      (facebook-away . ,(create-image (concat erc-nicklist-icons-directory
 						 "facebook-offline.png")))
+	      (gtalk      . ,(create-image (concat erc-nicklist-icons-directory
+						 "gtalk-online.png")))
+	      (gtalk-away . ,(create-image (concat erc-nicklist-icons-directory
+						 "gtalk-offline.png")))
 	      (icq      . ,(create-image (concat erc-nicklist-icons-directory
 						 "icq-online.png")))
 	      (icq-away . ,(create-image (concat erc-nicklist-icons-directory
