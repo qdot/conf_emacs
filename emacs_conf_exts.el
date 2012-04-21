@@ -1,3 +1,8 @@
+;; Why is smex-initialize not running with el-get anymore? I dunno.
+;; Doesn't hurt to make sure it runs anyways.
+
+(smex-initialize)
+
 ;; use M-y and M-n in y-or-n minibuffer prompts
 (require 'quick-yes)
 
@@ -21,6 +26,7 @@
 
 ;; color-theme setup
 
+(color-theme-initialize)
 (color-theme-dark-laptop)     
 
 ;; Modeline decorator to get rid of the horizontal scrollbar
@@ -54,7 +60,7 @@
 (require 'auto-complete-config)
 (ac-config-default)
 (ac-flyspell-workaround)
-
+(ac-linum-workaround)
 (global-auto-complete-mode t)
 (setq ac-auto-start 3)
 (setq ac-dwim t)
@@ -134,3 +140,6 @@
 (setq twittering-timer-interval 120)
 (setq twittering-url-show-status nil)
 (add-hook 'twittering-edit-mode-hook (lambda () (ispell-minor-mode) (flyspell-mode)))
+
+;; (bbdb-initialize 'gnus 'message)
+;; (bbdb-mua-auto-update-init 'gnus 'message)
