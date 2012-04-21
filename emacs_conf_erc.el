@@ -43,6 +43,9 @@
       erc-insert-timestamp-function 'erc-insert-timestamp-left
       erc-kill-queries-on-quit nil
       erc-keywords nil)
+(setq erc-button-url-regexp
+      "\\([-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]+\\.\\)+[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]*[-a-zA-Z0-9\\/]")
+
 ;; (erc-scrolltobottom-enable)
 ;;  (erc-scrolltobottom-disable)
 ;; (add-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
@@ -90,11 +93,11 @@
   "Shows a growl notification, when user's nick was mentioned. If
 the buffer is currently not visible, makes it sticky."
   (if (featurep 'todochiku)
-      (todochiku-message
-       "ERC Mention"
-       (concat "ERC: name mentioned on: " (buffer-name (current-buffer)))
-       (todochiku-icon 'irc)
-       )))
+      (when (and (not (string-match "Users on " msg)) (not (string-match "znc-" (buffer-name (current-buffer)))))
+	(todochiku-message
+	 "ERC Mention"
+	 (concat "ERC: name mentioned on: " (buffer-name (current-buffer)))
+	 (todochiku-icon 'irc)))))
 (add-hook 'erc-text-matched-hook 'qdot/text-match-erc-hook)
 
 (defvar qdot/erc-nopage-nick-list nil 
@@ -325,25 +328,6 @@ that can occur between two notifications.  The default is
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Walk all of the server buffers first
-;; Close those first, which autodetaches us from channels
-;; Then go back through and close everything
-
-(defun qdot/kill-erc ()
-  (interactive)
-  (mapcar 
-   (lambda (arg) 
-     (if (erc-server-buffer-p arg) 
-         (save-excursion
-	   (set-buffer arg)
-           (erc-quit-server "Wheee.")
-           (if (get-buffer-process arg)
-               (delete-process (get-buffer-process arg)))
-           (kill-buffer arg)
-           ))) (buffer-list)))
-
-(add-hook 'kill-emacs-hook 'qdot/kill-erc)
-
 (setq erc-fill-function 'erc-fill-static)
 (setq erc-fill-static-center 0)
 
@@ -414,8 +398,6 @@ is buffer local"
 
 (setq qdot/erc-event-channels '("&bitlbee"))
 
-
-
 (add-hook 'erc-join-hook 
 	  (lambda ()
 	    (make-local-variable 'blink-matching-paren)
@@ -446,3 +428,49 @@ recenters the buffer so that prior history cannot be seen.
     (setq blink-matching-paren nil)))
 
 (add-hook 'after-change-major-mode-hook 'qdot/erc-turn-off-parens)
+
+(defun qdot/replace-gtalk-asterisks (input)
+  (when (string-match "^gtalk-" (buffer-name (current-buffer)))
+    ;; erc-send-current-line uses the "str" variable before this hook
+    ;; to set what is being sent. Yay dynamic scoping! :( :( :(
+    (setq str (replace-regexp-in-string "\\*" "∗" input))))
+
+(add-hook 'erc-send-pre-hook 'qdot/replace-gtalk-asterisks)
+
+(defun qdot/erc-kill-all-channel-buffers ()
+  (interactive)
+  (dolist (channel (erc-buffer-list))
+    (when (string-match-p "#" (buffer-name channel))
+      (save-excursion
+	(set-buffer channel)
+	(kill-buffer)))))
+
+;; Walk all of the server buffers first
+;; Close those first, which autodetaches us from channels
+;; Then go back through and close everything
+
+(defun qdot/kill-erc (bitlbee)
+  (mapcar 
+   (lambda (arg) 
+     (when (and (erc-server-buffer-p arg)
+		(if bitlbee
+		    (string-match (buffer-name arg) "znc-bitlbee")
+		  (not (string-match (buffer-name arg) "znc-bitlbee"))))
+       (save-excursion
+	 (set-buffer arg)
+	 (erc-quit-server "Wheee.")
+	 (if (get-buffer-process arg)
+	     (delete-process (get-buffer-process arg)))
+	 (kill-buffer))))
+   (buffer-list)))
+
+(defun qdot/kill-irc ()
+  (interactive)
+  (qdot/kill-erc nil))
+
+(defun qdot/kill-bitlbee ()
+  (interactive)
+  (qdot/kill-erc t))
+
+(add-hook 'kill-emacs-hook 'qdot/kill-irc)
+(add-hook 'kill-emacs-hook 'qdot/kill-bitlbee)
