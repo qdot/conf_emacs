@@ -143,3 +143,6 @@
 
 ;; (bbdb-initialize 'gnus 'message)
 ;; (bbdb-mua-auto-update-init 'gnus 'message)
+
+(require 'calfw)
+(require 'calfw-org)
