@@ -39,8 +39,10 @@
 (setq show-paren-style 'expression)
 (defun qdot/programming-mode-hook ()
   (linum-mode 1)
+  (fci-mode 1)
   (make-variable-buffer-local 'show-paren-mode)
   (show-paren-mode 1)
+  (set-fill-column 80)
   (set-face-background 'show-paren-match-face "#222")
   (set-face-attribute 'show-paren-match-face nil 
 		      :weight 'bold :underline nil :overline nil :slant 'normal))
@@ -271,33 +273,35 @@
 ;; Emacs freaks out if this isn't set.
 (setq warning-suppress-types nil) 
 
-(global-ede-mode 1)
+;;(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
+(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+(add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode)
+;;(add-to-list 'semantic-default-submodes 'global-semantic-show-unmatched-syntax-mode)
+;;(add-to-list 'semantic-default-submodes 'global-semantic-highlight-edits-mode)
+;;(add-to-list 'semantic-default-submodes 'global-semantic-show-parser-state-mode)
+;;(add-to-list 'semantic-default-submodes ')
+
+;; (global-ede-mode 1)
 
 (setq-default semanticdb-default-save-directory "~/.emacs_meta/semanticdb/"
 	      semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
 
-(setq semantic-load-turn-useful-things-on 1)
-(semantic-load-enable-excessive-code-helpers)
-(global-srecode-minor-mode 1)
-(global-semantic-folding-mode 1)
-(global-semantic-mru-bookmark-mode 1)
-
 (custom-set-variables
  '(semantic-idle-scheduler-idle-time 3))
 
-(require 'semantic-decorate-include)
-(require 'semantic-ia)
-(require 'semantic-gcc)
+;; (semantic-add-system-include "~/usr/include" 'c++-mode)
+;; (semantic-add-system-include "~/usr/include" 'c-mode)
 
-(semantic-add-system-include "~/usr/include" 'c++-mode)
-(semantic-add-system-include "~/usr/include" 'c-mode)
-
-(setq-mode-local c-mode
-		 semanticdb-find-default-throttle
-		 '(project unloaded system recursive))
-(setq-mode-local c++-mode
-		 semanticdb-find-default-throttle
-		 '(project unloaded system recursive))
+;; (setq-mode-local c-mode
+;; 		 semanticdb-find-default-throttle
+;; 		 '(project unloaded system recursive))
+;; (setq-mode-local c++-mode
+;; 		 semanticdb-find-default-throttle
+;; 		 '(project unloaded system recursive))
 
 ;; (ede-cpp-root-project "MozillaCentral"
 ;;                 :file "~/code/mozbuild/mozilla-central/Makefile"
@@ -311,8 +315,6 @@
 
 ;; (add-hook 'c-mode-common-hook
 ;; 	  'qdot/cc-mode-cedet-idle-hook)
-
-(require 'semantic-lex-spp)
 
 ;; hooks, specific for semantic
 ;; (defun qdot/semantic-hook ()
@@ -349,10 +351,6 @@
   )
 (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)
 
-(setq-mode-local c-mode semanticdb-find-default-throttle
-		 '(project unloaded system recursive))
-(setq-mode-local c++-mode semanticdb-find-default-throttle
-		 '(project unloaded system recursive))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -363,10 +361,10 @@
 
 ;; TODO This freaks out if pyflakes isn't available on the system
 (if macosx-p
-    ;;(setq flyflakes-pyflakes-command '("/Library/Frameworks/Python.framework/Versions/Current/bin/pyflakes")))
     ;; Usually using homebrew on OS X
     (when (file-exists-p "/opt/homebrew/Cellar/python/2.7/bin/pyflakes")
-      (setq flyflakes-pyflakes-command '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
+      (setq flyflakes-pyflakes-command 
+	    '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
       (require 'flyflakes))
   (when (file-exists-p "/usr/local/bin/pyflakes")
     (setq flyflakes-pyflakes-command '("/usr/local/bin/pyflakes"))
