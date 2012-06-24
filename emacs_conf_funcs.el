@@ -290,3 +290,6 @@ strings"
 			     (if (boundp 'old-fullscreen) old-fullscreen nil)
 			   (progn (setq old-fullscreen current-value)
 				  'fullboth)))))
+
+(defun qdot/clear-kill-ring ()
+	(setq kill-ring nil))
