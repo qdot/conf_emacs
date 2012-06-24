@@ -51,7 +51,7 @@
 (defvar *emacs-load-start* (current-time))
 
 ;; Load cedet first, since so many things depend on it
-(load-file (expand-file-name (concat qdot/emacs-autoinst-elisp-dir "cedet/common/cedet.el")))
+(load-file (concat qdot/emacs-autoinst-elisp-dir "cedet/cedet-devel-load.el"))
 
 (setq lib-files
       (list
