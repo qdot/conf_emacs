@@ -433,7 +433,7 @@ recenters the buffer so that prior history cannot be seen.
   (when (string-match "^gtalk-" (buffer-name (current-buffer)))
     ;; erc-send-current-line uses the "str" variable before this hook
     ;; to set what is being sent. Yay dynamic scoping! :( :( :(
-    (setq str (replace-regexp-in-string "\\*" "∗" input))))
+    (setq str (replace-regexp-in-string "\\*" "•" input))))
 
 (add-hook 'erc-send-pre-hook 'qdot/replace-gtalk-asterisks)
 
@@ -449,7 +449,7 @@ recenters the buffer so that prior history cannot be seen.
 ;; Close those first, which autodetaches us from channels
 ;; Then go back through and close everything
 
-(defun qdot/kill-erc (bitlbee)
+(defun qdot/kill-erc-buffers (bitlbee)
   (mapcar 
    (lambda (arg) 
      (when (and (erc-server-buffer-p arg)
@@ -466,11 +466,23 @@ recenters the buffer so that prior history cannot be seen.
 
 (defun qdot/kill-irc ()
   (interactive)
-  (qdot/kill-erc nil))
+  (qdot/kill-erc-buffers nil))
 
 (defun qdot/kill-bitlbee ()
   (interactive)
-  (qdot/kill-erc t))
+  (qdot/kill-erc-buffers t))
 
 (add-hook 'kill-emacs-hook 'qdot/kill-irc)
 (add-hook 'kill-emacs-hook 'qdot/kill-bitlbee)
+
+(defun qdot/filter-bitlbee-joins-parts (msg)
+  (when (and (string= "&bitlbee" (buffer-name (current-buffer)))
+	     (= (string-match "***" msg) 0))
+    (setq erc-insert-this nil)
+    (dolist (nick qdot/bitlbee-status-nicks)
+      (if (string-match nick msg)
+	  (setq erc-insert-this t)))))
+
+(add-hook 'erc-insert-pre-hook 'qdot/filter-bitlbee-joins-parts)
+
+(defalias 'qdot/kill-erc 'qdot/kill-irc)
