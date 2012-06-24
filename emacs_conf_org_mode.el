@@ -4,7 +4,6 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'org-contacts)
 (require 'org-checklist)
 (require 'org-screen)
 (require 'org-protocol)
