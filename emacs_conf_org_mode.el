@@ -246,7 +246,7 @@ weekend."
   (setq org-agenda-files
         (append
          (file-expand-wildcards "~/emacs_org/tasks.org")
-         ;; (file-expand-wildcards "~/emacs_org/work/*.org")
+         (file-expand-wildcards "~/emacs_org/mozilla/*.org")
          (file-expand-wildcards "~/emacs_org/home/*.org")
          (file-expand-wildcards "~/emacs_org/nplabs/*.org")
          (file-expand-wildcards "~/emacs_org/travel/*.org")
@@ -281,7 +281,7 @@ weekend."
 
 (setq org-agenda-no-resize t)
 
-(defadvice org-fit-agenda-window (around org-fit-agenda-window-select)
+(defadvice qdot/org-fit-agenda-window (around org-fit-agenda-window-select)
   "Will not let org-fit-agenda-window resize if
 org-agenda-no-resize is non-nil"
   (when (not org-agenda-no-resize)
