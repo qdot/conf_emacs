@@ -25,4 +25,5 @@
          ("\\.h$"    . c++-mode)
          ("\\.H$"    . c++-mode)
 	 ("\\.org$"  . org-mode)
+	 ("\\.org_archive$"  . org-mode)
          ) auto-mode-alist))
