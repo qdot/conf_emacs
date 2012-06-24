@@ -174,7 +174,7 @@
                                (filename . "/emacs_d/")))
                ("magit" (name . "magit"))
                ("dired" (mode . dired-mode))
-               ("work projects" (filename . "/build/"))
+               ("work projects" (filename . "/mozbuild/"))
                ("home projects" (filename . "/git-projects/"))
                ("emacs" (or
                          (name . "^\\*scratch\\*$")
