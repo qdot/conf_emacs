@@ -3,19 +3,22 @@
  (adoc-mode status "installed" recipe
 	    (:name adoc-mode :website "http://code.google.com/p/adoc-mode/" :description "A major-mode for editing AsciiDoc files in Emacs." :type http :url "http://sensorflo-emacs.googlecode.com/svn/trunk/adoc-mode/adoc-mode.el" :features "adoc-mode" :compile nil))
  (auto-complete status "installed" recipe
-		(:name auto-complete :website "http://cx4a.org/software/auto-complete/" :description "The most intelligent auto-completion extension." :type github :pkgname "m2ym/auto-complete" :depends popup :load-path "." :post-init
-		       (progn
-			 (require 'auto-complete)
-			 (add-to-list 'ac-dictionary-directories
-				      (expand-file-name "dict"))
-			 (require 'auto-complete-config)
-			 (ac-config-default))))
+		(:name auto-complete :website "http://cx4a.org/software/auto-complete/" :description "The most intelligent auto-completion extension." :type github :pkgname "m2ym/auto-complete" :depends
+		       (popup fuzzy)))
  (auto-complete-css status "installed" recipe
-		    (:name auto-complete-css :description "Auto-complete sources for CSS" :type http :url "http://www.cx4a.org/pub/auto-complete-css.el"))
+		    (:name auto-complete-css :description "Auto-complete sources for CSS" :type http :url "http://www.cx4a.org/pub/auto-complete-css.el" :depends auto-complete))
  (auto-complete-emacs-lisp status "installed" recipe
-			   (:name auto-complete-emacs-lisp :description "Auto-complete sources for emacs lisp" :type http :url "http://www.cx4a.org/pub/auto-complete-emacs-lisp.el"))
+			   (:name auto-complete-emacs-lisp :description "Auto-complete sources for emacs lisp" :type http :url "http://www.cx4a.org/pub/auto-complete-emacs-lisp.el" :depends auto-complete))
  (auto-complete-extension status "installed" recipe
-			  (:name auto-complete-extension :type emacswiki :description "Some extension for auto-complete-mode"))
+			  (:name auto-complete-extension :type emacswiki :description "Some extension for auto-complete-mode" :depends auto-complete))
+ (bbdb status "installed" recipe
+       (:name bbdb :website "http://bbdb.sourceforge.net/" :description "The Insidious Big Brother Database (BBDB) is a contact management utility." :type git :url "git://git.savannah.nongnu.org/bbdb.git" :load-path
+	      ("./lisp")
+	      :build
+	      `("autoconf" ,(concat "./configure --with-emacs=" el-get-emacs)
+		"make clean" "rm -f lisp/bbdb-autoloads.el" "make bbdb")
+	      :features bbdb-loaddefs :autoloads nil :post-init
+	      (bbdb-initialize)))
  (browse-kill-ring status "installed" recipe
 		   (:name browse-kill-ring :description "Interactively insert items from kill-ring" :type emacswiki :features browse-kill-ring))
  (buffer-move status "installed" recipe
@@ -23,12 +26,21 @@
  (calfw status "installed" recipe
 	(:name calfw :type github :pkgname "kiwanami/emacs-calfw" :load-path "." :description "A calendar framework for Emacs (with support for `org-mode', `howm' and iCal files)" :website "https://github.com/kiwanami/emacs-calfw"))
  (cedet status "installed" recipe
-	(:name cedet :website "http://cedet.sourceforge.net/" :description "CEDET is a Collection of Emacs Development Environment Tools written with the end goal of creating an advanced development environment in Emacs." :type bzr :url "bzr://cedet.bzr.sourceforge.net/bzrroot/cedet/code/trunk" :build
-	       ("touch `find . -name Makefile`" "make")
+	(:name cedet :website "http://cedet.sourceforge.net/" :description "CEDET is a Collection of Emacs Development Environment Tools written with the end goal of creating an advanced development environment in Emacs." :type git :url "http://git.randomsample.de/cedet.git" :build
+	       `(("sh" "-c" "touch `find . -name Makefile`")
+		 ("make" ,(format "EMACS=%s"
+				  (shell-quote-argument el-get-emacs))))
+	       :build/berkeley-unix
+	       `(("sh" "-c" "touch `find . -name Makefile`")
+		 ("gmake" ,(format "EMACS=%s"
+				   (shell-quote-argument el-get-emacs))))
 	       :build/windows-nt
 	       ("echo #!/bin/sh > tmp.sh & echo touch `/usr/bin/find . -name Makefile` >> tmp.sh & echo make FIND=/usr/bin/find >> tmp.sh" "sed 's/^M$//' tmp.sh  > tmp2.sh" "sh ./tmp2.sh" "rm ./tmp.sh ./tmp2.sh")
-	       :load-path
-	       ("./common" "speedbar")))
+	       :features nil :lazy nil :post-init
+	       (unless
+		   (featurep 'cedet-devel-load)
+		 (load
+		  (expand-file-name "cedet-devel-load.el" pdir)))))
  (cmake-mode status "installed" recipe
 	     (:name cmake-mode :website "http://www.itk.org/Wiki/CMake_Editors_Support" :description "Provides syntax highlighting and indentation for CMakeLists.txt and *.cmake source files." :type http :url "http://www.cmake.org/CMakeDocs/cmake-mode.el" :features "cmake-mode" :post-init
 		    (progn
@@ -55,6 +67,8 @@
 	 (:name el-get :website "https://github.com/dimitri/el-get#readme" :description "Manage the external elisp bits and pieces you depend upon." :type github :branch "master" :pkgname "dimitri/el-get" :features el-get :load "el-get.el"))
  (erc-highlight-nicknames status "installed" recipe
 			  (:name erc-highlight-nicknames :description "Highlights nicknames" :type emacswiki :features erc-highlight-nicknames))
+ (fill-column-indicator status "installed" recipe
+			(:name fill-column-indicator :type github :website "https://github.com/alpaker/Fill-Column-Indicator#readme" :description "An Emacs minor mode that graphically indicates the fill column." :pkgname "alpaker/Fill-Column-Indicator" :features fill-column-indicator))
  (filladapt status "installed" recipe
 	    (:name filladapt :description "Filladapt enhances the behavior of Emacs' fill functions by guessing the proper fill prefix in many contexts. Emacs has a built-in adaptive fill mode but Filladapt is much better." :type http :url "http://www.wonderworks.com/download/filladapt.el"))
  (flymake-point status "installed" recipe
@@ -72,6 +86,8 @@
 	   (:name gravatar :description "Get Gravatars" :type http :url "http://git.gnus.org/cgit/gnus.git/plain/lisp/gravatar.el"))
  (icomplete+ status "installed" recipe
 	     (:name icomplete+ :description "Extensions to `icomplete.el'." :type emacswiki :features "icomplete+"))
+ (ido-ubiquitous status "installed" recipe
+		 (:name ido-ubiquitous :description "Use ido (nearly) everywhere" :type elpa))
  (js2-mode status "installed" recipe
 	   (:name js2-mode :website "https://github.com/mooz/js2-mode#readme" :description "An improved JavaScript editing mode" :type github :pkgname "mooz/js2-mode" :prepare
 		  (autoload 'js2-mode "js2-mode" nil t)))
@@ -81,9 +97,7 @@
 	(:name magit :website "https://github.com/magit/magit#readme" :description "It's Magit! An Emacs mode for Git." :type github :pkgname "magit/magit" :info "." :build
 	       ("make all")
 	       :build/darwin
-	       `(,(concat "PATH="
-			  (shell-quote-argument invocation-directory)
-			  ":$PATH make all"))))
+	       `(,(concat "make EMACS=" el-get-emacs " all"))))
  (magithub status "installed" recipe
 	   (:name magithub :description "Magit extensions for using GitHub" :type github :username "nex3" :depends magit))
  (markdown-mode status "installed" recipe
@@ -112,16 +126,45 @@
  (org-buffers status "installed" recipe
 	      (:name org-buffers :description "An Org-mode tool for buffer management" :type github :pkgname "dandavison/org-buffers"))
  (org-mode status "installed" recipe
-	   (:name org-mode :website "http://orgmode.org/" :description "Org-mode is for keeping notes, maintaining ToDo lists, doing project planning, and authoring with a fast and effective plain-text system." :type git :url "git://orgmode.org/org-mode.git" :info "doc" :build `,(mapcar
-																																			 (lambda
-																																			   (target)
-																																			   (list "make" target
-																																				 (concat "EMACS="
-																																					 (shell-quote-argument el-get-emacs))))
-																																			 '("clean" "all"))
+	   (:name org-mode :website "http://orgmode.org/" :description "Org-mode is for keeping notes, maintaining ToDo lists, doing project planning, and authoring with a fast and effective plain-text system." :type git :url "git://orgmode.org/org-mode.git" :info "doc" :build/berkeley-unix `,(mapcar
+																																				       (lambda
+																																					 (target)
+																																					 (list "gmake" target
+																																					       (concat "EMACS="
+																																						       (shell-quote-argument el-get-emacs))))
+																																				       '("oldorg"))
+		  :build `,(mapcar
+			    (lambda
+			      (target)
+			      (list "make" target
+				    (concat "EMACS="
+					    (shell-quote-argument el-get-emacs))))
+			    '("oldorg"))
 		  :load-path
 		  ("." "lisp" "contrib/lisp")
 		  :autoloads nil :features org-install))
+ (package status "installed" recipe
+	  (:name package :description "ELPA implementation (\"package.el\") from Emacs 24" :builtin 24 :type http :url "http://repo.or.cz/w/emacs.git/blob_plain/1a0a666f941c99882093d7bd08ced15033bc3f0c:/lisp/emacs-lisp/package.el" :shallow nil :features package :post-init
+		 (progn
+		   (setq package-user-dir
+			 (expand-file-name
+			  (convert-standard-filename
+			   (concat
+			    (file-name-as-directory default-directory)
+			    "elpa")))
+			 package-directory-list
+			 (list
+			  (file-name-as-directory package-user-dir)
+			  "/usr/share/emacs/site-lisp/elpa/"))
+		   (make-directory package-user-dir t)
+		   (unless
+		       (boundp 'package-subdirectory-regexp)
+		     (defconst package-subdirectory-regexp "^\\([^.].*\\)-\\([0-9]+\\(?:[.][0-9]+\\)*\\)$" "Regular expression matching the name of\n a package subdirectory. The first subexpression is the package\n name. The second subexpression is the version string."))
+		   (setq package-archives
+			 '(("ELPA" . "http://tromey.com/elpa/")
+			   ("gnu" . "http://elpa.gnu.org/packages/")
+			   ("marmalade" . "http://marmalade-repo.org/packages/")
+			   ("SC" . "http://joseito.republika.pl/sunrise-commander/"))))))
  (pastebin status "installed" recipe
 	   (:name pastebin :description "An Emacs interface to pastebin.com." :type emacswiki :features pastebin))
  (popup status "installed" recipe
