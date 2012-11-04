@@ -1,10 +1,12 @@
 ((ace-jump-mode status "installed" recipe
 		(:name ace-jump-mode :website "https://github.com/winterTTr/ace-jump-mode/wiki" :description "A quick cursor location minor mode for emacs" :type github :pkgname "winterTTr/ace-jump-mode" :features ace-jump-mode))
  (adoc-mode status "installed" recipe
-	    (:name adoc-mode :website "http://code.google.com/p/adoc-mode/" :description "A major-mode for editing AsciiDoc files in Emacs." :type http :url "http://sensorflo-emacs.googlecode.com/svn/trunk/adoc-mode/adoc-mode.el" :features "adoc-mode" :compile nil))
+	    (:name adoc-mode :website "https://github.com/sensorflo/adoc-mode/wiki" :description "A major-mode for editing AsciiDoc files in Emacs." :type github :pkgname "sensorflo/adoc-mode" :depends markup-faces))
  (auto-complete status "installed" recipe
-		(:name auto-complete :website "http://cx4a.org/software/auto-complete/" :description "The most intelligent auto-completion extension." :type github :pkgname "m2ym/auto-complete" :depends
+		(:name auto-complete :website "http://cx4a.org/software/auto-complete/" :description "The most intelligent auto-completion extension." :type github :pkgname "auto-complete/auto-complete" :depends
 		       (popup fuzzy)))
+ (auto-complete-clang status "installed" recipe
+		      (:name auto-complete-clang :website "https://github.com/brianjcj/auto-complete-clang" :description "Auto-complete sources for Clang. Combine the power of AC, Clang and Yasnippet." :type github :pkgname "brianjcj/auto-complete-clang" :depends auto-complete))
  (auto-complete-css status "installed" recipe
 		    (:name auto-complete-css :description "Auto-complete sources for CSS" :type http :url "http://www.cx4a.org/pub/auto-complete-css.el" :depends auto-complete))
  (auto-complete-emacs-lisp status "installed" recipe
@@ -20,18 +22,24 @@
 	      :features bbdb-loaddefs :autoloads nil :post-init
 	      (bbdb-initialize)))
  (browse-kill-ring status "installed" recipe
-		   (:name browse-kill-ring :description "Interactively insert items from kill-ring" :type emacswiki :features browse-kill-ring))
+		   (:name browse-kill-ring :description "Interactively insert items from kill-ring" :type github :pkgname "browse-kill-ring/browse-kill-ring" :features browse-kill-ring))
  (buffer-move status "installed" recipe
 	      (:name buffer-move :description "Swap buffers without typing C-x b on each window" :type emacswiki :features buffer-move))
  (calfw status "installed" recipe
 	(:name calfw :type github :pkgname "kiwanami/emacs-calfw" :load-path "." :description "A calendar framework for Emacs (with support for `org-mode', `howm' and iCal files)" :website "https://github.com/kiwanami/emacs-calfw"))
  (cedet status "installed" recipe
-	(:name cedet :website "http://cedet.sourceforge.net/" :description "CEDET is a Collection of Emacs Development Environment Tools written with the end goal of creating an advanced development environment in Emacs." :type git :url "http://git.randomsample.de/cedet.git" :build
+	(:name cedet :website "http://cedet.sourceforge.net/" :description "CEDET is a Collection of Emacs Development Environment Tools written with the end goal of creating an advanced development environment in Emacs." :type bzr :url "bzr://cedet.bzr.sourceforge.net/bzrroot/cedet/code/trunk" :build
 	       `(("sh" "-c" "touch `find . -name Makefile`")
+		 ("make" ,(format "EMACS=%s"
+				  (shell-quote-argument el-get-emacs))
+		  "clean-all")
 		 ("make" ,(format "EMACS=%s"
 				  (shell-quote-argument el-get-emacs))))
 	       :build/berkeley-unix
 	       `(("sh" "-c" "touch `find . -name Makefile`")
+		 ("gmake" ,(format "EMACS=%s"
+				   (shell-quote-argument el-get-emacs))
+		  "clean-all")
 		 ("gmake" ,(format "EMACS=%s"
 				   (shell-quote-argument el-get-emacs))))
 	       :build/windows-nt
@@ -55,6 +63,8 @@
 		     (progn
 		       (color-theme-initialize)
 		       (setq color-theme-is-global t))))
+ (diminish status "installed" recipe
+	   (:name diminish :description "An Emacs package that diminishes the amount of space taken on the mode line by the names of minor modes." :type http :url "http://www.eskimo.com/~seldon/diminish.el" :features diminish))
  (dired-single status "installed" recipe
 	       (:name dired-single :description "Reuse the current dired buffer to visit another directory" :type emacswiki :features "dired-single"))
  (doxymacs status "installed" recipe
@@ -63,10 +73,18 @@
 		  :build
 		  ("./bootstrap" "./configure" "make")
 		  :features doxymacs))
+ (dynamic-fonts status "installed" recipe
+		(:name dynamic-fonts :depends persistent-soft :type github :description "Set faces based on available fonts" :pkgname "rolandwalker/dynamic-fonts"))
  (el-get status "installed" recipe
 	 (:name el-get :website "https://github.com/dimitri/el-get#readme" :description "Manage the external elisp bits and pieces you depend upon." :type github :branch "master" :pkgname "dimitri/el-get" :features el-get :load "el-get.el"))
  (erc-highlight-nicknames status "installed" recipe
 			  (:name erc-highlight-nicknames :description "Highlights nicknames" :type emacswiki :features erc-highlight-nicknames))
+ (eshell-manual status "installed" recipe
+		(:name eshell-manual :description "eshell is great but lacks a good manual, someone wrote one." :type github :pkgname "aidalgol/eshell-manual" :build
+		       (("make" "eshell.info"))
+		       :compile nil :info "eshell.info"))
+ (expand-region status "installed" recipe
+		(:name expand-region :type github :pkgname "magnars/expand-region.el" :description "Expand region increases the selected region by semantic units. Just keep pressing the key until it selects what you want." :website "https://github.com/magnars/expand-region.el#readme" :features expand-region))
  (fill-column-indicator status "installed" recipe
 			(:name fill-column-indicator :type github :website "https://github.com/alpaker/Fill-Column-Indicator#readme" :description "An Emacs minor mode that graphically indicates the fill column." :pkgname "alpaker/Fill-Column-Indicator" :features fill-column-indicator))
  (filladapt status "installed" recipe
@@ -74,7 +92,7 @@
  (flymake-point status "installed" recipe
 		(:name flymake-point :description "Show flymake errors under the point in the minibuffer" :type http :url "https://bitbucket.org/brodie/dotfiles/raw/tip/.emacs.d/plugins/flymake-point.el" :features flymake-point))
  (fuzzy status "installed" recipe
-	(:name fuzzy :website "https://github.com/m2ym/fuzzy-el" :description "Fuzzy matching utilities for GNU Emacs" :type github :pkgname "m2ym/fuzzy-el" :features fuzzy))
+	(:name fuzzy :website "https://github.com/auto-complete/fuzzy-el" :description "Fuzzy matching utilities for GNU Emacs" :type github :pkgname "auto-complete/fuzzy-el"))
  (git-emacs status "installed" recipe
 	    (:name git-emacs :description "Yet another git emacs mode for newbies" :type github :pkgname "tsgates/git-emacs" :features git-emacs))
  (google-maps status "installed" recipe
@@ -84,6 +102,11 @@
 			(google-weather org-google-weather)))
  (gravatar status "installed" recipe
 	   (:name gravatar :description "Get Gravatars" :type http :url "http://git.gnus.org/cgit/gnus.git/plain/lisp/gravatar.el"))
+ (haskell-mode status "installed" recipe
+	       (:name haskell-mode :description "A Haskell editing mode" :type github :pkgname "haskell/haskell-mode" :load "haskell-site-file.el" :post-init
+		      (progn
+			(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+			(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation))))
  (icomplete+ status "installed" recipe
 	     (:name icomplete+ :description "Extensions to `icomplete.el'." :type emacswiki :features "icomplete+"))
  (ido-ubiquitous status "installed" recipe
@@ -94,18 +117,27 @@
  (json status "installed" recipe
        (:name json :description "JavaScript Object Notation parser / generator" :type http :url "http://edward.oconnor.cx/elisp/json.el" :features json))
  (magit status "installed" recipe
-	(:name magit :website "https://github.com/magit/magit#readme" :description "It's Magit! An Emacs mode for Git." :type github :pkgname "magit/magit" :info "." :build
-	       ("make all")
+	(:name magit :website "https://github.com/magit/magit#readme" :description "It's Magit! An Emacs mode for Git." :type github :pkgname "magit/magit" :info "." :autoloads
+	       ("50magit")
+	       :build
+	       (("make" "all"))
 	       :build/darwin
-	       `(,(concat "make EMACS=" el-get-emacs " all"))))
+	       `(("make" ,(format "EMACS=%s" el-get-emacs)
+		  "all"))))
+ (magit-view-file status "installed" recipe
+		  (:name magit-view-file :type github :description "View git file through history." :pkgname "renard/magit-view-file"))
  (magithub status "installed" recipe
-	   (:name magithub :description "Magit extensions for using GitHub" :type github :username "nex3" :depends magit))
+	   (:name magithub :description "Magit extensions for using GitHub" :type github :pkgname "nex3/magithub" :depends magit))
  (markdown-mode status "installed" recipe
-		(:name markdown-mode :description "Major mode to edit Markdown files in Emacs" :type git :url "git://jblevins.org/git/markdown-mode.git" :post-init
+		(:name markdown-mode :description "Major mode to edit Markdown files in Emacs" :type git :url "git://jblevins.org/git/markdown-mode.git" :before
 		       (add-to-list 'auto-mode-alist
 				    '("\\.\\(md\\|mdown\\|markdown\\)\\'" . markdown-mode))))
+ (markup-faces status "installed" recipe
+	       (:name markup-faces :description "Collection of faces for markup language modes." :type github :pkgname "sensorflo/markup-faces"))
  (mo-git-blame status "installed" recipe
 	       (:name mo-git-blame :description "An interactive, iterative 'git blame' mode for Emacs" :type github :pkgname "mbunkus/mo-git-blame" :features "mo-git-blame"))
+ (multiple-cursors status "installed" recipe
+		   (:name multiple-cursors :description "An experiment in adding multiple cursors to emacs" :type github :pkgname "magnars/multiple-cursors.el" :features multiple-cursors))
  (nognus status "installed" recipe
 	 (:name nognus :description "A newsreader for GNU Emacs" :type git :url "http://git.gnus.org/gnus.git" :build
 		`(("./configure" ,(concat "--with-emacs="
@@ -117,12 +149,12 @@
 		("lisp")
 		:autoloads nil :features gnus-load))
  (nxhtml status "installed" recipe
-	 (:type github :username "emacsmirror" :name nxhtml :type emacsmirror :description "An addon for Emacs mainly for web development." :build
+	 (:type github :pkgname "emacsmirror/nxhtml" :name nxhtml :type emacsmirror :description "An addon for Emacs mainly for web development." :build
 		(list
 		 (concat el-get-emacs " -batch -q -no-site-file -L . -l nxhtmlmaint.el -f nxhtmlmaint-start-byte-compilation"))
 		:load "autostart.el"))
  (offlineimap status "installed" recipe
-	      (:name offlineimap :description "Run OfflineIMAP from Emacs" :type git :url "git://git.naquadah.org/offlineimap-el.git" :features offlineimap :depends nognus))
+	      (:name offlineimap :description "Run OfflineIMAP from Emacs" :type git :url "git://git.naquadah.org/offlineimap-el.git" :features offlineimap))
  (org-buffers status "installed" recipe
 	      (:name org-buffers :description "An Org-mode tool for buffer management" :type github :pkgname "dandavison/org-buffers"))
  (org-mode status "installed" recipe
@@ -141,8 +173,13 @@
 					    (shell-quote-argument el-get-emacs))))
 			    '("oldorg"))
 		  :load-path
-		  ("." "lisp" "contrib/lisp")
-		  :autoloads nil :features org-install))
+		  ("." "lisp" "contrib/lisp")))
+ (org-sync status "installed" recipe
+	   (:name org-sync :website "http://orgmode.org/worg/org-contrib/gsoc2012/student-projects/org-sync/" :description "Org-sync is a tool to synchronize Org-mode documents with bugtracking tools such as Bugzilla, Github or Google Code and other TODO-list services such as Remember the Milk." :type git :url "git://orgmode.org/org-sync.git" :prepare
+		  (progn
+		    (autoload 'os "os" "Sync org-mode files with different online services" t)
+		    (autoload 'os-import "os" "Import information to sync with org-mode from different online services" t)
+		    (autoload 'os-sync "os" "Sync current org-mode file with service it is bound to" t))))
  (package status "installed" recipe
 	  (:name package :description "ELPA implementation (\"package.el\") from Emacs 24" :builtin 24 :type http :url "http://repo.or.cz/w/emacs.git/blob_plain/1a0a666f941c99882093d7bd08ced15033bc3f0c:/lisp/emacs-lisp/package.el" :shallow nil :features package :post-init
 		 (progn
@@ -167,26 +204,18 @@
 			   ("SC" . "http://joseito.republika.pl/sunrise-commander/"))))))
  (pastebin status "installed" recipe
 	   (:name pastebin :description "An Emacs interface to pastebin.com." :type emacswiki :features pastebin))
+ (persistent-soft status "installed" recipe
+		  (:name persistent-soft :type github :description "Persistent storage, returning nil on failure" :pkgname "rolandwalker/persistent-soft"))
  (popup status "installed" recipe
-	(:name popup :website "https://github.com/m2ym/popup-el" :description "Visual Popup Interface Library for Emacs" :type github :pkgname "m2ym/popup-el" :features popup))
+	(:name popup :website "https://github.com/auto-complete/popup-el" :description "Visual Popup Interface Library for Emacs" :type github :pkgname "auto-complete/popup-el"))
+ (popwin status "installed" recipe
+	 (:name popwin :description "Popup Window Manager." :website "https://github.com/m2ym/popwin-el" :type github :pkgname "m2ym/popwin-el"))
  (processing-mode status "installed" recipe
 		  (:name processing-mode :description "Processing mode for Emacs. Written by Rudolf Olah. This mode is a derivative of the java-mode. It adds key-bindings for running/compiling Processing sketches and it also highlights keywords found in the Processing language, such as ``setup'', ``draw'', and ``frameRate''." :type git :url "https://git.gitorious.org/processing-emacs/processing-emacs.git" :features processing-mode))
  (pymacs status "installed" recipe
 	 (:name pymacs :description "Interface between Emacs Lisp and Python" :type github :pkgname "pinard/Pymacs" :prepare
 		(progn
-		  (setenv "PYTHONPATH"
-			  (let
-			      ((pplist
-				(split-string
-				 (or
-				  (getenv "PYTHONPATH")
-				  "")
-				 ":" 'omit-nulls)))
-			    (mapconcat 'identity
-				       (remove-duplicates
-					(cons default-directory pplist)
-					:test #'string= :from-end t)
-				       ":")))
+		  (el-get-envpath-prepend "PYTHONPATH" default-directory)
 		  (autoload 'pymacs-load "pymacs" nil t)
 		  (autoload 'pymacs-eval "pymacs" nil t)
 		  (autoload 'pymacs-exec "pymacs" nil t)
@@ -198,13 +227,13 @@
 	 (:name python :description "Python's flying circus support for Emacs" :type github :pkgname "fgallina/python.el"))
  (rainbow-delimiters status "installed" recipe
 		     (:name rainbow-delimiters :website "https://github.com/jlr/rainbow-delimiters#readme" :description "Color nested parentheses, brackets, and braces according to their depth." :type github :pkgname "jlr/rainbow-delimiters" :features rainbow-delimiters))
+ (rainbow-mode status "installed" recipe
+	       (:name rainbow-mode :description "Colorize color names in buffers" :type elpa))
+ (revbufs status "installed" recipe
+	  (:name revbufs :description "Reverts out-of-date buffers safely" :type http :url "http://www.neilvandyke.org/revbufs/revbufs.el" :features revbufs))
  (rope status "installed" recipe
        (:name rope :description "A python refactoring library" :post-init
-	      (progn
-		(unless
-		    (boundp 'pymacs-load-path)
-		  (setq pymacs-load-path nil))
-		(add-to-list 'pymacs-load-path default-directory))
+	      (el-get-envpath-prepend "PYTHONPATH" default-directory)
 	      :type hg :url "http://bitbucket.org/agr/rope"))
  (ropemacs status "installed" recipe
 	   (:name ropemacs :description "An Emacs minor mode for using rope python refactoring library in emacs." :post-init
@@ -232,15 +261,27 @@
 	      (smex-initialize)))
  (sml-modeline status "installed" recipe
 	       (:name sml-modeline :description "Show position in a scrollbar like way in mode-line" :type http :url "http://bazaar.launchpad.net/~nxhtml/nxhtml/main/download/head%3A/smlmodeline.el-20100318165023-n7kkswg6dlq8l6b3-1/sml-modeline.el" :features "sml-modeline"))
- (todochiku status "installed" recipe
-	    (:name todochiku :description "A mode for interfacing with Growl, Snarl, and the like." :type emacswiki :features todochiku))
+ (sunrise-commander status "installed" recipe
+		    (:name sunrise-commander :description "Two-pane file manager for Emacs based on Dired and inspired by MC" :type elpa))
+ (tomorrow-night-paradise-theme status "installed" recipe
+				(:name tomorrow-night-paradise-theme :description "A light-on-dark Emacs theme which is essentially a tweaked version of Chris Kempson's Tomorrow Night Bright theme." :website "https://github.com/jimeh/tomorrow-night-paradise-theme.el" :type github :pkgname "jimeh/tomorrow-night-paradise-theme.el" :minimum-emacs-version 24 :post-init
+				       (add-to-list 'custom-theme-load-path default-directory)))
+ (tomorrow-theme status "installed" recipe
+		 (:name tomorrow-theme :description "Colour Schemes for Hackers" :website "https://github.com/chriskempson/tomorrow-theme" :type github :pkgname "chriskempson/tomorrow-theme" :load-path "GNU Emacs" :minimum-emacs-version 24 :post-init
+			(add-to-list 'custom-theme-load-path default-directory)))
  (twittering-mode status "installed" recipe
 		  (:name twittering-mode :description "Major mode for Twitter" :type github :pkgname "hayamiz/twittering-mode" :features twittering-mode :compile "twittering-mode.el"))
+ (ucs-utils status "installed" recipe
+	    (:name ucs-utils :type github :description "Utilities for Unicode characters in Emacs" :pkgname "rolandwalker/ucs-utils"))
  (undo-tree status "installed" recipe
 	    (:name undo-tree :description "Treat undo history as a tree" :type git :url "http://www.dr-qubit.org/git/undo-tree.git" :prepare
 		   (progn
 		     (autoload 'undo-tree-mode "undo-tree.el" "Undo tree mode; see undo-tree.el for details" t)
 		     (autoload 'global-undo-tree-mode "undo-tree.el" "Global undo tree mode" t))))
+ (unicode-fonts status "installed" recipe
+		(:name unicode-fonts :depends
+		       (dynamic-fonts ucs-utils)
+		       :type github :description "Configure Unicode fonts" :pkgname "rolandwalker/unicode-fonts"))
  (wikipedia-mode status "installed" recipe
 		 (:name wikipedia-mode :description "Mode for editing Wikipedia articles off-line" :type emacswiki :features wikipedia-mode :post-init
 			(add-to-list 'auto-mode-alist
