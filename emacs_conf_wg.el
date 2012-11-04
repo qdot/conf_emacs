@@ -85,9 +85,9 @@ and it's not equal to UID, error."
 			   qdot/wg-buffer-list-filter-associated-not-irc))
 
 (defun qdot/wg-set-buffer-lists ()
-  ;; (wg-set-workgroup-parameter (wg-get-workgroup "work") 
-  ;; 			      'wg-buffer-list-filter-order-alist 
-  ;; 			      '((default qdot/associated-not-irc qdot/not-irc all)))
+  (wg-set-workgroup-parameter (wg-get-workgroup "work") 
+  			      'wg-buffer-list-filter-order-alist 
+  			      '((default qdot/associated-not-irc qdot/not-irc all)))
   (wg-set-workgroup-parameter (wg-get-workgroup "scratch")
 			      'wg-buffer-list-filter-order-alist 
 			      '((qdot/not-irc all)))
@@ -98,7 +98,6 @@ and it's not equal to UID, error."
 			      'wg-buffer-list-filter-order-alist 
 			      '((default qdot/erc-query all))))
 
-
 (defun qdot/wg-load ()
   (interactive)
   (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el"))
@@ -107,11 +106,25 @@ and it's not equal to UID, error."
 ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
 ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))
 
-;; Auto-place IM windows when switching to bitlbee workgroup
-(add-hook 'wg-switch-to-workgroup-hook 
-	  (lambda () 
-	    (if (eq (wg-get-workgroup "bitlbee") (wg-current-workgroup))
-		(qdot/bitlbee-resume-layout))))
+;; (defvar qdot/reallocate-query-buffer-trigger t
+;; 	"Used to know when to trigger a query buffer reallocation on workgroup change")
+
+;; (defun qdot/trigger-reallocate-query-buffers (proc parsed)
+;; 	(setq qdot/reallocate-query-buffer-trigger t))
+
+;; (add-hook 'erc-server-PRIVMSG-functions 'qdot/trigger-reallocate-query-buffers)
+
+;; ;; Auto-place IM windows when switching to bitlbee workgroup
+;; (add-hook 'wg-switch-to-workgroup-hook 
+;; 	  (lambda () 
+;;  	    (when (and qdot/reallocate-query-buffer-trigger
+;; 								 (eq (wg-get-workgroup "bitlbee") (wg-current-workgroup)))
+;; 				(qdot/bitlbee-resume-layout)
+;; 				(setq qdot/reallocate-query-buffer-trigger nil))
+;; 	    (when (eq (wg-get-workgroup "erc") (wg-current-workgroup))
+;; 	      (qdot/erc-set-fill-columns))
+;; 	    (when (eq (wg-get-workgroup "mozilla") (wg-current-workgroup))
+;; 	      (qdot/erc-set-fill-columns))))
 
 
 			    
