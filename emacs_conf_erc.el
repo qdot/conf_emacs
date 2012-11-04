@@ -80,93 +80,6 @@
 
 ;;(add-hook 'window-configuration-change-hook 'qdot/erc-set-fill-columns)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Query event functionality
-;; Todochiku messaging on privmsgs, checks for repeat pages, etc...
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Todochiku notifier for priv messages
-(defun qdot/text-match-erc-hook (match-type nick msg)
-  "Shows a growl notification, when user's nick was mentioned. If
-the buffer is currently not visible, makes it sticky."
-  (if (featurep 'todochiku)
-      (when (and (not (string-match "Users on " msg)) (not (string-match "znc-" (buffer-name (current-buffer)))))
-	(todochiku-message
-	 "ERC Mention"
-	 (concat "ERC: name mentioned on: " (buffer-name (current-buffer)))
-	 (todochiku-icon 'irc)))))
-(add-hook 'erc-text-matched-hook 'qdot/text-match-erc-hook)
-
-(defvar qdot/erc-nopage-nick-list nil 
-  "List of nick regexps that should not be allowed to page.")
-(setq qdot/erc-nopage-nick-list '("twitter_qdot"))
-
-(defvar qdot/erc-page-nick-alist nil
-  "Alist of nicks and the last time they tried to trigger a notification")
-
-(defvar qdot/erc-page-timeout 10
-  "Number of seconds that must elapse between notifications from the same 
-person.")
-
-(defvar qdot/erc-no-page nil
-  "List of muted nicks that will repage until removed or session is reset")
-
-(defun qdot/erc-add-no-page (nick)
-  (interactive "sNick: ")
-  (push nick qdot/erc-no-page))
-
-(defun qdot/erc-remove-no-page (nick) 
-  (interactive "sNick: ")
-  (setq qdot/erc-no-page (remove nick qdot/erc-no-page)))
-
-(defun qdot/erc-page-allowed (nick &optional delay)
-  "Return non-nil if a notification should be made for NICK.
-If DELAY is specified, it will be the minimum time in seconds
-that can occur between two notifications.  The default is
-`qdot/erc-page-timeout'."
-
-  ;; Check to see if we even want to page about this nick
-  ;; We want to make sure the nick isn't in the list, so negate
-  (when (and (not (member nick qdot/erc-nopage-nick-list)) (not (member nick qdot/erc-no-page)))
-    (unless delay (setq delay qdot/erc-page-timeout))    
-    (let ((cur-time (time-to-seconds (current-time)))
-          (cur-assoc (assoc nick qdot/erc-page-nick-alist))
-          (last-time))
-      (if cur-assoc
-          (progn
-            (setq last-time (cdr cur-assoc))
-            (setcdr cur-assoc cur-time)
-            (> (abs (- cur-time last-time)) delay))
-        (push (cons nick cur-time) qdot/erc-page-nick-alist)
-        t))))
-
-(defun qdot/erc-page-popup-notification (nick)
-  (when window-system
-    ;; must set default directory, otherwise start-process is unhappy
-    ;; when this is something remote or nonexistent
-    (if (featurep 'todochiku)    
-        (todochiku-message
-         "ERC Mention"
-         (concat "ERC: priv-msg from " nick)
-         (todochiku-icon 'irc)))))
-
-;; The hook for figuring out whether or not we should be paged
-(defun qdot/erc-page-me-PRIVMSG (proc parsed)
-  (let ((nick (car (erc-parse-user (erc-response.sender parsed))))
-        (target (car (erc-response.command-args parsed)))
-        (msg (erc-response.contents parsed)))
-    ;; If we're the target, and we haven't been paged in a while, page
-    (when (and (erc-current-nick-p target)
-               (not (erc-is-message-ctcp-and-not-action-p msg))
-               (qdot/erc-page-allowed nick))
-      (qdot/erc-page-popup-notification nick)
-      nil)))
-
-(add-hook 'erc-server-PRIVMSG-functions 'qdot/erc-page-me-PRIVMSG)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Privmsg window allocation
@@ -231,12 +144,9 @@ that can occur between two notifications.  The default is
                    (not (erc-is-message-ctcp-and-not-action-p msg))
                    (not (get-buffer-window (erc-get-buffer query proc) t)))
           (qdot/erc-move-query-to-placeholder (erc-get-buffer query proc)))))
-  nil
-  )
+  nil)
 
 (add-hook 'erc-server-PRIVMSG-functions 'qdot/erc-privmsg-query-allocate)
-
-(add-hook 'wg-switch-hook 'qdot/bitlbee-reallocate-query-buffers)
 
 ;; Once we close a query window, return it to being a query placeholder window
 
@@ -306,7 +216,8 @@ that can occur between two notifications.  The default is
 
 (defun qdot/bitlbee-reallocate-query-buffers ()
   ;; For each already opened query window, reallocate
-  (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf)) (qdot/filter 'erc-query-buffer-p (buffer-list))))
+  (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf))
+	(qdot/filter 'erc-query-buffer-p (buffer-list))))
 
 (defun qdot/bitlbee-resume-layout ()
   (interactive)
@@ -319,8 +230,7 @@ that can occur between two notifications.  The default is
     (set-buffer "&bitlbee")
     (erc-nicklist))
   (wg-revert-workgroup (wg-get-workgroup "bitlbee"))
-  (qdot/bitlbee-reallocate-query-buffers)
-  )
+  (qdot/bitlbee-reallocate-query-buffers))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -336,7 +246,6 @@ that can occur between two notifications.  The default is
 				"324" "329" "332" "333" "353" "477"))
 
 (setq erc-current-nick-highlight-type 'nick)
-;; (setq erc-keywords '("\\berc[-a-z]*\\b" "\\bemms[-a-z]*\\b"))
 
 (setq erc-track-use-faces t)
 (setq erc-track-faces-priority-list
@@ -430,7 +339,7 @@ recenters the buffer so that prior history cannot be seen.
 (add-hook 'after-change-major-mode-hook 'qdot/erc-turn-off-parens)
 
 (defun qdot/replace-gtalk-asterisks (input)
-  (when (string-match "^gtalk-" (buffer-name (current-buffer)))
+  (when (string-match "^gt-" (buffer-name (current-buffer)))
     ;; erc-send-current-line uses the "str" variable before this hook
     ;; to set what is being sent. Yay dynamic scoping! :( :( :(
     (setq str (replace-regexp-in-string "\\*" "•" input))))
@@ -475,6 +384,8 @@ recenters the buffer so that prior history cannot be seen.
 (add-hook 'kill-emacs-hook 'qdot/kill-irc)
 (add-hook 'kill-emacs-hook 'qdot/kill-bitlbee)
 
+(setq qdot/bitlbee-status-nicks '("subgirl13" "xiuvx" "bokehcat" "qdot76367" "gt-JaredAllen"))
+
 (defun qdot/filter-bitlbee-joins-parts (msg)
   (when (and (string= "&bitlbee" (buffer-name (current-buffer)))
 	     (= (string-match "***" msg) 0))
@@ -484,5 +395,5 @@ recenters the buffer so that prior history cannot be seen.
 	  (setq erc-insert-this t)))))
 
 (add-hook 'erc-insert-pre-hook 'qdot/filter-bitlbee-joins-parts)
-
+(setq erc-insert-pre-hook nil)
 (defalias 'qdot/kill-erc 'qdot/kill-irc)
