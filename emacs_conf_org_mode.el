@@ -56,14 +56,17 @@
  ;; Use IDO for target completion
  org-completion-use-ido t
 
- ;; Targets include this file and any file contributing to the agenda - up to 5 levels deep
- org-refile-targets (quote ((org-agenda-files :maxlevel . 5) (nil :maxlevel . 5)))
+ ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
+ org-refile-targets (quote ((nil :maxlevel . 9) (org-agenda-files :maxlevel . 9)))
 
- ;; Targets start with the file name - allows creating level 1 tasks
+ ;; Use outline paths, but let IDO handle things
  org-refile-use-outline-path (quote file)
 
- ;; Targets complete in steps so we start with filename, TAB shows the next level of targets etc
- org-outline-path-complete-in-steps t
+ ;; Allow refile to create parent tasks with confirmation
+ org-refile-allow-creating-parent-nodes (quote confirm)
+
+ ;; IDO now handles header finding
+ org-outline-path-complete-in-steps nil
 
  ;; Yes it's long... but more is better ;
  org-clock-history-length 35
@@ -121,7 +124,12 @@
 
  ;; Turn on sticky agendas so we don't have to regenerate them
  org-agenda-sticky t
- )
+
+ ;; If there's a region, do whatever it is I'm trying to do to ALL headlines in
+ ;; region
+ org-loop-over-headlines-in-active-region t
+
+ org-align-all-tags t)
 
 ;; flyspell mode for spell checking everywhere
 (add-hook 'org-mode-hook 'turn-on-flyspell 'append)
@@ -144,7 +152,8 @@
 ;; this year" via state and tags
 (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d!/!)")
                                 (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)")
-				(sequence "EVENT(e)" "|" "ATTENDED(a!)" "SKIPPED(k!)"))))
+				(sequence "EVENT(e)" "|" "ATTENDED(a!)" "SKIPPED(k!)")
+				(sequence "ORDER(z)" "ORDERED(o!)" "SHIPPED(h!)" "|" "ARRIVED(A!/!)"))))
 
 ;; I use C-M-r to start org-remember
 (global-set-key (kbd "C-M-R") 'org-capture)
@@ -285,3 +294,18 @@ weekend."
 org-agenda-no-resize is non-nil"
   (when (not org-agenda-no-resize)
     ad-do-it))
+
+(defadvice qdot/cfw:org-extract-summary (after cfw:org-extract-summary)
+  "Remove tags and filenames from item summary"
+  (message item))
+
+;; Taken from http://doc.norang.ca/org-mode.html
+;;;; Refile settings
+					; Exclude DONE state tasks from refile targets
+(defun qdot/verify-refile-target ()
+  "Exclude todo keywords with a done state from refile targets"
+  (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+
+(setq org-refile-target-verify-function 'qdot/verify-refile-target)
+
+;; (diminish 'org-indent-mode " i")
