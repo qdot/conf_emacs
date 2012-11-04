@@ -5,15 +5,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; The base conf directory
-(setq qdot/emacs-conf-dir (expand-file-name "~/.emacs_files_24/"))
+(if load-in-progress
+    (setq qdot/emacs-conf-dir (file-name-directory load-file-name))
+	(setq qdot/emacs-conf-dir (file-name-directory buffer-file-name)))
 
 ;; For manually installed elisp
 (setq qdot/emacs-elisp-dir (expand-file-name 
-			    (concat qdot/emacs-conf-dir "elisp/")))
+														(concat qdot/emacs-conf-dir "elisp/")))
 
 ;; For manually installed elisp
 (setq qdot/emacs-scripts-dir (expand-file-name 
-			      (concat qdot/emacs-conf-dir "scripts/")))
+															(concat qdot/emacs-conf-dir "scripts/")))
 
 ;; For source installs (no repo available to track)
 (setq qdot/emacs-elisp-src-dir (expand-file-name 
@@ -21,7 +23,7 @@
 
 ;; For auto-install.el elisp
 (setq qdot/emacs-autoinst-elisp-dir (expand-file-name 
-				     (concat qdot/emacs-conf-dir "elisp_auto/")))
+																		 (concat qdot/emacs-conf-dir "elisp_auto/")))
 
 ;; As of emacs 23, ~/.emacs.d is user-emacs-directory
 (setq custom-file (concat user-emacs-directory "emacs_conf_custom.el"))
@@ -40,7 +42,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;Make sure we have good ol' LISP available
+;; Make sure we have good ol' LISP available
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -50,7 +52,7 @@
 (require 'compile+)
 (defvar *emacs-load-start* (current-time))
 
-;; Load cedet first, since so many things depend on it
+;; Load cedet first, otherwise we'll conflict against the 1.1 repo stuff
 (load-file (concat qdot/emacs-autoinst-elisp-dir "cedet/cedet-devel-load.el"))
 
 (setq lib-files
@@ -86,18 +88,8 @@
 
 (mapcar 'load-library lib-files)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Time ourselves to see how long loading takes
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(message "My .emacs loaded in %ds" 
-         (destructuring-bind (hi lo ms) (current-time)
-           (- (+ hi lo) 
-              (+ (first *emacs-load-start*) (second *emacs-load-start*)))))
-
 ;; Something in el-get is setting debug-on-error to t. 
 ;; Not cool.
 (if debug-on-error
+		(message "Something in init is setting debug-on-error to t. Fix it!")
     (setq debug-on-error nil))
