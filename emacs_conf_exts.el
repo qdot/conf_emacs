@@ -97,52 +97,35 @@
 ;; 50 files ought to be enough.
 (setq recentf-max-saved-items 50)
 
-;; eshell + autocomplete
-;; From http://paste.lisp.org/display/120731
-
-(require 'pcomplete)
-(add-to-list 'ac-modes 'eshell-mode)
-(ac-define-source pcomplete
-  '((candidates . pcomplete-completions)))
-
-(defun nm-eshell-pcomplete ()
-  (interactive)
-  (let ((ac-sources '(ac-source-pcomplete
-		      ac-source-filename)))
-    (auto-complete)))
-
-(defun nm-eshell-auto-complete ()
-  (interactive)
-  (let ((ac-sources '(ac-source-functions
-		      ac-source-variables
-		      ac-source-features
-		      ac-source-symbols
-		      ac-source-words-in-same-mode-buffers)))
-    (auto-complete)))
-
-(defun nm-eshell-mode-hook ()
-  (local-unset-key (kbd "M-?"))
-
-  ;; (local-set-key (kbd "TAB") 'nm-eshell-pcomplete)
-  ;; (local-set-key [tab] 'nm-eshell-pcomplete)
-
-  (local-set-key (kbd "TAB") 'nm-eshell-auto-complete)
-  (local-set-key [tab] 'nm-eshell-auto-complete))
-
-(add-hook 'eshell-mode-hook 'nm-eshell-mode-hook)
-
 ;; link numbering for twittering mode
-
+(add-hook 'eshell-preoutput-filter-functions
+	  'ansi-color-filter-apply)
 
 (require 'twittering-numbering)
 (add-hook 'twittering-mode-hook 'twittering-numbering)
 (setq twittering-icon-mode t)
-(setq twittering-timer-interval 120)
+(setq twittering-timer-interval 600)
 (setq twittering-url-show-status nil)
-(add-hook 'twittering-edit-mode-hook (lambda () (ispell-minor-mode) (flyspell-mode)))
+(add-hook 'twittering-edit-mode-hook (lambda () 
+				       (ispell-minor-mode) 
+				       (flyspell-mode)))
 
 ;; (bbdb-initialize 'gnus 'message)
 ;; (bbdb-mua-auto-update-init 'gnus 'message)
 
+(require 'org-compat)
 (require 'calfw)
-(require 'calfw-org)
+;; (require 'calfw-org)
+
+;; (require 'popwin)
+;; (setq display-buffer-function 'popwin:display-buffer)
+
+(setq bbdb-phone-style 'nil)
+
+(require 'diminish)
+
+(workgroups-mode t)
+
+(diminish 'workgroups-mode " ω")
+(diminish 'auto-complete-mode " α")
+
