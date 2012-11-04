@@ -7,11 +7,6 @@
 ;; doxymacs mode for editing doxygen
 (add-hook 'c-mode-common-hook 'doxymacs-mode)
 
-(defun qdot/doxymacs-font-lock-hook ()
-  (if (or (eq major-mode 'c-mode) (eq major-mode 'c++-mode))
-      (doxymacs-font-lock)))
-(add-hook 'font-lock-mode-hook 'qdot/doxymacs-font-lock-hook)
-
 ;; Set defaults we expect
 (setq-default c-basic-offset 2)
 (setq-default py-indent-offset 2)
@@ -21,9 +16,6 @@
 (setq gdb-show-main t)
 (setq gud-chdir-before-run nil)
 (setq gud-tooltip-mode t)
-
-;; gtags
-(autoload 'gtags-mode "gtags" "" t)
 
 ;; eldoc mode for showing function calls in mode line
 (setq eldoc-idle-delay 0)
@@ -43,9 +35,10 @@
   (make-variable-buffer-local 'show-paren-mode)
   (show-paren-mode 1)
   (set-fill-column 80)
+  (setq show-trailing-whitespace t)
   (set-face-background 'show-paren-match-face "#222")
   (set-face-attribute 'show-paren-match-face nil 
-		      :weight 'bold :underline nil :overline nil :slant 'normal))
+											:weight 'bold :underline nil :overline nil :slant 'normal))
 
 (add-hook 'emacs-lisp-mode-hook 'qdot/programming-mode-hook)
 (add-hook 'cmake-mode-hook 'qdot/programming-mode-hook)
@@ -172,19 +165,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-(defun qdot/cc-code-mode-hook ()
-  (define-key c-mode-base-map "\C-m" 'newline-and-indent)
+(defun qdot/cc-mode-hook ()
+	(doxymacs-font-lock)
+  (local-set-key (kbd "\C-m") 'newline-and-indent)
   (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 2)))
-  (setq indent-tabs-mode t)
+  (setq indent-tabs-mode nil)
   (setq-default tab-width 2)
   (c-set-style "qdot/cc-code-style")
   (c-set-offset 'innamespace 0)
   (local-set-key [(control tab)] 'semantic-complete-self-insert)
   (subword-mode 1))
 
-(add-hook 'c-mode-hook 'qdot/cc-code-mode-hook)
-(add-hook 'c++-mode-hook 'qdot/cc-code-mode-hook)
+(add-hook 'c-mode-common-hook 'qdot/cc-mode-hook)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -201,16 +193,11 @@
   "Run compile and resize the compile window closing the old one if necessary"
   (interactive)
   (progn
-    (if (get-buffer "*compilation*")	; If old compile window exists
-        (progn
-          (delete-windows-on (get-buffer "*compilation*")) ; Delete the compilation windows
-          (kill-buffer "*compilation*") ; and kill the buffers
-          )
-      )
+    (when (get-buffer "*compilation*")	; If old compile window exists
+			(delete-windows-on (get-buffer "*compilation*")) ; Delete the compilation windows
+			(kill-buffer "*compilation*")) ; and kill the buffers
     (call-interactively 'compile)
-    (enlarge-window 30)
-    )
-  )
+    (enlarge-window 30)))
 
 (defun qdot/next-error ()
   "Move point to next error and highlight it"
@@ -218,9 +205,7 @@
   (progn
     (next-error)
     (end-of-line-nomark)
-    (beginning-of-line-mark)
-    )
-  )
+    (beginning-of-line-mark)))
 
 (defun qdot/previous-error ()
   "Move point to previous error and highlight it"
@@ -228,41 +213,12 @@
   (progn
     (previous-error)
     (end-of-line-nomark)
-    (beginning-of-line-mark)
-    )
-  )
+    (beginning-of-line-mark)))
+
 ;; (global-set-key (kbd "C-n") 'qdot/next-error)
 ;; (global-set-key (kbd "C-p") 'qdot/previous-error)
 
 (global-set-key [f5] 'qdot/recompile)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Use c-c c-o to switch between header and implementation files
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(add-hook 'c-mode-common-hook
-          (lambda()
-	    (setq indent-tabs-mode nil)
-            (local-set-key  (kbd "C-c o") 'ff-find-other-file)))
-
-(setq cc-other-file-alist
-      '(
-        ("\\.cpp$" (".h" ".hpp" ".hh"))
-        ("\\.cxx$" (".hpp" ".h" ".hh"))
-        ("\\.h$" (".c" ".cpp" ".cc" ".cxx"))
-        ("\\.c$" (".hpp" ".h" ".hh" ".hxx"))
-        ("\\.hpp$" (".cpp" ".c" ".cc" ".cxx"))
-        ("\\.hh$" (".cc"))
-        ("\\.cc$" (".hh"))
-        ))
-
-(setq ff-search-directories '(
-                              "."
-                              "$HOME/code/*"
-                              "/usr/*/include/*"
-                              ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -276,6 +232,7 @@
 ;;(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
 (add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
 (add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+(add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode)
 (add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
 (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode)
@@ -283,46 +240,24 @@
 ;;(add-to-list 'semantic-default-submodes 'global-semantic-show-unmatched-syntax-mode)
 ;;(add-to-list 'semantic-default-submodes 'global-semantic-highlight-edits-mode)
 ;;(add-to-list 'semantic-default-submodes 'global-semantic-show-parser-state-mode)
-;;(add-to-list 'semantic-default-submodes ')
 
+(require 'semantic/bovine/c)
+(require 'semantic/bovine/gcc)
+(require 'semantic/bovine/clang)
+(require 'semantic/ia)
+(require 'semantic/decorate/include)
+(require 'semantic/lex-spp)
+
+;; need to add CEDET contrib to bring in eassist
+(add-to-list 'load-path (expand-file-name 
+												 (concat
+													qdot/emacs-autoinst-elisp-dir "cedet/contrib")))
+
+(require 'eassist)
 ;; (global-ede-mode 1)
 
 (setq-default semanticdb-default-save-directory "~/.emacs_meta/semanticdb/"
-	      semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
-
-(custom-set-variables
- '(semantic-idle-scheduler-idle-time 3))
-
-;; (semantic-add-system-include "~/usr/include" 'c++-mode)
-;; (semantic-add-system-include "~/usr/include" 'c-mode)
-
-;; (setq-mode-local c-mode
-;; 		 semanticdb-find-default-throttle
-;; 		 '(project unloaded system recursive))
-;; (setq-mode-local c++-mode
-;; 		 semanticdb-find-default-throttle
-;; 		 '(project unloaded system recursive))
-
-;; (ede-cpp-root-project "MozillaCentral"
-;;                 :file "~/code/mozbuild/mozilla-central/Makefile"
-;; 		:ede-cpp-root "~/code/mozbuild/mozilla-central/Makefile"
-;;                 :include-path '("/"))
-
-;; (defun qdot/cc-mode-cedet-idle-hook()
-;;   (semantic-idle-scheduler-mode 3)
-;;   (semantic-idle-completions-mode 3)
-;;   (semantic-idle-summary-mode 3))
-
-;; (add-hook 'c-mode-common-hook
-;; 	  'qdot/cc-mode-cedet-idle-hook)
-
-;; hooks, specific for semantic
-;; (defun qdot/semantic-hook ()
-;;   ;; (semantic-tag-folding-mode 1)
-;;   (imenu-add-to-menubar "TAGS")
-;;   )
-;; (add-hook 'semantic-init-hooks 'qdot/semantic-hook)
-;; (global-semantic-tag-folding-mode 1)
+							semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
 
 (defun qdot/cedet-hook ()
   (local-set-key [(control return)] 'semantic-ia-complete-symbol)
@@ -339,16 +274,8 @@
 (add-hook 'emacs-lisp-mode-hook 'qdot/cedet-hook)
 
 (defun qdot/c-mode-cedet-hook ()
-
-  ;; Uncomment these for full intellisense typeahead
-  ;; Currently very slow
-  ;; (local-set-key "." 'semantic-complete-self-insert)
-  ;; (local-set-key ">" 'semantic-complete-self-insert)
-  (local-set-key "\C-ct" 'eassist-switch-h-cpp)
-  (local-set-key "\C-xt" 'eassist-switch-h-cpp)
-  (local-set-key "\C-ce" 'eassist-list-methods)
-  (local-set-key "\C-c\C-r" 'semantic-symref)
-  )
+	(local-set-key (kbd "C-c o") 'eassist-switch-h-cpp)
+  (local-set-key (kbd "C-c C-r") 'semantic-symref))
 (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)
 
 
@@ -364,7 +291,7 @@
     ;; Usually using homebrew on OS X
     (when (file-exists-p "/opt/homebrew/Cellar/python/2.7/bin/pyflakes")
       (setq flyflakes-pyflakes-command 
-	    '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
+						'("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
       (require 'flyflakes))
   (when (file-exists-p "/usr/local/bin/pyflakes")
     (setq flyflakes-pyflakes-command '("/usr/local/bin/pyflakes"))
@@ -413,9 +340,15 @@
 ;; Guess tabs/spaces for python mode indentation
 ;; (add-hook 'python-mode-hook guess-style-guess-tabs-mode)
 (add-hook 'python-mode-hook (lambda ()
-			      (when indent-tabs-mode
-				(guess-style-guess-tab-width))))
-;; Javascript
+															(when indent-tabs-mode
+																(guess-style-guess-tab-width))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Javascript settings
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (setq js-indent-level 2)
 (setq
  js2-auto-indent-p t
@@ -423,14 +356,28 @@
  js2-enter-indents-newline t
  js2-indent-on-enter-key t)
 
-(add-hook 'compilation-mode-hook
-	  (lambda ()
-	    (setq comint-buffer-maximum-size 10240)))
-;; (add-hook 'comint-output-filter-functions 'comint-truncate-buffer)))
+;; (add-hook 'compilation-mode-hook
+;; 					(lambda ()
+;; 						(setq comint-buffer-maximum-size 10240)))
+;; ;; (add-hook 'comint-output-filter-functions 'comint-truncate-buffer)))
 
 ;; Fix for .js files that have Java set as the mode (I'm looking at
 ;; you, mozilla-central)
 (add-hook 'java-mode-hook
-	  (lambda ()
-	    (when (string-match "\\.js\\'" buffer-file-name)
-	      (js2-mode))))
+					(lambda ()
+						(when (string-match "\\.js\\'" buffer-file-name)
+							(js2-mode))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; gdb settings
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Turn off non-stop by default. All or nothing, damnit.
+(setq gdb-non-stop-setting nil)
+
+(setq compilation-auto-jump-to-first-error t)
+(setq compilation-scroll-output 'first-error)
+
+
