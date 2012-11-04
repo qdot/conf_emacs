@@ -293,3 +293,14 @@ strings"
 
 (defun qdot/clear-kill-ring ()
 	(setq kill-ring nil))
+
+;; Used to make org-agenda pop into the large window available on the agenda
+;; workgroup.
+(defun qdot/org-agenda-open-in-other-window()
+  (interactive)
+  (when (and workgroups-mode
+	     (eq (wg-get-workgroup "agenda") (wg-current-workgroup)))
+    (setq pop-up-windows nil)
+    (org-agenda-switch-to)
+    (setq pop-up-windows t))
+  (org-agenda-switch-to))
