@@ -54,13 +54,6 @@
 (defun auto-save-file-name-p (filename)
   (string-match "^#.*#$" (file-name-nondirectory filename)))
 
-(defun make-auto-save-file-name ()
-  (concat autosave-dir
-          (if buffer-file-name
-              (concat "#" (file-name-nondirectory buffer-file-name) "#")
-            (expand-file-name
-             (concat "#%" (buffer-name) "#")))))
-
 ;; Put backup files (ie foo~) in one place too. (The backup-directory-alist
 ;; list contains regexp=>directory mappings; filenames matching a regexp are
 ;; backed up in the corresponding directory. Emacs will mkdir it if necessary.)
@@ -93,7 +86,7 @@
  sentence-end-double-space nil
  default-directory "~"
  message-log-max 1024
-)
+ )
 (set-default 'indicate-empty-lines t)
 (display-time)
 (line-number-mode t)
@@ -101,6 +94,7 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (global-font-lock-mode 1)
+(global-auto-revert-mode t)
 
 ;; Transparently open compressed files
 (auto-compression-mode t)
@@ -112,8 +106,7 @@
 (defun qdot/set-firefox-trunk ()
   (interactive)
   (if linux-p
-      (setq browse-url-browser-function 'browse-url-generic
-	    browse-url-generic-program "firefox-trunk")))
+      (custom-set-variables '(browse-url-firefox-program "firefox-trunk"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -264,3 +257,15 @@
 (setq sauron-separate-frame nil)
 
 (require 'memory-usage)
+
+;; byte compile the current buffer on save if a byte compiled version already
+;; exists.
+
+(defun qdot/byte-compile-current-buffer ()
+  "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
+  (interactive)
+  (when (and (eq major-mode 'emacs-lisp-mode)
+             (file-exists-p (byte-compile-dest-file buffer-file-name)))
+    (byte-compile-file buffer-file-name)))
+
+(add-hook 'after-save-hook 'qdot/byte-compile-current-buffer)
