@@ -17,12 +17,6 @@
 (setq gud-chdir-before-run nil)
 (setq gud-tooltip-mode t)
 
-;; eldoc mode for showing function calls in mode line
-(setq eldoc-idle-delay 0)
-(autoload 'turn-on-eldoc-mode "eldoc" nil t)
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-
 ;; turn on linum mode for programming
 (setq linum-format "%4d")
 
@@ -31,14 +25,15 @@
 (setq show-paren-style 'expression)
 (defun qdot/programming-mode-hook ()
   (linum-mode 1)
-  (fci-mode 1)
+	;; fci-mode violently broken at the moment (24.3 HEAD)
+	;;  (fci-mode 1)
   (make-variable-buffer-local 'show-paren-mode)
   (show-paren-mode 1)
   (set-fill-column 80)
   (setq show-trailing-whitespace t)
   (set-face-background 'show-paren-match-face "#222")
-  (set-face-attribute 'show-paren-match-face nil 
-											:weight 'bold :underline nil :overline nil :slant 'normal))
+  (set-face-attribute 'show-paren-match-face nil
+		      :weight 'bold :underline nil :overline nil :slant 'normal))
 
 (add-hook 'emacs-lisp-mode-hook 'qdot/programming-mode-hook)
 (add-hook 'cmake-mode-hook 'qdot/programming-mode-hook)
@@ -166,7 +161,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun qdot/cc-mode-hook ()
-	(doxymacs-font-lock)
+  (doxymacs-font-lock)
   (local-set-key (kbd "\C-m") 'newline-and-indent)
   (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 2)))
   (setq indent-tabs-mode nil)
@@ -194,8 +189,8 @@
   (interactive)
   (progn
     (when (get-buffer "*compilation*")	; If old compile window exists
-			(delete-windows-on (get-buffer "*compilation*")) ; Delete the compilation windows
-			(kill-buffer "*compilation*")) ; and kill the buffers
+      (delete-windows-on (get-buffer "*compilation*")) ; Delete the compilation windows
+      (kill-buffer "*compilation*")) ; and kill the buffers
     (call-interactively 'compile)
     (enlarge-window 30)))
 
@@ -250,14 +245,14 @@
 
 ;; need to add CEDET contrib to bring in eassist
 (add-to-list 'load-path (expand-file-name 
-												 (concat
-													qdot/emacs-autoinst-elisp-dir "cedet/contrib")))
+			 (concat
+			  qdot/emacs-autoinst-elisp-dir "cedet/contrib")))
 
 (require 'eassist)
 ;; (global-ede-mode 1)
 
 (setq-default semanticdb-default-save-directory "~/.emacs_meta/semanticdb/"
-							semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
+	      semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
 
 (defun qdot/cedet-hook ()
   (local-set-key [(control return)] 'semantic-ia-complete-symbol)
@@ -274,7 +269,7 @@
 (add-hook 'emacs-lisp-mode-hook 'qdot/cedet-hook)
 
 (defun qdot/c-mode-cedet-hook ()
-	(local-set-key (kbd "C-c o") 'eassist-switch-h-cpp)
+  (local-set-key (kbd "C-c o") 'eassist-switch-h-cpp)
   (local-set-key (kbd "C-c C-r") 'semantic-symref))
 (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)
 
@@ -291,7 +286,7 @@
     ;; Usually using homebrew on OS X
     (when (file-exists-p "/opt/homebrew/Cellar/python/2.7/bin/pyflakes")
       (setq flyflakes-pyflakes-command 
-						'("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
+	    '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
       (require 'flyflakes))
   (when (file-exists-p "/usr/local/bin/pyflakes")
     (setq flyflakes-pyflakes-command '("/usr/local/bin/pyflakes"))
@@ -324,14 +319,16 @@
 
 (defun qdot/python-mode-hook()
   (lambda () (eldoc-mode 1))
-  (setq tab-width 2)
+  (setq tab-width 4)
   (setq indent-tabs-mode nil)
-  (setq py-indent-offset 2)
-  (setq python-indent-offset 2)
+  (setq py-indent-offset 4)
+  (setq python-indent-offset 4)
+  (set-variable 'python-indent-guess-indent-offset nil)
   (qdot/load-pymacs)
   (auto-complete-mode nil)
+  (subword-mode 1)
   (set (make-local-variable 'ac-sources)
-       (setq ac-sources (append '(ac-source-ropemacs) ac-sources)))
+       (setq ac-sources (append '(ac-source-ropemacs ac-source-yasnippet) ac-sources)))
   (set (make-local-variable 'ac-find-function) 'ac-python-find))
 
 ;; (add-hook 'python-mode-hook 'qdot/ac-config-python)
@@ -340,8 +337,8 @@
 ;; Guess tabs/spaces for python mode indentation
 ;; (add-hook 'python-mode-hook guess-style-guess-tabs-mode)
 (add-hook 'python-mode-hook (lambda ()
-															(when indent-tabs-mode
-																(guess-style-guess-tab-width))))
+			      (when indent-tabs-mode
+				(guess-style-guess-tab-width))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -364,9 +361,9 @@
 ;; Fix for .js files that have Java set as the mode (I'm looking at
 ;; you, mozilla-central)
 (add-hook 'java-mode-hook
-					(lambda ()
-						(when (string-match "\\.js\\'" buffer-file-name)
-							(js2-mode))))
+	  (lambda ()
+	    (when (string-match "\\.js\\'" buffer-file-name)
+	      (js2-mode))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -380,4 +377,50 @@
 (setq compilation-auto-jump-to-first-error t)
 (setq compilation-scroll-output 'first-error)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; lisp/elisp settings
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; eldoc mode for showing function calls in mode line
+(setq eldoc-idle-delay 0)
+(autoload 'turn-on-eldoc-mode "eldoc" nil t)
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+
+;; stealin' things from esk
+(add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
+
+(defun esk-remove-elc-on-save ()
+  "If you're saving an elisp file, likely the .elc is no longer valid."
+  (make-local-variable 'after-save-hook)
+  (add-hook 'after-save-hook
+	    (lambda ()
+	      (if (file-exists-p (concat buffer-file-name "c"))
+		  (delete-file (concat buffer-file-name "c"))))))
+
+(define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
+(define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+
+;; TODO: look into parenface package
+(defface esk-paren-face
+  '((((class color) (background dark))
+     (:foreground "grey50"))
+    (((class color) (background light))
+     (:foreground "grey55")))
+  "Face used to dim parentheses."
+  :group 'starter-kit-faces)
+
+(dolist (mode '(scheme emacs-lisp lisp))
+    (when (> (display-color-cells) 8)
+      (font-lock-add-keywords (intern (concat (symbol-name mode) "-mode"))
+                              '(("(\\|)" . 'esk-paren-face)))))
+
+(eval-after-load 'magit
+  '(progn
+     (set-face-foreground 'magit-diff-add "green1")
+     (set-face-foreground 'magit-diff-del "red1")
+     (set-face-background 'magit-diff-add "#004400")
+     (set-face-background 'magit-diff-del "#440000")
+		 (set-face-background 'magit-item-highlight "#1f2727")))

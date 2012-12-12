@@ -114,7 +114,7 @@
 ;; (bbdb-mua-auto-update-init 'gnus 'message)
 
 (require 'org-compat)
-(require 'calfw)
+;; (require 'calfw)
 ;; (require 'calfw-org)
 
 ;; (require 'popwin)
@@ -122,10 +122,19 @@
 
 (setq bbdb-phone-style 'nil)
 
+
+;; This will completely shit itself on HEAD as of 24.3 due to silly macro
+;; definitions for called-interactively-p. Currently commenting those out in
+;; yasnippet itself.
+(require 'yasnippet)
+(yas-global-mode 1)
+(yas/load-directory "~/.emacs_files/elisp_auto/yasnippet/snippets")
+
 (require 'diminish)
 
 (workgroups-mode t)
 
+(diminish 'yas-minor-mode " y")
 (diminish 'workgroups-mode " ω")
 (diminish 'auto-complete-mode " α")
 

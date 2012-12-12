@@ -282,17 +282,8 @@ strings"
   (let ((backward-delete-char-untabify-method 'hungry))
     (backward-delete-char-untabify arg killp)))
 
-(defun toggle-fullscreen (&optional f)
-  (interactive)
-  (let ((current-value (frame-parameter nil 'fullscreen)))
-    (set-frame-parameter nil 'fullscreen
-			 (if (equal 'fullboth current-value)
-			     (if (boundp 'old-fullscreen) old-fullscreen nil)
-			   (progn (setq old-fullscreen current-value)
-				  'fullboth)))))
-
 (defun qdot/clear-kill-ring ()
-	(setq kill-ring nil))
+  (setq kill-ring nil))
 
 ;; Used to make org-agenda pop into the large window available on the agenda
 ;; workgroup.

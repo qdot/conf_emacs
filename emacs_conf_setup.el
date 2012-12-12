@@ -108,6 +108,11 @@
   (if linux-p
       (custom-set-variables '(browse-url-firefox-program "firefox-trunk"))))
 
+(defun qdot/set-firefox ()
+  (interactive)
+  (if linux-p
+      (custom-set-variables '(browse-url-firefox-program "firefox"))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Setup for packages included with emacs
@@ -140,8 +145,8 @@
 ;; Make sure I always come back to the same place in a file
 ;; http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 
-(setq-default save-place t) 
-(require 'saveplace) 
+(setq-default save-place t)
+(require 'saveplace)
 
 ;; Set up tramp and set default protocol to ssh
 
@@ -269,3 +274,4 @@
     (byte-compile-file buffer-file-name)))
 
 (add-hook 'after-save-hook 'qdot/byte-compile-current-buffer)
+
