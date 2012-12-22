@@ -276,22 +276,24 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Flymake + pyflakes syntax checking for python
-;; http://plope.com/Members/chrism/flymake-mode
-;;
+;; Flymake for python using pep8/pylint/pychecker
+;; http://vaab.blog.kal.fr/2012/09/20/emacs-and-flymake-for-python-javascript-php-rst/
+;; 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO This freaks out if pyflakes isn't available on the system
-(if macosx-p
-    ;; Usually using homebrew on OS X
-    (when (file-exists-p "/opt/homebrew/Cellar/python/2.7/bin/pyflakes")
-      (setq flyflakes-pyflakes-command 
-	    '("/opt/homebrew/Cellar/python/2.7/bin/pyflakes"))
-      (require 'flyflakes))
-  (when (file-exists-p "/usr/local/bin/pyflakes")
-    (setq flyflakes-pyflakes-command '("/usr/local/bin/pyflakes"))
-    (require 'flyflakes)))
+;; Python flymake configuration
 
+(when (load "flymake" t)
+  (defun flymake-pycheckers-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                    'flymake-create-temp-inplace))
+        (local-file (file-relative-name
+                     temp-file
+                     (file-name-directory buffer-file-name))))
+      (list (concat qdot/emacs-scripts-dir "flycheck_python.py")  (list local-file))))
+
+  (add-to-list 'flymake-allowed-file-name-masks
+            '("\\.py\\'" flymake-pycheckers-init)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; pymacs and ropemacs
