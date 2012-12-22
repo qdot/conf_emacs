@@ -22,7 +22,7 @@
 	      :features bbdb-loaddefs :autoloads nil :post-init
 	      (bbdb-initialize)))
  (browse-kill-ring status "installed" recipe
-		   (:name browse-kill-ring :description "Interactively insert items from kill-ring" :type github :pkgname "browse-kill-ring/browse-kill-ring" :features browse-kill-ring))
+		   (:name browse-kill-ring :description "Interactively insert items from kill-ring" :type github :pkgname "browse-kill-ring/browse-kill-ring"))
  (buffer-move status "installed" recipe
 	      (:name buffer-move :description "Swap buffers without typing C-x b on each window" :type emacswiki :features buffer-move))
  (calfw status "installed" recipe
@@ -50,8 +50,9 @@
 		 (load
 		  (expand-file-name "cedet-devel-load.el" pdir)))))
  (cmake-mode status "installed" recipe
-	     (:name cmake-mode :website "http://www.itk.org/Wiki/CMake_Editors_Support" :description "Provides syntax highlighting and indentation for CMakeLists.txt and *.cmake source files." :type http :url "http://www.cmake.org/CMakeDocs/cmake-mode.el" :features "cmake-mode" :post-init
+	     (:name cmake-mode :website "http://www.itk.org/Wiki/CMake_Editors_Support" :description "Provides syntax highlighting and indentation for CMakeLists.txt and *.cmake source files." :type http :url "http://www.cmake.org/CMakeDocs/cmake-mode.el" :before
 		    (progn
+		      (autoload 'cmake-mode "cmake-mode" "Major mode for editing CMake listfiles.")
 		      (add-to-list 'auto-mode-alist
 				   '("CMakeLists\\.txt\\'" . cmake-mode))
 		      (add-to-list 'auto-mode-alist
@@ -76,7 +77,12 @@
  (dynamic-fonts status "installed" recipe
 		(:name dynamic-fonts :depends persistent-soft :type github :description "Set faces based on available fonts" :pkgname "rolandwalker/dynamic-fonts"))
  (el-get status "installed" recipe
-	 (:name el-get :website "https://github.com/dimitri/el-get#readme" :description "Manage the external elisp bits and pieces you depend upon." :type github :branch "master" :pkgname "dimitri/el-get" :features el-get :load "el-get.el"))
+	 (:name el-get :website "https://github.com/dimitri/el-get#readme" :description "Manage the external elisp bits and pieces you depend upon." :type github :branch "4.stable" :pkgname "dimitri/el-get" :info "." :load "el-get.el"))
+ (elisp-slime-nav status "installed" recipe
+		  (:name elisp-slime-nav :type github :pkgname "purcell/elisp-slime-nav" :description "Slime-style navigation for Emacs Lisp" :prepare
+			 (add-hook 'emacs-lisp-mode-hook
+				   (defun turn-elisp-slime-nav-on nil
+				     (elisp-slime-nav-mode t)))))
  (erc-highlight-nicknames status "installed" recipe
 			  (:name erc-highlight-nicknames :description "Highlights nicknames" :type emacswiki :features erc-highlight-nicknames))
  (eshell-manual status "installed" recipe
@@ -89,12 +95,24 @@
 			(:name fill-column-indicator :type github :website "https://github.com/alpaker/Fill-Column-Indicator#readme" :description "An Emacs minor mode that graphically indicates the fill column." :pkgname "alpaker/Fill-Column-Indicator" :features fill-column-indicator))
  (filladapt status "installed" recipe
 	    (:name filladapt :description "Filladapt enhances the behavior of Emacs' fill functions by guessing the proper fill prefix in many contexts. Emacs has a built-in adaptive fill mode but Filladapt is much better." :type http :url "http://www.wonderworks.com/download/filladapt.el"))
+ (flymake status "installed" recipe
+	  (:name flymake :description "Continuous syntax checking for Emacs." :type github :pkgname "illusori/emacs-flymake"))
  (flymake-point status "installed" recipe
 		(:name flymake-point :description "Show flymake errors under the point in the minibuffer" :type http :url "https://bitbucket.org/brodie/dotfiles/raw/tip/.emacs.d/plugins/flymake-point.el" :features flymake-point))
  (fuzzy status "installed" recipe
 	(:name fuzzy :website "https://github.com/auto-complete/fuzzy-el" :description "Fuzzy matching utilities for GNU Emacs" :type github :pkgname "auto-complete/fuzzy-el"))
  (git-emacs status "installed" recipe
 	    (:name git-emacs :description "Yet another git emacs mode for newbies" :type github :pkgname "tsgates/git-emacs" :features git-emacs))
+ (gnus status "installed" recipe
+       (:name gnus :description "A newsreader for GNU Emacs" :type git :url "http://git.gnus.org/gnus.git" :build
+	      `(("./configure" ,(concat "--with-emacs="
+					(shell-quote-argument el-get-emacs)))
+		("make"))
+	      :build/windows-nt
+	      `(,(concat "\"make.bat " invocation-directory "\""))
+	      :info "texi" :load-path
+	      ("lisp")
+	      :autoloads nil :features gnus-load))
  (google-maps status "installed" recipe
 	      (:name google-maps :description "Access Google Maps from Emacs" :type git :url "git://git.naquadah.org/google-maps.git" :features google-maps))
  (google-weather status "installed" recipe
@@ -139,15 +157,7 @@
  (multiple-cursors status "installed" recipe
 		   (:name multiple-cursors :description "An experiment in adding multiple cursors to emacs" :type github :pkgname "magnars/multiple-cursors.el" :features multiple-cursors))
  (nognus status "installed" recipe
-	 (:name nognus :description "A newsreader for GNU Emacs" :type git :url "http://git.gnus.org/gnus.git" :build
-		`(("./configure" ,(concat "--with-emacs="
-					  (shell-quote-argument el-get-emacs)))
-		  ("make"))
-		:build/windows-nt
-		`(,(concat "\"make.bat " invocation-directory "\""))
-		:info "texi" :load-path
-		("lisp")
-		:autoloads nil :features gnus-load))
+	 (:name nognus :description "A newsreader for GNU Emacs" :type builtin :depends gnus))
  (nxhtml status "installed" recipe
 	 (:type github :pkgname "emacsmirror/nxhtml" :name nxhtml :type emacsmirror :description "An addon for Emacs mainly for web development." :build
 		(list
@@ -202,6 +212,8 @@
 			   ("gnu" . "http://elpa.gnu.org/packages/")
 			   ("marmalade" . "http://marmalade-repo.org/packages/")
 			   ("SC" . "http://joseito.republika.pl/sunrise-commander/"))))))
+ (parenface status "installed" recipe
+	    (:name parenface :description "Provide a face for parens in lisp modes." :type http :url "http://www.davep.org/emacs/parenface.el" :features "parenface"))
  (pastebin status "installed" recipe
 	   (:name pastebin :description "An Emacs interface to pastebin.com." :type emacswiki :features pastebin))
  (persistent-soft status "installed" recipe
@@ -226,7 +238,7 @@
  (python status "installed" recipe
 	 (:name python :description "Python's flying circus support for Emacs" :type github :pkgname "fgallina/python.el"))
  (rainbow-delimiters status "installed" recipe
-		     (:name rainbow-delimiters :website "https://github.com/jlr/rainbow-delimiters#readme" :description "Color nested parentheses, brackets, and braces according to their depth." :type github :pkgname "jlr/rainbow-delimiters" :features rainbow-delimiters))
+		     (:name rainbow-delimiters :website "https://github.com/jlr/rainbow-delimiters#readme" :description "Color nested parentheses, brackets, and braces according to their depth." :type github :pkgname "jlr/rainbow-delimiters"))
  (rainbow-mode status "installed" recipe
 	       (:name rainbow-mode :description "Colorize color names in buffers" :type elpa))
  (revbufs status "installed" recipe
@@ -256,6 +268,15 @@
  (sauron status "installed" recipe
 	 (:name sauron :description "enhanced tracking of the world inside and outside your emacs" :website "https://github.com/djcb/sauron" :type github :pkgname "djcb/sauron" :prepare
 		(autoload 'sauron-start "sauron" "Start sauron." t)))
+ (slime status "installed" recipe
+	(:name slime :description "Superior Lisp Interaction Mode for Emacs" :type github :autoloads "slime-autoloads" :info "doc" :pkgname "nablaone/slime" :load-path
+	       ("." "contrib")
+	       :compile
+	       (".")
+	       :build
+	       '(("make" "-C" "doc" "slime.info"))
+	       :post-init
+	       (slime-setup)))
  (smex status "installed" recipe
        (:name smex :description "M-x interface with Ido-style fuzzy matching." :type github :pkgname "nonsequitur/smex" :features smex :post-init
 	      (smex-initialize)))
@@ -287,4 +308,24 @@
 			(add-to-list 'auto-mode-alist
 				     '("\\.wiki\\.txt\\'" . wikipedia-mode))))
  (workgroups status "installed" recipe
-	     (:name workgroups :description "Workgroups for windows (for Emacs)" :type github :pkgname "tlh/workgroups.el" :features "workgroups")))
+	     (:name workgroups :description "Workgroups for windows (for Emacs)" :type github :pkgname "tlh/workgroups.el" :features "workgroups"))
+ (yasnippet status "installed" recipe
+	    (:name yasnippet :website "https://github.com/capitaomorte/yasnippet.git" :description "YASnippet is a template system for Emacs." :type github :pkgname "capitaomorte/yasnippet" :features "yasnippet" :pre-init
+		   (unless
+		       (or
+			(boundp 'yas/snippet-dirs)
+			(get 'yas/snippet-dirs 'customized-value))
+		     (setq yas/snippet-dirs
+			   (list
+			    (concat el-get-dir
+				    (file-name-as-directory "yasnippet")
+				    "snippets"))))
+		   :post-init
+		   (put 'yas/snippet-dirs 'standard-value
+			(list
+			 (list 'quote
+			       (list
+				(concat el-get-dir
+					(file-name-as-directory "yasnippet")
+					"snippets")))))
+		   :compile nil :submodule nil)))
