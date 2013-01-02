@@ -11,7 +11,7 @@
 
 ;; Bells? Who needs them
 
-(setq visible-bell nil) 
+(setq visible-bell nil)
 (setq ring-bell-function 'ignore)
 
 (setq message-log-max 5000)
@@ -24,19 +24,18 @@
 (defun qdot/set-platform-font ()
   "Set the default font for the system type."
   (interactive)
-  (when (and macosx-p
-	     (when (member "Consolas" (font-family-list))
-	       (set-face-font 'default "consolas-11"))))
+  (when macosx-p
+    (set-face-font 'default "consolas-11"))
   (when mswindows-p
     (set-face-font 'default "consolas-8"))
   (when linux-p
     (when (member "Inconsolata" (font-family-list))
       (set-face-font 'default "inconsolata-11"))))
 
-(qdot/set-platform-font)
+;; (qdot/set-platform-font)
 
 (when macosx-p
-  ;;Change meta to alt    
+  ;;Change meta to alt
   (setq mac-command-modifier 'meta)
   ;;avoid hiding with M-h
   (setq mac-pass-command-to-system nil))
@@ -93,6 +92,7 @@
 (column-number-mode t)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(blink-cursor-mode -1)
 (global-font-lock-mode 1)
 (global-auto-revert-mode t)
 
@@ -275,3 +275,8 @@
 
 (add-hook 'after-save-hook 'qdot/byte-compile-current-buffer)
 
+
+;; mu4e
+(setq mu4e-maildir "~/Mail") ;; top-level Maildir
+(setq mu4e-html2text-command "w3m -dump -T text/html")
+(setq mu4e-view-prefer-html t)
