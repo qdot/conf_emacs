@@ -326,9 +326,10 @@
   (setq py-indent-offset 4)
   (setq python-indent-offset 4)
   (set-variable 'python-indent-guess-indent-offset nil)
-  (qdot/load-pymacs)
+  ;;(qdot/load-pymacs)
   (auto-complete-mode nil)
   (subword-mode 1)
+  (flymake-mode 1)
   (set (make-local-variable 'ac-sources)
        (setq ac-sources (append '(ac-source-ropemacs ac-source-yasnippet) ac-sources)))
   (set (make-local-variable 'ac-find-function) 'ac-python-find))
@@ -425,4 +426,19 @@
      (set-face-foreground 'magit-diff-del "red1")
      (set-face-background 'magit-diff-add "#004400")
      (set-face-background 'magit-diff-del "#440000")
-		 (set-face-background 'magit-item-highlight "#1f2727")))
+     (set-face-background 'magit-item-highlight "#1f2727")
+     ;; full screen magit-status
+
+     (defadvice magit-status (around magit-fullscreen activate)
+       (window-configuration-to-register :magit-fullscreen)
+       ad-do-it
+       (delete-other-windows))
+
+     (defun magit-quit-session ()
+       "Restores the previous window configuration and kills the magit buffer"
+       (interactive)
+       (kill-buffer)
+       (jump-to-register :magit-fullscreen))
+
+     (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
+

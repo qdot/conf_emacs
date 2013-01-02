@@ -158,6 +158,7 @@ class PylintRunner(LintRunner):
     sane_default_ignore_codes = set([
         "C0103",  # Naming convention
         "C0111",  # Missing Docstring
+        "C0301",  # 80 character limit
     #    "E1002",  # Use super on old-style class
         "W0232",  # No __init__
     #    #"I0011",  # Warning locally suppressed using disable-msg
@@ -185,8 +186,8 @@ class PylintRunner(LintRunner):
         return ('--output-format', 'parseable',
                 '--include-ids', 'y',
                 '--reports', 'n',
-                '--rcfile','~/.pylintrc',)
-                #'--disable-msg=' + ','.join(self.operative_ignore_codes))
+                '--rcfile','~/.pylintrc',
+                '--disable=' + ','.join(self.operative_ignore_codes))
 
 
 class PycheckerRunner(LintRunner):
@@ -231,6 +232,7 @@ class Pep8Runner(LintRunner):
     #     'W391', # blank line at end of file
     #     'W291', # trailing whitespaces
           'E262', # inline comment should start with '# '
+          'E501', # 80-character limit
     ])
 
     output_matcher = re.compile(
