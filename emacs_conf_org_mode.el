@@ -309,3 +309,13 @@ org-agenda-no-resize is non-nil"
 (setq org-refile-target-verify-function 'qdot/verify-refile-target)
 
 ;; (diminish 'org-indent-mode " i")
+
+;; Sasha Chua's org done faces
+;; http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
+(setq org-fontify-done-headline t)
+(custom-set-faces
+ '(org-done ((t (:foreground "PaleGreen"
+                 :weight normal :strike-through t))))
+ '(org-headline-done
+            ((((class color) (min-colors 16) (background dark))
+               (:foreground "LightSalmon" :strike-through t)))))
