@@ -11,11 +11,11 @@
 
 ;; For manually installed elisp
 (setq qdot/emacs-elisp-dir (expand-file-name 
-														(concat qdot/emacs-conf-dir "elisp/")))
+			    (concat qdot/emacs-conf-dir "elisp/")))
 
 ;; For manually installed elisp
 (setq qdot/emacs-scripts-dir (expand-file-name 
-															(concat qdot/emacs-conf-dir "scripts/")))
+			      (concat qdot/emacs-conf-dir "scripts/")))
 
 ;; For source installs (no repo available to track)
 (setq qdot/emacs-elisp-src-dir (expand-file-name 
@@ -23,7 +23,7 @@
 
 ;; For auto-install.el elisp
 (setq qdot/emacs-autoinst-elisp-dir (expand-file-name 
-																		 (concat qdot/emacs-conf-dir "elisp_auto/")))
+				     (concat qdot/emacs-conf-dir "elisp_auto/")))
 
 ;; As of emacs 23, ~/.emacs.d is user-emacs-directory
 (setq custom-file (concat user-emacs-directory "emacs_conf_custom.el"))

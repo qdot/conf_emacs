@@ -24,8 +24,7 @@
 (defun ask-before-quit ()
   "Ask me before I quit emacs if I think that's a good thing to do"
   (interactive)
-  (yes-or-no-p "Do you really want to quit Emacs?")
-  )
+  (yes-or-no-p "Do you really want to quit Emacs?"))
 (add-hook 'kill-emacs-query-functions 'ask-before-quit)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -37,7 +36,7 @@
 
 (defun get-ip-address (&optional dev)
   "get the IP-address for device DEV (default: eth0)"
-  (interactive)  
+  (interactive)
   (let ((dev (if dev dev "eth0")))
     (format-network-address (car (network-interface-info dev)) t)))
 
@@ -295,3 +294,16 @@ strings"
     (org-agenda-switch-to)
     (setq pop-up-windows t))
   (org-agenda-switch-to))
+
+(defun qdot/delete-current-buffer-file ()
+  "Removes file connected to current buffer and kills buffer."
+  (interactive)
+  (let ((filename (buffer-file-name))
+        (buffer (current-buffer))
+        (name (buffer-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (ido-kill-buffer)
+      (when (yes-or-no-p "Are you sure you want to remove this file? ")
+        (delete-file filename)
+        (kill-buffer buffer)
+        (message "File '%s' successfully removed" filename)))))
