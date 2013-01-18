@@ -39,13 +39,6 @@
 ;; Start a regular shell if you prefer that.
 (global-set-key (kbd "C-x C-m") 'shell)
 
-;; Let's see how long it takes to forget I put this here even though it's just a
-;; fix for a HEAD issue.
-(defun go-back ()
-  (interactive)
-  (forward-line -1))
-
+;; Make this like shell. And also make emacs completely unusable for anyone
+;; else. :D
 (global-set-key (kbd "C-w") 'backward-kill-word)
-
-(global-set-key (kbd "C-p") 'go-back)
-(global-set-key (kbd "<up>") 'go-back)

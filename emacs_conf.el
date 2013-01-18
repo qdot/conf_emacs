@@ -5,24 +5,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; The base conf directory
-(if load-in-progress
-    (setq qdot/emacs-conf-dir (file-name-directory load-file-name))
-	(setq qdot/emacs-conf-dir (file-name-directory buffer-file-name)))
+(setq qdot/emacs-conf-dir (file-name-directory (or load-file-name (buffer-file-name))))
 
 ;; For manually installed elisp
-(setq qdot/emacs-elisp-dir (expand-file-name 
+(setq qdot/emacs-elisp-dir (expand-file-name
 			    (concat qdot/emacs-conf-dir "elisp/")))
 
 ;; For manually installed elisp
-(setq qdot/emacs-scripts-dir (expand-file-name 
+(setq qdot/emacs-scripts-dir (expand-file-name
 			      (concat qdot/emacs-conf-dir "scripts/")))
 
 ;; For source installs (no repo available to track)
-(setq qdot/emacs-elisp-src-dir (expand-file-name 
+(setq qdot/emacs-elisp-src-dir (expand-file-name
                                 (concat qdot/emacs-conf-dir "elisp_src/")))
 
 ;; For auto-install.el elisp
-(setq qdot/emacs-autoinst-elisp-dir (expand-file-name 
+(setq qdot/emacs-autoinst-elisp-dir (expand-file-name
 				     (concat qdot/emacs-conf-dir "elisp_auto/")))
 
 ;; As of emacs 23, ~/.emacs.d is user-emacs-directory
@@ -36,20 +34,12 @@
 (add-to-list 'load-path (expand-file-name qdot/emacs-conf-dir))
 (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 
-(setq mswindows-p (string-match "windows" (symbol-name system-type)))
-(setq macosx-p (string-match "darwin" (symbol-name system-type)))
-(setq linux-p (string-match "gnu/linux" (symbol-name system-type)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Make sure we have good ol' LISP available
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'cl)
-;; We need compile before CEDET, and compile+ before compile, so just
-;; do compile+, which also picks up compile- in the correct order. Oi.
-(require 'compile+)
 (defvar *emacs-load-start* (current-time))
 
 ;; Load cedet first, otherwise we'll conflict against the 1.1 repo stuff
@@ -68,8 +58,8 @@
        ;; Mode setup and random externals
        "emacs_conf_exts.el"
 
-       ;; Always load functions before binds, since we bind to functions 
-       ;; somewhat often       
+       ;; Always load functions before binds, since we bind to functions
+       ;; somewhat often
        "emacs_conf_funcs.el"
 
        ;; Package specific setup
@@ -88,7 +78,7 @@
 
 (mapcar 'load-library lib-files)
 
-;; Something in el-get is setting debug-on-error to t. 
+;; Something in el-get is setting debug-on-error to t.
 ;; Not cool.
 (if debug-on-error
 		(message "Something in init is setting debug-on-error to t. Fix it!")

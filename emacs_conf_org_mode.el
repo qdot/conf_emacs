@@ -9,9 +9,19 @@
 (require 'org-protocol)
 (require 'org-mobile)
 
-(setq org-modules (quote (org-bibtex org-crypt org-gnus org-id org-info org-jsinfo org-habit org-inlinetask org-irc org-protocol org-w3m)))
+(setq org-modules			(quote (org-bibtex
+															org-crypt
+															org-gnus
+															org-id
+															org-info
+															org-jsinfo
+															org-habit
+															org-inlinetask
+															org-irc
+															org-protocol
+															org-w3m)))
 
-					; global STYLE property values for completion
+;; global STYLE property values for completion
 (setq org-global-properties (quote (("STYLE_ALL" . "habit"))))
 
 ;; Most of this ripped from http://doc.norang.ca/org-mode.html
@@ -25,9 +35,6 @@
 
  ;; By default, at least timestamp done states
  org-log-done t
-
- ;; Always make sure indentation is on
- org-indent-mode t
 
  ;; Start indented
  org-startup-indented t
@@ -129,10 +136,16 @@
  ;; region
  org-loop-over-headlines-in-active-region t
 
+ org-special-ctrl-a/e t
+ org-special-ctrl-k t
+ org-yank-adjusted-subtrees t
+
  org-align-all-tags t)
 
 ;; flyspell mode for spell checking everywhere
 (add-hook 'org-mode-hook 'turn-on-flyspell 'append)
+
+(add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
 
 ;; Disable C-c [ and C-c ] in org-mode
 (add-hook 'org-mode-hook
@@ -319,3 +332,8 @@ org-agenda-no-resize is non-nil"
  '(org-headline-done
             ((((class color) (min-colors 16) (background dark))
                (:foreground "LightSalmon" :strike-through t)))))
+
+;; Set org babel backgrounds so we get nice blocks
+(set-face-background 'org-block-begin-line "#333")
+(set-face-background 'org-block-end-line "#333")
+(set-face-background 'org-block-background "#222")

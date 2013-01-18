@@ -231,8 +231,6 @@
 				(:name popup :website "https://github.com/auto-complete/popup-el" :description "Visual Popup Interface Library for Emacs" :type github :pkgname "auto-complete/popup-el"))
  (popwin status "installed" recipe
 				 (:name popwin :description "Popup Window Manager." :website "https://github.com/m2ym/popwin-el" :type github :pkgname "m2ym/popwin-el"))
- (processing-mode status "installed" recipe
-									(:name processing-mode :description "Processing mode for Emacs. Written by Rudolf Olah. This mode is a derivative of the java-mode. It adds key-bindings for running/compiling Processing sketches and it also highlights keywords found in the Processing language, such as ``setup'', ``draw'', and ``frameRate''." :type git :url "https://git.gitorious.org/processing-emacs/processing-emacs.git" :features processing-mode))
  (pymacs status "installed" recipe
 				 (:name pymacs :description "Interface between Emacs Lisp and Python" :type github :pkgname "pinard/Pymacs" :prepare
 								(progn

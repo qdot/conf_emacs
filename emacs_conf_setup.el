@@ -4,6 +4,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setq mswindows-p (string-match "windows" (symbol-name system-type)))
+(setq macosx-p (string-match "darwin" (symbol-name system-type)))
+(setq linux-p (string-match "gnu/linux" (symbol-name system-type)))
+
 ;; Turn off start message
 
 (setq inhibit-start-message t)
@@ -13,8 +17,6 @@
 
 (setq visible-bell nil)
 (setq ring-bell-function 'ignore)
-
-(setq message-log-max 5000)
 
 ;; Platform fonts and meta keys
 
@@ -60,15 +62,6 @@
 (defvar backup-dir (concat user-emacs-directory "backups/"))
 (make-directory backup-dir t)
 (setq backup-directory-alist (list (cons "." backup-dir)))
-
-;; show marks for regions
-
-(setq transient-mark-mode t)
-
-;; setup common tab width
-
-(setq tab-width 3)
-(setq standard-indent 3)
 
 ;; Modeline and display setup
 
@@ -241,17 +234,8 @@
     (custom-set-variables
      '(magit-git-executable "/usr/local/git/bin/git")))
 
-;; If something updates under us and we haven't changed the buffer
-;; ourselves, reload without asking. Handy for git.
-(setq global-auto-revert-mode t)
-
 ;; Turn on narrowing
 (put 'narrow-to-region 'disabled nil)
-
-;; Turn on easy-pg
-;; (require 'epa-file)
-;; (epa-file-enable)
-;; (setq epa-file-cache-passphrase-for-symmetric-encryption t)
 
 ;; Twittering additions
 (add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
