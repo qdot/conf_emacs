@@ -1,12 +1,6 @@
 #+TITLE: qDot's Emacs Configuration
 #+OPTIONS: toc:nil num:nil ^:nil
 #+PROPERTY: comments both
-* Configuration Load Timing
-
-#+begin_src emacs-lisp
-(defvar *emacs-load-start* (current-time))
-#+end_src
-
 * Directory Configuration
 Setting up a few different variables for the different types of
 directories we have (configurations, locally stored versus el-get
@@ -14,25 +8,30 @@ fetched libs, etc...)
 
 - Set up the base configuration directory
 #+begin_src emacs-lisp
-  (setq qdot/emacs-conf-dir (file-name-directory (or load-file-name (buffer-file-name))))
+  (defconst qdot/emacs-conf-dir
+    (file-name-directory (or load-file-name (buffer-file-name)))
+    "Directory for emacs configuration")
 #+end_src
 
 - Manually installed/maintained elisp directory
 #+begin_src emacs-lisp
-  (setq qdot/emacs-elisp-dir (expand-file-name
-            (concat qdot/emacs-conf-dir "elisp/")))
+  (defconst qdot/emacs-elisp-dir
+    (expand-file-name (concat qdot/emacs-conf-dir "elisp/"))
+    "Directory for manually installed/maintained elisp files")
 #+end_src
 
 - Non-elisp scripts directory
 #+begin_src emacs-lisp
-  (setq qdot/emacs-scripts-dir (expand-file-name
-              (concat qdot/emacs-conf-dir "scripts/")))
+  (defconst qdot/emacs-scripts-dir
+    (expand-file-name (concat qdot/emacs-conf-dir "scripts/"))
+    "Directory for non-elisp scripts")
 #+end_src
 
 - el-get packages directory
 #+begin_src emacs-lisp
-  (setq qdot/emacs-autoinst-elisp-dir (expand-file-name
-               (concat qdot/emacs-conf-dir "elisp_auto/")))
+  (defconst qdot/emacs-autoinst-elisp-dir
+    (expand-file-name (concat qdot/emacs-conf-dir "elisp_auto/"))
+    "Directory for el-get elisp packages")
 #+end_src
 
 - As of emacs 23, ~/.emacs.d is user-emacs-directory
@@ -54,18 +53,18 @@ fetched libs, etc...)
 ** Close all buffers
 #+begin_src emacs-lisp
   (defun close-all-buffers ()
+    "Close all currently open buffers"
     (interactive)
     (mapc 'kill-buffer (buffer-list)))
 #+end_src
 
 ** Unfill paragraph
-Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph
-Takes a multi-line paragraph and makes it into a single line of text.
 #+begin_src emacs-lisp
-  (defun unfill-paragraph ()
-    (interactive)
-    (let ((fill-column (point-max)))
-      (fill-paragraph nil)))
+    (defun unfill-paragraph ()
+      "Takes a multi-line paragraph and makes it into a single line of text."
+      (interactive)
+      (let ((fill-column (point-max)))
+        (fill-paragraph nil)))
 #+end_src
 
 ** Ask before quitting
@@ -80,11 +79,11 @@ Takes a multi-line paragraph and makes it into a single line of text.
 ** Reload file with current position saved
 #+begin_src emacs-lisp
   (defun reload-file ()
+    "Reload a file, resetting the cursor to the current position"
     (interactive)
     (let ((curr-scroll (window-vscroll)))
       (find-file (buffer-name))
-      (set-window-vscroll nil curr-scroll)
-      (message "Reloaded file")))
+      (set-window-vscroll nil curr-scroll)))
 #+end_src
 
 ** Show just matches instead of everything in occur buffer
@@ -136,14 +135,16 @@ http://nflath.com/2009/08/tramp/
 
 #+begin_src emacs-lisp
   (defun sudo-edit (&optional arg)
+    "Open file as root and edit via tramp"
     (interactive "p")
     (if arg
         (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
       (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
   (defun sudo-edit-current-file ()
+    "Open file in current buffer as root and edit via tramp"
     (interactive)
     (let ((pos (point)))
-      (find-alternate-file 
+      (find-alternate-file
        (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer))))
       (goto-char pos)))
 #+end_src
@@ -177,6 +178,7 @@ http://trey-jackson.blogspot.com/2010/04/emacs-tip-36-abort-minibuffer-when.html
     "kill the minibuffer"
     (when (>= (recursion-depth) 1)
       (abort-recursive-edit)))
+  ;; Whenever a mouse click has happened, clear the minibuffer
   (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 #+end_src
 
@@ -201,6 +203,7 @@ http://stackoverflow.com/questions/2238418/emacs-lisp-how-to-get-buffer-major-mo
 ** Open current buffer file in browser
 #+begin_src emacs-lisp
   (defun qdot/open-in-browser()
+    "Open current file in browser"
     (interactive)
     (let ((filename (buffer-file-name)))
       (browse-url (concat "file://" filename))))
@@ -239,6 +242,7 @@ http://blog.tuxicity.se/elisp/emacs/2010/11/16/delete-file-and-buffer-in-emacs.h
 ** Insert a uuid at current position using uuidgen
 #+begin_src emacs-lisp
   (defun qdot/insert-uuid ()
+    "Use uuidgen to insert a uuid at point"
     (interactive)
     (shell-command-on-region (point) (point) "uuidgen" t)
     (delete-backward-char 1))
@@ -247,13 +251,14 @@ http://blog.tuxicity.se/elisp/emacs/2010/11/16/delete-file-and-buffer-in-emacs.h
 ** Clear kill ring
 #+begin_src emacs-lisp
   (defun qdot/clear-kill-ring ()
+    "Clear the kill ring variable"
     (setq kill-ring nil))
 #+end_src
 
 ** Override org-agenda-open-in-other-window
-Used to make org-agenda pop into the large window available on the agenda workgroup.
 #+begin_src emacs-lisp
   (defun qdot/org-agenda-open-in-other-window()
+    "Used for opening org files in the agenda in another window instead of over the agenda"
     (interactive)
     (when (and workgroups-mode
          (eq (wg-get-workgroup "agenda") (wg-current-workgroup)))
@@ -263,16 +268,16 @@ Used to make org-agenda pop into the large window available on the agenda workgr
     (org-agenda-switch-to))
 #+end_src
 
-
 ** Firefox Setup
-
 #+begin_src emacs-lisp
   (defun qdot/set-firefox-trunk ()
+    "Set default browser to firefox-trunk regardless of OS default"
     (interactive)
     (if linux-p
         (custom-set-variables '(browse-url-firefox-program "firefox-trunk"))))
   
   (defun qdot/set-firefox ()
+    "Set default browser to firefox regardless of OS default"
     (interactive)
     (if linux-p
         (custom-set-variables '(browse-url-firefox-program "firefox"))))
@@ -323,12 +328,12 @@ Load cedet first, otherwise we'll conflict against the 1.1 repo stuff
 #+end_src
 
 ** Global font setup
+We know we have consolas on OS X, so use it
+
+We also need to do this as near the beginning as possible, since it crashes otherwise?
 
 #+begin_src emacs-lisp
-;; Platform fonts and meta keys
-;; We know we have consolas on OS X, so use it
-;; We also need to do this as near the beginning as possible, since it crashes
-;; otherwise?
+
 (defun qdot/set-platform-font ()
   "Set the default font for the system type."
   (interactive)
@@ -340,7 +345,6 @@ Load cedet first, otherwise we'll conflict against the 1.1 repo stuff
     (when (member "Inconsolata" (font-family-list))
       (set-face-font 'default "inconsolata-11"))))
 
-;; (qdot/set-platform-font)
 #+end_src
 
 ** Platform specific meta keys
@@ -377,11 +381,11 @@ directory. Emacs will mkdir it if necessary.)
 #+end_src
 
 ** Modeline and display setup
+Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/improving-performance-emacs-display-engine/
 #+begin_src emacs-lisp
   (setq display-time-24hr-format t)
   (setq display-time-day-and-date t)
   (setq transient-mark-mode t)
-  ;; http://www.masteringemacs.org/articles/2011/10/02/improving-performance-emacs-display-engine/
   (setq redisplay-dont-pause t)
   (display-time)
   (line-number-mode t)
@@ -394,7 +398,6 @@ directory. Emacs will mkdir it if necessary.)
 
 ** Other setup
 #+begin_src emacs-lisp
-  (setq indent-tabs-mode nil)
   ;; period single space ends sentence
   (setq sentence-end-double-space nil)
   (setq default-directory "~")
@@ -406,13 +409,11 @@ directory. Emacs will mkdir it if necessary.)
      x-select-enable-clipboard t
      interprogram-paste-function 'x-cut-buffer-or-selection-value
      ))
+  
   (set-default 'indicate-empty-lines t)
-  
   (global-auto-revert-mode t)
-  
   ;; Transparently open compressed files
   (auto-compression-mode t)
-  
   ;; Save a list of recent files visited.
   (recentf-mode 1)
 #+end_src
