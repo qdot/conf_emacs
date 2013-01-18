@@ -50,34 +50,2214 @@ fetched libs, etc...)
   (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 #+end_src
 
-* Library file loading
+* Utility Functions
+** Close all buffers
 #+begin_src emacs-lisp
-  (org-babel-load-file (concat qdot/emacs-conf-dir "emacs_conf_setup.org"))
-  ;; (org-babel-load-file (concat qdot/emacs-conf-dir "emacs_conf_elget.org"))
-  ;; (org-babel-load-file (concat qdot/emacs-conf-dir "emacs_conf_exts.org"))
-  ;; (org-babel-load-file (concat qdot/emacs-conf-dir "emacs_conf_funcs.org"))
-  
-  (setq lib-files
-        (list
-         custom-file
-  
-         ;; Package specific setup
-         "emacs_conf_wg.el"
-         "emacs_conf_org_mode.el"
-         "emacs_conf_erc.el"
-         "emacs_conf_gnus.el"
-         "emacs_conf_notify.el"
-  
-         ;; Programming related stuff
-         "emacs_conf_programming.el"
-  
-         ;; bind/automodes as late as possible, so we already have
-         ;; everything in that we're going to load
-         "emacs_conf_binds.el"
-         "emacs_conf_automode.el"))
-  
-  (mapcar 'load-library lib-files)
+  (defun close-all-buffers ()
+    (interactive)
+    (mapc 'kill-buffer (buffer-list)))
 #+end_src
+
+** Unfill paragraph
+Stefan Monnier <foo at acm.org>. It is the opposite of fill-paragraph
+Takes a multi-line paragraph and makes it into a single line of text.
+#+begin_src emacs-lisp
+  (defun unfill-paragraph ()
+    (interactive)
+    (let ((fill-column (point-max)))
+      (fill-paragraph nil)))
+#+end_src
+
+** Ask before quitting
+#+begin_src emacs-lisp
+  (defun ask-before-quit ()
+    "Ask me before I quit emacs if I think that's a good thing to do"
+    (interactive)
+    (yes-or-no-p "Do you really want to quit Emacs?"))
+  (add-hook 'kill-emacs-query-functions 'ask-before-quit)
+#+end_src
+
+** Reload file with current position saved
+#+begin_src emacs-lisp
+  (defun reload-file ()
+    (interactive)
+    (let ((curr-scroll (window-vscroll)))
+      (find-file (buffer-name))
+      (set-window-vscroll nil curr-scroll)
+      (message "Reloaded file")))
+#+end_src
+
+** Show just matches instead of everything in occur buffer
+#+begin_src emacs-lisp
+  (defun occurrences (regexp &rest ignore)
+    "Show all matches for REGEXP in an `occur' buffer."
+    ;; keep text covered by occur-prefix and match text-properties
+    (interactive (occur-read-primary-args))
+    (occur regexp)
+    (with-current-buffer (get-buffer "*Occur*")
+      (let ((inhibit-read-only t)
+      delete-from
+      pos)
+        (save-excursion
+    (while (setq pos (next-property-change (point)))
+      (goto-char pos)
+      (if (not (or (get-text-property (point) 'occur-prefix)
+             (get-text-property (point) 'occur-match)))
+          (if delete-from
+        (delete-region delete-from (point))
+      (setq delete-from (point)))
+        (when delete-from
+          (delete-region delete-from (point))
+          (if (get-text-property (point) 'occur-prefix)
+        (insert "\n")
+      (insert " ")))
+        (setq delete-from nil)))))))
+#+end_src
+
+** Make kill-ring-save/kill-region smarter based on mark position
+#+begin_src emacs-lisp
+  (defadvice kill-ring-save (before slick-copy activate compile)
+    "When called interactively with no active region, copy a single line instead."
+    (interactive
+     (if mark-active (list (region-beginning) (region-end))
+       (message "Copied line")
+       (list (line-beginning-position)
+       (line-beginning-position 2)))))
+  (defadvice kill-region (before slick-cut activate compile)
+    "When called interactively with no active region, kill a single line instead."
+    (interactive
+     (if mark-active (list (region-beginning) (region-end))
+       (list (line-beginning-position)
+       (line-beginning-position 2)))))
+#+end_src
+
+** Edit files as root
+http://nflath.com/2009/08/tramp/
+
+#+begin_src emacs-lisp
+  (defun sudo-edit (&optional arg)
+    (interactive "p")
+    (if arg
+        (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+  (defun sudo-edit-current-file ()
+    (interactive)
+    (let ((pos (point)))
+      (find-alternate-file 
+       (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer))))
+      (goto-char pos)))
+#+end_src
+
+** Rename a file and the buffer it's in at the same time
+Via yeggeconf http://sites.google.com/site/steveyegge2/my-dot-emacs-file
+
+#+begin_src emacs-lisp
+  (defun rename-file-and-buffer ()
+    "Renames current buffer and file it is visiting."
+    (interactive)
+    (let ((name (buffer-name))
+          (filename (buffer-file-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (message "Buffer '%s' is not visiting a file!" name)
+        (let ((new-name (read-file-name "New name: " filename)))
+          (cond ((get-buffer new-name)
+                 (message "A buffer named '%s' already exists!" new-name))
+                (t
+                 (rename-file name new-name 1)
+                 (rename-buffer new-name)
+                 (set-visited-file-name new-name)
+                 (set-buffer-modified-p nil)))))))
+#+end_src
+
+** Abort minibuffer when mousing
+http://trey-jackson.blogspot.com/2010/04/emacs-tip-36-abort-minibuffer-when.html
+
+#+begin_src emacs-lisp
+  (defun stop-using-minibuffer ()
+    "kill the minibuffer"
+    (when (>= (recursion-depth) 1)
+      (abort-recursive-edit)))
+  (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
+#+end_src
+
+** Simple filter function
+http://www.emacswiki.org/emacs/ElispCookbook
+#+begin_src emacs-lisp
+  (defun qdot/filter (condp lst)
+    (delq nil
+    (mapcar (lambda (x) (and (funcall condp x) x)) lst)))
+#+end_src
+
+** Return major mode of a buffer
+http://stackoverflow.com/questions/2238418/emacs-lisp-how-to-get-buffer-major-mode
+#+begin_src emacs-lisp
+  (defun qdot/buffer-mode (buffer-or-string)
+    "Returns the major mode associated with a buffer."
+    (save-excursion
+      (set-buffer buffer-or-string)
+      major-mode))
+#+end_src
+
+** Open current buffer file in browser
+#+begin_src emacs-lisp
+  (defun qdot/open-in-browser()
+    (interactive)
+    (let ((filename (buffer-file-name)))
+      (browse-url (concat "file://" filename))))
+#+end_src
+
+** Evaluate and replace preceding sexp
+#+begin_src emacs-lisp
+  (defun eval-and-replace ()
+    "Replace the preceding sexp with its value."
+    (interactive)
+    (backward-kill-sexp)
+    (condition-case nil
+        (prin1 (eval (read (current-kill 0)))
+               (current-buffer))
+      (error (message "Invalid expression")
+             (insert (current-kill 0)))))
+#+end_src
+
+** Delete current buffer and file
+http://blog.tuxicity.se/elisp/emacs/2010/11/16/delete-file-and-buffer-in-emacs.html
+#+begin_src emacs-lisp
+  (defun delete-buffer-and-file ()
+    "Removes file connected to current buffer and kills buffer."
+    (interactive)
+    (let ((filename (buffer-file-name))
+          (buffer (current-buffer))
+          (name (buffer-name)))
+      (if (not (and filename (file-exists-p filename)))
+          (error "Buffer '%s' is not visiting a file!" name)
+        (when (yes-or-no-p "Are you sure you want to remove this file? ")
+          (delete-file filename)
+          (kill-buffer buffer)
+          (message "File '%s' successfully removed" filename)))))
+#+end_src
+
+** Insert a uuid at current position using uuidgen
+#+begin_src emacs-lisp
+  (defun qdot/insert-uuid ()
+    (interactive)
+    (shell-command-on-region (point) (point) "uuidgen" t)
+    (delete-backward-char 1))
+#+end_src
+
+** Clear kill ring
+#+begin_src emacs-lisp
+  (defun qdot/clear-kill-ring ()
+    (setq kill-ring nil))
+#+end_src
+
+** Override org-agenda-open-in-other-window
+Used to make org-agenda pop into the large window available on the agenda workgroup.
+#+begin_src emacs-lisp
+  (defun qdot/org-agenda-open-in-other-window()
+    (interactive)
+    (when (and workgroups-mode
+         (eq (wg-get-workgroup "agenda") (wg-current-workgroup)))
+      (setq pop-up-windows nil)
+      (org-agenda-switch-to)
+      (setq pop-up-windows t))
+    (org-agenda-switch-to))
+#+end_src
+
+
+** Firefox Setup
+
+#+begin_src emacs-lisp
+  (defun qdot/set-firefox-trunk ()
+    (interactive)
+    (if linux-p
+        (custom-set-variables '(browse-url-firefox-program "firefox-trunk"))))
+  
+  (defun qdot/set-firefox ()
+    (interactive)
+    (if linux-p
+        (custom-set-variables '(browse-url-firefox-program "firefox"))))
+#+end_src
+
+** Byte compile elisp when saved
+Byte compile the current buffer on save if a byte compiled version
+already exists.
+
+#+begin_src emacs-lisp
+  (defun qdot/byte-compile-current-buffer ()
+    "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
+    (interactive)
+    (when (and (eq major-mode 'emacs-lisp-mode)
+               (file-exists-p (byte-compile-dest-file buffer-file-name)))
+      (byte-compile-file buffer-file-name)))
+  
+  (add-hook 'after-save-hook 'qdot/byte-compile-current-buffer)
+#+end_src
+
+
+* Basic Variables and Modes
+** Platform Variables
+Set up some simple platform finding variables that may or may not work
+#+begin_src emacs-lisp
+(setq mswindows-p (string-match "windows" (symbol-name system-type)))
+(setq macosx-p (string-match "darwin" (symbol-name system-type)))
+(setq linux-p (string-match "gnu/linux" (symbol-name system-type)))
+#+end_src
+
+** CEDET Loading
+Load cedet first, otherwise we'll conflict against the 1.1 repo stuff
+
+#+begin_src emacs-lisp
+(load-file (concat qdot/emacs-autoinst-elisp-dir "cedet/cedet-devel-load.el"))
+#+end_src
+
+** Start/Splash Inhibit
+#+begin_src emacs-lisp
+(setq inhibit-start-message t)
+(setq inhibit-splash-screen t)
+#+end_src
+
+** Turn off Bell Functions
+#+begin_src emacs-lisp
+(setq visible-bell nil)
+(setq ring-bell-function 'ignore)
+#+end_src
+
+** Global font setup
+
+#+begin_src emacs-lisp
+;; Platform fonts and meta keys
+;; We know we have consolas on OS X, so use it
+;; We also need to do this as near the beginning as possible, since it crashes
+;; otherwise?
+(defun qdot/set-platform-font ()
+  "Set the default font for the system type."
+  (interactive)
+  (when macosx-p
+    (set-face-font 'default "consolas-11"))
+  (when mswindows-p
+    (set-face-font 'default "consolas-8"))
+  (when linux-p
+    (when (member "Inconsolata" (font-family-list))
+      (set-face-font 'default "inconsolata-11"))))
+
+;; (qdot/set-platform-font)
+#+end_src
+
+** Platform specific meta keys
+#+begin_src emacs-lisp
+(when macosx-p
+  ;;Change meta to alt
+  (setq mac-command-modifier 'meta)
+  ;;avoid hiding with M-h
+  (setq mac-pass-command-to-system nil))
+(when linux-p
+  (setq x-alt-keysym 'meta))
+#+end_src
+
+** Autosave setup
+Put autosave files (ie #foo#) in one place, *not* scattered all over
+the file system
+#+begin_src emacs-lisp
+(defvar autosave-dir (concat user-emacs-directory "autosaves/"))
+(make-directory autosave-dir t)
+(defun auto-save-file-name-p (filename)
+  (string-match "^#.*#$" (file-name-nondirectory filename)))
+#+end_src
+
+** Backup file setup
+Put backup files (ie foo~) in one place too. (The
+backup-directory-alist list contains regexp=>directory mappings;
+filenames matching a regexp are backed up in the corresponding
+directory. Emacs will mkdir it if necessary.)
+
+#+begin_src emacs-lisp
+(defvar backup-dir (concat user-emacs-directory "backups/"))
+(make-directory backup-dir t)
+(setq backup-directory-alist (list (cons "." backup-dir)))
+#+end_src
+
+** Modeline and display setup
+#+begin_src emacs-lisp
+  (setq display-time-24hr-format t)
+  (setq display-time-day-and-date t)
+  (setq transient-mark-mode t)
+  ;; http://www.masteringemacs.org/articles/2011/10/02/improving-performance-emacs-display-engine/
+  (setq redisplay-dont-pause t)
+  (display-time)
+  (line-number-mode t)
+  (column-number-mode t)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (blink-cursor-mode -1)
+  (global-font-lock-mode 1)
+#+end_src
+
+** Other setup
+#+begin_src emacs-lisp
+  (setq indent-tabs-mode nil)
+  ;; period single space ends sentence
+  (setq sentence-end-double-space nil)
+  (setq default-directory "~")
+  (setq message-log-max 5000)
+  
+  (when linux-p
+    (setq
+     ;; copy emacs clipboard to system
+     x-select-enable-clipboard t
+     interprogram-paste-function 'x-cut-buffer-or-selection-value
+     ))
+  (set-default 'indicate-empty-lines t)
+  
+  (global-auto-revert-mode t)
+  
+  ;; Transparently open compressed files
+  (auto-compression-mode t)
+  
+  ;; Save a list of recent files visited.
+  (recentf-mode 1)
+#+end_src
+
+* El-get
+Sets up variables for storage locations and status files. If el-get
+doesn't currently exist on the system, it downloads the initialization
+file and tries to install it. After that, it will pull all packages in
+the status file. This is useful for rebuilding from scratch in the git
+repo, though it can take a really, really, REALLY long time.
+
+#+begin_src emacs-lisp
+  (add-to-list 'load-path (expand-file-name (concat qdot/emacs-autoinst-elisp-dir "el-get")))
+  (setq el-get-dir qdot/emacs-autoinst-elisp-dir)
+  (setq el-get-verbose t)
+  (setq el-get-status-file (expand-file-name (concat qdot/emacs-conf-dir "elget-status.el")))
+  
+  (unless (require 'el-get nil t)
+    (url-retrieve
+     "https://github.com/dimitri/el-get/raw/master/el-get-install.el"
+     (lambda (s)
+       (end-of-buffer)
+       (eval-print-last-sexp))))
+  
+  (el-get)
+#+end_src
+
+* External Packages
+** quick-yes
+Use M-y and M-n in y-or-n minibuffer prompts
+#+begin_src emacs-lisp
+  (require 'quick-yes)
+#+end_src
+
+** icomplete
+#+begin_src emacs-lisp
+  (icomplete-mode 1)
+  (setq icomplete-compute-delay 0)
+#+end_src
+
+** scel
+#+begin_src emacs-lisp
+  (when (file-exists-p "~/.emacs_files/elisp_local/scel")
+    (when macosx-p
+      ;; Assume we're on a mac with SuperCollider in the normal spot
+      (when (file-exists-p "/Applications/SuperCollider/sclang")
+        (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/scel/el"))
+        (custom-set-variables
+         '(sclang-auto-scroll-post-buffer t)
+         '(sclang-eval-line-forward nil)
+         '(sclang-help-path (quote ("/Applications/SuperCollider/Help")))
+         '(sclang-runtime-directory "~/.sclang/")
+         '(sclang-program "/Applications/SuperCollider/sclang"))
+        (require 'sclang))))
+#+end_src
+
+** color-theme
+#+begin_src emacs-lisp
+  (color-theme-initialize)
+  (color-theme-dark-laptop)     
+#+end_src
+
+** sml-modeline (scroll percentage info)
+Modeline decorator to get rid of the horizontal scrollbar
+
+Via http://emacs-fu.blogspot.com/2010/03/showing-buffer-position-in-mode-line.html
+
+#+begin_src emacs-lisp
+  (if (require 'sml-modeline nil 'noerror)    ;; use sml-modeline if available
+      (progn 
+        (sml-modeline-mode 1)                   ;; show buffer pos in the mode line
+        (scroll-bar-mode -1))                   ;; turn off the scrollbar
+    (scroll-bar-mode 1)                       ;; otherwise, show a scrollbar...
+    (set-scroll-bar-mode 'right))             ;; ... on the right
+#+end_src
+
+** auto-complete
+#+begin_src emacs-lisp
+  (require 'auto-complete-config)
+  (ac-config-default)
+  (ac-flyspell-workaround)
+  (ac-linum-workaround)
+  (global-auto-complete-mode t)
+  (setq ac-auto-start 3)
+  (setq ac-dwim t)
+  (set-default 'ac-sources '(ac-source-yasnippet)) ;; ac-source-semantic))
+  (defun ielm-auto-complete ()
+    "Enables `auto-complete' support in \\[ielm]."
+    (setq ac-sources '(ac-source-functions
+           ac-source-variables
+           ac-source-features
+           ac-source-symbols
+           ac-source-words-in-same-mode-buffers))
+    (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
+    (auto-complete-mode 1))
+  (add-hook 'ielm-mode-hook 'ielm-auto-complete)
+  (define-key ac-complete-mode-map [tab] 'ac-expand)
+#+end_src
+
+** recentf
+http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
+
+#+begin_src emacs-lisp
+  (require 'recentf)
+  
+  ;; get rid of `find-file-read-only' and replace it with something
+  ;; more useful.
+  (defun ido-recentf-open ()
+    "Use `ido-completing-read' to \\[find-file] a recent file"
+    (interactive)
+    (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+        (message "Opening file...")
+      (message "Aborting")))
+  
+  (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+  
+  ;; enable recent files mode.
+  (recentf-mode t)
+  
+  ;; 50 files ought to be enough.
+  (setq recentf-max-saved-items 50)
+  
+  ;; link numbering for twittering mode
+  (add-hook 'eshell-preoutput-filter-functions
+      'ansi-color-filter-apply)
+#+end_src
+
+** twittering-mode
+#+begin_src emacs-lisp
+(require 'twittering-numbering)
+(add-hook 'twittering-mode-hook 'twittering-numbering)
+(setq twittering-icon-mode t)
+(setq twittering-timer-interval 600)
+(setq twittering-url-show-status nil)
+(add-hook 'twittering-edit-mode-hook (lambda () 
+				       (ispell-minor-mode) 
+				       (flyspell-mode)))
+#+end_src
+
+** bbdb
+#+begin_src emacs-lisp
+;; (bbdb-initialize 'gnus 'message)
+;; (bbdb-mua-auto-update-init 'gnus 'message)
+(setq bbdb-phone-style 'nil)
+#+end_src
+
+** calfw
+#+begin_src emacs-lisp
+(require 'org-compat)
+;; (require 'calfw)
+;; (require 'calfw-org)
+#+end_src
+
+** popwin
+#+begin_src emacs-lisp
+;; (require 'popwin)
+;; (setq display-buffer-function 'popwin:display-buffer)
+#+end_src
+
+** yasnippet
+#+begin_src emacs-lisp
+;; This will completely shit itself on HEAD as of 24.3 due to silly macro
+;; definitions for called-interactively-p. Currently commenting those out in
+;; yasnippet itself.
+(require 'yasnippet)
+(yas-global-mode 1)
+(yas/load-directory "~/.emacs_files/elisp_auto/yasnippet/snippets")
+#+end_src
+
+** diminish
+#+begin_src emacs-lisp
+(require 'diminish)
+(diminish 'yas-minor-mode " y")
+;; (diminish 'org-indent-mode " i")
+(diminish 'workgroups-mode " ω")
+(diminish 'auto-complete-mode " α")
+#+end_src
+
+
+** ido
+#+begin_src emacs-lisp
+  (require 'ido)
+  (ido-mode t)
+  (ido-everywhere t)
+  (setq ido-enable-flex-matching t)
+  (setq ido-execute-command-cache nil)
+  (setq ido-create-new-buffer 'always)
+#+end_src
+
+** uniquify
+#+begin_src emacs-lisp
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'reverse)
+(setq uniquify-separator "|")
+(setq uniquify-after-kill-buffer-p t)
+(setq uniquify-ignore-buffers-re "^\\*")
+#+end_src
+
+** windmove
+#+begin_src emacs-lisp
+(require 'windmove)
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
+#+end_src
+
+** saveplace
+Make sure I always come back to the same place in a file
+http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
+
+#+begin_src emacs-lisp
+(setq-default save-place t)
+(require 'saveplace)
+#+end_src
+
+** tramp
+#+begin_src emacs-lisp
+(require 'tramp)
+(setq tramp-default-method "ssh")
+#+end_src
+
+** ibuffer
+#+begin_src emacs-lisp
+  (require 'ibuffer)
+  (setq ibuffer-default-sorting-mode 'major-mode)
+  (setq ibuffer-always-show-last-buffer t)
+  (setq ibuffer-view-ibuffer t)
+  (setq ibuffer-show-empty-filter-groups nil)
+  
+  ;; Set up buffer groups based on file and mode types
+  (setq ibuffer-saved-filter-groups
+        (quote (("default"
+                 ("Org" (mode . org-mode))
+                 ("ERC" (mode . erc-mode))
+                 ("Emacs Setup" (or
+                                 (filename . "/.emacs_files/")
+                                 (filename . "/.emacs_d/")
+                                 (filename . "/emacs_d/")))
+                 ("magit" (name . "magit"))
+                 ("dired" (mode . dired-mode))
+                 ("work projects" (filename . "/mozbuild/"))
+                 ("home projects" (filename . "/git-projects/"))
+                 ("emacs" (or
+                           (name . "^\\*scratch\\*$")
+                           (name . "^\\*Messages\\*$")))))))
+  
+  ;; Make sure we're always using our buffer groups
+  (add-hook 'ibuffer-mode-hook
+            (lambda ()
+              (ibuffer-switch-to-saved-filter-groups "default")))
+#+end_src
+
+** ansi-color
+#+begin_src emacs-lisp
+(require 'ansi-color)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+#+end_src
+
+** dired
+#+begin_src emacs-lisp
+;; dired modifications
+
+;; one dired buffer, damnit
+;; taken from http://bitbucket.org/kcfelix/emacsd/src/tip/init.el
+(defun qdot/dired-init ()
+  "Bunch of stuff to run for dired, either immediately or when it's
+        loaded."
+  (define-key dired-mode-map (kbd "C-s") 'dired-isearch-filenames-regexp)
+  (define-key dired-mode-map (kbd "C-M-s") 'dired-isearch-filenames)
+  (define-key dired-mode-map [return] 'joc-dired-single-buffer)
+  (define-key dired-mode-map "v" 'joc-dired-single-buffer)
+  (define-key dired-mode-map [mouse-1] 'joc-dired-single-buffer-mouse)
+  (define-key dired-mode-map "^"
+    (function
+     (lambda nil (interactive) (joc-dired-single-buffer "..")))))
+
+;; if dired's already loaded, then the keymap will be bound
+(if (boundp 'dired-mode-map)
+    ;; we're good to go; just add our bindings
+    (qdot/dired-init)
+  ;; it's not loaded yet, so add our bindings to the load-hook
+  (add-hook 'dired-load-hook 'qdot/dired-init))
+
+;; Additions to dired
+;; http://nflath.com/2009/07/dired/
+
+(require 'dired-x)
+(require 'wdired)
+(setq wdired-allow-to-change-permissions 'advanced)
+(define-key dired-mode-map	      	      (kbd "r")		'wdired-change-to-wdired-mode)
+
+;;Updated file system on all buffer switches if in dired mode
+(defadvice switch-to-buffer-other-window (after auto-refresh-dired (buffer &optional norecord) activate)
+  (if (equal major-mode 'dired-mode)
+      (revert-buffer)))
+(defadvice switch-to-buffer (after auto-refresh-dired (buffer &optional norecord) activate)
+  (if (equal major-mode 'dired-mode)
+      (revert-buffer)))
+(defadvice display-buffer (after auto-refresh-dired (buffer &optional not-this-window frame)  activate)
+  (if (equal major-mode 'dired-mode)
+      (revert-buffer)))
+(defadvice other-window (after auto-refresh-dired (arg &optional all-frame) activate)
+  (if (equal major-mode 'dired-mode)
+      (revert-buffer)))
+#+end_src
+
+** magit
+(if macosx-p
+    (custom-set-variables
+     '(magit-git-executable "/usr/local/git/bin/git")))
+
+;; Turn on narrowing
+(put 'narrow-to-region 'disabled nil)
+
+** easy-pg
+#+begin_src emacs-lisp
+;; Turn on easy-pg
+;; (require 'epa-file)
+;; (epa-file-enable)
+;; (setq epa-file-cache-passphrase-for-symmetric-encryption t)
+#+end_src
+
+** twittering-mode
+#+begin_src emacs-lisp
+;; Twittering additions
+(add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
+#+end_src
+
+** mu4e
+#+begin_src emacs-lisp
+(setq mu4e-maildir "~/Mail") ;; top-level Maildir
+(setq mu4e-html2text-command "w3m -dump -T text/html")
+(setq mu4e-view-prefer-html t)
+#+end_src
+
+** sauron
+#+begin_src emacs-lisp
+(setq sauron-separate-frame nil)
+#+end_src
+
+
+** workgroups
+#+begin_src emacs-lisp
+  ;; Set the prefix key to tilde, what I normally use in screen
+  (setq wg-prefix-key "`")
+  ;; Turn off animations
+  (setq wg-morph-on nil)
+  ;; Turn off saving on exit
+  (setq wg-emacs-exit-save-behavior nil)
+  ;; Turn off reloading of workgroup file lists
+  (setq wg-restore-associated-buffers nil)
+  
+  (setq wg-switch-to-first-workgroup-on-find-session-file nil)
+  
+  ;; Due to some buffers having issues when reloading (erc), uids start
+  ;; to mismatch which massively trips up workgroups. This is function
+  ;; redefinition allows us to set the action when a mismatch happens.
+  
+  (defvar wg-error-on-uid-mismatch t
+    "Whether or not we should throw an error when buffer uids
+  mismatch, or just throw a message and reset them to what we think
+  they should be.")
+  
+  (setq wg-error-on-uid-mismatch nil)
+  
+  (defun wg-set-buffer-uid-or-error (uid &optional buffer)
+    "Set BUFFER's buffer local value of `wg-buffer-uid' to UID.
+  If BUFFER already has a buffer local value of `wg-buffer-uid',
+  and it's not equal to UID, error."
+    (if wg-buffer-uid
+        (if (string= wg-buffer-uid uid) uid
+    (if wg-error-on-uid-mismatch
+        (error "uids don't match %S and %S for %S" 
+         uid wg-buffer-uid
+         (if buffer (buffer-name buffer) 
+           (buffer-name (current-buffer))))
+      (setq wg-buffer-uid uid)
+      (message "uids don't match %S and %S for %S" 
+         uid wg-buffer-uid
+         (if buffer (buffer-name buffer) 
+           (buffer-name (current-buffer))))))
+      (setq wg-buffer-uid uid)))
+  
+  (workgroups-mode 1)
+  
+  (defun qdot/wg-filter-buffer-list-by-not-major-mode (major-mode buffer-list)
+    "Return only those buffers in BUFFER-LIST in major-mode MAJOR-MODE."
+    (remove-if (lambda (mm) (eq mm major-mode))
+         buffer-list :key 'wg-buffer-major-mode))
+  
+  (defun qdot/wg-filter-buffer-list-by-erc-query (server buffer-list)
+    "Return only those buffers in BUFFER-LIST in major-mode MAJOR-MODE."
+    (remove-if-not (lambda (buf) (erc-query-buffer-p (get-buffer buf)))
+       buffer-list :key 'buffer-name))
+  
+  (defun qdot/wg-buffer-list-filter-not-irc (workgroup buffer-list)
+    "Return only those buffers in BUFFER-LIST in `erc-mode'."
+    (qdot/wg-filter-buffer-list-by-not-major-mode 'erc-mode buffer-list))
+  
+  (defun qdot/wg-buffer-list-filter-associated-not-irc (workgroup buffer-list)
+    "Return only those buffers in BUFFER-LIST in `erc-mode'."
+    (qdot/wg-filter-buffer-list-by-not-major-mode
+     'erc-mode (wg-buffer-list-filter-associated workgroup buffer-list)))
+  
+  
+  (defun qdot/wg-buffer-list-filter-erc-channel (workgroup buffer-list)
+    "Return only those buffers in BUFFER-LIST in `erc-mode'."
+    (wg-filter-buffer-list-by-regexp 
+     "^#" (wg-filter-buffer-list-by-major-mode 'erc-mode buffer-list)))
+  
+  (defun qdot/wg-buffer-list-filter-erc-query (workgroup buffer-list)
+    "Return only those buffers in BUFFER-LIST in `erc-mode'."
+    (qdot/wg-filter-buffer-list-by-erc-query 'erc-mode buffer-list))
+  
+  (add-to-list
+   'wg-buffer-list-filter-definitions
+   '(qdot/erc-query "qdot/erc-query" qdot/wg-buffer-list-filter-erc-query))
+  (add-to-list
+   'wg-buffer-list-filter-definitions
+   '(qdot/erc-irc "qdot/erc-channel" qdot/wg-buffer-list-filter-erc-channel))
+  (add-to-list
+   'wg-buffer-list-filter-definitions
+   '(qdot/not-irc "qdot/not-irc" qdot/wg-buffer-list-filter-not-irc))
+  
+  (add-to-list
+   'wg-buffer-list-filter-definitions
+   '(qdot/associated-not-irc "qdot/associated-not-irc" 
+           qdot/wg-buffer-list-filter-associated-not-irc))
+  
+  (defun qdot/wg-set-buffer-lists ()
+    (wg-set-workgroup-parameter (wg-get-workgroup "work") 
+                'wg-buffer-list-filter-order-alist 
+                '((default qdot/associated-not-irc qdot/not-irc all)))
+    (wg-set-workgroup-parameter (wg-get-workgroup "scratch")
+              'wg-buffer-list-filter-order-alist 
+              '((qdot/not-irc all)))
+    (wg-set-workgroup-parameter (wg-get-workgroup "erc") 
+              'wg-buffer-list-filter-order-alist 
+              '((default qdot/erc-irc all)))
+    (wg-set-workgroup-parameter (wg-get-workgroup "bitlbee") 
+              'wg-buffer-list-filter-order-alist 
+              '((default qdot/erc-query all))))
+  
+  (defun qdot/wg-load ()
+    (interactive)
+    (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el"))
+    (qdot/wg-set-buffer-lists))
+  
+  ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
+  ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))
+  
+  ;; (defvar qdot/reallocate-query-buffer-trigger t
+  ;;  "Used to know when to trigger a query buffer reallocation on workgroup change")
+  
+  ;; (defun qdot/trigger-reallocate-query-buffers (proc parsed)
+  ;;  (setq qdot/reallocate-query-buffer-trigger t))
+  
+  ;; (add-hook 'erc-server-PRIVMSG-functions 'qdot/trigger-reallocate-query-buffers)
+  
+  ;; ;; Auto-place IM windows when switching to bitlbee workgroup
+  ;; (add-hook 'wg-switch-to-workgroup-hook 
+  ;;    (lambda () 
+  ;;        (when (and qdot/reallocate-query-buffer-trigger
+  ;;                 (eq (wg-get-workgroup "bitlbee") (wg-current-workgroup)))
+  ;;        (qdot/bitlbee-resume-layout)
+  ;;        (setq qdot/reallocate-query-buffer-trigger nil))
+  ;;      (when (eq (wg-get-workgroup "erc") (wg-current-workgroup))
+  ;;        (qdot/erc-set-fill-columns))
+  ;;      (when (eq (wg-get-workgroup "mozilla") (wg-current-workgroup))
+  ;;        (qdot/erc-set-fill-columns))))
+#+end_src
+			  
+** org-mode
+#+begin_src emacs-lisp
+  (require 'org-checklist)
+  (require 'org-screen)
+  (require 'org-protocol)
+  (require 'org-mobile)
+  
+  (setq org-modules     (quote (org-bibtex
+                                org-crypt
+                                org-gnus
+                                org-id
+                                org-info
+                                org-jsinfo
+                                org-habit
+                                org-inlinetask
+                                org-irc
+                                org-protocol
+                                org-w3m)))
+  
+  ;; global STYLE property values for completion
+  (setq org-global-properties (quote (("STYLE_ALL" . "habit"))))
+  
+  ;; Most of this ripped from http://doc.norang.ca/org-mode.html
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
+  
+  (setq
+   ;; Use ~/emacs_org for storing files. Usually symlinked to Dropbox
+   org-directory "~/emacs_org"
+  
+   ;; By default, at least timestamp done states
+   org-log-done t
+  
+   ;; Start indented
+   org-startup-indented t
+  
+   ;; Hide blank lines inside folded nodes
+   org-cycle-separator-lines 0
+  
+   ;; Show notes in a task first
+   org-reverse-note-order nil
+  
+   ;; Just show one day on the agenda
+   org-agenda-ndays 1
+  
+   ;; Not sure, think I copied it from norang
+   org-indent-indentation-per-level 2
+  
+   ;; Archive to the file name, assume we're not doubling up names across projects
+   org-archive-location "~/emacs_org/archives/%s_archive::"
+  
+   ;; Don't really use priorities, turn them off
+   org-enable-priority-commands nil
+  
+   ;; Do single letter confirm of links
+   org-confirm-elisp-link-function 'y-or-n-p
+  
+   ;; Use IDO for target completion
+   org-completion-use-ido t
+  
+   ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
+   org-refile-targets (quote ((nil :maxlevel . 9) (org-agenda-files :maxlevel . 9)))
+  
+   ;; Use outline paths, but let IDO handle things
+   org-refile-use-outline-path (quote file)
+  
+   ;; Allow refile to create parent tasks with confirmation
+   org-refile-allow-creating-parent-nodes (quote confirm)
+  
+   ;; IDO now handles header finding
+   org-outline-path-complete-in-steps nil
+  
+   ;; Yes it's long... but more is better ;
+   org-clock-history-length 35
+  
+   ;; Resume clocking task on clock-in if the clock is open
+   org-clock-in-resume t
+  
+   ;; Change task state to STARTED when clocking in
+   org-clock-in-switch-to-state "STARTED"
+  
+   ;; Save clock data and notes in the LOGBOOK drawer
+   org-clock-into-drawer t
+  
+   ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
+   org-clock-out-remove-zero-time-clocks t
+  
+   ;; Don't clock out when moving task to a done state
+   org-clock-out-when-done nil
+  
+   ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+   org-clock-persist t
+  
+   ;; Don't use priorities and accidentally set them all the time, so just turn them off.
+   org-enable-priority-commands nil
+  
+   ;; Don't use super/subscript, makes exports weird.
+   org-use-sub-superscripts nil
+  
+   ;; The habit graph display column in the agenda
+   org-habit-graph-column 50
+  
+   ;; warn 15 min in advance
+   appt-message-warning-time 15
+  
+   ;; warn every 5 minutes
+   appt-display-interval 5
+  
+   ;; show in the modeline
+   appt-display-mode-line t
+  
+   ;; use our func
+   appt-display-format 'nil
+  
+   ;; use speed commands
+   org-use-speed-commands t
+  
+   ;; I like links being active ret
+   org-return-follows-link t
+  
+   ;; Make lists cycle whether they're nodes or plain
+   org-cycle-include-plain-lists t
+  
+   ;; Fontify org-src blocks like their language mode
+   org-src-fontify-natively t
+  
+   ;; Turn on sticky agendas so we don't have to regenerate them
+   org-agenda-sticky t
+  
+   ;; If there's a region, do whatever it is I'm trying to do to ALL headlines in
+   ;; region
+   org-loop-over-headlines-in-active-region t
+  
+   org-special-ctrl-a/e t
+   org-special-ctrl-k t
+   org-yank-adjusted-subtrees t
+  
+   org-align-all-tags t)
+  
+  ;; flyspell mode for spell checking everywhere
+  (add-hook 'org-mode-hook 'turn-on-flyspell 'append)
+  
+  (add-hook 'org-mode-hook (lambda () (org-indent-mode t)))
+  
+  ;; Disable C-c [ and C-c ] in org-mode
+  (add-hook 'org-mode-hook
+            (lambda ()
+              ;; Undefine C-c [ and C-c ] since this breaks my
+              ;; org-agenda files when directories are include It
+              ;; expands the files in the directories individually
+              (org-defkey org-mode-map "\C-c["    'undefined)
+              (org-defkey org-mode-map "\C-c]"    'undefined))
+            'append)
+  
+  ;; Resume clocking tasks when emacs is restarted
+  (org-clock-persistence-insinuate)
+  
+  ;; 3 different stage setups. First two are from norang, final is for
+  ;; events, so I can search for things like "all concerts I attended
+  ;; this year" via state and tags
+  (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d!/!)")
+                                  (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)")
+          (sequence "EVENT(e)" "|" "ATTENDED(a!)" "SKIPPED(k!)")
+          (sequence "ORDER(z)" "ORDERED(o!)" "SHIPPED(h!)" "|" "ARRIVED(A!/!)"))))
+  
+  ;; I use C-M-r to start org-remember
+  (global-set-key (kbd "C-M-R") 'org-capture)
+  
+  ;; Once again, stolen from norang, except for the contacts one, which
+  ;; was taken from the org-mode list.
+  (setq org-capture-templates
+        (quote
+         (("t" "todo" entry (file "~/emacs_org/tasks.org")
+     "* TODO %?
+    %u
+    %a")
+    ("n" "note" entry (file "~/emacs_org/notes.org")
+     "* %?                                        :NOTE:
+    %u
+    %a")
+    ("r" "reply" entry (file+headline "~/emacs_org/tasks.org" "Email")
+     "* [[gnus:%:group#%:message-id]]                                        :email:"
+     :immediate-finish t)
+    ("w" "link" entry (file+headline "~/emacs_org/links.org" "Links")
+     "* %c                                        :link:"
+     :immediate-finish t)
+    ("s" "snowmew link" entry (file+headline "~/emacs_org/links.org" "Snowmew Links")
+     "* %c                                        :link:"
+     :immediate-finish t))))
+  
+  ;; Personal agenda modes
+  (setq org-agenda-custom-commands
+        (quote (("h" "Tasks for home" tags-todo "+HOME-someday" nil)
+                ("5" "Tasks for work" tags-todo "+WORK-someday" nil)
+                ("p" "Tasks for personal projects" tags-todo "+PROJECTS-someday" nil)
+                ("X" agenda ""
+                 (;;(org-agenda-prefix-format " [ ] ")
+                  (org-agenda-with-colors nil)
+                  (org-agenda-remove-tags t))
+                 ("~/emacs_org/agenda.txt"))
+                ("w" agenda "Week with events and no daily/chores"
+                 ((org-agenda-ndays-to-span 7)
+                  (org-agenda-ndays 7)
+                  (org-agenda-filter-preset '("-daily"))))
+          (" " "Agenda"
+                 ((agenda "" nil)
+                  (tags "email"
+                        ((org-agenda-overriding-header "Emails")
+                         (org-tags-match-list-sublevels nil)
+             (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))))
+      nil)))))
+  
+  ;; Org mode notifications via aptp
+  ;; the appointment notification facility
+  (appt-activate 1)              ;; active appt (appointment notification)
+  (display-time)                 ;; time display is required for this...
+  
+  ;; update appt each time agenda opened
+  (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
+  
+  ;; Show the weather, set in the main task file via:
+  ;;* Weather
+  ;;%%(org-google-weather "XXXXX")
+  ;;
+  ;; (XXXXX being zip code)
+  
+  (require 'org-google-weather)
+  
+  ;; Embed location maps, with directions from home
+  
+  (setq calendar-location-name "Home")
+  (setq calendar-latitude 37.870975)
+  (setq calendar-longitude -122.288813)
+  
+  (require 'org-location-google-maps)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; http://kanis.fr/blog-emacs.html#%20Diary%20block%20without%20week%2Dend
+  ;; %%(diary-block-no-week-end 15 9 2010 30 10 2010) block without week-end
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (defun qdot/diary-block-no-week-end (m1 d1 y1 m2 d2 y2 &optional mark)
+    "Block diary entry.
+  Entry applies if date is between two dates and not in the
+  weekend."
+    (let ((date1 (calendar-absolute-from-gregorian
+                  (diary-make-date m1 d1 y1)))
+          (date2 (calendar-absolute-from-gregorian
+                  (diary-make-date m2 d2 y2)))
+          (day (calendar-day-of-week date))
+          (d (calendar-absolute-from-gregorian date)))
+      (and (<= date1 d) (<= d date2) (not (= day 6)) (not (= day 0))
+           (cons mark entry))))
+  
+  (setq org-latex-to-pdf-process
+        '("xelatex -interaction nonstopmode %f"
+    "xelatex -interaction nonstopmode %f")) ;; for multiple passes
+  
+  
+  (defun qdot/reload-org-files ()
+    (interactive)
+    (setq org-agenda-files
+          (append
+           (file-expand-wildcards "~/emacs_org/tasks.org")
+           (file-expand-wildcards "~/emacs_org/mozilla/*.org")
+           (file-expand-wildcards "~/emacs_org/home/*.org")
+           (file-expand-wildcards "~/emacs_org/nplabs/*.org")
+           (file-expand-wildcards "~/emacs_org/travel/*.org")
+           (file-expand-wildcards "~/emacs_org/projects/*.org")
+           (file-expand-wildcards "~/emacs_org/personal/*.org"))))
+  
+  (qdot/reload-org-files)
+  
+  ;; Always hilight the current agenda line
+  (add-hook 'org-agenda-mode-hook
+            '(lambda () (hl-line-mode 1))
+            'append)
+  
+  ;; The following custom-set-faces create the highlights
+  (custom-set-faces
+   '(org-mode-line-clock ((t (:background "grey75" :foreground "red" :box (:line-width -1 :style released-button)))) t))
+  
+  ;; Turn habits on at 6am every morning
+  (run-at-time "06:00" 86400 '(lambda () (setq org-habit-show-habits t)))
+  
+  (setq org-ghi-interesting-repos '("qdot/libnifalcon" "qdot/liblightstone" "qdot/libtrancevibe" "qdot/emokit" "qdot/libomron" "qdot/libfitbit"))
+  (setq org-ghi-org-file "~/emacs_org/github.org")
+  (setq org-ghi-file-under-repo-headline t)
+  
+  (setq org-mobile-inbox-for-pull "~/emacs_org/tasks.org")
+  (setq org-mobile-directory "~/Dropbox/MobileOrg")
+  (setq org-mobile-files '("~/emacs_org/tasks.org" "~/emacs_org/mozilla/B2G.org"))
+  (setq org-mobile-agendas nil)
+  
+  (defvar org-agenda-no-resize nil
+    "When non-nil, don't let org-mode resize windows for you")
+  
+  (setq org-agenda-no-resize t)
+  
+  (defadvice qdot/org-fit-agenda-window (around org-fit-agenda-window-select)
+    "Will not let org-fit-agenda-window resize if
+  org-agenda-no-resize is non-nil"
+    (when (not org-agenda-no-resize)
+      ad-do-it))
+  
+  (defadvice qdot/cfw:org-extract-summary (after cfw:org-extract-summary)
+    "Remove tags and filenames from item summary"
+    (message item))
+  
+  ;; Taken from http://doc.norang.ca/org-mode.html
+  ;;;; Refile settings
+            ; Exclude DONE state tasks from refile targets
+  (defun qdot/verify-refile-target ()
+    "Exclude todo keywords with a done state from refile targets"
+    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+  
+  (setq org-refile-target-verify-function 'qdot/verify-refile-target)
+  
+  ;; (diminish 'org-indent-mode " i")
+  
+  ;; Sasha Chua's org done faces
+  ;; http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
+  (setq org-fontify-done-headline t)
+  (custom-set-faces
+   '(org-done ((t (:foreground "PaleGreen"
+                   :weight normal :strike-through t))))
+   '(org-headline-done
+              ((((class color) (min-colors 16) (background dark))
+                 (:foreground "LightSalmon" :strike-through t)))))
+  
+  ;; Set org babel backgrounds so we get nice blocks
+  (set-face-background 'org-block-begin-line "#333")
+  (set-face-background 'org-block-end-line "#333")
+  (set-face-background 'org-block-background "#222")
+#+end_src
+** ERC
+#+begin_src emacs-lisp
+  (require 'erc)
+  
+  (require 'erc-fill)
+  (erc-fill-mode t)
+  
+  (require 'erc-ring)
+  (erc-ring-mode t)
+  
+  (require 'erc-match)
+  
+  ;; For bitlbee
+  (require 'erc-nicklist)
+  
+  (load-library "erc-highlight-nicknames")
+  (add-to-list 'erc-modules 'highlight-nicknames)
+  ;; (add-to-list 'erc-modules 'scrolltobottom)
+  (add-to-list 'erc-modules 'match)
+  (erc-update-modules)
+  
+  (erc-match-enable)
+  (erc-match-mode 1)
+  
+  (erc-timestamp-mode t)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; ERC setup
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (setq erc-timestamp-only-if-changed-flag nil
+        erc-timestamp-format "[%H:%M] "
+        erc-fill-prefix "      "
+        erc-timestamp-mode t
+        erc-max-buffer-size 20000
+        erc-interpret-mirc-color nil
+        erc-insert-timestamp-function 'erc-insert-timestamp-left
+        erc-kill-queries-on-quit nil
+        erc-keywords nil)
+  (setq erc-button-url-regexp
+        "\\([-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]+\\.\\)+[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]*[-a-zA-Z0-9\\/]")
+  
+  ;; (erc-scrolltobottom-enable)
+  ;;  (erc-scrolltobottom-disable)
+  ;; (add-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
+  ;; (setq erc-keywords '((".*Online.*" (:foreground "green"))
+  ;;                      (".*Busy" (:foreground "red"))
+  ;;                      (".*Away" (:foreground "red"))
+  ;;                      (".*Idle" (:foreground "orange"))
+  ;;                      ))
+  
+  (setq erc-keywords nil)
+  (make-variable-buffer-local 'erc-fill-column)
+  (make-variable-buffer-local 'erc-hide-list)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; Change fill column on resize
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (defun qdot/erc-set-fill-columns ()
+    (interactive)
+    (save-excursion
+      (walk-windows
+       (lambda (w)
+         (let ((buffer (window-buffer w)))
+     (set-buffer buffer)
+     (when (eq major-mode 'erc-mode)
+       (message "Window size: %d" (window-width w))
+       (setq erc-fill-column (- (window-width w) 2))))))))
+  
+  (setq window-configuration-change-hook (cddr window-configuration-change-hook))
+  
+  ;;(add-hook 'window-configuration-change-hook 'qdot/erc-set-fill-columns)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; Privmsg window allocation
+  ;;
+  ;; We create a buffer with a ton of windows pointing to the bitlbee-placeholder
+  ;; buffer. These can then be used to throw query windows into as they're
+  ;; created by IMs or IRC privmsgs, so we don't have to worry about ERC screwing
+  ;; with whatever buffer we're in now.
+  ;;
+  ;; Similarly, whenever we kill a query window, we should have it pop back to
+  ;; the placeholder buffer so it can be reused.
+  ;;
+  ;; We also make the assumption that the privmsg allocation frame is the one
+  ;; with the &bitlbee channel buffer in one of its windows. I just usually
+  ;; assume bitlbee is going to be running anyways, so this seemed ok for my
+  ;; setup.
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  
+  ;; Since we have our own allocator, just have ERC bury the buffers and then
+  ;; we'll take care of them ourselves
+  (setq erc-auto-query 'bury)
+  
+  (defun qdot/free-query-window-p (window)
+    (let ((r nil))
+      (if (string= "bitlbee-placeholder" (buffer-name (window-buffer window)))
+          (setq r t))
+      r))
+  
+  (defun qdot/erc-move-query-to-placeholder (buffer)
+    (let* 
+        ((bitlbee-window (get-buffer-window "&bitlbee" t)))
+      (when bitlbee-window
+        (let*
+      ((bitlbee-window-list (window-list (window-frame bitlbee-window)))
+       (free-window-list (qdot/filter 'qdot/free-query-window-p bitlbee-window-list)))
+    (when (not (memq buffer (mapcar 'window-buffer bitlbee-window-list)))
+      (set-window-buffer (car free-window-list) buffer))))))
+  
+  (defun qdot/erc-privmsg-query-allocate (proc parsed)
+    ;; Find the frame holding the bitlbee& buffer. We'll consider that our privmsg window
+    ;; Once we find it, walk the windows until we find an open bitlbee-placeholder
+    ;; Set the window list to that so we can just pick the first window off the top
+    (if (get-buffer-window "&bitlbee" t)
+        (let* 
+            (
+             (nick (car (erc-parse-user (erc-response.sender parsed))))
+             (target (car (erc-response.command-args parsed)))
+             (msg (erc-response.contents parsed))
+             (query  (if (not erc-query-on-unjoined-chan-privmsg)
+             nick
+           (if (erc-current-nick-p target)
+         nick
+             target))))
+  
+          ;;If the buffer doesn't even exist yet, go ahead and run auto-query to make it happen
+          (if (not (erc-get-buffer query proc))
+              (erc-auto-query proc parsed))
+          ;;If we find one, allocate into that, otherwise, commense undefined behavior
+          (when (and (erc-current-nick-p target)
+                     (not (erc-is-message-ctcp-and-not-action-p msg))
+                     (not (get-buffer-window (erc-get-buffer query proc) t)))
+            (qdot/erc-move-query-to-placeholder (erc-get-buffer query proc)))))
+    nil)
+  
+  (add-hook 'erc-server-PRIVMSG-functions 'qdot/erc-privmsg-query-allocate)
+  
+  ;; Once we close a query window, return it to being a query placeholder window
+  
+  (defun qdot/erc-query-buffer-recycle ()
+    (if (and (erc-query-buffer-p (current-buffer)) (get-buffer "bitlbee-placeholder"))
+        (set-window-buffer (get-buffer-window (current-buffer)) (get-buffer "bitlbee-placeholder")))
+    nil)
+  
+  (add-hook 'kill-buffer-hook 'qdot/erc-query-buffer-recycle)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; ZNC IRC Bouncer Setup
+  ;;
+  ;; I use the ZNC IRC bouncer to keep IRC connected, kinda like screen, except
+  ;; far more complicated and only useful for one thing. Yay!
+  ;;
+  ;; ZNC divides up networks to be one per account, so we have to start once ERC
+  ;; instance per network we want to connect to.
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (setq qdot/erc-znc-server-rename-list (list))
+  
+  (defun qdot/erc-znc-connect (nick)
+    (interactive "ZNC Nick:")
+    (erc :server qdot/erc-znc-remote-server :port qdot/erc-znc-port :nick nick :full-name nick)
+    )
+  
+  (defun qdot/erc-znc-rename-server-buffer ()
+    (interactive)
+    (let ((current-network (caddr (split-string (erc-current-nick) "-"))))
+      (save-excursion
+        (set-buffer (erc-server-buffer))
+        (rename-buffer (concat "znc-" current-network))
+        (message (format "Renamed buffer to %s" (concat "znc-" current-network)))
+        )))
+  
+  (defun qdot/erc-znc-initialize (proc parsed)
+    ;; Prepend all ZNC buffers with znc-
+    (if (and (not (string-match "znc-" (buffer-name (erc-server-buffer)))) (string-match "qdot-znc" (erc-current-nick)))
+        (progn
+          (qdot/erc-znc-rename-server-buffer)
+          (erc-server-send (format "PASS %s:%s" (erc-current-nick) qdot/erc-znc-password))))
+    nil)
+  
+  (add-hook 'erc-server-NOTICE-functions 'qdot/erc-znc-initialize)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; ZNC variables and utility functions
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (setq qdot/erc-znc-nicks '("qdot-znc-freenode" "qdot-znc-mozilla"))
+  (defvar qdot/erc-znc-password "doesnotmatter")
+  (defvar qdot/erc-znc-remote-server "localhost")
+  (defvar qdot/erc-znc-port 9999)
+  
+  (defun qdot/erc-znc-start ()
+    (interactive)
+    (mapcar 'qdot/erc-znc-connect qdot/erc-znc-nicks))
+  
+  (defun qdot/bitlbee-connect ()
+    (interactive)
+    (qdot/erc-znc-connect "qdot-znc-bitlbee"))
+  
+  (defun qdot/bitlbee-reallocate-query-buffers ()
+    ;; For each already opened query window, reallocate
+    (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf))
+    (qdot/filter 'erc-query-buffer-p (buffer-list))))
+  
+  (defun qdot/bitlbee-resume-layout ()
+    (interactive)
+    ;; If we havn't created a placeholder buffer yet, do so now, make it
+    ;; readonly.
+    (with-current-buffer (get-buffer-create "bitlbee-placeholder")
+      (setq buffer-read-only t))
+    (save-excursion
+      ;; Bring up the bitlbee nicklist
+      (set-buffer "&bitlbee")
+      (erc-nicklist))
+    (wg-revert-workgroup (wg-get-workgroup "bitlbee"))
+    (qdot/bitlbee-reallocate-query-buffers))
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; Kill all ERC windows and connections for the current frame
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (setq erc-fill-function 'erc-fill-static)
+  (setq erc-fill-static-center 0)
+  
+  ;; Don't track common events
+  (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+          "324" "329" "332" "333" "353" "477"))
+  
+  (setq erc-current-nick-highlight-type 'nick)
+  
+  (setq erc-track-use-faces t)
+  (setq erc-track-faces-priority-list
+        '(erc-current-nick-face erc-keyword-face))
+  (setq erc-track-priority-faces-only 'all)
+  
+  ;; Make erc-hide-list buffer-local
+  ;; http://web.archiveorange.com/archive/v/rByihNiNJaOnTUlfaxLs
+  
+  (defun erc-display-buffer-list (buffer)
+    "Sanitize a 'buffer' name or list, and convert to a buffer-name list."
+    (cond ((bufferp buffer) (list buffer))
+    ((listp buffer) buffer)
+    ((processp buffer) (list (process-buffer buffer)))
+    ((eq 'all buffer)
+     ;; Hmm, or all of the same session server?
+     (erc-buffer-list nil erc-server-process))
+    ((and (eq 'active buffer) (erc-active-buffer))
+     (list (erc-active-buffer)))
+    ((erc-server-buffer-live-p)
+     (list (process-buffer erc-server-process)))
+    (t (list (current-buffer)))))
+  
+  (defun erc-display-message (parsed type buffer msg &rest args)
+    "Display MSG in BUFFER.
+  
+  ARGS, PARSED, and TYPE are used to format MSG sensibly.
+  
+  See also `erc-format-message' and `erc-display-line'.
+  
+  NOTE: PATCHED VERSION that takes into account that erc-hide-list
+  is buffer local"
+    (let ((string (if (symbolp msg)
+          (apply 'erc-format-message msg args)
+        msg)))
+      (setq string
+      (cond
+       ((null type)
+        string)
+       ((listp type)
+        (mapc (lambda (type)
+          (setq string
+          (erc-display-message-highlight type string)))
+        type)
+        string)
+       ((symbolp type)
+        (erc-display-message-highlight type string))))
+  
+      (if (not (erc-response-p parsed))
+    (erc-display-line string buffer)
+        (erc-put-text-property 0 (length string) 'erc-parsed parsed string)
+        (erc-put-text-property 0 (length string) 'rear-sticky t string)
+        (dolist (buf (erc-display-buffer-list buffer))
+    (unless (member (erc-response.command parsed)
+        (if (bufferp buf)
+            (with-current-buffer buf erc-hide-list)
+          erc-hide-list))
+      (erc-display-line string buf))))))
+  
+  (setq qdot/erc-event-channels '("&bitlbee"))
+  
+  (add-hook 'erc-join-hook 
+      (lambda ()
+        (make-local-variable 'blink-matching-paren)
+        (setq blink-matching-paren nil)
+        "Only show joins/hides/quits for channels we
+  specify in qdot/erc-event-channels"
+        (when (not (member (buffer-name (current-buffer))
+               qdot/erc-event-channels))
+          (setq erc-hide-list '( "PART" "QUIT" "JOIN")))))
+  
+  (defun qdot/clear-irc-buffer ()
+    "If the current buffer is and ERC buffer, clear all text out of
+  it. 
+  
+  This function exists due to the fact that calling /CLEAR only
+  recenters the buffer so that prior history cannot be seen.
+  "
+    (interactive)
+    (when (member (current-buffer) (erc-buffer-list))
+      (erc-truncate-buffer-to-size 0)))
+  
+  (defun erc-cmd-CLEAR ()
+    (qdot/clear-irc-buffer))
+  
+  (defun qdot/erc-turn-off-parens ()
+    (when (member (current-buffer) (erc-buffer-list))
+      (setq completion-auto-help nil)
+      (setq blink-matching-paren nil)))
+  
+  (add-hook 'after-change-major-mode-hook 'qdot/erc-turn-off-parens)
+  
+  (defun qdot/replace-gtalk-asterisks (input)
+    (when (string-match "^gt-" (buffer-name (current-buffer)))
+      ;; erc-send-current-line uses the "str" variable before this hook
+      ;; to set what is being sent. Yay dynamic scoping! :( :( :(
+      (setq str (replace-regexp-in-string "\\*" "•" input))))
+  
+  (add-hook 'erc-send-pre-hook 'qdot/replace-gtalk-asterisks)
+  
+  (defun qdot/erc-kill-all-channel-buffers ()
+    (interactive)
+    (dolist (channel (erc-buffer-list))
+      (when (string-match-p "#" (buffer-name channel))
+        (save-excursion
+    (set-buffer channel)
+    (kill-buffer)))))
+  
+  ;; Walk all of the server buffers first
+  ;; Close those first, which autodetaches us from channels
+  ;; Then go back through and close everything
+  
+  (defun qdot/kill-erc-buffers (bitlbee)
+    (mapcar 
+     (lambda (arg) 
+       (when (and (erc-server-buffer-p arg)
+      (if bitlbee
+          (string-match (buffer-name arg) "znc-bitlbee")
+        (not (string-match (buffer-name arg) "znc-bitlbee"))))
+         (save-excursion
+     (set-buffer arg)
+     (erc-quit-server "Wheee.")
+     (if (get-buffer-process arg)
+         (delete-process (get-buffer-process arg)))
+     (kill-buffer))))
+     (buffer-list)))
+  
+  (defun qdot/kill-irc ()
+    (interactive)
+    (qdot/kill-erc-buffers nil))
+  
+  (defun qdot/kill-bitlbee ()
+    (interactive)
+    (qdot/kill-erc-buffers t))
+  
+  (add-hook 'kill-emacs-hook 'qdot/kill-irc)
+  (add-hook 'kill-emacs-hook 'qdot/kill-bitlbee)
+  
+  (setq qdot/bitlbee-status-nicks '("subgirl13" "xiuvx" "bokehcat" "qdot76367" "gt-JaredAllen"))
+  
+  (defun qdot/filter-bitlbee-joins-parts (msg)
+    (when (and (string= "&bitlbee" (buffer-name (current-buffer)))
+         (= (string-match "***" msg) 0))
+      (setq erc-insert-this nil)
+      (dolist (nick qdot/bitlbee-status-nicks)
+        (if (string-match nick msg)
+      (setq erc-insert-this t)))))
+  
+  (add-hook 'erc-insert-pre-hook 'qdot/filter-bitlbee-joins-parts)
+  (setq erc-insert-pre-hook nil)
+  (defalias 'qdot/kill-erc 'qdot/kill-irc)
+#+end_src
+* Notification Settings
+#+begin_src emacs-lisp
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; Notifications relay file
+  ;;
+  ;; This file is responsible for creating and deleting files on the filesystem
+  ;; for events like privmsg's on irc (which also means ims), new mail, etc...)
+  ;;
+  ;; Existence of these files can then be used by shell scripts to post
+  ;; notifications without having to worry about stupid shit like dbus.
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (setq
+   sauron-max-line-length 200
+   ;; 60 was a little long, and there's a lot of times I switch away quickly after
+   ;; replying.
+   sauron-nick-insensitivity 5
+  
+   ;; uncomment to show sauron in the current frame
+   ;; sauron-separate-frame nil
+  
+   ;; you probably want to add your own nickname to the these patterns
+   sauron-watch-patterns
+   '("qDot_" "qDot" "subgirl" "bokeh" "xiuv")
+  
+   ;; you probably want to add you own nick here as well
+   sauron-watch-nicks
+   '("qDot_" "qDot" "aim-xiuvx" "aim-bokehcat" "aim-subgirl13"))
+  
+  ;; Monkeypatching sauron's ERC hook until I write a msg string formatter for it
+  (defun sr-erc-PRIVMSG-hook-func (proc parsed)
+    "Hook function, to be called for erc-matched-hook."
+    (let* ( (me      (erc-current-nick))
+      (sender  (car (erc-parse-user (erc-response.sender parsed))))
+      (channel (car (erc-response.command-args parsed)))
+      (msg     (sr-erc-msg-clean (erc-response.contents parsed)))
+      (nw      (symbol-name (erc-network)))
+      (for-me  (string= me channel))
+      (prio
+       (cond
+        ((string= sender "root") 2)  ;; e.g. bitlbee stuff; low-prio
+        (for-me                  3)  ;; private msg for me => prio 4
+        ((string-match me msg)   3)  ;; I'm mentioned => prio 3
+        (t       2)))  ;; default
+      (target (if (buffer-live-p (get-buffer channel))
+                (with-current-buffer (get-buffer channel)
+        (point-marker)))))
+      (sauron-add-event
+       'erc
+       prio
+       (concat
+        (propertize sender 'face 'sauron-highlight1-face) "@"
+        (propertize channel 'face 'sauron-highlight2-face) " on "
+        (propertize nw 'face 'sauron-highlight2-face)
+        (if (string-match "#" channel)
+      (propertize " msg" 'face 'sauron-highlight1-face)
+    (propertize " privmsg" 'face 'sauron-highlight1-face)))
+       (lexical-let* ((target-mark target)
+          (target-buf (if for-me sender channel)))
+         (lambda ()
+     (sauron-switch-to-marker-or-buffer (or target-mark target-buf))))
+       `( :event   privmsg
+       :sender ,sender
+       :me     ,me
+       :channel ,channel
+       :msg    ,msg)))
+    nil)
+  
+  (when linux-p
+    (defvar qdot/status-file-directory "/home/qdot/.xmonad/status/"
+      "Directory to store status files in. Existence of status denotes that xmobar
+  should highlight that status.")
+  
+    (when (not (file-exists-p qdot/status-file-directory))
+      (make-directory qdot/status-file-directory))
+  
+    (setq qdot/status-types '("bitlbee" "freenode" "twitter" "mozilla" "mail"))
+  
+    (defun qdot/add-notify-type (origin prio msg &optional props)
+      (cond
+       ((string-match "privmsg" msg)
+        (with-temp-file (concat qdot/status-file-directory "bitlbee")))
+       ((string-match "freenode" msg)
+        (with-temp-file (concat qdot/status-file-directory "freenode")))
+       ((string-match "mozilla" msg)
+        (with-temp-file (concat qdot/status-file-directory "mozilla")))
+       ((string-match "twit" (symbol-name origin))
+        (with-temp-file (concat qdot/status-file-directory "twitter"))))
+      nil)
+  
+    (defun qdot/remove-notify-type (type)
+      (let ((status-file (concat qdot/status-file-directory type)))
+        (when (and (file-exists-p status-file) (member type qdot/status-types))
+    (delete-file status-file))))
+  
+    (add-hook 'wg-switch-to-workgroup-hook
+        (lambda ()
+          (cond
+           ((eq (wg-get-workgroup "erc") (wg-current-workgroup))
+      (qdot/remove-notify-type "freenode"))
+           ((eq (wg-get-workgroup "mozilla") (wg-current-workgroup))
+      (qdot/remove-notify-type "mozilla"))
+           ((eq (wg-get-workgroup "bitlbee") (wg-current-workgroup))
+      (qdot/remove-notify-type "bitlbee"))
+           ((eq (wg-get-workgroup "gnus") (wg-current-workgroup))
+      (qdot/remove-notify-type "mail"))
+           ((eq (wg-get-workgroup "twitter") (wg-current-workgroup))
+      (qdot/remove-notify-type "twitter")))))
+  
+    (add-hook 'sauron-event-added-functions
+        'qdot/add-notify-type))
+#+end_src
+* Programming Settings
+#+begin_src emacs-lisp
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; load file modes for programming
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  ;; doxymacs mode for editing doxygen
+  (add-hook 'c-mode-common-hook 'doxymacs-mode)
+  
+  ;; Set defaults we expect
+  (setq-default c-basic-offset 2)
+  (setq-default py-indent-offset 2)
+  
+  ;; gdb/gud
+  (setq gdb-many-windows t)
+  (setq gdb-show-main t)
+  (setq gud-chdir-before-run nil)
+  (setq gud-tooltip-mode t)
+  
+  ;; turn on linum mode for programming
+  (setq linum-format "%4d")
+  
+  ;; I don't always show parens, but when I do...
+  (setq show-paren-delay 0)
+  (setq show-paren-style 'expression)
+  (defun qdot/programming-mode-hook ()
+    (linum-mode 1)
+    ;; fci-mode violently broken at the moment (24.3 HEAD)
+    ;;  (fci-mode 1)
+    (make-variable-buffer-local 'show-paren-mode)
+    (show-paren-mode 1)
+    (set-fill-column 80)
+    (setq show-trailing-whitespace t)
+    (set-face-background 'show-paren-match-face "#222")
+    (set-face-attribute 'show-paren-match-face nil
+            :weight 'bold :underline nil :overline nil :slant 'normal))
+  
+  (add-hook 'emacs-lisp-mode-hook 'qdot/programming-mode-hook)
+  (add-hook 'cmake-mode-hook 'qdot/programming-mode-hook)
+  (add-hook 'c-mode-common-hook 'qdot/programming-mode-hook)
+  (add-hook 'haskell-mode-hook 'qdot/programming-mode-hook)
+  (add-hook 'java-mode-hook 'qdot/programming-mode-hook)
+  (add-hook 'js2-mode-hook 'qdot/programming-mode-hook)
+  (add-hook 'nxml-mode-hook 'qdot/programming-mode-hook)
+  (add-hook 'xml-mode-hook 'qdot/programming-mode-hook)
+  (add-hook 'nxhtml-mode-hook 'qdot/programming-mode-hook)
+  (add-hook 'python-mode-hook 'qdot/programming-mode-hook)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; flymake with mode fixes
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (require 'flymake)
+  (defun qdot/flymake-off-hook ()
+    (flymake-mode 0))
+  (add-hook 'nxml-mode-hook 'qdot/flymake-off-hook)
+  (add-hook 'c++-mode-hook 'qdot/flymake-off-hook)
+  (add-hook 'c-mode-hook 'qdot/flymake-off-hook)
+  (add-hook 'xml-mode-hook 'qdot/flymake-off-hook)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; haskell
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  ;;(require 'haskell-mode)
+  ;;(require 'inf-haskell)
+  ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+  ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+  ;;(add-hook 'haskell-mode-hook 'font-lock-mode)
+  ;;(setq haskell-font-lock-symbols t)
+  
+  ;; (defun flymake-Haskell-init ()
+  ;;   (flymake-simple-make-init-impl
+  ;;    'flymake-create-temp-with-folder-structure nil nil
+  ;;    (file-name-nondirectory buffer-file-name)
+  ;;    'flymake-get-Haskell-cmdline))
+  
+  ;; (defun flymake-get-Haskell-cmdline (source base-dir)
+  ;;   (list "flycheck_haskell.pl"
+  ;;  (list source base-dir)))
+  
+  ;; (push '(".+\\.hs$" flymake-Haskell-init flymake-simple-java-cleanup)
+  ;;       flymake-allowed-file-name-masks)
+  ;; (push '(".+\\.lhs$" flymake-Haskell-init flymake-simple-java-cleanup)
+  ;;       flymake-allowed-file-name-masks)
+  ;; (push
+  ;;  '("^\\(\.+\.hs\\|\.lhs\\):\\([0-9]+\\):\\([0-9]+\\):\\(.+\\)"
+  ;;    1 2 3 4) flymake-err-line-patterns)
+  
+  ;; (add-hook
+  ;;  'haskell-mode-hook
+  ;;  '(lambda ()
+  ;;     (if (not (null buffer-file-name)) (flymake-mode))))
+  
+  ;; Taken from http://www.credmp.org/index.php/2007/07/20/on-the-fly-syntax-checking-java-in-emacs/
+  
+  ;; (defun qdot/flymake-display-err-minibuf () 
+  ;;   "Displays the error/warning for the current line in the minibuffer"
+  ;;   (interactive)
+  ;;   (let* ((line-no             (flymake-current-line-no))
+  ;;   (line-err-info-list  (nth 0 (flymake-find-err-info flymake-err-info line-no)))
+  ;;   (count               (length line-err-info-list))
+  ;;   )
+  ;;     (while (> count 0)
+  ;;       (when line-err-info-list
+  ;;  (let* ((file       (flymake-ler-file (nth (1- count) line-err-info-list)))
+  ;;         (full-file  (flymake-ler-full-file (nth (1- count) line-err-info-list)))
+  ;;         (text (flymake-ler-text (nth (1- count) line-err-info-list)))
+  ;;         (line       (flymake-ler-line (nth (1- count) line-err-info-list))))
+  ;;    (message "[%s] %s" line text)
+  ;;    )
+  ;;  )
+  ;;       (setq count (1- count)))))
+  
+  ;; (add-hook
+  ;;  'haskell-mode-hook
+  ;;  '(lambda ()
+  ;;     (define-key haskell-mode-map "\C-cd"
+  ;;       'qdot/flymake-display-err-minibuf)))
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; smerge mode for looking at inline conflicts
+  ;; http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (defun sm-try-smerge ()
+    (save-excursion
+      (goto-char (point-min))
+      (when (re-search-forward "^<<<<<<< " nil t)
+        (smerge-mode 1))))
+  
+  (add-hook 'find-file-hook 'sm-try-smerge t)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; Super simple generic mode for nsis editing
+  ;; God forbid I have to do that often
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (define-generic-mode 'nsis-generic-mode
+    nil ;;'(";")
+    '("Section" "SectionEnd" "Function" "FunctionEnd" "Call" "Goto")
+    '(("!\\([A-Za-z]+\\)" (1 'font-lock-builtin-face))
+      ("$[({]?\\([A-Za-z0-9_]+\\)[)}]?" (1 'font-lock-variable-name-face))
+      )
+    (list "\\.\\(nsi\\|nsh\\)$")    
+    nil
+    "Generic mode for nsis files.")
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; cc-mode hook
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (defun qdot/cc-mode-hook ()
+    (doxymacs-font-lock)
+    (local-set-key (kbd "\C-m") 'newline-and-indent)
+    (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 2)))
+    (setq indent-tabs-mode nil)
+    (setq-default tab-width 2)
+    (c-set-style "qdot/cc-code-style")
+    (c-set-offset 'innamespace 0)
+    (local-set-key [(control tab)] 'semantic-complete-self-insert)
+    (subword-mode 1))
+  
+  (add-hook 'c-mode-common-hook 'qdot/cc-mode-hook)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; Hooks for recompilation and error maneuvering
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (require 'compile)
+  (setq compilation-disable-input nil)
+  (setq compilation-scroll-output t)
+  (setq mode-compile-always-save-buffer-p t)
+  
+  (defun qdot/recompile ()
+    "Run compile and resize the compile window closing the old one if necessary"
+    (interactive)
+    (progn
+      (when (get-buffer "*compilation*")  ; If old compile window exists
+        (delete-windows-on (get-buffer "*compilation*")) ; Delete the compilation windows
+        (kill-buffer "*compilation*")) ; and kill the buffers
+      (call-interactively 'compile)
+      (enlarge-window 30)))
+  
+  (defun qdot/next-error ()
+    "Move point to next error and highlight it"
+    (interactive)
+    (progn
+      (next-error)
+      (end-of-line-nomark)
+      (beginning-of-line-mark)))
+  
+  (defun qdot/previous-error ()
+    "Move point to previous error and highlight it"
+    (interactive)
+    (progn
+      (previous-error)
+      (end-of-line-nomark)
+      (beginning-of-line-mark)))
+  
+  ;; (global-set-key (kbd "C-n") 'qdot/next-error)
+  ;; (global-set-key (kbd "C-p") 'qdot/previous-error)
+  
+  (global-set-key [f5] 'qdot/recompile)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; CEDET settings
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  ;; Emacs freaks out if this isn't set.
+  (setq warning-suppress-types nil) 
+  
+  ;;(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
+  (add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
+  (add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+  (add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode)
+  (add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
+  (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+  (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode)
+  (add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode)
+  ;;(add-to-list 'semantic-default-submodes 'global-semantic-show-unmatched-syntax-mode)
+  ;;(add-to-list 'semantic-default-submodes 'global-semantic-highlight-edits-mode)
+  ;;(add-to-list 'semantic-default-submodes 'global-semantic-show-parser-state-mode)
+  
+  (require 'semantic/bovine/c)
+  (require 'semantic/bovine/gcc)
+  (require 'semantic/bovine/clang)
+  (require 'semantic/ia)
+  (require 'semantic/decorate/include)
+  (require 'semantic/lex-spp)
+  
+  ;; need to add CEDET contrib to bring in eassist
+  (add-to-list 'load-path (expand-file-name 
+         (concat
+          qdot/emacs-autoinst-elisp-dir "cedet/contrib")))
+  
+  (require 'eassist)
+  ;; (global-ede-mode 1)
+  
+  (setq-default semanticdb-default-save-directory "~/.emacs_meta/semanticdb/"
+          semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
+  
+  (defun qdot/cedet-hook ()
+    (local-set-key [(control return)] 'semantic-ia-complete-symbol)
+    (local-set-key "\C-c?" 'semantic-ia-complete-symbol-menu)
+    (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
+    (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle)
+    (local-set-key "\C-cj" 'semantic-ia-fast-jump)
+    (local-set-key "\C-cq" 'semantic-ia-show-doc)
+    (local-set-key "\C-cs" 'semantic-ia-show-summary)
+    (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle)
+    )
+  (add-hook 'c-mode-common-hook 'qdot/cedet-hook)
+  (add-hook 'lisp-mode-hook 'qdot/cedet-hook)
+  (add-hook 'emacs-lisp-mode-hook 'qdot/cedet-hook)
+  
+  (defun qdot/c-mode-cedet-hook ()
+    (local-set-key (kbd "C-c o") 'eassist-switch-h-cpp)
+    (local-set-key (kbd "C-c C-r") 'semantic-symref))
+  (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)
+  
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; Flymake for python using pep8/pylint/pychecker
+  ;; http://vaab.blog.kal.fr/2012/09/20/emacs-and-flymake-for-python-javascript-php-rst/
+  ;; 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  ;; Python flymake configuration
+  
+  (when (load "flymake" t)
+    (defun flymake-pycheckers-init ()
+      (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                      'flymake-create-temp-inplace))
+          (local-file (file-relative-name
+                       temp-file
+                       (file-name-directory buffer-file-name))))
+        (list (concat qdot/emacs-scripts-dir "flycheck_python.py")  (list local-file))))
+  
+    (add-to-list 'flymake-allowed-file-name-masks
+              '("\\.py\\'" flymake-pycheckers-init)))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; pymacs and ropemacs
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  ;; Initialize Pymacs
+  (require 'pymacs)
+  
+  (setq qdot/pymacs-loaded nil)
+  
+  (defun qdot/load-pymacs()
+    (interactive)
+    (unless qdot/pymacs-loaded
+      (autoload 'pymacs-apply "pymacs")
+      (autoload 'pymacs-call "pymacs")
+      (autoload 'pymacs-eval "pymacs" nil t)
+      (autoload 'pymacs-exec "pymacs" nil t)
+      (autoload 'pymacs-load "pymacs" nil t)
+      (pymacs-load "ropemacs" "rope-")
+      (setq ropemacs-enable-autoimport t)
+      (ac-ropemacs-require)
+      (setq qdot/pymacs-loaded t)
+      ))
+  
+  (defun qdot/python-mode-hook()
+    (lambda () (eldoc-mode 1))
+    (setq tab-width 4)
+    (setq indent-tabs-mode nil)
+    (setq py-indent-offset 4)
+    (setq python-indent-offset 4)
+    (set-variable 'python-indent-guess-indent-offset nil)
+    ;;(qdot/load-pymacs)
+    (auto-complete-mode nil)
+    (subword-mode 1)
+    (flymake-mode 1)
+    (set (make-local-variable 'ac-sources)
+         (setq ac-sources (append '(ac-source-ropemacs ac-source-yasnippet) ac-sources)))
+    (set (make-local-variable 'ac-find-function) 'ac-python-find))
+  
+  ;; (add-hook 'python-mode-hook 'qdot/ac-config-python)
+  (add-hook 'python-mode-hook 'qdot/python-mode-hook)
+  
+  ;; Guess tabs/spaces for python mode indentation
+  ;; (add-hook 'python-mode-hook guess-style-guess-tabs-mode)
+  (add-hook 'python-mode-hook (lambda ()
+              (when indent-tabs-mode
+          (guess-style-guess-tab-width))))
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; Javascript settings
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (setq js-indent-level 2)
+  (setq
+   js2-auto-indent-p t
+   js2-basic-offset 2
+   js2-enter-indents-newline t
+   js2-indent-on-enter-key t)
+  
+  ;; (add-hook 'compilation-mode-hook
+  ;;          (lambda ()
+  ;;            (setq comint-buffer-maximum-size 10240)))
+  ;; ;; (add-hook 'comint-output-filter-functions 'comint-truncate-buffer)))
+  
+  ;; Fix for .js files that have Java set as the mode (I'm looking at
+  ;; you, mozilla-central)
+  (add-hook 'java-mode-hook
+      (lambda ()
+        (when (string-match "\\.js\\'" buffer-file-name)
+          (js2-mode))))
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; gdb settings
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  ;; Turn off non-stop by default. All or nothing, damnit.
+  (setq gdb-non-stop-setting nil)
+  
+  (setq compilation-auto-jump-to-first-error t)
+  (setq compilation-scroll-output 'first-error)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; lisp/elisp settings
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  ;; eldoc mode for showing function calls in mode line
+  (setq eldoc-idle-delay 0)
+  (autoload 'turn-on-eldoc-mode "eldoc" nil t)
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+  
+  ;; stealin' things from esk
+  (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
+  
+  (defun esk-remove-elc-on-save ()
+    "If you're saving an elisp file, likely the .elc is no longer valid."
+    (make-local-variable 'after-save-hook)
+    (add-hook 'after-save-hook
+        (lambda ()
+          (if (file-exists-p (concat buffer-file-name "c"))
+        (delete-file (concat buffer-file-name "c"))))))
+  
+  (define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
+  (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+  
+  ;; TODO: look into parenface package
+  (defface esk-paren-face
+    '((((class color) (background dark))
+       (:foreground "grey50"))
+      (((class color) (background light))
+       (:foreground "grey55")))
+    "Face used to dim parentheses."
+    :group 'starter-kit-faces)
+  
+  (dolist (mode '(scheme emacs-lisp lisp))
+      (when (> (display-color-cells) 8)
+        (font-lock-add-keywords (intern (concat (symbol-name mode) "-mode"))
+                                '(("(\\|)" . 'esk-paren-face)))))
+  
+  (eval-after-load 'magit
+    '(progn
+       (set-face-foreground 'magit-diff-add "green1")
+       (set-face-foreground 'magit-diff-del "red1")
+       (set-face-background 'magit-diff-add "#004400")
+       (set-face-background 'magit-diff-del "#440000")
+       (set-face-background 'magit-item-highlight "#1f2727")
+       ;; full screen magit-status
+  
+       (defadvice magit-status (around magit-fullscreen activate)
+         (window-configuration-to-register :magit-fullscreen)
+         ad-do-it
+         (delete-other-windows))
+  
+       (defun magit-quit-session ()
+         "Restores the previous window configuration and kills the magit buffer"
+         (interactive)
+         (kill-buffer)
+         (jump-to-register :magit-fullscreen))
+  
+       (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
+  
+#+end_src
+* Keybinds
+#+begin_src emacs-lisp
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; Key triggers
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  ;;(global-set-key (kbd "C-h") 'delete-backward-char)
+  (global-set-key (kbd "C-w") 'backward-kill-word)
+  (global-set-key (kbd "C-c p") 'swap-buffers-in-windows)
+  (global-set-key (kbd "C-c r") 'revert-buffer)
+  (global-set-key (kbd "C-c v") 'visual-line-mode)
+  (global-set-key (kbd "C-c e") 'eval-and-replace)
+  (global-set-key (kbd "C-c s") 'shell-current-directory)
+  (global-set-key (kbd "C-x C-k") 'kill-region)
+  (global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
+  (global-set-key (kbd "C-c C-m") 'execute-extended-command)
+  (global-set-key (kbd "C-c C-k") 'kill-region)
+  (global-set-key (kbd "C-c C-s") 'sudo-edit-current-file)
+  (global-set-key (kbd "C-c C-r") 'reload-file)
+  (global-set-key (kbd "C-M-g") 'goto-line)
+  (global-set-key (kbd "M-g s") 'magit-status)
+  (global-set-key (kbd "C-=") 'er/expand-region)
+  
+  ;; Bind smex over M-x, deals with sorting most used commands to front of IDO
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+  
+  (define-key global-map (kbd "C-x SPC") 'ace-jump-mode)
+  
+  ;; Stealin' from esk
+  
+  ;; Start eshell or switch to it if it's active.
+  (global-set-key (kbd "C-x m") 'eshell)
+  
+  ;; Start a new eshell even if one is active.
+  (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+  
+  ;; Start a regular shell if you prefer that.
+  (global-set-key (kbd "C-x C-m") 'shell)
+  
+  ;; Make this like shell. And also make emacs completely unusable for anyone
+  ;; else. :D
+  (global-set-key (kbd "C-w") 'backward-kill-word)
+#+end_src
+* Automodes
+#+begin_src emacs-lisp
+  ;; file extension mode recognition
+  (setq auto-mode-alist
+        (append
+         '(
+           ("\\.py$"   . python-mode)
+           ("\\.\\(xml\\|mxml\\)$" . nxml-mode)
+           ("\\.\\(html\\|htm\\)$" . nxhtml-mode)
+           ("\\.css$" . css-mode)  
+           ("\\.markdown$" . markdown-mode)
+           ("\\.testdoc$" . adoc-mode)
+           ("\\.archdoc$" . adoc-mode)
+           ("\\.asciidoc$" . adoc-mode)
+           ("\\.php$"  . php-mode)
+           ("\\.py$"   . python-mode)
+           ("\\.sql$"  . sql-mode)
+           ("\\.mode$" . cmake-mode)
+           ("\\.php$" . php-mode)
+           ("\\.wiki$" . wikipedia-mode)
+           ("\\.json$" . python-mode)
+           ("\\.cmake$" . cmake-mode)
+           ("\\.hs$" . haskell-mode)
+           ("CMakeLists\\.txt\\'" . cmake-mode)
+           ("ChangeLog\\.txt\\'" . change-log-mode)
+           ("\\.lua$" . lua-mode)
+           ("\\.h$"    . c++-mode)
+           ("\\.H$"    . c++-mode)
+           ("\\.org$"  . org-mode)
+           ("\\.org_archive$"  . org-mode)
+  ;         ("\\.pde$"  . processing-mode))
+         auto-mode-alist))
+#+end_src
+
 
 * WTF
 Something in el-get is setting debug-on-error to t. Not cool.
