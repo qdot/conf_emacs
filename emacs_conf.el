@@ -1,31 +1,17 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; add personal elisp directory to autoload
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar *emacs-load-start* (current-time))
 
-;; The base conf directory
 (setq qdot/emacs-conf-dir (file-name-directory (or load-file-name (buffer-file-name))))
 
-;; For manually installed elisp
 (setq qdot/emacs-elisp-dir (expand-file-name
-			    (concat qdot/emacs-conf-dir "elisp/")))
+          (concat qdot/emacs-conf-dir "elisp/")))
 
-;; For manually installed elisp
 (setq qdot/emacs-scripts-dir (expand-file-name
-			      (concat qdot/emacs-conf-dir "scripts/")))
+            (concat qdot/emacs-conf-dir "scripts/")))
 
-;; For source installs (no repo available to track)
-(setq qdot/emacs-elisp-src-dir (expand-file-name
-                                (concat qdot/emacs-conf-dir "elisp_src/")))
-
-;; For auto-install.el elisp
 (setq qdot/emacs-autoinst-elisp-dir (expand-file-name
-				     (concat qdot/emacs-conf-dir "elisp_auto/")))
+             (concat qdot/emacs-conf-dir "elisp_auto/")))
 
-;; As of emacs 23, ~/.emacs.d is user-emacs-directory
 (setq custom-file (concat user-emacs-directory "emacs_conf_custom.el"))
-
 (if (not (file-exists-p custom-file))
     (with-temp-buffer
       (write-file custom-file)))
@@ -34,22 +20,11 @@
 (add-to-list 'load-path (expand-file-name qdot/emacs-conf-dir))
 (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Make sure we have good ol' LISP available
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defvar *emacs-load-start* (current-time))
-
-;; Load cedet first, otherwise we'll conflict against the 1.1 repo stuff
-(load-file (concat qdot/emacs-autoinst-elisp-dir "cedet/cedet-devel-load.el"))
-
+(org-babel-load-file "emacs_conf_setup.org")
 (setq lib-files
       (list
        ;; Basic emacs setup. Anything that needs to happen before the
        ;; huge el-get package load happens here
-       "emacs_conf_setup.el"
 
        ;; Pull all modules now
        "emacs_conf_elget.el"
@@ -66,7 +41,9 @@
        "emacs_conf_wg.el"
        "emacs_conf_org_mode.el"
        "emacs_conf_erc.el"
+       "emacs_conf_gnus.el"
        "emacs_conf_autocomplete.el"
+       "emacs_conf_notify.el"
 
        ;; Programming related stuff
        "emacs_conf_programming.el"
@@ -78,8 +55,6 @@
 
 (mapcar 'load-library lib-files)
 
-;; Something in el-get is setting debug-on-error to t.
-;; Not cool.
 (if debug-on-error
-		(message "Something in init is setting debug-on-error to t. Fix it!")
+    (message "Something in init is setting debug-on-error to t. Fix it!")
     (setq debug-on-error nil))

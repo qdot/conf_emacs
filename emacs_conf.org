@@ -1,0 +1,98 @@
+#+TITLE: qDot's Emacs Configuration
+#+OPTIONS: toc:nil num:nil ^:nil
+* Configuration Load Timing
+
+#+begin_src emacs-lisp
+(defvar *emacs-load-start* (current-time))
+#+end_src
+
+* Directory Configuration
+Setting up a few different variables for the different types of
+directories we have (configurations, locally stored versus el-get
+fetched libs, etc...)
+
+- Set up the base configuration directory
+#+begin_src emacs-lisp
+  (setq qdot/emacs-conf-dir (file-name-directory (or load-file-name (buffer-file-name))))
+#+end_src
+
+- Manually installed/maintained elisp directory
+#+begin_src emacs-lisp
+  (setq qdot/emacs-elisp-dir (expand-file-name
+            (concat qdot/emacs-conf-dir "elisp/")))
+#+end_src
+
+- Non-elisp scripts directory
+#+begin_src emacs-lisp
+  (setq qdot/emacs-scripts-dir (expand-file-name
+              (concat qdot/emacs-conf-dir "scripts/")))
+#+end_src
+
+- el-get packages directory
+#+begin_src emacs-lisp
+  (setq qdot/emacs-autoinst-elisp-dir (expand-file-name
+               (concat qdot/emacs-conf-dir "elisp_auto/")))
+#+end_src
+
+- As of emacs 23, ~/.emacs.d is user-emacs-directory
+#+begin_src emacs-lisp
+  (setq custom-file (concat user-emacs-directory "emacs_conf_custom.el"))
+  (if (not (file-exists-p custom-file))
+      (with-temp-buffer
+        (write-file custom-file)))
+#+end_src
+
+- Add configuration and scripts directories to proper variables
+#+begin_src emacs-lisp
+  (add-to-list 'exec-path (expand-file-name qdot/emacs-scripts-dir))
+  (add-to-list 'load-path (expand-file-name qdot/emacs-conf-dir))
+  (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
+#+end_src
+
+* Library file loading
+#+begin_src emacs-lisp
+  (org-babel-load-file "emacs_conf_setup.org")
+  (setq lib-files
+        (list
+         ;; Basic emacs setup. Anything that needs to happen before the
+         ;; huge el-get package load happens here
+  
+         ;; Pull all modules now
+         "emacs_conf_elget.el"
+         custom-file
+  
+         ;; Mode setup and random externals
+         "emacs_conf_exts.el"
+  
+         ;; Always load functions before binds, since we bind to functions
+         ;; somewhat often
+         "emacs_conf_funcs.el"
+  
+         ;; Package specific setup
+         "emacs_conf_wg.el"
+         "emacs_conf_org_mode.el"
+         "emacs_conf_erc.el"
+         "emacs_conf_gnus.el"
+         "emacs_conf_autocomplete.el"
+         "emacs_conf_notify.el"
+  
+         ;; Programming related stuff
+         "emacs_conf_programming.el"
+  
+         ;; bind/automodes as late as possible, so we already have
+         ;; everything in that we're going to load
+         "emacs_conf_binds.el"
+         "emacs_conf_automode.el"))
+  
+  (mapcar 'load-library lib-files)
+#+end_src
+
+* WTF
+Something in el-get is setting debug-on-error to t. Not cool.
+
+#+begin_src emacs-lisp
+  (if debug-on-error
+      (message "Something in init is setting debug-on-error to t. Fix it!")
+      (setq debug-on-error nil))
+#+end_src
+
