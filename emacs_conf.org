@@ -1,5 +1,6 @@
 #+TITLE: qDot's Emacs Configuration
 #+OPTIONS: toc:nil num:nil ^:nil
+#+PROPERTY: comments both
 * Configuration Load Timing
 
 #+begin_src emacs-lisp
@@ -51,29 +52,20 @@ fetched libs, etc...)
 
 * Library file loading
 #+begin_src emacs-lisp
-  (org-babel-load-file "emacs_conf_setup.org")
+  (org-babel-load-file (concat qdot/emacs-conf-dir "emacs_conf_setup.org"))
+  ;; (org-babel-load-file (concat qdot/emacs-conf-dir "emacs_conf_elget.org"))
+  ;; (org-babel-load-file (concat qdot/emacs-conf-dir "emacs_conf_exts.org"))
+  ;; (org-babel-load-file (concat qdot/emacs-conf-dir "emacs_conf_funcs.org"))
+  
   (setq lib-files
         (list
-         ;; Basic emacs setup. Anything that needs to happen before the
-         ;; huge el-get package load happens here
-  
-         ;; Pull all modules now
-         "emacs_conf_elget.el"
          custom-file
-  
-         ;; Mode setup and random externals
-         "emacs_conf_exts.el"
-  
-         ;; Always load functions before binds, since we bind to functions
-         ;; somewhat often
-         "emacs_conf_funcs.el"
   
          ;; Package specific setup
          "emacs_conf_wg.el"
          "emacs_conf_org_mode.el"
          "emacs_conf_erc.el"
          "emacs_conf_gnus.el"
-         "emacs_conf_autocomplete.el"
          "emacs_conf_notify.el"
   
          ;; Programming related stuff

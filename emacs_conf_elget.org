@@ -1,6 +1,6 @@
 #+TITLE: el-get Setup
 #+OPTIONS: toc:nil num:nil ^:nil
-
+#+PROPERTY: comments both
 * El-get
 Sets up variables for storage locations and status files. If el-get
 doesn't currently exist on the system, it downloads the initialization
