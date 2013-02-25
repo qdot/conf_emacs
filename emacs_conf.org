@@ -428,6 +428,13 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   ;; Save a list of recent files visited.
   (recentf-mode 1)
 #+end_src
+** Package variables that need to be set before loading
+#+begin_src emacs-lisp
+  
+  ;; Variables for packages that need to be set before loading
+  (setq jedi:setup-keys t)
+  
+#+end_src
 
 * El-get
 Sets up variables for storage locations and status files. If el-get
