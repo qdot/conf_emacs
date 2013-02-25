@@ -2303,44 +2303,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 * Automodes
 #+begin_src emacs-lisp
   ;; file extension mode recognition
-  (setq auto-mode-alist
-        (append
-         '(
-           ("\\.py$"   . python-mode)
-           ("\\.\\(xml\\|mxml\\)$" . nxml-mode)
-           ("\\.\\(html\\|htm\\)$" . nxhtml-mode)
-           ("\\.css$" . css-mode)  
-           ("\\.markdown$" . markdown-mode)
-           ("\\.testdoc$" . adoc-mode)
-           ("\\.archdoc$" . adoc-mode)
-           ("\\.asciidoc$" . adoc-mode)
-           ("\\.php$"  . php-mode)
-           ("\\.py$"   . python-mode)
-           ("\\.sql$"  . sql-mode)
-           ("\\.mode$" . cmake-mode)
-           ("\\.php$" . php-mode)
-           ("\\.wiki$" . wikipedia-mode)
-           ("\\.json$" . python-mode)
-           ("\\.cmake$" . cmake-mode)
-           ("\\.hs$" . haskell-mode)
-           ("CMakeLists\\.txt\\'" . cmake-mode)
-           ("ChangeLog\\.txt\\'" . change-log-mode)
-           ("\\.lua$" . lua-mode)
-           ("\\.h$"    . c++-mode)
-           ("\\.H$"    . c++-mode)
-           ("\\.org$"  . org-mode)
-           ("\\.org_archive$"  . org-mode)
-  ;         ("\\.pde$"  . processing-mode))
-         auto-mode-alist))
-#+end_src
-
-
-* WTF
-Something in el-get is setting debug-on-error to t. Not cool.
-
-#+begin_src emacs-lisp
-  (if debug-on-error
-      (message "Something in init is setting debug-on-error to t. Fix it!")
-      (setq debug-on-error nil))
-#+end_src
-
+  (add-to-list 'auto-mode-alist '("\\.\\(xml\\|mxml\\)$" . nxml-mode))
+  (add-to-list 'auto-mode-alist '("\\.asciidoc$" . adoc-mode))
+  (add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
+  (add-to-list 'auto-mode-alist '("ChangeLog\\.txt\\'" . change-log-mode))
+  (add-to-list 'auto-mode-alist '("\\.org_archive$"  . org-mode))
+  
