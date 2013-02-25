@@ -718,50 +718,67 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 
 ** dired
 #+begin_src emacs-lisp
-;; dired modifications
-
-;; one dired buffer, damnit
-;; taken from http://bitbucket.org/kcfelix/emacsd/src/tip/init.el
-(defun qdot/dired-init ()
-  "Bunch of stuff to run for dired, either immediately or when it's
-        loaded."
-  (define-key dired-mode-map (kbd "C-s") 'dired-isearch-filenames-regexp)
-  (define-key dired-mode-map (kbd "C-M-s") 'dired-isearch-filenames)
-  (define-key dired-mode-map [return] 'joc-dired-single-buffer)
-  (define-key dired-mode-map "v" 'joc-dired-single-buffer)
-  (define-key dired-mode-map [mouse-1] 'joc-dired-single-buffer-mouse)
-  (define-key dired-mode-map "^"
-    (function
-     (lambda nil (interactive) (joc-dired-single-buffer "..")))))
-
-;; if dired's already loaded, then the keymap will be bound
-(if (boundp 'dired-mode-map)
-    ;; we're good to go; just add our bindings
-    (qdot/dired-init)
-  ;; it's not loaded yet, so add our bindings to the load-hook
-  (add-hook 'dired-load-hook 'qdot/dired-init))
-
-;; Additions to dired
-;; http://nflath.com/2009/07/dired/
-
-(require 'dired-x)
-(require 'wdired)
-(setq wdired-allow-to-change-permissions 'advanced)
-(define-key dired-mode-map	      	      (kbd "r")		'wdired-change-to-wdired-mode)
-
-;;Updated file system on all buffer switches if in dired mode
-(defadvice switch-to-buffer-other-window (after auto-refresh-dired (buffer &optional norecord) activate)
-  (if (equal major-mode 'dired-mode)
-      (revert-buffer)))
-(defadvice switch-to-buffer (after auto-refresh-dired (buffer &optional norecord) activate)
-  (if (equal major-mode 'dired-mode)
-      (revert-buffer)))
-(defadvice display-buffer (after auto-refresh-dired (buffer &optional not-this-window frame)  activate)
-  (if (equal major-mode 'dired-mode)
-      (revert-buffer)))
-(defadvice other-window (after auto-refresh-dired (arg &optional all-frame) activate)
-  (if (equal major-mode 'dired-mode)
-      (revert-buffer)))
+  ;; dired modifications
+  
+  ;; one dired buffer, damnit
+  ;; taken from http://bitbucket.org/kcfelix/emacsd/src/tip/init.el
+  (defun qdot/dired-init ()
+    "Bunch of stuff to run for dired, either immediately or when it's
+          loaded."
+    (define-key dired-mode-map (kbd "C-s") 'dired-isearch-filenames-regexp)
+    (define-key dired-mode-map (kbd "C-M-s") 'dired-isearch-filenames)
+    (define-key dired-mode-map [return] 'joc-dired-single-buffer)
+    (define-key dired-mode-map "v" 'joc-dired-single-buffer)
+    (define-key dired-mode-map [mouse-1] 'joc-dired-single-buffer-mouse)
+    (define-key dired-mode-map "^"
+      (function
+       (lambda nil (interactive) (joc-dired-single-buffer "..")))))
+  
+  ;; if dired's already loaded, then the keymap will be bound
+  (if (boundp 'dired-mode-map)
+      ;; we're good to go; just add our bindings
+      (qdot/dired-init)
+    ;; it's not loaded yet, so add our bindings to the load-hook
+    (add-hook 'dired-load-hook 'qdot/dired-init))
+  
+  ;; Additions to dired
+  ;; http://nflath.com/2009/07/dired/
+  
+  (require 'dired-x)
+  (require 'wdired)
+  (setq wdired-allow-to-change-permissions 'advanced)
+  (define-key dired-mode-map                    (kbd "r")         'wdired-change-to-wdired-mode)
+  
+  ;;Updated file system on all buffer switches if in dired mode
+  (defadvice switch-to-buffer-other-window (after auto-refresh-dired (buffer &optional norecord) activate)
+    (if (equal major-mode 'dired-mode)
+        (revert-buffer)))
+  (defadvice switch-to-buffer (after auto-refresh-dired (buffer &optional norecord) activate)
+    (if (equal major-mode 'dired-mode)
+        (revert-buffer)))
+  (defadvice display-buffer (after auto-refresh-dired (buffer &optional not-this-window frame)  activate)
+    (if (equal major-mode 'dired-mode)
+        (revert-buffer)))
+  (defadvice other-window (after auto-refresh-dired (arg &optional all-frame) activate)
+    (if (equal major-mode 'dired-mode)
+        (revert-buffer)))
+  
+  ;; http://whattheemacsd.com//setup-dired.el-02.html
+  (defun dired-back-to-top ()
+    (interactive)
+    (beginning-of-buffer)
+    (dired-next-line (if dired-omit-mode 2 4)))
+  
+  (define-key dired-mode-map
+    (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)
+  
+  (defun dired-jump-to-bottom ()
+    (interactive)
+    (end-of-buffer)
+    (dired-next-line -1))
+  
+  (define-key dired-mode-map
+    (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 #+end_src
 
 ** magit
