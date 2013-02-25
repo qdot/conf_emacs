@@ -2291,6 +2291,14 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   ;; Make this like shell. And also make emacs completely unusable for anyone
   ;; else. :D
   (global-set-key (kbd "C-w") 'backward-kill-word)
+  
+  ;; http://whattheemacsd.com//key-bindings.el-03.html
+  (global-set-key (kbd "M-j")
+                  (lambda ()
+                    (interactive)
+                    (join-line -1)))
+  
+  (global-set-key (kbd "C-x f") 'find-file-in-project)
 #+end_src
 * Automodes
 #+begin_src emacs-lisp
