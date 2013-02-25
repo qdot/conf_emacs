@@ -268,21 +268,6 @@ http://blog.tuxicity.se/elisp/emacs/2010/11/16/delete-file-and-buffer-in-emacs.h
     (org-agenda-switch-to))
 #+end_src
 
-** Firefox Setup
-#+begin_src emacs-lisp
-  (defun qdot/set-firefox-trunk ()
-    "Set default browser to firefox-trunk regardless of OS default"
-    (interactive)
-    (if linux-p
-        (custom-set-variables '(browse-url-firefox-program "firefox-trunk"))))
-  
-  (defun qdot/set-firefox ()
-    "Set default browser to firefox regardless of OS default"
-    (interactive)
-    (if linux-p
-        (custom-set-variables '(browse-url-firefox-program "firefox"))))
-#+end_src
-
 ** Byte compile elisp when saved
 Byte compile the current buffer on save if a byte compiled version
 already exists.
@@ -306,6 +291,26 @@ Set up some simple platform finding variables that may or may not work
 (setq mswindows-p (string-match "windows" (symbol-name system-type)))
 (setq macosx-p (string-match "darwin" (symbol-name system-type)))
 (setq linux-p (string-match "gnu/linux" (symbol-name system-type)))
+#+end_src
+** Firefox Setup
+#+begin_src emacs-lisp
+  
+  (when linux-p
+    (defun qdot/set-firefox-trunk ()
+      "Set default browser to firefox-trunk regardless of OS default"
+      (interactive)
+      (when linux-p
+        (custom-set-variables '(browse-url-firefox-program "firefox-trunk"))))
+  
+    (defun qdot/set-firefox ()
+      "Set default browser to firefox regardless of OS default"
+      (interactive)
+      (when linux-p
+        (custom-set-variables '(browse-url-firefox-program "firefox"))))
+  
+    ;; Make sure we use firefox-trunk if it's on linux.
+    (when (member t (mapcar (lambda (d) (file-exists-p (concat d "/firefox-trunk"))) exec-path))
+      (qdot/set-firefox-trunk)))
 #+end_src
 
 ** CEDET Loading
