@@ -285,6 +285,12 @@ already exists.
 
 
 * Basic Variables and Modes
+** Identity
+#+begin_src emacs-lisp
+  (setq
+   user-mail-address "kyle@nonpolynomial.com"
+   user-full-name  "Kyle Machulis")
+#+end_src
 ** Platform Variables
 Set up some simple platform finding variables that may or may not work
 #+begin_src emacs-lisp
