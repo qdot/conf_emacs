@@ -2309,3 +2309,152 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (add-to-list 'auto-mode-alist '("ChangeLog\\.txt\\'" . change-log-mode))
   (add-to-list 'auto-mode-alist '("\\.org_archive$"  . org-mode))
   
+#+end_src
+* Tasks
+** DONE Import contacts into BBDB3
+CLOSED: [2012-08-25 Sat 21:23]
+- State "DONE"       from "TODO"       [2012-08-25 Sat 21:23]
+** DONE Move contacts into BBDB off iphone
+CLOSED: [2012-08-25 Sat 21:24]
+- State "DONE"       from "TODO"       [2012-08-25 Sat 21:24]
+:PROPERTIES:
+:ID: 74bfbc0a-3618-4567-a639-171aa0af2b24
+:END:
+   [2010-09-20 Mon]
+   [[file:~/emacs_org/vienna2010.org::*2010%2009%2010][2010-09-10]]
+** CANCELLED Create special ERC buffer to show query buffer list
+CLOSED: [2012-10-15 Mon 15:47]
+- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:47] \\
+  Implementing via erc-nicklist
+** CANCELLED Make todochiku notification for twitter mentions
+CLOSED: [2012-10-15 Mon 15:36]
+- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:36] \\
+  Not using todochiku anymore
+:PROPERTIES:
+:ID: 8a309bfb-abc0-4492-9eb7-3f7af4a30bd1
+:END:
+** CANCELLED Make todochiku notification for inbox receives
+CLOSED: [2012-10-15 Mon 15:36]
+- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:36] \\
+  Not using todochiku anymore
+:PROPERTIES:
+:ID: c315b3ab-448b-4134-af2f-0378af73dc24
+:END:
+** DONE See how sauron handles notifications for twitter/gnus
+CLOSED: [2012-10-15 Mon 15:37]
+- State "DONE"       from "TODO"       [2012-10-15 Mon 15:37]
+:PROPERTIES:
+:ID: 587c0a16-161f-482a-b950-f74c760dea78
+:END:
+** DONE Rename emacs_files_24 to just emacs_files again
+CLOSED: [2012-10-15 Mon 15:47]
+- State "DONE"       from "TODO"       [2012-10-15 Mon 15:47]
+  [2012-04-27 Fri]
+  [[file:~/emacs_org/org-reorg.org::*Files][Files]]
+** TODO Redo CEDET Setup
+** TODO Figure out issues with schedule export
+** TODO Read up more on mail sync
+** TODO Make header/source search look at the buffer list first
+   :PROPERTIES:
+   :ID:       831C60D2-5A9C-46C4-AFFD-D197F22E9731
+   :END:
+** TODO Extend jekyll script to deal with multiple blogs
+   :PROPERTIES:
+   :ID:       6B223E71-B699-4B9D-836B-C9F061DC93AD
+   :END:
+
+** TODO Fix rope mode to always have ignore_bad_imports equal to True
+:PROPERTIES:
+:ID: 0757ee32-8d03-4745-8f00-74023cc739a2
+:END:
+   [2010-10-27 Wed]
+   [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
+
+** TODO Make emacs autoblogging utility for blog and software sites
+:PROPERTIES:
+:ID: 1ce4cdcc-ddbe-48d6-9eb6-2b363d5db90c
+:END:
+   [2011-01-08 Sat]
+
+   [[file:~/git-projects/nonpolynomial.com/libraries/index.html::<H2>libnifalcon</H2>]]
+** TODO Check out eproject
+:PROPERTIES:
+:ID: 5c2bdb24-e177-45eb-a5c0-5b1ecacbbc45
+:END:
+https://github.com/jrockway/eproject
+
+** TODO Check out ede which apparently now works with CMake?
+** TODO Work on eshell
+:PROPERTIES:
+:ID: f7db638c-c411-4f8f-b214-7e66ce0b1756
+:END:
+** TODO Override java-mode to be js2-mode on all .js files
+  [2012-03-30 Fri]
+  [[file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power)%20{][file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power) {]]
+
+** TODO Make fill columns for ERC auto-set for workgroup sizes?
+** TODO Install BufferTimer
+https://github.com/hardaker/elisp-buffer-timer/
+** TODO Fix ede-mode for org files
+** TODO Add C-c . to org-disputed-keys, change to C-c c for calendar bring-up versus cedet/ede
+** TODO Check out why rainbow delimiters don't like mozilla C++ files
+** TODO Read Julian Danjou's config
+http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
+** TODO Set up unicode fonts in emacs
+https://github.com/rolandwalker/unicode-fonts
+** TODO Check out js2-refactor
+** TODO Make bitlbee workgroup regenerate whenever we get a new im
+** TODO Think about non-fixed with for non-code buffers?
+** ERC Nicklist rewrite
+*** TODO Create filter function to load things like lists of privmsg buffers
+*** TODO Use hl-mode for hilighting per line
+*** TODO Remove cursor rendering
+*** TODO Rewrite menu/query function
+*** TODO Group handling?
+*** TODO Host fetch handling
+*** TODO Change nick/line faces based on status or privmsg
+*** TODO Make nicklist buffer show up in buffer list
+*** TODO Create command to clear erc-nicklist
+  [2012-03-30 Fri]
+  [[file:~/code/mozbuild/mozilla-central/dom/wifi/WifiWorker.js::let%20sdkVersion%20%3D%2015%3B][file:~/code/mozbuild/mozilla-central/dom/wifi/WifiWorker.js::let sdkVersion = 15;]]
+** ERC Privmsg mode
+*** TODO Make keymap for last/next privmsg
+*** TODO Make trigger to clear erc-nicklist status on access
+*** TODO Gravatar image viewing?
+*** TODO Make ido only list IMs?
+** Workgroups Update
+*** TODO Divide functionality into modules
+*** TODO Removing pickling, make configuration files human readable
+*** TODO Make more features enable/disable-able
+*** TODO Per-workgroup buffer list implementations
+*** TODO Stop workgroups.el from reloading file lists for workgroups
+** mu4e/gnupg
+*** DONE Set all past email address in mu4e-user-mail-address-list
+CLOSED: [2013-02-18 Mon 22:21]
+- State "DONE"       from "TODO"       [2013-02-18 Mon 22:21]
+*** DONE Set up gpg to not require passwords all the time
+CLOSED: [2013-02-18 Mon 22:25]
+- State "DONE"       from "TODO"       [2013-02-18 Mon 22:25]
+*** DONE Check out message actions ('a' in header view)
+CLOSED: [2013-02-21 Thu 18:51]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 18:51]
+*** DONE Change mu4e-view-show-addresses so I can see email addresses
+CLOSED: [2013-02-21 Thu 18:58]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 18:58]
+*** DONE Set up multiple account information for smtpmail
+CLOSED: [2013-02-21 Thu 21:26]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 21:26]
+*** DONE Set up bookmarks for oft used searches
+CLOSED: [2013-02-21 Thu 22:34]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 22:34]
+*** TODO Set up quick indexes to maildirs
+5*** TODO Add mu notifications for sauron and xmonad
+*** TODO Set up offlineimap to retrieve via mu4e
+*** TODO Set up mail queuing in mu4e
+*** TODO Set up encryption/checking in mu4e
+*** TODO Encrypt maildir via truecrypt
+*** TODO Figure out where to put maildir for transfer
+*** TODO Look at key sharing via ssss or libgfshare
+http://www.digital-scurf.org/software/libgfshare
+*** TODO Make autorefiling function for messages from Kelly
+*** TODO Speedbar setup for xmonad (automatic frame sizing)?
