@@ -2131,8 +2131,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (auto-complete-mode nil)
     (subword-mode 1)
     (flymake-mode 1)
-    (set (make-local-variable 'ac-sources)
-         (setq ac-sources (append '(ac-source-ropemacs ac-source-yasnippet) ac-sources)))
+    (jedi:ac-setup)
     (set (make-local-variable 'ac-find-function) 'ac-python-find))
   
   ;; (add-hook 'python-mode-hook 'qdot/ac-config-python)
