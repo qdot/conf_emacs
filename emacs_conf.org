@@ -630,11 +630,11 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 
 ** diminish
 #+begin_src emacs-lisp
-(require 'diminish)
-(diminish 'yas-minor-mode " y")
-;; (diminish 'org-indent-mode " i")
-(diminish 'workgroups-mode " ω")
-(diminish 'auto-complete-mode " α")
+  (require 'diminish)
+  (diminish 'yas-minor-mode " y")
+  ;; (diminish 'org-indent-mode " i")
+  ;; (diminish 'workgroups-mode " ω")
+  (diminish 'auto-complete-mode " α")
 #+end_src
 
 
