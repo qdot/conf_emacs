@@ -828,14 +828,182 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 
 ** mu4e
 #+begin_src emacs-lisp
-(setq mu4e-maildir "~/Mail") ;; top-level Maildir
-(setq mu4e-html2text-command "w3m -dump -T text/html")
-(setq mu4e-view-prefer-html t)
+  (require 'mu4e-vars)
+  (when linux-p
+    (setq mu4e-mu-binary "/home/qdot/usr/bin/mu"))
+  (when macosx-p
+    (setq mu4e-mu-binary "/opt/homebrew/bin/mu"))
+  (setq mu4e-maildir "~/Mail") ;; top-level Maildir
+  (setq mu4e-html2text-command "w3m -dump -T text/html")
+  (setq mu4e-view-prefer-html t)
+  (setq mu4e-use-fancy-chars t)
+  (setq mu4e-get-mail-command "offlineimap")
+  (setq mu4e-update-interval 300)
+  (setq mu4e-attachment-dir  "~/Downloads")
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types))
+  (setq mu4e-view-show-images t)
+  (setq mu4e-view-show-addresses t)
+  
+  ;; setup some handy shortcuts
+  (setq mu4e-maildir-shortcuts
+        '(("/nonpolynomial/INBOX"             . ?i)
+          ("/mozilla/INBOX"             . ?m)
+          ("/nonpolynomial/Mozilla.bugzilla"             . ?b)
+          ("/[Gmail].Sent Mail" . ?s)
+          ("/[Gmail].Trash"     . ?t)))
+  
+  (setq qdot/mu4e-account-alist
+    '(("nonpolynomial"
+       (mu4e-sent-folder "/nonpolynomial/[Gmail].Sent Mail")
+       (mu4e-drafts-folder "/nonpolynomial/[Gmail].Drafts")
+       (user-mail-address "kyle@nonpolynomial.com")
+       (smtpmail-default-smtp-server "smtp.gmail.com")
+       (smtpmail-local-domain "nonpolynomial.com")
+       (smtpmail-smtp-server "smtp.gmail.com")
+       (smtpmail-stream-type starttls)
+       (smtpmail-smtp-service 587))
+      ("mozilla"
+       (mu4e-sent-folder "/mozilla/Sent")
+       (mu4e-drafts-folder "/mozilla/Drafts")
+       (user-mail-address "kmachulis@mozilla.com")
+       (smtpmail-default-smtp-server "smtp.")
+       (smtpmail-local-domain "mozilla.com")
+       (smtpmail-smtp-server "smtp.gmail.com")
+       (smtpmail-stream-type starttls)
+       (smtpmail-smtp-service 587))))
+  
+  (add-to-list 'mu4e-bookmarks
+               '("maildir:/nonpolynomial/INBOX flag:unread" "Nonpolynomial Unread" ?n) t)
+  (add-to-list 'mu4e-bookmarks
+               '("maildir:/mozilla/INBOX flag:unread" "Mozilla Unread" ?m) t)
+  
+  (setq mail-user-agent 'mu4e-user-agent)
+  (require 'org-mu4e)
+  
+  (defun qdot/mu4e-set-account ()
+    "Set the account for composing a message."
+    (interactive)
+    (let* ((account
+            (if mu4e-compose-parent-message
+                (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
+                  (string-match "/\\(.*?\\)/" maildir)
+                  (match-string 1 maildir))
+              (completing-read (format "Compose with account: (%s) "
+                                       (mapconcat #'(lambda (var) (car var)) qdot/mu4e-account-alist "/"))
+                               (mapcar #'(lambda (var) (car var)) qdot/mu4e-account-alist)
+                               nil t nil nil (caar qdot/mu4e-account-alist))))
+           (account-vars (cdr (assoc account qdot/mu4e-account-alist))))
+      (if account-vars
+          (mapc #'(lambda (var)
+                    (set (car var) (cadr var)))
+                account-vars)
+        (error "No email account found"))))
+  
+  (add-hook 'mu4e-compose-pre-hook 'qdot/mu4e-set-account)
+  
+  (require 'gnus-dired)
+  ;; make the `gnus-dired-mail-buffers' function also work on
+  ;; message-mode derived modes, such as mu4e-compose-mode
+  (defun gnus-dired-mail-buffers ()
+    "Return a list of active message buffers."
+    (let (buffers)
+      (save-current-buffer
+        (dolist (buffer (buffer-list t))
+          (set-buffer buffer)
+          (when (and (derived-mode-p 'message-mode)
+                     (null message-sent-message-via))
+            (push (buffer-name buffer) buffers))))
+      (nreverse buffers)))
+  
+  (setq gnus-dired-mail-mode 'mu4e-user-agent)
+  (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
+  
+#+end_src
+** smtpmail
+#+begin_src emacs-lisp  
+  ;; sending mail -- replace USERNAME with your gmail username
+  ;; also, make sure the gnutls command line utils are installed
+  ;; package 'gnutls-bin' in Debian/Ubuntu, 'gnutls' in Archlinux.
+  
+  (require 'smtpmail)
+  (setq message-send-mail-function 'smtpmail-send-it
+        starttls-use-gnutls t
+        smtpmail-starttls-credentials
+        '(("smtp.gmail.com" 587 nil nil))
+        smtpmail-auth-credentials
+        '(("smtp.gmail.com" 587 "kyle@nonpolynomial.com" nil))
+        smtpmail-default-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-service 587
+        smtpmail-debug-info t)
+  
+  (setq smtpmail-queue-mail  nil  ;; start in non-queuing mode
+        smtpmail-queue-dir   "~/Mail/queue/cur")
 #+end_src
 
+** message-mode
+#+begin_src emacs-lisp
+  ;; add Cc and Bcc headers to the message buffer
+  (setq message-default-mail-headers "Cc: \nBcc: \n")
+  (setq message-kill-buffer-on-exit t)
+  
+#+end_src
 ** sauron
 #+begin_src emacs-lisp
-(setq sauron-separate-frame nil)
+  (setq sauron-separate-frame nil)
+  (setq sauron-dbus-cookie t)
+  (setq
+   sauron-max-line-length 200
+   ;; 60 was a little long, and there's a lot of times I switch away quickly after
+   ;; replying.
+   sauron-nick-insensitivity 5
+  
+   ;; uncomment to show sauron in the current frame
+   ;; sauron-separate-frame nil
+  
+  
+  (defun qdot/monkey-patch-sr ()
+    (interactive)
+    ;; Monkeypatching sauron's ERC hook until I write a msg string formatter for it
+    (defun sr-erc-PRIVMSG-hook-func (proc parsed)
+      "Hook function, to be called for erc-matched-hook."
+      (let* ( (me      (erc-current-nick))
+              (sender  (car (erc-parse-user (erc-response.sender parsed))))
+              (channel (car (erc-response.command-args parsed)))
+              (msg     (sr-erc-msg-clean (erc-response.contents parsed)))
+              (nw      (symbol-name (erc-network)))
+              (for-me  (string= me channel))
+              (prio
+               (cond
+                ((string= sender "root") 2)  ;; e.g. bitlbee stuff; low-prio
+                (for-me                  3)  ;; private msg for me => prio 4
+                ((string-match me msg)   3)  ;; I'm mentioned => prio 3
+                (t       2)))  ;; default
+              (target (if (buffer-live-p (get-buffer channel))
+                          (with-current-buffer (get-buffer channel)
+                            (point-marker)))))
+        (sauron-add-event
+         'erc
+         prio
+         (concat
+          (propertize sender 'face 'sauron-highlight1-face) "@"
+          (propertize channel 'face 'sauron-highlight2-face) " on "
+          (propertize nw 'face 'sauron-highlight2-face)
+          (if (string-match "#" channel)
+              (propertize " msg" 'face 'sauron-highlight1-face)
+            (propertize " privmsg" 'face 'sauron-highlight1-face)))
+         (lexical-let* ((target-mark target)
+                        (target-buf (if for-me sender channel)))
+           (lambda ()
+             (sauron-switch-to-marker-or-buffer (or target-mark target-buf))))
+         `( :event   privmsg
+                     :sender ,sender
+                     :me     ,me
+                     :channel ,channel
+                     :msg    ,msg)))
+      nil))
+  
 #+end_src
 
 
@@ -1309,6 +1477,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (set-face-background 'org-block-end-line "#333")
   (set-face-background 'org-block-background "#222")
 #+end_src
+
 ** ERC
 #+begin_src emacs-lisp
   (require 'erc)
@@ -1719,62 +1888,6 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   ;; notifications without having to worry about stupid shit like dbus.
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
-  (setq
-   sauron-max-line-length 200
-   ;; 60 was a little long, and there's a lot of times I switch away quickly after
-   ;; replying.
-   sauron-nick-insensitivity 5
-  
-   ;; uncomment to show sauron in the current frame
-   ;; sauron-separate-frame nil
-  
-   ;; you probably want to add your own nickname to the these patterns
-   sauron-watch-patterns
-   '("qDot_" "qDot" "subgirl" "bokeh" "xiuv")
-  
-   ;; you probably want to add you own nick here as well
-   sauron-watch-nicks
-   '("qDot_" "qDot" "aim-xiuvx" "aim-bokehcat" "aim-subgirl13"))
-  
-  ;; Monkeypatching sauron's ERC hook until I write a msg string formatter for it
-  (defun sr-erc-PRIVMSG-hook-func (proc parsed)
-    "Hook function, to be called for erc-matched-hook."
-    (let* ( (me      (erc-current-nick))
-      (sender  (car (erc-parse-user (erc-response.sender parsed))))
-      (channel (car (erc-response.command-args parsed)))
-      (msg     (sr-erc-msg-clean (erc-response.contents parsed)))
-      (nw      (symbol-name (erc-network)))
-      (for-me  (string= me channel))
-      (prio
-       (cond
-        ((string= sender "root") 2)  ;; e.g. bitlbee stuff; low-prio
-        (for-me                  3)  ;; private msg for me => prio 4
-        ((string-match me msg)   3)  ;; I'm mentioned => prio 3
-        (t       2)))  ;; default
-      (target (if (buffer-live-p (get-buffer channel))
-                (with-current-buffer (get-buffer channel)
-        (point-marker)))))
-      (sauron-add-event
-       'erc
-       prio
-       (concat
-        (propertize sender 'face 'sauron-highlight1-face) "@"
-        (propertize channel 'face 'sauron-highlight2-face) " on "
-        (propertize nw 'face 'sauron-highlight2-face)
-        (if (string-match "#" channel)
-      (propertize " msg" 'face 'sauron-highlight1-face)
-    (propertize " privmsg" 'face 'sauron-highlight1-face)))
-       (lexical-let* ((target-mark target)
-          (target-buf (if for-me sender channel)))
-         (lambda ()
-     (sauron-switch-to-marker-or-buffer (or target-mark target-buf))))
-       `( :event   privmsg
-       :sender ,sender
-       :me     ,me
-       :channel ,channel
-       :msg    ,msg)))
-    nil)
   
   (when linux-p
     (defvar qdot/status-file-directory "/home/qdot/.xmonad/status/"
@@ -2321,6 +2434,12 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
                     (join-line -1)))
   
   (global-set-key (kbd "C-x f") 'find-file-in-project)
+  
+  (require 'rect-mark)
+  (global-set-key (kbd "C-x r C-SPC") 'rm-set-mark)
+  (global-set-key (kbd "C-x r C-x")   'rm-exchange-point-and-mark)
+  (global-set-key (kbd "C-x r C-w")   'rm-kill-region)
+  (global-set-key (kbd "C-x r M-w")   'rm-kill-ring-save)
 #+end_src
 * Automodes
 #+begin_src emacs-lisp
@@ -2480,3 +2599,4 @@ CLOSED: [2013-02-21 Thu 22:34]
 http://www.digital-scurf.org/software/libgfshare
 *** TODO Make autorefiling function for messages from Kelly
 *** TODO Speedbar setup for xmonad (automatic frame sizing)?
+
