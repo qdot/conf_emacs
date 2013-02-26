@@ -283,6 +283,22 @@ already exists.
   (add-hook 'after-save-hook 'qdot/byte-compile-current-buffer)
 #+end_src
 
+** Desktop setup function
+#+begin_src emacs-lisp
+  (defun qdot/start-desktop ()
+    (interactive)
+    (qdot/set-platform-font)
+    (when linux-p
+      (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el")))
+    (org-agenda-list)
+    (sauron-start)
+    (qdot/monkey-patch-sr)
+    (qdot/erc-znc-start)
+    (qdot/bitlbee-connect)
+    (wg-switch-to-workgroup "bitlbee")
+    (qdot/bitlbee-resume-layout)
+    (wg-switch-to-workgroup "twitter"))
+#+end_src
 
 * Basic Variables and Modes
 ** Identity
