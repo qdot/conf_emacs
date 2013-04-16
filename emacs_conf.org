@@ -1645,28 +1645,27 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   
-  (setq qdot/erc-znc-server-rename-list (list))
+  (defvar qdot/erc-znc-nick "qdot")
+  (defvar qdot/erc-znc-password "doesnotmatter")
   
-  (defun qdot/erc-znc-connect (nick)
-    (interactive "ZNC Nick:")
-    (erc :server qdot/erc-znc-remote-server :port qdot/erc-znc-port :nick nick :full-name nick)
-    )
+  (defun qdot/erc-znc-connect (network)
+    (erc :server qdot/erc-znc-remote-server
+         :port qdot/erc-znc-port
+         :nick (format "%s/%s" qdot/erc-znc-nick network)
+         :full-name "qdot"
+         :password (format "%s/%s:%s" qdot/erc-znc-nick network qdot/erc-znc-password)))
   
   (defun qdot/erc-znc-rename-server-buffer ()
     (interactive)
-    (let ((current-network (caddr (split-string (erc-current-nick) "-"))))
-      (save-excursion
-        (set-buffer (erc-server-buffer))
-        (rename-buffer (concat "znc-" current-network))
-        (message (format "Renamed buffer to %s" (concat "znc-" current-network)))
-        )))
+    (save-excursion
+      (set-buffer (erc-server-buffer))
+      (rename-buffer (concat "znc-" (erc-current-network)))
+      (message (format "Renamed buffer to %s" (concat "znc-" (erc-current-network))))))
   
   (defun qdot/erc-znc-initialize (proc parsed)
     ;; Prepend all ZNC buffers with znc-
-    (if (and (not (string-match "znc-" (buffer-name (erc-server-buffer)))) (string-match "qdot-znc" (erc-current-nick)))
-        (progn
-          (qdot/erc-znc-rename-server-buffer)
-          (erc-server-send (format "PASS %s:%s" (erc-current-nick) qdot/erc-znc-password))))
+    (when (not (string-match "znc-" (buffer-name (erc-server-buffer))))
+      (qdot/erc-znc-rename-server-buffer))
     nil)
   
   (add-hook 'erc-server-NOTICE-functions 'qdot/erc-znc-initialize)
@@ -1676,24 +1675,22 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   ;; ZNC variables and utility functions
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
-  (setq qdot/erc-znc-nicks '("qdot-znc-freenode" "qdot-znc-mozilla"))
-  (defvar qdot/erc-znc-password "doesnotmatter")
+  (defvar qdot/erc-znc-networks '("freenode" "mozilla"))
   (defvar qdot/erc-znc-remote-server "localhost")
   (defvar qdot/erc-znc-port 9999)
   
   (defun qdot/erc-znc-start ()
     (interactive)
-    (mapcar 'qdot/erc-znc-connect qdot/erc-znc-nicks))
+    (mapcar 'qdot/erc-znc-connect qdot/erc-znc-networks))
   
   (defun qdot/bitlbee-connect ()
     (interactive)
-    (qdot/erc-znc-connect "qdot-znc-bitlbee"))
+    (qdot/erc-znc-connect "bitlbee"))
   
   (defun qdot/bitlbee-reallocate-query-buffers ()
     ;; For each already opened query window, reallocate
     (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf))
-    (qdot/filter 'erc-query-buffer-p (buffer-list))))
+          (qdot/filter 'erc-query-buffer-p (buffer-list))))
   
   (defun qdot/bitlbee-resume-layout ()
     (interactive)
@@ -1719,7 +1716,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   
   ;; Don't track common events
   (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
-          "324" "329" "332" "333" "353" "477"))
+                                  "324" "329" "332" "333" "353" "477"))
   
   (setq erc-current-nick-highlight-type 'nick)
   
