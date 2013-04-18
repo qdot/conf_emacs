@@ -443,6 +443,10 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (auto-compression-mode t)
   ;; Save a list of recent files visited.
   (recentf-mode 1)
+  ;; Wrap everywhere
+  (global-visual-line-mode 1)
+  ;; When region active, delete actually deletes it
+  (delete-selection-mode 1)
 #+end_src
 ** Package variables that need to be set before loading
 #+begin_src emacs-lisp
