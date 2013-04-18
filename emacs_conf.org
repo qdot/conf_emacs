@@ -991,8 +991,37 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   
   (setq smtpmail-queue-mail  nil  ;; start in non-queuing mode
         smtpmail-queue-dir   "~/Mail/queue/cur")
+  
+  ;; msmtp setup via
+  ;; http://ionrock.org/emacs-email-and-mu.html
+  
+  ;; sending mail
+  (setq message-send-mail-function 'message-send-mail-with-sendmail
+        sendmail-program "/usr/bin/msmtp")
+  
+  ;; Choose account label to feed msmtp -a option based on From header
+  ;; in Message buffer; This function must be added to
+  ;; message-send-mail-hook for on-the-fly change of From address before
+  ;; sending message since message-send-mail-hook is processed right
+  ;; before sending message.
+  (defun choose-msmtp-account ()
+    (if (message-mail-p)
+        (save-excursion
+          (let*
+              ((from (save-restriction
+                       (message-narrow-to-headers)
+                       (message-fetch-field "from")))
+               (account
+                (cond
+                 ((string-match "kmachulis@mozilla.com" from) "mozilla-mail")
+                 ((string-match "kyle@nonpolynomial.com" from) "nplabs-mail"))))
+            (setq message-sendmail-extra-arguments
+                  (list "-C" "/home/qdot/.msmtprc"
+                        "-a" account
+                        (format "--passwordeval=gpg --use-agent --batch --quiet -d /home/qdot/.passwd/%s.gpg" account)))))))
+  (setq message-sendmail-envelope-from 'header)
+  (add-hook 'message-send-mail-hook 'choose-msmtp-account)
 #+end_src
-
 ** message-mode
 #+begin_src emacs-lisp
   ;; add Cc and Bcc headers to the message buffer
