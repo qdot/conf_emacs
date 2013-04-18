@@ -2462,7 +2462,6 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   
   ;;(global-set-key (kbd "C-h") 'delete-backward-char)
   (global-set-key (kbd "C-w") 'backward-kill-word)
-  (global-set-key (kbd "C-c p") 'swap-buffers-in-windows)
   (global-set-key (kbd "C-c r") 'revert-buffer)
   (global-set-key (kbd "C-c v") 'visual-line-mode)
   (global-set-key (kbd "C-c e") 'eval-and-replace)
@@ -2520,6 +2519,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (add-to-list 'auto-mode-alist '("\\.\\(xml\\|mxml\\)$" . nxml-mode))
   (add-to-list 'auto-mode-alist '("\\.asciidoc$" . adoc-mode))
   (add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsm$" . js2-mode))
   (add-to-list 'auto-mode-alist '("ChangeLog\\.txt\\'" . change-log-mode))
   (add-to-list 'auto-mode-alist '("\\.org_archive$"  . org-mode))
   
@@ -2568,6 +2568,20 @@ CLOSED: [2012-10-15 Mon 15:47]
 ** DONE Read up more on mail sync
 CLOSED: [2013-02-26 Tue 19:48]
 - State "DONE"       from "TODO"       [2013-02-26 Tue 19:48]
+** CLOSED Fix rope mode to always have ignore_bad_imports equal to True
+CLOSED: [2013-04-17 Wed 21:23]
+- State "CLOSED"     from "TODO"       [2013-04-17 Wed 21:23] \\
+  Not using rope anymore
+:PROPERTIES:
+:ID: 0757ee32-8d03-4745-8f00-74023cc739a2
+:END:
+   [2010-10-27 Wed]
+   [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
+** DONE Override java-mode to be js2-mode on all .js files
+CLOSED: [2013-04-17 Wed 21:27]
+- State "DONE"       from "TODO"       [2013-04-17 Wed 21:27]
+  [2012-03-30 Fri]
+  [[file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power)%20{][file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power) {]]
 ** TODO Redo CEDET Setup
 ** TODO Figure out issues with schedule export
 ** TODO Make header/source search look at the buffer list first
@@ -2578,13 +2592,6 @@ CLOSED: [2013-02-26 Tue 19:48]
    :PROPERTIES:
    :ID:       6B223E71-B699-4B9D-836B-C9F061DC93AD
    :END:
-
-** TODO Fix rope mode to always have ignore_bad_imports equal to True
-:PROPERTIES:
-:ID: 0757ee32-8d03-4745-8f00-74023cc739a2
-:END:
-   [2010-10-27 Wed]
-   [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
 
 ** TODO Make emacs autoblogging utility for blog and software sites
 :PROPERTIES:
@@ -2604,14 +2611,10 @@ https://github.com/jrockway/eproject
 :PROPERTIES:
 :ID: f7db638c-c411-4f8f-b214-7e66ce0b1756
 :END:
-** TODO Override java-mode to be js2-mode on all .js files
-  [2012-03-30 Fri]
-  [[file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power)%20{][file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power) {]]
 
 ** TODO Make fill columns for ERC auto-set for workgroup sizes?
 ** TODO Install BufferTimer
 https://github.com/hardaker/elisp-buffer-timer/
-** TODO Fix ede-mode for org files
 ** TODO Add C-c . to org-disputed-keys, change to C-c c for calendar bring-up versus cedet/ede
 ** TODO Check out why rainbow delimiters don't like mozilla C++ files
 ** TODO Read Julian Danjou's config
