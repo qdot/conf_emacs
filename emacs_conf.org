@@ -953,6 +953,23 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (setq gnus-dired-mail-mode 'mu4e-user-agent)
   (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
   
+  ;; Create a header action for marking as needs reply
+  (defun qdot/mu4e-org-needs-reply (msg)
+    (let* ((msgid   (or (plist-get msg :message-id) "<none>"))
+           (msgfrom (car (mu4e-message-field msg :from)))
+           link)
+      ;; Manually concat the link because I suck at figuring out how org-mode
+      ;; elisp works
+      (setq link (concat "REPLY "
+                         (format-time-string (cdr org-time-stamp-formats) (mu4e-message-field msg :date))
+                         " [[mu4e:msgid:" msgid "][" (car msgfrom) " <" (cdr msgfrom) "> : "
+                         (funcall org-mu4e-link-desc-func msg) "]]" ))
+      (kill-new link)
+      (org-capture nil "r")))
+  
+  (require 'mu4e-headers)
+  (add-to-list 'mu4e-headers-actions '("org reply task" . qdot/mu4e-org-needs-reply) t)
+  
 #+end_src
 ** smtpmail
 #+begin_src emacs-lisp  
@@ -1349,22 +1366,22 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (setq org-capture-templates
         (quote
          (("t" "todo" entry (file "~/emacs_org/tasks.org")
-     "* TODO %?
+           "* TODO %?
     %u
     %a")
-    ("n" "note" entry (file "~/emacs_org/notes.org")
-     "* %?                                        :NOTE:
+          ("n" "note" entry (file "~/emacs_org/notes.org")
+           "* %?                                        :NOTE:
     %u
     %a")
-    ("r" "reply" entry (file+headline "~/emacs_org/tasks.org" "Email")
-     "* [[gnus:%:group#%:message-id]]                                        :email:"
-     :immediate-finish t)
-    ("w" "link" entry (file+headline "~/emacs_org/links.org" "Links")
-     "* %c                                        :link:"
-     :immediate-finish t)
-    ("s" "snowmew link" entry (file+headline "~/emacs_org/links.org" "Snowmew Links")
-     "* %c                                        :link:"
-     :immediate-finish t))))
+          ("r" "mu4e email reply" entry (file "~/emacs_org/email.org")
+           "* %c"
+           :immediate-finish t)
+          ("w" "link" entry (file+headline "~/emacs_org/links.org" "Links")
+           "* %c                                        :link:"
+           :immediate-finish t)
+          ("s" "snowmew link" entry (file+headline "~/emacs_org/links.org" "Snowmew Links")
+           "* %c                                        :link:"
+           :immediate-finish t))))
   
   ;; Personal agenda modes
   (setq org-agenda-custom-commands
