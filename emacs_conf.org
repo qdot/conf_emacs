@@ -2025,6 +2025,8 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (linum-mode 1)
     ;; fci-mode violently broken at the moment (24.3 HEAD)
     ;;  (fci-mode 1)
+    ;; No tabs. Or wire hangers.
+    (setq indent-tabs-mode nil)
     (make-variable-buffer-local 'show-paren-mode)
     (show-paren-mode 1)
     (set-fill-column 80)
@@ -2043,7 +2045,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (add-hook 'xml-mode-hook 'qdot/programming-mode-hook)
   (add-hook 'nxhtml-mode-hook 'qdot/programming-mode-hook)
   (add-hook 'python-mode-hook 'qdot/programming-mode-hook)
-  
+#+end_src
+** Flymake
+#+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; flymake with mode fixes
@@ -2058,6 +2062,23 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (add-hook 'c-mode-hook 'qdot/flymake-off-hook)
   (add-hook 'xml-mode-hook 'qdot/flymake-off-hook)
   
+  ;; Flymake for python using pep8/pylint/pychecker
+  ;; http://vaab.blog.kal.fr/2012/09/20/emacs-and-flymake-for-python-javascript-php-rst/
+  
+  (when (load "flymake" t)
+    (defun flymake-pycheckers-init ()
+      (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                         'flymake-create-temp-inplace))
+             (local-file (file-relative-name
+                          temp-file
+                          (file-name-directory buffer-file-name))))
+        (list (concat qdot/emacs-scripts-dir "flycheck_python.py")  (list local-file))))
+    (add-to-list 'flymake-allowed-file-name-masks
+                 '("\\.py\\'" flymake-pycheckers-init)))
+  
+#+end_src
+** haskell-mode
+#+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; haskell
@@ -2119,7 +2140,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   ;;  '(lambda ()
   ;;     (define-key haskell-mode-map "\C-cd"
   ;;       'qdot/flymake-display-err-minibuf)))
-  
+#+end_src
+** smerge
+#+begin_src emacs-lisp  
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; smerge mode for looking at inline conflicts
@@ -2134,24 +2157,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
         (smerge-mode 1))))
   
   (add-hook 'find-file-hook 'sm-try-smerge t)
-  
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; Super simple generic mode for nsis editing
-  ;; God forbid I have to do that often
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
-  (define-generic-mode 'nsis-generic-mode
-    nil ;;'(";")
-    '("Section" "SectionEnd" "Function" "FunctionEnd" "Call" "Goto")
-    '(("!\\([A-Za-z]+\\)" (1 'font-lock-builtin-face))
-      ("$[({]?\\([A-Za-z0-9_]+\\)[)}]?" (1 'font-lock-variable-name-face))
-      )
-    (list "\\.\\(nsi\\|nsh\\)$")    
-    nil
-    "Generic mode for nsis files.")
-  
+#+end_src
+** cc-mode
+#+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; cc-mode hook
@@ -2170,7 +2178,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (subword-mode 1))
   
   (add-hook 'c-mode-common-hook 'qdot/cc-mode-hook)
-  
+#+end_src
+** compilation mode
+#+begin_src emacs-lisp  
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; Hooks for recompilation and error maneuvering
@@ -2212,7 +2222,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   ;; (global-set-key (kbd "C-p") 'qdot/previous-error)
   
   (global-set-key [f5] 'qdot/recompile)
-  
+#+end_src
+** CEDET
+#+begin_src emacs-lisp  
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; CEDET settings
@@ -2270,53 +2282,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (local-set-key (kbd "C-c o") 'eassist-switch-h-cpp)
     (local-set-key (kbd "C-c C-r") 'semantic-symref))
   (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)
-  
-  
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; Flymake for python using pep8/pylint/pychecker
-  ;; http://vaab.blog.kal.fr/2012/09/20/emacs-and-flymake-for-python-javascript-php-rst/
-  ;; 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
-  ;; Python flymake configuration
-  
-  (when (load "flymake" t)
-    (defun flymake-pycheckers-init ()
-      (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                      'flymake-create-temp-inplace))
-          (local-file (file-relative-name
-                       temp-file
-                       (file-name-directory buffer-file-name))))
-        (list (concat qdot/emacs-scripts-dir "flycheck_python.py")  (list local-file))))
-  
-    (add-to-list 'flymake-allowed-file-name-masks
-              '("\\.py\\'" flymake-pycheckers-init)))
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; pymacs and ropemacs
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
-  ;; Initialize Pymacs
-  (require 'pymacs)
-  
-  (setq qdot/pymacs-loaded nil)
-  
-  (defun qdot/load-pymacs()
-    (interactive)
-    (unless qdot/pymacs-loaded
-      (autoload 'pymacs-apply "pymacs")
-      (autoload 'pymacs-call "pymacs")
-      (autoload 'pymacs-eval "pymacs" nil t)
-      (autoload 'pymacs-exec "pymacs" nil t)
-      (autoload 'pymacs-load "pymacs" nil t)
-      (pymacs-load "ropemacs" "rope-")
-      (setq ropemacs-enable-autoimport t)
-      (ac-ropemacs-require)
-      (setq qdot/pymacs-loaded t)
-      ))
-  
+#+end_src  
+** python
+#+begin_src emacs-lisp
   (defun qdot/python-mode-hook()
     (lambda () (eldoc-mode 1))
     (setq tab-width 4)
@@ -2324,22 +2292,21 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (setq py-indent-offset 4)
     (setq python-indent-offset 4)
     (set-variable 'python-indent-guess-indent-offset nil)
-    ;;(qdot/load-pymacs)
-    (auto-complete-mode nil)
     (subword-mode 1)
     (flymake-mode 1)
-    (jedi:ac-setup)
+    (jedi:setup)
     (set (make-local-variable 'ac-find-function) 'ac-python-find))
   
   ;; (add-hook 'python-mode-hook 'qdot/ac-config-python)
   (add-hook 'python-mode-hook 'qdot/python-mode-hook)
   
   ;; Guess tabs/spaces for python mode indentation
-  ;; (add-hook 'python-mode-hook guess-style-guess-tabs-mode)
   (add-hook 'python-mode-hook (lambda ()
-              (when indent-tabs-mode
-          (guess-style-guess-tab-width))))
-  
+                                (when indent-tabs-mode
+                                  (guess-style-guess-tab-width))))
+#+end_src  
+** js2-mode
+#+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; Javascript settings
@@ -2364,7 +2331,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
       (lambda ()
         (when (string-match "\\.js\\'" buffer-file-name)
           (js2-mode))))
-  
+#+end_src
+** gdb
+#+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; gdb settings
@@ -2376,7 +2345,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   
   (setq compilation-auto-jump-to-first-error t)
   (setq compilation-scroll-output 'first-error)
-  
+#+end_src
+** elisp/lisp modes
+#+begin_src emacs-lisp  
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; lisp/elisp settings
