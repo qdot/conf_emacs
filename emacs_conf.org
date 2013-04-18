@@ -2413,9 +2413,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     "If you're saving an elisp file, likely the .elc is no longer valid."
     (make-local-variable 'after-save-hook)
     (add-hook 'after-save-hook
-        (lambda ()
-          (if (file-exists-p (concat buffer-file-name "c"))
-        (delete-file (concat buffer-file-name "c"))))))
+              (lambda ()
+                (if (file-exists-p (concat buffer-file-name "c"))
+                    (delete-file (concat buffer-file-name "c"))))))
   
   (define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
   (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
@@ -2430,9 +2430,10 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     :group 'starter-kit-faces)
   
   (dolist (mode '(scheme emacs-lisp lisp))
-      (when (> (display-color-cells) 8)
-        (font-lock-add-keywords (intern (concat (symbol-name mode) "-mode"))
-                                '(("(\\|)" . 'esk-paren-face)))))
+    (when (> (display-color-cells) 8)
+      (font-lock-add-keywords (intern (concat (symbol-name mode) "-mode"))
+                              '(("(\\|)" . 'esk-paren-face)))))
+  
   
   
   
