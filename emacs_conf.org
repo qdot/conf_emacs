@@ -2552,9 +2552,11 @@ CLOSED: [2012-10-15 Mon 15:47]
 - State "DONE"       from "TODO"       [2012-10-15 Mon 15:47]
   [2012-04-27 Fri]
   [[file:~/emacs_org/org-reorg.org::*Files][Files]]
+** DONE Read up more on mail sync
+CLOSED: [2013-02-26 Tue 19:48]
+- State "DONE"       from "TODO"       [2013-02-26 Tue 19:48]
 ** TODO Redo CEDET Setup
 ** TODO Figure out issues with schedule export
-** TODO Read up more on mail sync
 ** TODO Make header/source search look at the buffer list first
    :PROPERTIES:
    :ID:       831C60D2-5A9C-46C4-AFFD-D197F22E9731
@@ -2605,7 +2607,12 @@ http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
 https://github.com/rolandwalker/unicode-fonts
 ** TODO Check out js2-refactor
 ** TODO Make bitlbee workgroup regenerate whenever we get a new im
-** TODO Think about non-fixed with for non-code buffers?
+** TODO Think about non-fixed width for non-code buffers?
+** TODO Yank frame/window detection for emacs from rcirc/dbus script :emacs:
+http://www.emacswiki.org/emacs/rcircDbusNotification
+** TODO Check out UsePackage for emacs                               :emacs:
+https://github.com/jwiegley/use-package
+** TODO Work on memacs                                               :emacs:
 ** ERC Nicklist rewrite
 *** TODO Create filter function to load things like lists of privmsg buffers
 *** TODO Use hl-mode for hilighting per line
@@ -2648,8 +2655,14 @@ CLOSED: [2013-02-21 Thu 21:26]
 *** DONE Set up bookmarks for oft used searches
 CLOSED: [2013-02-21 Thu 22:34]
 - State "DONE"       from "TODO"       [2013-02-21 Thu 22:34]
-*** TODO Set up quick indexes to maildirs
-5*** TODO Add mu notifications for sauron and xmonad
+*** DONE Set up quick indexes to maildirs
+CLOSED: [2013-02-26 Tue 19:54]
+- State "DONE"       from "TODO"       [2013-02-26 Tue 19:54]
+*** DONE Set up msmtp
+CLOSED: [2013-02-26 Tue 21:32]
+- State "DONE"       from "TODO"       [2013-02-26 Tue 21:32]
+*** TODO Add mu notifications for sauron and xmonad
+*** TODO Add optional display of mu update status in minibuffer
 *** TODO Set up offlineimap to retrieve via mu4e
 *** TODO Set up mail queuing in mu4e
 *** TODO Set up encryption/checking in mu4e
@@ -2659,4 +2672,6 @@ CLOSED: [2013-02-21 Thu 22:34]
 http://www.digital-scurf.org/software/libgfshare
 *** TODO Make autorefiling function for messages from Kelly
 *** TODO Speedbar setup for xmonad (automatic frame sizing)?
-
+** TODO Make python flymake deal with missing linters better
+** TODO Make sauron only notify for twitter when mentions or PMs received.
+** TODO Remove sauron dbus
