@@ -1360,7 +1360,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
    org-special-ctrl-k t
    org-yank-adjusted-subtrees t
   
-   org-align-all-tags t)
+   org-align-all-tags t
+  
+   org-startup-folded t)
   
   ;; flyspell mode for spell checking everywhere
   (add-hook 'org-mode-hook 'turn-on-flyspell 'append)
@@ -1384,9 +1386,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   ;; events, so I can search for things like "all concerts I attended
   ;; this year" via state and tags
   (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d!/!)")
-                                  (sequence "WAITING(w@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(c@/!)")
-          (sequence "EVENT(e)" "|" "ATTENDED(a!)" "SKIPPED(k!)")
-          (sequence "ORDER(z)" "ORDERED(o!)" "SHIPPED(h!)" "|" "ARRIVED(A!/!)"))))
+                                  (sequence "WAITING(w@/!)" "TOFILE(t@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(C@/!)" "CLOSED(c@/!)")
+                                  (sequence "EVENT(e)" "|" "ATTENDED(a!)" "SKIPPED(k!)")
+                                  (sequence "ORDER(z)" "ORDERED(o!)" "SHIPPED(h!)" "|" "ARRIVED(A!/!)"))))
   
   ;; I use C-M-r to start org-remember
   (global-set-key (kbd "C-M-R") 'org-capture)
@@ -1427,13 +1429,12 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
                  ((org-agenda-ndays-to-span 7)
                   (org-agenda-ndays 7)
                   (org-agenda-filter-preset '("-daily"))))
-          (" " "Agenda"
+                (" " "Agenda"
                  ((agenda "" nil)
                   (tags "email"
                         ((org-agenda-overriding-header "Emails")
                          (org-tags-match-list-sublevels nil)
-             (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE" "CANCELLED")))))
-      nil)))))
+                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("REPLIED"))))))))))
   
   ;; Org mode notifications via aptp
   ;; the appointment notification facility
@@ -1479,7 +1480,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   
   (setq org-latex-to-pdf-process
         '("xelatex -interaction nonstopmode %f"
-    "xelatex -interaction nonstopmode %f")) ;; for multiple passes
+          "xelatex -interaction nonstopmode %f")) ;; for multiple passes
   
   
   (defun qdot/reload-org-files ()
@@ -1487,6 +1488,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (setq org-agenda-files
           (append
            (file-expand-wildcards "~/emacs_org/tasks.org")
+           (file-expand-wildcards "~/emacs_org/email.org")
            (file-expand-wildcards "~/emacs_org/mozilla/*.org")
            (file-expand-wildcards "~/emacs_org/home/*.org")
            (file-expand-wildcards "~/emacs_org/nplabs/*.org")
@@ -1533,8 +1535,8 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (message item))
   
   ;; Taken from http://doc.norang.ca/org-mode.html
-  ;;;; Refile settings
-            ; Exclude DONE state tasks from refile targets
+  ;; Refile settings
+  ;; Exclude DONE state tasks from refile targets
   (defun qdot/verify-refile-target ()
     "Exclude todo keywords with a done state from refile targets"
     (not (member (nth 2 (org-heading-components)) org-done-keywords)))
@@ -1548,15 +1550,18 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (setq org-fontify-done-headline t)
   (custom-set-faces
    '(org-done ((t (:foreground "PaleGreen"
-                   :weight normal :strike-through t))))
+                               :weight normal :strike-through t))))
    '(org-headline-done
-              ((((class color) (min-colors 16) (background dark))
-                 (:foreground "LightSalmon" :strike-through t)))))
+     ((((class color) (min-colors 16) (background dark))
+       (:foreground "LightSalmon" :strike-through t)))))
   
   ;; Set org babel backgrounds so we get nice blocks
   (set-face-background 'org-block-begin-line "#333")
   (set-face-background 'org-block-end-line "#333")
   (set-face-background 'org-block-background "#222")
+  
+  (setq org-link-abbrev-alist
+        '(("bugzilla"  . "https://bugzilla.mozilla.org/show_bug.cgi?id=")))
 #+end_src
 
 ** ERC
