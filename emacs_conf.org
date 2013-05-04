@@ -2569,13 +2569,82 @@ http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
 ** TODO Set up unicode fonts in emacs
 https://github.com/rolandwalker/unicode-fonts
 ** TODO Check out js2-refactor
-** TODO Make bitlbee workgroup regenerate whenever we get a new im
 ** TODO Think about non-fixed width for non-code buffers?
 ** TODO Yank frame/window detection for emacs from rcirc/dbus script :emacs:
 http://www.emacswiki.org/emacs/rcircDbusNotification
 ** TODO Check out UsePackage for emacs                               :emacs:
 https://github.com/jwiegley/use-package
 ** TODO Work on memacs                                               :emacs:
+** TODO Make python flymake deal with missing linters better
+** TODO Make sauron only notify for twitter when mentions or PMs received.
+** TODO Remove sauron dbus
+** TODO Go through commit list for mu, add new functions/actions     :emacs:
+** TODO Add new mailbox shortcuts for kelly, receipts, etc...        :emacs:
+** TODO Turn on semantic in C++ buffers                              :emacs:
+** TODO Turn on flyspell in buffers that need it
+** TODO Load mu4e-unread-main as part of startup
+** TODO Create named emacs instances, make them come up in correct xmonad instances
+** CANCELLED Make bitlbee workgroup regenerate whenever we get a new im
+CLOSED: [2013-05-03 Fri 19:33]
+- State "CLOSED"     from "TODO"       [2013-05-03 Fri 19:33] \\
+  No
+** DONE Import contacts into BBDB3
+CLOSED: [2012-08-25 Sat 21:23]
+- State "DONE"       from "TODO"       [2012-08-25 Sat 21:23]
+** DONE Move contacts into BBDB off iphone
+CLOSED: [2012-08-25 Sat 21:24]
+- State "DONE"       from "TODO"       [2012-08-25 Sat 21:24]
+:PROPERTIES:
+:ID: 74bfbc0a-3618-4567-a639-171aa0af2b24
+:END:
+   [2010-09-20 Mon]
+   [[file:~/emacs_org/vienna2010.org::*2010%2009%2010][2010-09-10]]
+** DONE See how sauron handles notifications for twitter/gnus
+CLOSED: [2012-10-15 Mon 15:37]
+- State "DONE"       from "TODO"       [2012-10-15 Mon 15:37]
+:PROPERTIES:
+:ID: 587c0a16-161f-482a-b950-f74c760dea78
+:END:
+** DONE Rename emacs_files_24 to just emacs_files again
+CLOSED: [2012-10-15 Mon 15:47]
+- State "DONE"       from "TODO"       [2012-10-15 Mon 15:47]
+  [2012-04-27 Fri]
+  [[file:~/emacs_org/org-reorg.org::*Files][Files]]
+** DONE Read up more on mail sync
+CLOSED: [2013-02-26 Tue 19:48]
+- State "DONE"       from "TODO"       [2013-02-26 Tue 19:48]
+** DONE Override java-mode to be js2-mode on all .js files
+CLOSED: [2013-04-17 Wed 21:27]
+- State "DONE"       from "TODO"       [2013-04-17 Wed 21:27]
+  [2012-03-30 Fri]
+  [[file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power)%20{][file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power) {]]
+** CANCELLED Create special ERC buffer to show query buffer list
+CLOSED: [2012-10-15 Mon 15:47]
+- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:47] \\
+  Implementing via erc-nicklist
+** CANCELLED Make todochiku notification for twitter mentions
+CLOSED: [2012-10-15 Mon 15:36]
+- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:36] \\
+  Not using todochiku anymore
+:PROPERTIES:
+:ID: 8a309bfb-abc0-4492-9eb7-3f7af4a30bd1
+:END:
+** CANCELLED Make todochiku notification for inbox receives
+CLOSED: [2012-10-15 Mon 15:36]
+- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:36] \\
+  Not using todochiku anymore
+:PROPERTIES:
+:ID: c315b3ab-448b-4134-af2f-0378af73dc24
+:END:
+** CLOSED Fix rope mode to always have ignore_bad_imports equal to True
+CLOSED: [2013-04-17 Wed 21:23]
+- State "CLOSED"     from "TODO"       [2013-04-17 Wed 21:23] \\
+  Not using rope anymore
+:PROPERTIES:
+:ID: 0757ee32-8d03-4745-8f00-74023cc739a2
+:END:
+   [2010-10-27 Wed]
+   [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
 ** ERC Nicklist rewrite
 *** TODO Create filter function to load things like lists of privmsg buffers
 *** TODO Use hl-mode for hilighting per line
@@ -2635,6 +2704,3 @@ CLOSED: [2013-02-26 Tue 21:32]
 http://www.digital-scurf.org/software/libgfshare
 *** TODO Make autorefiling function for messages from Kelly
 *** TODO Speedbar setup for xmonad (automatic frame sizing)?
-** TODO Make python flymake deal with missing linters better
-** TODO Make sauron only notify for twitter when mentions or PMs received.
-** TODO Remove sauron dbus
