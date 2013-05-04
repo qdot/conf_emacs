@@ -2357,7 +2357,21 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
                               '(("(\\|)" . 'esk-paren-face)))))
   
 #+end_src
+** unicode-fonts
+On debian derivatives, this will also require some font packages:
+- ttf-indic-fonts
+- fonts-sil*
+- ttf-dejavu
 
+Plus
+From http://www.quivira-font.com/downloads.php - Quivira
+From http://users.teilar.gr/~g1951d/ - Symbola
+
+#+begin_src emacs-lisp
+  (require 'unicode-fonts)
+  (unicode-fonts-setup)
+  
+#+end_src
 * Notification Settings
 #+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
