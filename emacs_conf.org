@@ -492,22 +492,6 @@ Use M-y and M-n in y-or-n minibuffer prompts
   (setq icomplete-compute-delay 0)
 #+end_src
 
-** scel
-#+begin_src emacs-lisp
-  (when (file-exists-p "~/.emacs_files/elisp_local/scel")
-    (when macosx-p
-      ;; Assume we're on a mac with SuperCollider in the normal spot
-      (when (file-exists-p "/Applications/SuperCollider/sclang")
-        (add-to-list 'load-path (expand-file-name "~/.emacs_files/elisp_local/scel/el"))
-        (custom-set-variables
-         '(sclang-auto-scroll-post-buffer t)
-         '(sclang-eval-line-forward nil)
-         '(sclang-help-path (quote ("/Applications/SuperCollider/Help")))
-         '(sclang-runtime-directory "~/.sclang/")
-         '(sclang-program "/Applications/SuperCollider/sclang"))
-        (require 'sclang))))
-#+end_src
-
 ** color-theme
 #+begin_src emacs-lisp
   (color-theme-initialize)
