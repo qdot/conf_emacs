@@ -1987,6 +1987,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (make-variable-buffer-local 'show-paren-mode)
     (show-paren-mode 1)
     (set-fill-column 80)
+    (flyspell-prog-mode)
     (setq show-trailing-whitespace t)
     (set-face-background 'show-paren-match-face "#222")
     (set-face-attribute 'show-paren-match-face nil
