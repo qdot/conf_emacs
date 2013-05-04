@@ -2372,6 +2372,26 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (unicode-fonts-setup)
   
 #+end_src
+** buffer-timer
+#+begin_src emacs-lisp
+    (require 'buffer-timer)
+    
+    ;; Example list of titles and regexps to group by.
+    (setq buffer-timer-regexp-master-list
+          '(
+            ("idle" .
+             (("generic" . "^\\*idle\\*")
+              ("minibuf" . "^ \\*Minibuf-.*")))
+            ("emacs" . ".emacs_files/")
+            ("org-mode" . "emacs_org/")
+            ("personal" .
+             (("code" . "code/git-projects/")))
+            ("work" .
+             ("code" .
+              (("general" . "code/mozbuild")
+               ("m-c" . "code/mozbuild/mozilla-central")
+               ("b2g" . "code/mozbuild/B2G"))))))
+#+end_src
 * Notification Settings
 #+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2548,8 +2568,6 @@ https://github.com/jrockway/eproject
 :END:
 
 ** TODO Make fill columns for ERC auto-set for workgroup sizes?
-** TODO Install BufferTimer
-https://github.com/hardaker/elisp-buffer-timer/
 ** TODO Add C-c . to org-disputed-keys, change to C-c c for calendar bring-up versus cedet/ede
 ** TODO Check out why rainbow delimiters don't like mozilla C++ files
 ** TODO Read Julian Danjou's config
@@ -2564,6 +2582,10 @@ https://github.com/jwiegley/use-package
 ** TODO Remove sauron dbus
 ** TODO Divide down large configurations into org subnodes
 ** TODO Create named emacs instances, make them come up in correct xmonad instances
+** DONE Set up BufferTimer
+CLOSED: [2013-05-04 Sat 00:54]
+- State "DONE"       from "TODO"       [2013-05-04 Sat 00:54]
+https://github.com/hardaker/elisp-buffer-timer/
 ** DONE Set up unicode fonts in emacs
 CLOSED: [2013-05-04 Sat 00:31]
 - State "DONE"       from "TODO"       [2013-05-04 Sat 00:31]
