@@ -935,6 +935,9 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (require 'mu4e-headers)
   (add-to-list 'mu4e-headers-actions '("org reply task" . qdot/mu4e-org-needs-reply) t)
   
+  (require 'mu4e-contrib)
+  (add-to-list 'mu4e-headers-actions '("mark all read" . mu4e-headers-mark-all-unread-read) t)
+  
 #+end_src
 ** smtpmail
 #+begin_src emacs-lisp  
