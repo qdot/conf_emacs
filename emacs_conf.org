@@ -2554,10 +2554,6 @@ https://github.com/hardaker/elisp-buffer-timer/
 ** TODO Check out why rainbow delimiters don't like mozilla C++ files
 ** TODO Read Julian Danjou's config
 http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
-** TODO Set up unicode fonts in emacs
-https://github.com/rolandwalker/unicode-fonts
-** TODO Check out js2-refactor
-** TODO Think about non-fixed width for non-code buffers?
 ** TODO Yank frame/window detection for emacs from rcirc/dbus script :emacs:
 http://www.emacswiki.org/emacs/rcircDbusNotification
 ** TODO Check out UsePackage for emacs                               :emacs:
@@ -2566,10 +2562,28 @@ https://github.com/jwiegley/use-package
 ** TODO Make python flymake deal with missing linters better
 ** TODO Make sauron only notify for twitter when mentions or PMs received.
 ** TODO Remove sauron dbus
-** TODO Go through commit list for mu, add new functions/actions     :emacs:
-** TODO Add new mailbox shortcuts for kelly, receipts, etc...        :emacs:
 ** TODO Divide down large configurations into org subnodes
 ** TODO Create named emacs instances, make them come up in correct xmonad instances
+** DONE Set up unicode fonts in emacs
+CLOSED: [2013-05-04 Sat 00:31]
+- State "DONE"       from "TODO"       [2013-05-04 Sat 00:31]
+https://github.com/rolandwalker/unicode-fonts
+** DONE Check out js2-refactor
+CLOSED: [2013-05-03 Fri 23:57]
+- State "DONE"       from "TODO"       [2013-05-03 Fri 23:57]
+** CLOSED Think about non-fixed width for non-code buffers?
+CLOSED: [2013-05-03 Fri 23:56]
+- State "CLOSED"     from "TODO"       [2013-05-03 Fri 23:56] \\
+  No
+** DONE Make header action for mark all read (in mu4e-contrib)
+CLOSED: [2013-05-03 Fri 23:49]
+- State "DONE"       from "TODO"       [2013-05-03 Fri 23:49]
+** DONE Go through commit list for mu, add new functions/actions
+CLOSED: [2013-05-03 Fri 23:47]
+- State "DONE"       from "TODO"       [2013-05-03 Fri 23:47]
+** DONE Add new mailbox shortcuts for kelly, receipts, etc...        :emacs:
+CLOSED: [2013-05-03 Fri 23:26]
+- State "DONE"       from "TODO"       [2013-05-03 Fri 23:26]
 ** DONE Turn on semantic in C++ buffers
 CLOSED: [2013-05-03 Fri 22:19]
 - State "DONE"       from "TODO"       [2013-05-03 Fri 22:19]
