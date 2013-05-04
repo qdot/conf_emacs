@@ -2031,11 +2031,15 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (add-hook 'c-mode-common-hook 'qdot/programming-mode-hook)
   (add-hook 'haskell-mode-hook 'qdot/programming-mode-hook)
   (add-hook 'java-mode-hook 'qdot/programming-mode-hook)
+  (add-hook 'js-mode-hook 'qdot/programming-mode-hook)
   (add-hook 'js2-mode-hook 'qdot/programming-mode-hook)
+  (add-hook 'js3-mode-hook 'qdot/programming-mode-hook)
   (add-hook 'nxml-mode-hook 'qdot/programming-mode-hook)
   (add-hook 'xml-mode-hook 'qdot/programming-mode-hook)
   (add-hook 'nxhtml-mode-hook 'qdot/programming-mode-hook)
   (add-hook 'python-mode-hook 'qdot/programming-mode-hook)
+  
+  
 #+end_src
 ** Flymake
 #+begin_src emacs-lisp
@@ -2508,69 +2512,23 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (add-to-list 'auto-mode-alist '("\\.\\(xml\\|mxml\\)$" . nxml-mode))
   (add-to-list 'auto-mode-alist '("\\.asciidoc$" . adoc-mode))
   (add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.jsm$" . js2-mode))
   (add-to-list 'auto-mode-alist '("ChangeLog\\.txt\\'" . change-log-mode))
   (add-to-list 'auto-mode-alist '("\\.org_archive$"  . org-mode))
   
 #+end_src
 * Tasks
-** DONE Import contacts into BBDB3
-CLOSED: [2012-08-25 Sat 21:23]
-- State "DONE"       from "TODO"       [2012-08-25 Sat 21:23]
-** DONE Move contacts into BBDB off iphone
-CLOSED: [2012-08-25 Sat 21:24]
-- State "DONE"       from "TODO"       [2012-08-25 Sat 21:24]
-:PROPERTIES:
-:ID: 74bfbc0a-3618-4567-a639-171aa0af2b24
-:END:
-   [2010-09-20 Mon]
-   [[file:~/emacs_org/vienna2010.org::*2010%2009%2010][2010-09-10]]
-** CANCELLED Create special ERC buffer to show query buffer list
-CLOSED: [2012-10-15 Mon 15:47]
-- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:47] \\
-  Implementing via erc-nicklist
-** CANCELLED Make todochiku notification for twitter mentions
-CLOSED: [2012-10-15 Mon 15:36]
-- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:36] \\
-  Not using todochiku anymore
-:PROPERTIES:
-:ID: 8a309bfb-abc0-4492-9eb7-3f7af4a30bd1
-:END:
-** CANCELLED Make todochiku notification for inbox receives
-CLOSED: [2012-10-15 Mon 15:36]
-- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:36] \\
-  Not using todochiku anymore
-:PROPERTIES:
-:ID: c315b3ab-448b-4134-af2f-0378af73dc24
-:END:
-** DONE See how sauron handles notifications for twitter/gnus
-CLOSED: [2012-10-15 Mon 15:37]
-- State "DONE"       from "TODO"       [2012-10-15 Mon 15:37]
-:PROPERTIES:
-:ID: 587c0a16-161f-482a-b950-f74c760dea78
-:END:
-** DONE Rename emacs_files_24 to just emacs_files again
-CLOSED: [2012-10-15 Mon 15:47]
-- State "DONE"       from "TODO"       [2012-10-15 Mon 15:47]
-  [2012-04-27 Fri]
-  [[file:~/emacs_org/org-reorg.org::*Files][Files]]
-** DONE Read up more on mail sync
-CLOSED: [2013-02-26 Tue 19:48]
-- State "DONE"       from "TODO"       [2013-02-26 Tue 19:48]
-** CLOSED Fix rope mode to always have ignore_bad_imports equal to True
-CLOSED: [2013-04-17 Wed 21:23]
-- State "CLOSED"     from "TODO"       [2013-04-17 Wed 21:23] \\
-  Not using rope anymore
-:PROPERTIES:
-:ID: 0757ee32-8d03-4745-8f00-74023cc739a2
-:END:
-   [2010-10-27 Wed]
-   [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
-** DONE Override java-mode to be js2-mode on all .js files
-CLOSED: [2013-04-17 Wed 21:27]
-- State "DONE"       from "TODO"       [2013-04-17 Wed 21:27]
-  [2012-03-30 Fri]
-  [[file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power)%20{][file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power) {]]
+** DONE Fix IRC killing functions
+CLOSED: [2013-05-03 Fri 21:39]
+- State "DONE"       from "TODO"       [2013-05-03 Fri 21:39]
+** DONE Fix IRC server buffer renaming functions
+CLOSED: [2013-05-03 Fri 21:39]
+- State "DONE"       from "TODO"       [2013-05-03 Fri 21:39]
+** TODO Divide out work setup from home setup
+*** TODO mu4e
+*** TODO erc
+*** TODO workgroups
 ** TODO Redo CEDET Setup
 ** TODO Figure out issues with schedule export
 ** TODO Make header/source search look at the buffer list first
