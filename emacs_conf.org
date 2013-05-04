@@ -1780,17 +1780,17 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (defun qdot/erc-znc-rename-server-buffer ()
     (interactive)
     (save-excursion
-      (set-buffer (erc-server-buffer))
-      (rename-buffer (concat "znc-" (erc-current-network)))
-      (message (format "Renamed buffer to %s" (concat "znc-" (erc-current-network))))))
-  
-  (defun qdot/erc-znc-initialize (proc parsed)
-    ;; Prepend all ZNC buffers with znc-
-    (when (not (string-match "znc-" (buffer-name (erc-server-buffer))))
-      (qdot/erc-znc-rename-server-buffer))
+      (let ((network-name (symbol-name (erc-network))))
+        (set-buffer (erc-server-buffer))
+        (rename-buffer (concat "znc-" network-name))
+        (message (format "Renamed buffer to %s" network-name))))
     nil)
   
-  (add-hook 'erc-server-NOTICE-functions 'qdot/erc-znc-initialize)
+  (defun qdot/erc-znc-initialize (server nick)
+    ;; Prepend all ZNC buffers with znc-
+    (qdot/erc-znc-rename-server-buffer))
+  
+  (add-hook 'erc-after-connect 'qdot/erc-znc-initialize)
   
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
@@ -1933,15 +1933,6 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   
   (add-hook 'after-change-major-mode-hook 'qdot/erc-turn-off-parens)
   
-  (defun qdot/replace-gtalk-asterisks (input)
-    (when (or (string-match "^gt-" (buffer-name (current-buffer)))
-              (string-match "^aim-.*gmail.*" (buffer-name (current-buffer))))
-      ;; erc-send-current-line uses the "str" variable before this hook
-      ;; to set what is being sent. Yay dynamic scoping! :( :( :(
-      (setq str (replace-regexp-in-string "\\*" "•" input))))
-  
-  (add-hook 'erc-send-pre-hook 'qdot/replace-gtalk-asterisks)
-  
   (defun qdot/erc-kill-all-channel-buffers ()
     (interactive)
     (dolist (channel (erc-buffer-list))
@@ -1959,8 +1950,8 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
      (lambda (arg)
        (when (and (erc-server-buffer-p arg)
                   (if bitlbee
-                      (string-match (buffer-name arg) "znc-bitlbee")
-                    (not (string-match (buffer-name arg) "znc-bitlbee"))))
+                      (string-match (buffer-name arg) "znc-BitlBee")
+                    (not (string-match (buffer-name arg) "znc-BitlBee"))))
          (save-excursion
            (set-buffer arg)
            (erc-quit-server "Wheee.")
