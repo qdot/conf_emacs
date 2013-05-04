@@ -2499,6 +2499,7 @@ CLOSED: [2013-05-03 Fri 21:39]
 *** TODO mu4e
 *** TODO erc
 *** TODO workgroups
+** TODO Fix diminish mode sets
 ** TODO Redo CEDET Setup
 ** TODO Figure out issues with schedule export
 ** TODO Make header/source search look at the buffer list first
@@ -2550,10 +2551,17 @@ https://github.com/jwiegley/use-package
 ** TODO Remove sauron dbus
 ** TODO Go through commit list for mu, add new functions/actions     :emacs:
 ** TODO Add new mailbox shortcuts for kelly, receipts, etc...        :emacs:
-** TODO Turn on semantic in C++ buffers                              :emacs:
-** TODO Turn on flyspell in buffers that need it
-** TODO Load mu4e-unread-main as part of startup
+** TODO Divide down large configurations into org subnodes
 ** TODO Create named emacs instances, make them come up in correct xmonad instances
+** DONE Turn on semantic in C++ buffers
+CLOSED: [2013-05-03 Fri 22:19]
+- State "DONE"       from "TODO"       [2013-05-03 Fri 22:19]
+** DONE Turn on flyspell in buffers that need it
+CLOSED: [2013-05-03 Fri 22:14]
+- State "DONE"       from "TODO"       [2013-05-03 Fri 22:14]
+** DONE Load mu4e-unread-main as part of startup
+CLOSED: [2013-05-03 Fri 22:03]
+- State "DONE"       from "TODO"       [2013-05-03 Fri 22:03]
 ** CANCELLED Make bitlbee workgroup regenerate whenever we get a new im
 CLOSED: [2013-05-03 Fri 19:33]
 - State "CLOSED"     from "TODO"       [2013-05-03 Fri 19:33] \\
