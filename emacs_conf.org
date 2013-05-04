@@ -2215,6 +2215,8 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   (require 'semantic/decorate/include)
   (require 'semantic/lex-spp)
   
+  (semantic-mode 1)
+  
   ;; need to add CEDET contrib to bring in eassist
   (add-to-list 'load-path (expand-file-name 
          (concat
@@ -2227,6 +2229,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
           semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
   
   (defun qdot/cedet-hook ()
+    (add-to-list 'ac-sources 'ac-source-semantic)
     (local-set-key [(control return)] 'semantic-ia-complete-symbol)
     (local-set-key "\C-c?" 'semantic-ia-complete-symbol-menu)
     (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
@@ -2234,8 +2237,8 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (local-set-key "\C-cj" 'semantic-ia-fast-jump)
     (local-set-key "\C-cq" 'semantic-ia-show-doc)
     (local-set-key "\C-cs" 'semantic-ia-show-summary)
-    (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle)
-    )
+    (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle))
+  
   (add-hook 'c-mode-common-hook 'qdot/cedet-hook)
   (add-hook 'lisp-mode-hook 'qdot/cedet-hook)
   (add-hook 'emacs-lisp-mode-hook 'qdot/cedet-hook)
