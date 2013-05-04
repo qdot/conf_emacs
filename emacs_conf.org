@@ -573,6 +573,7 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 (add-hook 'twittering-edit-mode-hook (lambda () 
 				       (ispell-minor-mode) 
 				       (flyspell-mode)))
+(add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
 #+end_src
 
 ** bbdb
@@ -614,19 +615,6 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
   
    ;;'(( "From" . "no.?reply\\|DAEMON\\|daemon\\|facebookmail\\|twitter")))
    bbdb/mail-auto-create-p nil)
-#+end_src
-
-** calfw
-#+begin_src emacs-lisp
-(require 'org-compat)
-;; (require 'calfw)
-;; (require 'calfw-org)
-#+end_src
-
-** popwin
-#+begin_src emacs-lisp
-;; (require 'popwin)
-;; (setq display-buffer-function 'popwin:display-buffer)
 #+end_src
 
 ** yasnippet
@@ -837,12 +825,6 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 (require 'epa-file)
 (epa-file-enable)
 (setq epa-file-cache-passphrase-for-symmetric-encryption t)
-#+end_src
-
-** twittering-mode
-#+begin_src emacs-lisp
-;; Twittering additions
-(add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
 #+end_src
 
 ** mu4e
