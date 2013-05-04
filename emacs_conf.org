@@ -565,15 +565,13 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 
 ** twittering-mode
 #+begin_src emacs-lisp
-(require 'twittering-numbering)
-(add-hook 'twittering-mode-hook 'twittering-numbering)
-(setq twittering-icon-mode t)
-(setq twittering-timer-interval 600)
-(setq twittering-url-show-status nil)
-(add-hook 'twittering-edit-mode-hook (lambda () 
-				       (ispell-minor-mode) 
-				       (flyspell-mode)))
-(add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
+  (require 'twittering-numbering)
+  (add-hook 'twittering-mode-hook 'twittering-numbering)
+  (setq twittering-icon-mode t)
+  (setq twittering-timer-interval 600)
+  (setq twittering-url-show-status nil)
+  (add-hook 'twittering-edit-mode-hook 'turn-on-flyspell 'append)
+  (add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
 #+end_src
 
 ** bbdb
