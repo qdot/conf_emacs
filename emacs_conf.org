@@ -2514,5 +2514,5 @@ CLOSED: [2013-02-26 Tue 21:32]
 *** TODO Figure out where to put maildir for transfer
 *** TODO Look at key sharing via ssss or libgfshare
 http://www.digital-scurf.org/software/libgfshare
-*** TODO Make autorefiling function for messages from Kelly
 *** TODO Speedbar setup for xmonad (automatic frame sizing)?
+*** TODO Make autorefiling function for messages from Kelly
