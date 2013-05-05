@@ -416,15 +416,6 @@ Address book
 (yas/load-directory "~/.emacs_files/elisp_auto/yasnippet/snippets")
 #+end_src
 
-** diminish
-#+begin_src emacs-lisp
-  (require 'diminish)
-  (diminish 'yas-minor-mode " y")
-  ;; (diminish 'org-indent-mode " i")
-  ;; (diminish 'workgroups-mode " ω")
-  (diminish 'auto-complete-mode " α")
-#+end_src
-
 ** ido
 #+begin_src emacs-lisp
   (require 'ido)
@@ -2220,6 +2211,17 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (global-set-key (kbd "C-x r M-w")   'rm-kill-ring-save)
 
 #+END_SRC
+
+** diminish
+#+begin_src emacs-lisp
+  (require 'diminish)
+  (add-hook 'yas-minor-mode-hook (lambda () (diminish 'yas-minor-mode " ÿ")))
+  (add-hook 'auto-complete-mode-hook (lambda () (diminish 'auto-complete-mode " α")))
+  (add-hook 'org-mode-hook (lambda () (diminish 'org-indent-mode " ı")))
+  (add-hook 'workgroups-mode-hook (lambda () (diminish 'workgroups-mode " ω")))
+  (eval-after-load "flyspell" '(diminish 'flyspell-mode " 仚"))
+  
+#+end_src
 
 * Automodes
 #+begin_src emacs-lisp
