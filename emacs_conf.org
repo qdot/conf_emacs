@@ -324,6 +324,10 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
   (setq twittering-url-show-status nil)
   (add-hook 'twittering-edit-mode-hook 'turn-on-flyspell 'append)
   (add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
+  (setq twittering-initial-timeline-spec-string
+        '(":home"
+          ":mentions"
+          ":direct_messages"))
 #+end_src
 
 ** bbdb
