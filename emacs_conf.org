@@ -276,6 +276,7 @@ Use M-y and M-n in y-or-n minibuffer prompts
 #+end_src
 
 ** icomplete
+Incremental minibuffer completion
 #+begin_src emacs-lisp
   (icomplete-mode 1)
   (setq icomplete-compute-delay 0)
@@ -367,6 +368,7 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 #+end_src
 
 ** bbdb
+Address book
 #+begin_src emacs-lisp
   (bbdb-initialize 'gnus 'message)
   ;; (bbdb-mua-auto-update-init 'gnus 'message)
@@ -409,9 +411,6 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 
 ** yasnippet
 #+begin_src emacs-lisp
-;; This will completely shit itself on HEAD as of 24.3 due to silly macro
-;; definitions for called-interactively-p. Currently commenting those out in
-;; yasnippet itself.
 (require 'yasnippet)
 (yas-global-mode 1)
 (yas/load-directory "~/.emacs_files/elisp_auto/yasnippet/snippets")
@@ -437,6 +436,7 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 #+end_src
 
 ** uniquify
+Make buffer names unique, handy when opening files with similar names
 #+begin_src emacs-lisp
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'reverse)
@@ -446,6 +446,7 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 #+end_src
 
 ** windmove
+Move between windows using shift-[arrow key]
 #+begin_src emacs-lisp
 (require 'windmove)
 (when (fboundp 'windmove-default-keybindings)
@@ -472,6 +473,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 #+end_src
 
 ** ibuffer
+List buffers in a dired-ish way
 #+begin_src emacs-lisp
   (require 'ibuffer)
   (setq ibuffer-default-sorting-mode 'major-mode)
@@ -503,6 +505,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 #+end_src
 
 ** ansi-color
+Turn on ansi in shells
 #+begin_src emacs-lisp
 (require 'ansi-color)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
@@ -574,6 +577,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 #+end_src
 
 ** magit
+git management in emacs
 #+begin_src emacs-lisp
   ;; Turn on narrowing
   (put 'narrow-to-region 'disabled nil)
@@ -609,6 +613,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   
 #+end_src
 ** easy-pg
+gpg file auto query/loading
 #+begin_src emacs-lisp
 ;; Turn on easy-pg
 (require 'epa-file)
