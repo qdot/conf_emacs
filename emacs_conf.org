@@ -2298,11 +2298,26 @@ CLOSED: [2013-05-03 Fri 21:39]
 ** DONE Fix IRC server buffer renaming functions
 CLOSED: [2013-05-03 Fri 21:39]
 - State "DONE"       from "TODO"       [2013-05-03 Fri 21:39]
+** TODO Divide down large configurations into org subnodes
 ** TODO Divide out work setup from home setup
 *** TODO mu4e
 *** TODO erc
+- [ ] Make network starting/stopping functions that are interactive
 *** TODO workgroups
+- Personal
+  - mu4e
+  - freenode erc
+  - bitlbee erc
+  - twitter
+- Work
+  - mu4e
+  - mozilla erc
+  - privmsg erc
+- Development
+  - Code/Project
+  - gdb (?)
 ** TODO Fix diminish mode sets
+** TODO Remove sauron dbus
 ** TODO Redo CEDET Setup
 ** TODO Figure out issues with schedule export
 ** TODO Make header/source search look at the buffer list first
@@ -2345,8 +2360,6 @@ https://github.com/jwiegley/use-package
 ** TODO Work on memacs                                               :emacs:
 ** TODO Make python flymake deal with missing linters better
 ** TODO Make sauron only notify for twitter when mentions or PMs received.
-** TODO Remove sauron dbus
-** TODO Divide down large configurations into org subnodes
 ** TODO Create named emacs instances, make them come up in correct xmonad instances
 ** DONE Set up BufferTimer
 CLOSED: [2013-05-04 Sat 00:54]
