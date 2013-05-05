@@ -262,7 +262,7 @@ repo, though it can take a really, really, REALLY long time.
   (el-get)
 #+end_src
 
-* External Packages
+* Package Configuration
 ** qdot-funcs
 #+BEGIN_SRC emacs-lisp
   (require 'qdot-funcs)
