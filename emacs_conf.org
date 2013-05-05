@@ -49,259 +49,6 @@ fetched libs, etc...)
   (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 #+end_src
 
-* Utility Functions
-** Close all buffers
-#+begin_src emacs-lisp
-  (defun close-all-buffers ()
-    "Close all currently open buffers"
-    (interactive)
-    (mapc 'kill-buffer (buffer-list)))
-#+end_src
-
-** Unfill paragraph
-#+begin_src emacs-lisp
-    (defun unfill-paragraph ()
-      "Takes a multi-line paragraph and makes it into a single line of text."
-      (interactive)
-      (let ((fill-column (point-max)))
-        (fill-paragraph nil)))
-#+end_src
-
-** Ask before quitting
-#+begin_src emacs-lisp
-  (defun ask-before-quit ()
-    "Ask me before I quit emacs if I think that's a good thing to do"
-    (interactive)
-    (yes-or-no-p "Do you really want to quit Emacs?"))
-  (add-hook 'kill-emacs-query-functions 'ask-before-quit)
-#+end_src
-
-** Reload file with current position saved
-#+begin_src emacs-lisp
-  (defun reload-file ()
-    "Reload a file, resetting the cursor to the current position"
-    (interactive)
-    (let ((curr-scroll (window-vscroll)))
-      (find-file (buffer-name))
-      (set-window-vscroll nil curr-scroll)))
-#+end_src
-
-** Show just matches instead of everything in occur buffer
-#+begin_src emacs-lisp
-  (defun occurrences (regexp &rest ignore)
-    "Show all matches for REGEXP in an `occur' buffer."
-    ;; keep text covered by occur-prefix and match text-properties
-    (interactive (occur-read-primary-args))
-    (occur regexp)
-    (with-current-buffer (get-buffer "*Occur*")
-      (let ((inhibit-read-only t)
-      delete-from
-      pos)
-        (save-excursion
-    (while (setq pos (next-property-change (point)))
-      (goto-char pos)
-      (if (not (or (get-text-property (point) 'occur-prefix)
-             (get-text-property (point) 'occur-match)))
-          (if delete-from
-        (delete-region delete-from (point))
-      (setq delete-from (point)))
-        (when delete-from
-          (delete-region delete-from (point))
-          (if (get-text-property (point) 'occur-prefix)
-        (insert "\n")
-      (insert " ")))
-        (setq delete-from nil)))))))
-#+end_src
-
-** Make kill-ring-save/kill-region smarter based on mark position
-#+begin_src emacs-lisp
-  (defadvice kill-ring-save (before slick-copy activate compile)
-    "When called interactively with no active region, copy a single line instead."
-    (interactive
-     (if mark-active (list (region-beginning) (region-end))
-       (message "Copied line")
-       (list (line-beginning-position)
-       (line-beginning-position 2)))))
-  (defadvice kill-region (before slick-cut activate compile)
-    "When called interactively with no active region, kill a single line instead."
-    (interactive
-     (if mark-active (list (region-beginning) (region-end))
-       (list (line-beginning-position)
-       (line-beginning-position 2)))))
-#+end_src
-
-** Edit files as root
-http://nflath.com/2009/08/tramp/
-
-#+begin_src emacs-lisp
-  (defun sudo-edit (&optional arg)
-    "Open file as root and edit via tramp"
-    (interactive "p")
-    (if arg
-        (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
-      (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-  (defun sudo-edit-current-file ()
-    "Open file in current buffer as root and edit via tramp"
-    (interactive)
-    (let ((pos (point)))
-      (find-alternate-file
-       (concat "/sudo:root@localhost:" (buffer-file-name (current-buffer))))
-      (goto-char pos)))
-#+end_src
-
-** Rename a file and the buffer it's in at the same time
-Via yeggeconf http://sites.google.com/site/steveyegge2/my-dot-emacs-file
-
-#+begin_src emacs-lisp
-  (defun rename-file-and-buffer ()
-    "Renames current buffer and file it is visiting."
-    (interactive)
-    (let ((name (buffer-name))
-          (filename (buffer-file-name)))
-      (if (not (and filename (file-exists-p filename)))
-          (message "Buffer '%s' is not visiting a file!" name)
-        (let ((new-name (read-file-name "New name: " filename)))
-          (cond ((get-buffer new-name)
-                 (message "A buffer named '%s' already exists!" new-name))
-                (t
-                 (rename-file name new-name 1)
-                 (rename-buffer new-name)
-                 (set-visited-file-name new-name)
-                 (set-buffer-modified-p nil)))))))
-#+end_src
-
-** Abort minibuffer when mousing
-http://trey-jackson.blogspot.com/2010/04/emacs-tip-36-abort-minibuffer-when.html
-
-#+begin_src emacs-lisp
-  (defun stop-using-minibuffer ()
-    "kill the minibuffer"
-    (when (>= (recursion-depth) 1)
-      (abort-recursive-edit)))
-  ;; Whenever a mouse click has happened, clear the minibuffer
-  (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
-#+end_src
-
-** Simple filter function
-http://www.emacswiki.org/emacs/ElispCookbook
-#+begin_src emacs-lisp
-  (defun qdot/filter (condp lst)
-    (delq nil
-    (mapcar (lambda (x) (and (funcall condp x) x)) lst)))
-#+end_src
-
-** Return major mode of a buffer
-http://stackoverflow.com/questions/2238418/emacs-lisp-how-to-get-buffer-major-mode
-#+begin_src emacs-lisp
-  (defun qdot/buffer-mode (buffer-or-string)
-    "Returns the major mode associated with a buffer."
-    (save-excursion
-      (set-buffer buffer-or-string)
-      major-mode))
-#+end_src
-
-** Open current buffer file in browser
-#+begin_src emacs-lisp
-  (defun qdot/open-in-browser()
-    "Open current file in browser"
-    (interactive)
-    (let ((filename (buffer-file-name)))
-      (browse-url (concat "file://" filename))))
-#+end_src
-
-** Evaluate and replace preceding sexp
-#+begin_src emacs-lisp
-  (defun eval-and-replace ()
-    "Replace the preceding sexp with its value."
-    (interactive)
-    (backward-kill-sexp)
-    (condition-case nil
-        (prin1 (eval (read (current-kill 0)))
-               (current-buffer))
-      (error (message "Invalid expression")
-             (insert (current-kill 0)))))
-#+end_src
-
-** Delete current buffer and file
-http://blog.tuxicity.se/elisp/emacs/2010/11/16/delete-file-and-buffer-in-emacs.html
-#+begin_src emacs-lisp
-  (defun delete-buffer-and-file ()
-    "Removes file connected to current buffer and kills buffer."
-    (interactive)
-    (let ((filename (buffer-file-name))
-          (buffer (current-buffer))
-          (name (buffer-name)))
-      (if (not (and filename (file-exists-p filename)))
-          (error "Buffer '%s' is not visiting a file!" name)
-        (when (yes-or-no-p "Are you sure you want to remove this file? ")
-          (delete-file filename)
-          (kill-buffer buffer)
-          (message "File '%s' successfully removed" filename)))))
-#+end_src
-
-** Insert a uuid at current position using uuidgen
-#+begin_src emacs-lisp
-  (defun qdot/insert-uuid ()
-    "Use uuidgen to insert a uuid at point"
-    (interactive)
-    (shell-command-on-region (point) (point) "uuidgen" t)
-    (delete-backward-char 1))
-#+end_src
-
-** Clear kill ring
-#+begin_src emacs-lisp
-  (defun qdot/clear-kill-ring ()
-    "Clear the kill ring variable"
-    (setq kill-ring nil))
-#+end_src
-
-** Override org-agenda-open-in-other-window
-#+begin_src emacs-lisp
-  (defun qdot/org-agenda-open-in-other-window()
-    "Used for opening org files in the agenda in another window instead of over the agenda"
-    (interactive)
-    (when (and workgroups-mode
-         (eq (wg-get-workgroup "agenda") (wg-current-workgroup)))
-      (setq pop-up-windows nil)
-      (org-agenda-switch-to)
-      (setq pop-up-windows t))
-    (org-agenda-switch-to))
-#+end_src
-
-** Byte compile elisp when saved
-Byte compile the current buffer on save if a byte compiled version
-already exists.
-
-#+begin_src emacs-lisp
-  (defun qdot/byte-compile-current-buffer ()
-    "`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
-    (interactive)
-    (when (and (eq major-mode 'emacs-lisp-mode)
-               (file-exists-p (byte-compile-dest-file buffer-file-name)))
-      (byte-compile-file buffer-file-name)))
-  
-  (add-hook 'after-save-hook 'qdot/byte-compile-current-buffer)
-#+end_src
-
-** Desktop setup function
-#+begin_src emacs-lisp
-  (defun qdot/start-desktop ()
-    (interactive)
-    (qdot/set-platform-font)
-    (when linux-p
-      (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el")))
-    (org-agenda nil " ")
-    (sauron-start)
-    (qdot/monkey-patch-sr)
-    (qdot/add-notify-hooks)
-    (qdot/erc-znc-start)
-    (qdot/bitlbee-connect)
-    (qdot/personal-wg-setup)
-    (wg-switch-to-workgroup "bitlbee")
-    (qdot/bitlbee-resume-layout)
-    (wg-switch-to-workgroup "twitter"))
-#+end_src
-
 * Basic Variables and Modes
 ** Identity
 #+begin_src emacs-lisp
@@ -480,6 +227,12 @@ repo, though it can take a really, really, REALLY long time.
 #+end_src
 
 * External Packages
+** qdot-funcs
+#+BEGIN_SRC emacs-lisp
+  (require 'qdot-funcs)
+  (global-set-key (kbd "C-c C-s") 'qdot/sudo-edit-current-file)
+  (global-set-key (kbd "C-c C-r") 'qdot/reload-file)
+#+END_SRC
 ** quick-yes
 Use M-y and M-n in y-or-n minibuffer prompts
 #+begin_src emacs-lisp
@@ -558,7 +311,6 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
   ;; 50 files ought to be enough.
   (setq recentf-max-saved-items 50)
   
-  ;; link numbering for twittering mode
   (add-hook 'eshell-preoutput-filter-functions
       'ansi-color-filter-apply)
 #+end_src
@@ -633,7 +385,6 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
   ;; (diminish 'workgroups-mode " ω")
   (diminish 'auto-complete-mode " α")
 #+end_src
-
 
 ** ido
 #+begin_src emacs-lisp
@@ -805,7 +556,6 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
          (window-configuration-to-register :magit-fullscreen)
          ad-do-it
          (delete-other-windows))
-  
        (defun magit-quit-session ()
          "Restores the previous window configuration and kills the magit buffer"
          (interactive)
@@ -813,6 +563,8 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
          (jump-to-register :magit-fullscreen))
   
        (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
+  
+  (global-set-key (kbd "M-g s") 'magit-status)
   
   
 #+end_src
@@ -2374,24 +2126,40 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 #+end_src
 ** buffer-timer
 #+begin_src emacs-lisp
-    (require 'buffer-timer)
-    
-    ;; Example list of titles and regexps to group by.
-    (setq buffer-timer-regexp-master-list
-          '(
-            ("idle" .
-             (("generic" . "^\\*idle\\*")
-              ("minibuf" . "^ \\*Minibuf-.*")))
-            ("emacs" . ".emacs_files/")
-            ("org-mode" . "emacs_org/")
-            ("personal" .
-             (("code" . "code/git-projects/")))
-            ("work" .
-             ("code" .
-              (("general" . "code/mozbuild")
-               ("m-c" . "code/mozbuild/mozilla-central")
-               ("b2g" . "code/mozbuild/B2G"))))))
+  ;; (require 'buffer-timer)
+  
+  ;; ;; Example list of titles and regexps to group by.
+  ;; (setq buffer-timer-regexp-master-list
+  ;;       '(
+  ;;         ("idle" .
+  ;;          (("generic" . "^\\*idle\\*")
+  ;;           ("minibuf" . "^ \\*Minibuf-.*")))
+  ;;         ("emacs" . ".emacs_files/")
+  ;;         ("org-mode" . "emacs_org/")
+  ;;         ("personal" .
+  ;;          (("code" . "code/git-projects/")))
+  ;;         ("work" .
+  ;;          ("code" .
+  ;;           (("general" . "code/mozbuild")
+  ;;            ("m-c" . "code/mozbuild/mozilla-central")
+  ;;            ("b2g" . "code/mozbuild/B2G"))))))
 #+end_src
+** smex
+#+BEGIN_SRC emacs-lisp
+  ;; Bind smex over M-x, deals with sorting most used commands to front of IDO
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+#+END_SRC
+** expand-region
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-=") 'er/expand-region)
+#+END_SRC
+** ace-jump-mode
+#+BEGIN_SRC emacs-lisp
+  (define-key global-map (kbd "C-x SPC") 'ace-jump-mode)
+#+END_SRC
+
 * Notification Settings
 #+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2454,13 +2222,6 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 #+end_src
 * Keybinds
 #+begin_src emacs-lisp
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; Key triggers
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
-  ;;(global-set-key (kbd "C-h") 'delete-backward-char)
   (global-set-key (kbd "C-w") 'backward-kill-word)
   (global-set-key (kbd "C-c r") 'revert-buffer)
   (global-set-key (kbd "C-c v") 'visual-line-mode)
@@ -2469,20 +2230,8 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (global-set-key (kbd "C-x C-k") 'kill-region)
   (global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
   (global-set-key (kbd "C-c C-m") 'execute-extended-command)
-  (global-set-key (kbd "C-c m") 'mu4e)
   (global-set-key (kbd "C-c C-k") 'kill-region)
-  (global-set-key (kbd "C-c C-s") 'sudo-edit-current-file)
-  (global-set-key (kbd "C-c C-r") 'reload-file)
   (global-set-key (kbd "C-M-g") 'goto-line)
-  (global-set-key (kbd "M-g s") 'magit-status)
-  (global-set-key (kbd "C-=") 'er/expand-region)
-  
-  ;; Bind smex over M-x, deals with sorting most used commands to front of IDO
-  (global-set-key (kbd "M-x") 'smex)
-  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
-  
-  (define-key global-map (kbd "C-x SPC") 'ace-jump-mode)
   
   ;; Stealin' from esk
   
@@ -2525,6 +2274,19 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (add-to-list 'auto-mode-alist '("\\.org_archive$"  . org-mode))
   
 #+end_src
+* Hooks
+Extra hooks to functions from the qdot-funcs modules
+#+BEGIN_SRC emacs-lisp
+  ;; Make sure we want to quit
+  (add-hook 'kill-emacs-query-functions 'qdot/ask-before-quit)
+  
+  ;; Whenever a mouse click has happened, clear the minibuffer
+  (add-hook 'mouse-leave-buffer-hook 'qdot/stop-using-minibuffer)
+  
+  ;; Byte compile buffer whenever we save
+  (add-hook 'after-save-hook 'qdot/byte-compile-current-buffer)
+  
+#+END_SRC
 * Tasks
 ** DONE Fix IRC killing functions
 CLOSED: [2013-05-03 Fri 21:39]
