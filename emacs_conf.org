@@ -954,6 +954,11 @@ My mail client of choice.
    sauron-watch-nicks
    '("qDot_" "qDot" "aim-xiuvx" "aim-bokehcat" "aim-subgirl13"))
   
+  ;; external module to handle special xmonad notifications setup
+  (require 'qdot-sauron-notifications)
+#+end_src
+*** Monkeypatching IM status message
+#+BEGIN_SRC emacs-lisp
   (defun qdot/monkey-patch-sr ()
     (interactive)
     ;; Monkeypatching sauron's ERC hook until I write a msg string formatter for it
@@ -994,10 +999,8 @@ My mail client of choice.
                      :channel ,channel
                      :msg    ,msg)))
       nil))
-
-  (require 'qdot-sauron-notifications)
 #+end_src
-			  
+
 ** org-mode
 #+begin_src emacs-lisp
   (require 'org-checklist)
