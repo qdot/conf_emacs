@@ -946,9 +946,6 @@ My mail client of choice.
    ;; replying.
    sauron-nick-insensitivity 5
   
-   ;; uncomment to show sauron in the current frame
-   ;; sauron-separate-frame nil
-  
    ;; you probably want to add your own nickname to the these patterns
    sauron-watch-patterns
    '("qDot_" "qDot" "subgirl" "bokeh" "xiuv")
