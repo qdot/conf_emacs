@@ -1002,12 +1002,13 @@ My mail client of choice.
 #+end_src
 
 ** org-mode
+*** org modules
 #+begin_src emacs-lisp
   (require 'org-checklist)
   (require 'org-screen)
   (require 'org-protocol)
   (require 'org-mobile)
-  
+
   (setq org-modules     (quote (org-bibtex
                                 org-crypt
                                 org-gnus
@@ -1019,16 +1020,25 @@ My mail client of choice.
                                 org-irc
                                 org-protocol
                                 org-w3m)))
+
+  ;; Show the weather, set in the main task file via:
+  ;;* Weather
+  ;;%%(org-google-weather "XXXXX")
+  ;;
+  ;; (XXXXX being zip code)
   
-  ;; global STYLE property values for completion
-  (setq org-global-properties (quote (("STYLE_ALL" . "habit"))))
+  (require 'org-google-weather)
   
-  ;; Most of this ripped from http://doc.norang.ca/org-mode.html
-  (global-set-key "\C-cl" 'org-store-link)
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-cb" 'org-iswitchb)
+  ;; Embed location maps, with directions from home  
+  (require 'org-location-google-maps)
   
+
+#+end_src emacs-lisp
+*** org variables
+#+BEGIN_SRC emacs-lisp  
   (setq
+   ;; global STYLE property values for completion
+   org-global-properties (quote (("STYLE_ALL" . "habit")))
    ;; Use ~/emacs_org for storing files. Usually symlinked to Dropbox
    org-directory "~/emacs_org"
   
@@ -1138,14 +1148,34 @@ My mail client of choice.
    ;; This seemed like a good idea to have at t at first, but now it's driving me
    ;; crazy.
    org-special-ctrl-a/e nil
-   
+  
    org-special-ctrl-k t
    org-yank-adjusted-subtrees t
   
    org-align-all-tags t
   
-   org-startup-folded t)
+   org-startup-folded t
   
+   ;; multiple pass pdf generation
+   org-latex-to-pdf-process '("xelatex -interaction nonstopmode %f"
+                              "xelatex -interaction nonstopmode %f")
+  
+   org-agenda-files (append
+                     (file-expand-wildcards "~/emacs_org/tasks.org")
+                     (file-expand-wildcards "~/emacs_org/email.org")
+                     (file-expand-wildcards "~/emacs_org/mozilla/*.org")
+                     (file-expand-wildcards "~/emacs_org/home/*.org")
+                     (file-expand-wildcards "~/emacs_org/nplabs/*.org")
+                     (file-expand-wildcards "~/emacs_org/travel/*.org")
+                     (file-expand-wildcards "~/emacs_org/projects/*.org")
+                     (file-expand-wildcards "~/emacs_org/personal/*.org"))
+  
+   org-link-abbrev-alist
+   '(("bugzilla"  . "https://bugzilla.mozilla.org/show_bug.cgi?id=")))
+  
+#+end_src
+*** Hooks
+#+BEGIN_SRC emacs-lisp
   ;; flyspell mode for spell checking everywhere
   (add-hook 'org-mode-hook 'turn-on-flyspell 'append)
   
@@ -1160,10 +1190,19 @@ My mail client of choice.
               (org-defkey org-mode-map "\C-c["    'undefined)
               (org-defkey org-mode-map "\C-c]"    'undefined))
             'append)
-  
+
+  ;; Always hilight the current agenda line
+  (add-hook 'org-agenda-mode-hook
+            '(lambda () (hl-line-mode 1))
+            'append)
+#+end_src
+*** Clocking
+#+BEGIN_SRC emacs-lisp
   ;; Resume clocking tasks when emacs is restarted
   (org-clock-persistence-insinuate)
-  
+#+END_SRC
+*** Todo flow setup
+#+BEGIN_SRC emacs-lisp
   ;; 3 different stage setups. First two are from norang, final is for
   ;; events, so I can search for things like "all concerts I attended
   ;; this year" via state and tags
@@ -1171,22 +1210,30 @@ My mail client of choice.
                                   (sequence "WAITING(w@/!)" "TOFILE(t@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(C@/!)" "CLOSED(c@/!)")
                                   (sequence "EVENT(e)" "|" "ATTENDED(a!)" "SKIPPED(k!)")
                                   (sequence "ORDER(z)" "ORDERED(o!)" "SHIPPED(h!)" "|" "ARRIVED(A!/!)"))))
-  
+#+END_SRC
+*** Key bindings
+#+BEGIN_SRC emacs-lisp
   ;; I use C-M-r to start org-remember
   (global-set-key (kbd "C-M-R") 'org-capture)
-  
+   ;; Most of this ripped from http://doc.norang.ca/org-mode.html
+   (global-set-key "\C-cl" 'org-store-link)
+   (global-set-key "\C-ca" 'org-agenda)
+   (global-set-key "\C-cb" 'org-iswitchb)
+#+END_SRC
+*** Capture  
+#+BEGIN_SRC emacs-lisp
   ;; Once again, stolen from norang, except for the contacts one, which
   ;; was taken from the org-mode list.
   (setq org-capture-templates
         (quote
          (("t" "todo" entry (file "~/emacs_org/tasks.org")
            "* TODO %?
-    %u
-    %a")
+     %u
+     %a")
           ("n" "note" entry (file "~/emacs_org/notes.org")
            "* %?                                        :NOTE:
-    %u
-    %a")
+     %u
+     %a")
           ("r" "mu4e email reply" entry (file "~/emacs_org/email.org")
            "* %c"
            :immediate-finish t)
@@ -1197,6 +1244,10 @@ My mail client of choice.
            "* %c                                        :link:"
            :immediate-finish t))))
   
+  
+#+END_SRC
+*** Agenda
+#+BEGIN_SRC emacs-lisp
   ;; Personal agenda modes
   (setq org-agenda-custom-commands
         (quote (("h" "Tasks for home" tags-todo "+HOME-someday" nil)
@@ -1217,7 +1268,9 @@ My mail client of choice.
                         ((org-agenda-overriding-header "Emails")
                          (org-tags-match-list-sublevels nil)
                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("REPLIED"))))))))))
-  
+#+END_SRC
+*** Appointment warning bindings
+#+BEGIN_SRC emacs-lisp
   ;; Org mode notifications via aptp
   ;; the appointment notification facility
   (appt-activate 1)              ;; active appt (appointment notification)
@@ -1225,23 +1278,9 @@ My mail client of choice.
   
   ;; update appt each time agenda opened
   (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
-  
-  ;; Show the weather, set in the main task file via:
-  ;;* Weather
-  ;;%%(org-google-weather "XXXXX")
-  ;;
-  ;; (XXXXX being zip code)
-  
-  (require 'org-google-weather)
-  
-  ;; Embed location maps, with directions from home
-  
-  (setq calendar-location-name "Home")
-  (setq calendar-latitude 37.870975)
-  (setq calendar-longitude -122.288813)
-  
-  (require 'org-location-google-maps)
-  
+#+END_SRC
+*** Functions
+#+BEGIN_SRC emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; http://kanis.fr/blog-emacs.html#%20Diary%20block%20without%20week%2Dend
   ;; %%(diary-block-no-week-end 15 9 2010 30 10 2010) block without week-end
@@ -1249,8 +1288,8 @@ My mail client of choice.
   
   (defun qdot/diary-block-no-week-end (m1 d1 y1 m2 d2 y2 &optional mark)
     "Block diary entry.
-  Entry applies if date is between two dates and not in the
-  weekend."
+   Entry applies if date is between two dates and not in the
+   weekend."
     (let ((date1 (calendar-absolute-from-gregorian
                   (diary-make-date m1 d1 y1)))
           (date2 (calendar-absolute-from-gregorian
@@ -1260,73 +1299,13 @@ My mail client of choice.
       (and (<= date1 d) (<= d date2) (not (= day 6)) (not (= day 0))
            (cons mark entry))))
   
-  (setq org-latex-to-pdf-process
-        '("xelatex -interaction nonstopmode %f"
-          "xelatex -interaction nonstopmode %f")) ;; for multiple passes
-  
-  
-  (defun qdot/reload-org-files ()
-    (interactive)
-    (setq org-agenda-files
-          (append
-           (file-expand-wildcards "~/emacs_org/tasks.org")
-           (file-expand-wildcards "~/emacs_org/email.org")
-           (file-expand-wildcards "~/emacs_org/mozilla/*.org")
-           (file-expand-wildcards "~/emacs_org/home/*.org")
-           (file-expand-wildcards "~/emacs_org/nplabs/*.org")
-           (file-expand-wildcards "~/emacs_org/travel/*.org")
-           (file-expand-wildcards "~/emacs_org/projects/*.org")
-           (file-expand-wildcards "~/emacs_org/personal/*.org"))))
-  
-  (qdot/reload-org-files)
-  
-  ;; Always hilight the current agenda line
-  (add-hook 'org-agenda-mode-hook
-            '(lambda () (hl-line-mode 1))
-            'append)
-  
+#+END_SRC
+*** Faces  
+#+BEGIN_SRC emacs-lisp
   ;; The following custom-set-faces create the highlights
   (custom-set-faces
    '(org-mode-line-clock ((t (:background "grey75" :foreground "red" :box (:line-width -1 :style released-button)))) t))
-  
-  ;; Turn habits on at 6am every morning
-  (run-at-time "06:00" 86400 '(lambda () (setq org-habit-show-habits t)))
-  
-  (setq org-ghi-interesting-repos '("qdot/libnifalcon" "qdot/liblightstone" "qdot/libtrancevibe" "qdot/emokit" "qdot/libomron" "qdot/libfitbit"))
-  (setq org-ghi-org-file "~/emacs_org/github.org")
-  (setq org-ghi-file-under-repo-headline t)
-  
-  (setq org-mobile-inbox-for-pull "~/emacs_org/tasks.org")
-  (setq org-mobile-directory "~/Dropbox/MobileOrg")
-  (setq org-mobile-files '("~/emacs_org/tasks.org" "~/emacs_org/mozilla/B2G.org"))
-  (setq org-mobile-agendas nil)
-  
-  (defvar org-agenda-no-resize nil
-    "When non-nil, don't let org-mode resize windows for you")
-  
-  (setq org-agenda-no-resize t)
-  
-  (defadvice qdot/org-fit-agenda-window (around org-fit-agenda-window-select)
-    "Will not let org-fit-agenda-window resize if
-  org-agenda-no-resize is non-nil"
-    (when (not org-agenda-no-resize)
-      ad-do-it))
-  
-  (defadvice qdot/cfw:org-extract-summary (after cfw:org-extract-summary)
-    "Remove tags and filenames from item summary"
-    (message item))
-  
-  ;; Taken from http://doc.norang.ca/org-mode.html
-  ;; Refile settings
-  ;; Exclude DONE state tasks from refile targets
-  (defun qdot/verify-refile-target ()
-    "Exclude todo keywords with a done state from refile targets"
-    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
-  
-  (setq org-refile-target-verify-function 'qdot/verify-refile-target)
-  
-  ;; (diminish 'org-indent-mode " i")
-  
+
   ;; Sasha Chua's org done faces
   ;; http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
   (setq org-fontify-done-headline t)
@@ -1341,12 +1320,45 @@ My mail client of choice.
   (set-face-background 'org-block-begin-line "#333")
   (set-face-background 'org-block-end-line "#333")
   (set-face-background 'org-block-background "#222")
+#+END_SRC
+*** Mobile Org
+#+BEGIN_SRC emacs-lisp
+  (setq org-mobile-inbox-for-pull "~/emacs_org/tasks.org")
+  (setq org-mobile-directory "~/Dropbox/MobileOrg")
+  (setq org-mobile-files '("~/emacs_org/tasks.org" "~/emacs_org/mozilla/B2G.org"))
+  (setq org-mobile-agendas nil)
+#+END_SRC
+*** Disable org agenda window resizing
+#+BEGIN_SRC emacs-lisp
+  (defvar org-agenda-no-resize nil
+    "When non-nil, don't let org-mode resize windows for you")
   
-  (setq org-link-abbrev-alist
-        '(("bugzilla"  . "https://bugzilla.mozilla.org/show_bug.cgi?id=")))
-#+end_src
-
+  (setq org-agenda-no-resize t)
+  
+  (defadvice qdot/org-fit-agenda-window (around org-fit-agenda-window-select)
+    "Will not let org-fit-agenda-window resize if
+   org-agenda-no-resize is non-nil"
+    (when (not org-agenda-no-resize)
+      ad-do-it))
+#+END_SRC
+*** Habit reloading
+#+BEGIN_SRC emacs-lisp
+  ;; Turn habits on at 6am every morning
+  (run-at-time "06:00" 86400 '(lambda () (setq org-habit-show-habits t)))
+#+END_SRC
+*** Refile settings
+#+BEGIN_SRC emacs-lisp
+  ;; Taken from http://doc.norang.ca/org-mode.html
+  ;; Refile settings
+  ;; Exclude DONE state tasks from refile targets
+  (defun qdot/verify-refile-target ()
+    "Exclude todo keywords with a done state from refile targets"
+    (not (member (nth 2 (org-heading-components)) org-done-keywords)))
+  
+  (setq org-refile-target-verify-function 'qdot/verify-refile-target)
+#+END_SRC
 ** ERC
+*** Module and variable setup
 #+begin_src emacs-lisp
   (require 'erc)
   
