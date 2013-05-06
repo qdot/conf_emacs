@@ -1384,12 +1384,6 @@ My mail client of choice.
   
   (erc-timestamp-mode t)
   
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; ERC setup
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
   (setq erc-timestamp-only-if-changed-flag nil
         erc-timestamp-format "[%H:%M] "
         erc-fill-prefix "      "
@@ -1402,25 +1396,37 @@ My mail client of choice.
   (setq erc-button-url-regexp
         "\\([-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]+\\.\\)+[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]*[-a-zA-Z0-9\\/]")
   
-  ;; (erc-scrolltobottom-enable)
-  ;;  (erc-scrolltobottom-disable)
-  ;; (add-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
-  ;; (setq erc-keywords '((".*Online.*" (:foreground "green"))
-  ;;                      (".*Busy" (:foreground "red"))
-  ;;                      (".*Away" (:foreground "red"))
-  ;;                      (".*Idle" (:foreground "orange"))
-  ;;                      ))
-  
   (setq erc-keywords nil)
+  (setq erc-fill-function 'erc-fill-static)
+  (setq erc-fill-static-center 0)
+  
+  ;; Don't track common events
+  (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                  "324" "329" "332" "333" "353" "477"))
+  
+  (setq erc-current-nick-highlight-type 'nick)
+  
+  (setq erc-track-use-faces t)
+  (setq erc-track-faces-priority-list
+        '(erc-current-nick-face erc-keyword-face))
+  (setq erc-track-priority-faces-only 'all)
+  
+  (add-hook 'erc-join-hook
+            (lambda ()
+              (make-local-variable 'blink-matching-paren)
+              (setq blink-matching-paren nil)))
+  
+  (defun qdot/erc-turn-off-parens ()
+    (when (member (current-buffer) (erc-buffer-list))
+      (setq completion-auto-help nil)
+      (setq blink-matching-paren nil)))
+  
+  (add-hook 'after-change-major-mode-hook 'qdot/erc-turn-off-parens)
+  
+#+END_SRC
+*** Fill column resetting
+#+BEGIN_SRC emacs-lisp
   (make-variable-buffer-local 'erc-fill-column)
-  (make-variable-buffer-local 'erc-hide-list)
-  
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; Change fill column on resize
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
   (defun qdot/erc-set-fill-columns ()
     (interactive)
     (save-excursion
@@ -1432,10 +1438,12 @@ My mail client of choice.
              (message "Window size: %d" (window-width w))
              (setq erc-fill-column (- (window-width w) 2))))))))
   
-  (setq window-configuration-change-hook (cddr window-configuration-change-hook))
+  ;;(setq window-configuration-change-hook (cddr window-configuration-change-hook))
   
   ;;(add-hook 'window-configuration-change-hook 'qdot/erc-set-fill-columns)
-  
+#+END_SRC
+*** Privmsg Window Allocation
+#+BEGIN_SRC emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; Privmsg window allocation
@@ -1548,7 +1556,91 @@ My mail client of choice.
     nil)
   
   (add-hook 'kill-buffer-hook 'qdot/erc-query-buffer-recycle)
+#+END_SRC
+*** Make join/part showing buffer local
+Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
+#+BEGIN_SRC emacs-lisp
+  (make-variable-buffer-local 'erc-hide-list)
   
+  ;; Make erc-hide-list buffer-local
+  ;; http://web.archiveorange.com/archive/v/rByihNiNJaOnTUlfaxLs
+  
+  (defun erc-display-buffer-list (buffer)
+    "Sanitize a 'buffer' name or list, and convert to a buffer-name list."
+    (cond ((bufferp buffer) (list buffer))
+          ((listp buffer) buffer)
+          ((processp buffer) (list (process-buffer buffer)))
+          ((eq 'all buffer)
+           ;; Hmm, or all of the same session server?
+           (erc-buffer-list nil erc-server-process))
+          ((and (eq 'active buffer) (erc-active-buffer))
+           (list (erc-active-buffer)))
+          ((erc-server-buffer-live-p)
+           (list (process-buffer erc-server-process)))
+          (t (list (current-buffer)))))
+  
+  (defun erc-display-message (parsed type buffer msg &rest args)
+    "Display MSG in BUFFER.
+  
+  ARGS, PARSED, and TYPE are used to format MSG sensibly.
+  
+  See also `erc-format-message' and `erc-display-line'.
+  
+  NOTE: PATCHED VERSION that takes into account that erc-hide-list
+  is buffer local"
+    (let ((string (if (symbolp msg)
+                      (apply 'erc-format-message msg args)
+                    msg)))
+      (setq string
+            (cond
+             ((null type)
+              string)
+             ((listp type)
+              (mapc (lambda (type)
+                      (setq string
+                            (erc-display-message-highlight type string)))
+                    type)
+              string)
+             ((symbolp type)
+              (erc-display-message-highlight type string))))
+  
+      (if (not (erc-response-p parsed))
+          (erc-display-line string buffer)
+        (erc-put-text-property 0 (length string) 'erc-parsed parsed string)
+        (erc-put-text-property 0 (length string) 'rear-sticky t string)
+        (dolist (buf (erc-display-buffer-list buffer))
+          (unless (member (erc-response.command parsed)
+                          (if (bufferp buf)
+                              (with-current-buffer buf erc-hide-list)
+                            erc-hide-list))
+            (erc-display-line string buf))))))
+  
+  (setq qdot/erc-event-channels '("&bitlbee"))
+  
+  (add-hook 'erc-join-hook
+            (lambda ()
+              (when (not (member (buffer-name (current-buffer))
+                                 qdot/erc-event-channels))
+                (setq erc-hide-list '( "PART" "QUIT" "JOIN")))))
+  
+  ;; Set certain nicks to show join/part on. Ignore all others.
+  ;; Doesn't seem to work right. At all.
+  
+  ;; (setq qdot/bitlbee-status-nicks '("aim-subgirl13" "aim-xiuvx" "aim-bokehcat" "qdot76367" "aim-allenjgmailcom"))
+  
+  ;; (defun qdot/filter-bitlbee-joins-parts (msg)
+  ;;   (when (and (string= "&bitlbee" (buffer-name (current-buffer)))
+  ;;              (= (string-match "***" msg) 0))
+  ;;     (setq erc-insert-this nil)
+  ;;     (dolist (nick qdot/bitlbee-status-nicks)
+  ;;       (if (string-match nick msg)
+  ;;           (setq erc-insert-this t)))))
+  
+  ;; (add-hook 'erc-insert-pre-hook 'qdot/filter-bitlbee-joins-parts)
+  ;;(setq erc-insert-pre-hook nil)  
+#+END_SRC
+*** ZNC Connection Setup
+#+BEGIN_SRC emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
   ;; ZNC IRC Bouncer Setup
@@ -1620,92 +1712,9 @@ My mail client of choice.
       (erc-nicklist))
     (wg-revert-workgroup (wg-get-workgroup "bitlbee"))
     (qdot/bitlbee-reallocate-query-buffers))
-  
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; Kill all ERC windows and connections for the current frame
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
-  (setq erc-fill-function 'erc-fill-static)
-  (setq erc-fill-static-center 0)
-  
-  ;; Don't track common events
-  (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
-                                  "324" "329" "332" "333" "353" "477"))
-  
-  (setq erc-current-nick-highlight-type 'nick)
-  
-  (setq erc-track-use-faces t)
-  (setq erc-track-faces-priority-list
-        '(erc-current-nick-face erc-keyword-face))
-  (setq erc-track-priority-faces-only 'all)
-  
-  ;; Make erc-hide-list buffer-local
-  ;; http://web.archiveorange.com/archive/v/rByihNiNJaOnTUlfaxLs
-  
-  (defun erc-display-buffer-list (buffer)
-    "Sanitize a 'buffer' name or list, and convert to a buffer-name list."
-    (cond ((bufferp buffer) (list buffer))
-          ((listp buffer) buffer)
-          ((processp buffer) (list (process-buffer buffer)))
-          ((eq 'all buffer)
-           ;; Hmm, or all of the same session server?
-           (erc-buffer-list nil erc-server-process))
-          ((and (eq 'active buffer) (erc-active-buffer))
-           (list (erc-active-buffer)))
-          ((erc-server-buffer-live-p)
-           (list (process-buffer erc-server-process)))
-          (t (list (current-buffer)))))
-  
-  (defun erc-display-message (parsed type buffer msg &rest args)
-    "Display MSG in BUFFER.
-  
-  ARGS, PARSED, and TYPE are used to format MSG sensibly.
-  
-  See also `erc-format-message' and `erc-display-line'.
-  
-  NOTE: PATCHED VERSION that takes into account that erc-hide-list
-  is buffer local"
-    (let ((string (if (symbolp msg)
-                      (apply 'erc-format-message msg args)
-                    msg)))
-      (setq string
-            (cond
-             ((null type)
-              string)
-             ((listp type)
-              (mapc (lambda (type)
-                      (setq string
-                            (erc-display-message-highlight type string)))
-                    type)
-              string)
-             ((symbolp type)
-              (erc-display-message-highlight type string))))
-  
-      (if (not (erc-response-p parsed))
-          (erc-display-line string buffer)
-        (erc-put-text-property 0 (length string) 'erc-parsed parsed string)
-        (erc-put-text-property 0 (length string) 'rear-sticky t string)
-        (dolist (buf (erc-display-buffer-list buffer))
-          (unless (member (erc-response.command parsed)
-                          (if (bufferp buf)
-                              (with-current-buffer buf erc-hide-list)
-                            erc-hide-list))
-            (erc-display-line string buf))))))
-  
-  (setq qdot/erc-event-channels '("&bitlbee"))
-  
-  (add-hook 'erc-join-hook
-            (lambda ()
-              (make-local-variable 'blink-matching-paren)
-              (setq blink-matching-paren nil)
-              "Only show joins/hides/quits for channels we
-  specify in qdot/erc-event-channels"
-              (when (not (member (buffer-name (current-buffer))
-                                 qdot/erc-event-channels))
-                (setq erc-hide-list '( "PART" "QUIT" "JOIN")))))
-  
+#+END_SRC
+*** Monkeypatch buffer clearing
+#+BEGIN_SRC emacs-lisp
   (defun qdot/clear-irc-buffer ()
     "If the current buffer is and ERC buffer, clear all text out of
   it.
@@ -1719,14 +1728,9 @@ My mail client of choice.
   
   (defun erc-cmd-CLEAR ()
     (qdot/clear-irc-buffer))
-  
-  (defun qdot/erc-turn-off-parens ()
-    (when (member (current-buffer) (erc-buffer-list))
-      (setq completion-auto-help nil)
-      (setq blink-matching-paren nil)))
-  
-  (add-hook 'after-change-major-mode-hook 'qdot/erc-turn-off-parens)
-  
+#+END_SRC
+*** Kill all buffers
+#+BEGIN_SRC emacs-lisp
   (defun qdot/erc-kill-all-channel-buffers ()
     (interactive)
     (dolist (channel (erc-buffer-list))
@@ -1765,20 +1769,8 @@ My mail client of choice.
   (add-hook 'kill-emacs-hook 'qdot/kill-irc)
   (add-hook 'kill-emacs-hook 'qdot/kill-bitlbee)
   
-  (setq qdot/bitlbee-status-nicks '("subgirl13" "xiuvx" "bokehcat" "qdot76367" "gt-JaredAllen"))
-  
-  (defun qdot/filter-bitlbee-joins-parts (msg)
-    (when (and (string= "&bitlbee" (buffer-name (current-buffer)))
-               (= (string-match "***" msg) 0))
-      (setq erc-insert-this nil)
-      (dolist (nick qdot/bitlbee-status-nicks)
-        (if (string-match nick msg)
-            (setq erc-insert-this t)))))
-  
-  (add-hook 'erc-insert-pre-hook 'qdot/filter-bitlbee-joins-parts)
-  (setq erc-insert-pre-hook nil)
   (defalias 'qdot/kill-erc 'qdot/kill-irc)
-#+end_src
+#+END_SRC  
 ** programming-mode
 #+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
