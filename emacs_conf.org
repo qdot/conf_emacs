@@ -1779,18 +1779,9 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   
-  ;; doxymacs mode for editing doxygen
-  (add-hook 'c-mode-common-hook 'doxymacs-mode)
-  
   ;; Set defaults we expect
   (setq-default c-basic-offset 2)
   (setq-default py-indent-offset 2)
-  
-  ;; gdb/gud
-  (setq gdb-many-windows t)
-  (setq gdb-show-main t)
-  (setq gud-chdir-before-run nil)
-  (setq gud-tooltip-mode t)
   
   ;; turn on linum mode for programming
   (setq linum-format "%4d")
@@ -1843,20 +1834,6 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (add-hook 'c++-mode-hook 'qdot/flymake-off-hook)
   (add-hook 'c-mode-hook 'qdot/flymake-off-hook)
   (add-hook 'xml-mode-hook 'qdot/flymake-off-hook)
-  
-  ;; Flymake for python using pep8/pylint/pychecker
-  ;; http://vaab.blog.kal.fr/2012/09/20/emacs-and-flymake-for-python-javascript-php-rst/
-  
-  (when (load "flymake" t)
-    (defun flymake-pycheckers-init ()
-      (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                         'flymake-create-temp-inplace))
-             (local-file (file-relative-name
-                          temp-file
-                          (file-name-directory buffer-file-name))))
-        (list (concat qdot/emacs-scripts-dir "flycheck_python.py")  (list local-file))))
-    (add-to-list 'flymake-allowed-file-name-masks
-                 '("\\.py\\'" flymake-pycheckers-init)))
   
 #+end_src
 ** haskell-mode
@@ -1924,13 +1901,8 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   ;;       'qdot/flymake-display-err-minibuf)))
 #+end_src
 ** smerge
+http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
 #+begin_src emacs-lisp  
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; smerge mode for looking at inline conflicts
-  ;; http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   
   (defun sm-try-smerge ()
     (save-excursion
@@ -1942,12 +1914,6 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+end_src
 ** cc-mode
 #+begin_src emacs-lisp
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; cc-mode hook
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
   (defun qdot/cc-mode-hook ()
     (doxymacs-font-lock)
     (local-set-key (kbd "\C-m") 'newline-and-indent)
@@ -1960,6 +1926,9 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
     (subword-mode 1))
   
   (add-hook 'c-mode-common-hook 'qdot/cc-mode-hook)
+  
+  ;; doxymacs mode for editing doxygen
+  (add-hook 'c-mode-common-hook 'doxymacs-mode) 
 #+end_src
 ** compilation mode
 #+begin_src emacs-lisp  
@@ -2089,6 +2058,21 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (add-hook 'python-mode-hook (lambda ()
                                 (when indent-tabs-mode
                                   (guess-style-guess-tab-width))))
+  
+  ;; Flymake for python using pep8/pylint/pychecker
+  ;; http://vaab.blog.kal.fr/2012/09/20/emacs-and-flymake-for-python-javascript-php-rst/
+  
+  (when (load "flymake" t)
+    (defun flymake-pycheckers-init ()
+      (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                         'flymake-create-temp-inplace))
+             (local-file (file-relative-name
+                          temp-file
+                          (file-name-directory buffer-file-name))))
+        (list (concat qdot/emacs-scripts-dir "flycheck_python.py")  (list local-file))))
+    (add-to-list 'flymake-allowed-file-name-masks
+                 '("\\.py\\'" flymake-pycheckers-init)))
+  
 #+end_src  
 ** js2-mode
 #+begin_src emacs-lisp
@@ -2119,14 +2103,13 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+end_src
 ** gdb
 #+begin_src emacs-lisp
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; gdb settings
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
   ;; Turn off non-stop by default. All or nothing, damnit.
   (setq gdb-non-stop-setting nil)
+  ;; gdb/gud
+  (setq gdb-many-windows t)
+  (setq gdb-show-main t)
+  (setq gud-chdir-before-run nil)
+  (setq gud-tooltip-mode t)
   
   (setq compilation-auto-jump-to-first-error t)
   (setq compilation-scroll-output 'first-error)
