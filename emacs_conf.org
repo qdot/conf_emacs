@@ -820,6 +820,7 @@ My mail client of choice.
 #+end_src
 
 ** workgroups
+*** Variables
 #+begin_src emacs-lisp
   ;; Set the prefix key to tilde, what I normally use in screen
   (setq wg-prefix-key "`")
@@ -831,7 +832,9 @@ My mail client of choice.
   (setq wg-restore-associated-buffers nil)
   
   (setq wg-switch-to-first-workgroup-on-find-session-file nil)
-  
+#+end_src emacs-lisp
+*** uid-mismatch handling
+#+BEGIN_SRC emacs-lisp
   ;; Due to some buffers having issues when reloading (erc), uids start
   ;; to mismatch which massively trips up workgroups. This is function
   ;; redefinition allows us to set the action when a mismatch happens.
@@ -860,7 +863,9 @@ My mail client of choice.
                      (if buffer (buffer-name buffer) 
                        (buffer-name (current-buffer))))))
       (setq wg-buffer-uid uid)))
-  
+#+END_SRC
+*** Personal usage setup function
+#+BEGIN_SRC emacs-lisp
   (defun qdot/personal-wg-setup ()
     (workgroups-mode 1)
   
@@ -928,29 +933,10 @@ My mail client of choice.
       (qdot/wg-set-buffer-lists)))
   
   ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
-  ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))
-  
-  ;; (defvar qdot/reallocate-query-buffer-trigger t
-  ;;  "Used to know when to trigger a query buffer reallocation on workgroup change")
-  
-  ;; (defun qdot/trigger-reallocate-query-buffers (proc parsed)
-  ;;  (setq qdot/reallocate-query-buffer-trigger t))
-  
-  ;; (add-hook 'erc-server-PRIVMSG-functions 'qdot/trigger-reallocate-query-buffers)
-  
-  ;; ;; Auto-place IM windows when switching to bitlbee workgroup
-  ;; (add-hook 'wg-switch-to-workgroup-hook 
-  ;;    (lambda () 
-  ;;        (when (and qdot/reallocate-query-buffer-trigger
-  ;;                 (eq (wg-get-workgroup "bitlbee") (wg-current-workgroup)))
-  ;;        (qdot/bitlbee-resume-layout)
-  ;;        (setq qdot/reallocate-query-buffer-trigger nil))
-  ;;      (when (eq (wg-get-workgroup "erc") (wg-current-workgroup))
-  ;;        (qdot/erc-set-fill-columns))
-  ;;      (when (eq (wg-get-workgroup "mozilla") (wg-current-workgroup))
-  ;;        (qdot/erc-set-fill-columns))))
+  ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))  
 #+end_src
 ** sauron
+*** Variables
 #+begin_src emacs-lisp
   (setq sauron-separate-frame nil)
   (setq sauron-dbus-cookie t)
