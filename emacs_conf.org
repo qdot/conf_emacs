@@ -613,8 +613,11 @@ gpg file auto query/loading
 #+end_src
 
 ** mu4e
-#+begin_src emacs-lisp
+My mail client of choice.
+*** mu4e variables/functions to be used across sessions
+#+BEGIN_SRC emacs-lisp
   (require 'mu4e-vars)
+  (add-hook 'mu4e-main-mode-hook (lambda () (require 'mu4e-unread-main)))
   (when linux-p
     (setq mu4e-mu-binary "/home/qdot/usr/bin/mu"))
   (when macosx-p
@@ -628,43 +631,7 @@ gpg file auto query/loading
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
   (setq mu4e-view-show-images t)
-  (setq mu4e-view-show-addresses t)
-  
-  ;; setup some handy shortcuts
-  (setq mu4e-maildir-shortcuts
-        '(("/nonpolynomial/INBOX"                 . ?i)
-          ("/mozilla/INBOX"                       . ?m)
-          ("/nonpolynomial/Mozilla.bugzilla"      . ?b)
-          ("/nonpolynomial/MailArchive.Kelly"     . ?k)
-          ("/nonpolynomial/MailArchive.Receipts"  . ?r)
-          ("/[Gmail].Sent Mail"                   . ?s)
-          ("/[Gmail].Trash"                       . ?t)))
-  
-  (setq qdot/mu4e-account-alist
-    '(("nonpolynomial"
-       (mu4e-sent-folder "/nonpolynomial/[Gmail].Sent Mail")
-       (mu4e-drafts-folder "/nonpolynomial/[Gmail].Drafts")
-       (user-mail-address "kyle@nonpolynomial.com")
-       (smtpmail-default-smtp-server "smtp.gmail.com")
-       (smtpmail-local-domain "nonpolynomial.com")
-       (smtpmail-smtp-server "smtp.gmail.com")
-       (smtpmail-stream-type starttls)
-       (smtpmail-smtp-service 587))
-      ("mozilla"
-       (mu4e-sent-folder "/mozilla/Sent")
-       (mu4e-drafts-folder "/mozilla/Drafts")
-       (user-mail-address "kmachulis@mozilla.com")
-       (smtpmail-default-smtp-server "smtp.")
-       (smtpmail-local-domain "mozilla.com")
-       (smtpmail-smtp-server "smtp.gmail.com")
-       (smtpmail-stream-type starttls)
-       (smtpmail-smtp-service 587))))
-  
-  (add-to-list 'mu4e-bookmarks
-               '("maildir:/nonpolynomial/INBOX flag:unread" "Nonpolynomial Unread" ?n) t)
-  (add-to-list 'mu4e-bookmarks
-               '("maildir:/mozilla/INBOX flag:unread" "Mozilla Unread" ?m) t)
-  
+  (setq mu4e-view-show-addresses t)  
   (setq mail-user-agent 'mu4e-user-agent)
   (require 'org-mu4e)
   
@@ -726,7 +693,72 @@ gpg file auto query/loading
   (require 'mu4e-contrib)
   (add-to-list 'mu4e-headers-actions '("mark all read" . mu4e-headers-mark-all-unread-read) t)
   
-#+end_src
+#+END_SRC
+*** Personal setup
+#+BEGIN_SRC emacs-lisp
+  (setq mu4e-user-mail-address-list (list "kyle@nonpolynomial.com"
+                                          "kyle@knot-theory.com"
+                                          "qdot76367@gmail.com"
+                                          "t-kylem@microsoft.com"
+                                          "kmachulis@mozilla.com"
+                                          "kyle@510systems.com"
+                                          "kyle@kipr.org"
+                                          "qdot@mozilla.com"
+                                          "qdot@knot-theory.com"
+                                          "qdot@nonpolynomial.com"
+                                          "qdot@deathbots.com"
+                                          "qdot@ia1hacking.com"
+                                          "alex@mmorgy.com"
+                                          "alexp@mmorgy.com"
+                                          "isabelle@mmorgy.com"
+                                          "qdot@mmorgy.com"
+                                          "tips@mmorgy.com"
+                                          "qdot@numberporn.com"
+                                          "qdot@opendildonics.org"
+                                          "kyle@openyou.org"
+                                          "qdot@slashdong.org"
+                                          "tips@slashdong.org"
+                                          "mage@ou.edu"
+                                          "mage@gothic.net"
+                                          "mage@ionet.net"
+                                          "mage@galstar.net"))
+
+  ;; setup some handy shortcuts
+  (setq mu4e-maildir-shortcuts
+        '(("/nonpolynomial/INBOX"                 . ?i)
+          ("/mozilla/INBOX"                       . ?m)
+          ("/nonpolynomial/Mozilla.bugzilla"      . ?b)
+          ("/nonpolynomial/MailArchive.Kelly"     . ?k)
+          ("/nonpolynomial/MailArchive.Receipts"  . ?r)
+          ("/[Gmail].Sent Mail"                   . ?s)
+          ("/[Gmail].Trash"                       . ?t)))
+  
+  (setq qdot/mu4e-account-alist
+    '(("nonpolynomial"
+       (mu4e-sent-folder "/nonpolynomial/[Gmail].Sent Mail")
+       (mu4e-drafts-folder "/nonpolynomial/[Gmail].Drafts")
+       (user-mail-address "kyle@nonpolynomial.com")
+       (smtpmail-default-smtp-server "smtp.gmail.com")
+       (smtpmail-local-domain "nonpolynomial.com")
+       (smtpmail-smtp-server "smtp.gmail.com")
+       (smtpmail-stream-type starttls)
+       (smtpmail-smtp-service 587))
+      ("mozilla"
+       (mu4e-sent-folder "/mozilla/Sent")
+       (mu4e-drafts-folder "/mozilla/Drafts")
+       (user-mail-address "kmachulis@mozilla.com")
+       (smtpmail-default-smtp-server "smtp.")
+       (smtpmail-local-domain "mozilla.com")
+       (smtpmail-smtp-server "smtp.gmail.com")
+       (smtpmail-stream-type starttls)
+       (smtpmail-smtp-service 587))))
+  
+  (add-to-list 'mu4e-bookmarks
+               '("maildir:/nonpolynomial/INBOX flag:unread" "Nonpolynomial Unread" ?n) t)
+  (add-to-list 'mu4e-bookmarks
+               '("maildir:/mozilla/INBOX flag:unread" "Mozilla Unread" ?m) t)
+#+END_SRC
+*** Work setup
 ** smtpmail
 #+begin_src emacs-lisp  
   ;; sending mail -- replace USERNAME with your gmail username
