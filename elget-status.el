@@ -243,6 +243,10 @@
 	 (:name popwin :description "Popup Window Manager." :website "https://github.com/m2ym/popwin-el" :type github :pkgname "m2ym/popwin-el"))
  (powerline-milkypostman status "installed" recipe
 			 (:name "powerline-milkypostman" :description "Yet another emacs vim-powerline implementation" :type github :pkgname "milkypostman/powerline" :url "http://github.com/milkypostman/powerline" :features powerline powerline-seperators))
+ (projectile status "installed" recipe
+	     (:name projectile :description "Project navigation and management library for Emacs" :type github :pkgname "bbatsov/projectile" :depends
+		    (dash s)
+		    :features projectile))
  (python status "installed" recipe
 	 (:name python :description "Python's flying circus support for Emacs" :type github :pkgname "fgallina/python.el"))
  (rainbow-delimiters status "installed" recipe
@@ -253,6 +257,8 @@
 	    (:name rect-mark :description "Mark a rectangle of text with highlighting." :type emacswiki))
  (revbufs status "installed" recipe
 	  (:name revbufs :description "Reverts out-of-date buffers safely" :type http :url "http://www.neilvandyke.org/revbufs/revbufs.el" :features revbufs))
+ (s status "installed" recipe
+    (:name s :description "The long lost Emacs string manipulation library." :type github :pkgname "magnars/s.el" :features s))
  (sauron status "installed" recipe
 	 (:name sauron :description "enhanced tracking of the world inside and outside your emacs" :website "https://github.com/djcb/sauron" :type github :pkgname "djcb/sauron" :prepare
 		(autoload 'sauron-start "sauron" "Start sauron." t)))

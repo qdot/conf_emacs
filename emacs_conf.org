@@ -2145,6 +2145,10 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 
 #+END_SRC
 
+** projectile
+#+BEGIN_SRC emacs-lisp
+  (projectile-global-mode 1)
+#+END_SRC
 ** diminish
 #+begin_src emacs-lisp
   (require 'diminish)
@@ -2153,7 +2157,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (add-hook 'org-mode-hook (lambda () (diminish 'org-indent-mode " ı")))
   (add-hook 'workgroups-mode-hook (lambda () (diminish 'workgroups-mode " ω")))
   (eval-after-load "flyspell" '(diminish 'flyspell-mode " 仚"))
-  
+  (after 'projectile (diminish 'projectile-mode " 🔫"))
 #+end_src
 
 * Automodes
@@ -2237,11 +2241,11 @@ Used el-get-sources variable
    [2011-01-08 Sat]
 
    [[file:~/git-projects/nonpolynomial.com/libraries/index.html::<H2>libnifalcon</H2>]]
-** TODO Check out eproject
+** TODO Check out projectile for emacs projects
 :PROPERTIES:
 :ID: 5c2bdb24-e177-45eb-a5c0-5b1ecacbbc45
 :END:
-https://github.com/jrockway/eproject
+https://github.com/bbatsov/projectile
 
 ** TODO Check out ede which apparently now works with CMake?
 ** TODO Work on eshell
