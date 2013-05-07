@@ -2202,7 +2202,10 @@ CLOSED: [2013-05-06 Mon 11:05]
 ** DONE defadvise erc-hide-current-message-p instead of monkeypatching erc-display-message for buffer-local erc-hide-list
 CLOSED: [2013-05-06 Mon 18:52]
 - State "DONE"       from "TODO"       [2013-05-06 Mon 18:52]
-** TODO Set up local el-get recipes directory so we don't have to track el-get perfectly
+** DONE Set up local el-get recipes directory so we don't have to track el-get perfectly
+CLOSED: [2013-05-06 Mon 20:52]
+- State "DONE"       from "TODO"       [2013-05-06 Mon 20:52]
+Used el-get-sources variable
 ** TODO Divide out work setup from home setup
 *** TODO mu4e
 *** TODO erc
