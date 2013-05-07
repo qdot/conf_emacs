@@ -239,6 +239,17 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (global-set-key (kbd "C-x f") 'find-file-in-project)  
 #+end_src
 
+* Macros
+** eval-after-load macro
+Taken from https://github.com/milkypostman/dotemacs/blob/master/init.el
+#+BEGIN_SRC emacs-lisp
+;;;; macros
+(defmacro after (mode &rest body)
+  "`eval-after-load' MODE evaluate BODY."
+  (declare (indent defun))
+  `(eval-after-load ,mode
+     '(progn ,@body)))
+#+END_SRC
 * El-get
 Sets up variables for storage locations and status files. If el-get
 doesn't currently exist on the system, it downloads the initialization
@@ -276,6 +287,15 @@ repo, though it can take a really, really, REALLY long time.
 #+end_src
 
 * Package Configuration
+** powerline
+#+BEGIN_SRC emacs-lisp
+  ;; (after 'powerline
+  ;;        (powerline-default-theme)
+  ;;        (custom-set-faces
+  ;;         '(mode-line ((t (:box nil))))
+  ;;         '(powerline-active1 ((t (:inherit mode-line :background "#444444"))) t)
+  ;;         '(powerline-active2 ((t (:inherit mode-line :background "#666666"))) t)))
+#+END_SRC
 ** qdot-funcs
 #+BEGIN_SRC emacs-lisp
   (require 'qdot-funcs)
@@ -1033,18 +1053,6 @@ My mail client of choice.
                                 org-irc
                                 org-protocol
                                 org-w3m)))
-
-  ;; Show the weather, set in the main task file via:
-  ;;* Weather
-  ;;%%(org-google-weather "XXXXX")
-  ;;
-  ;; (XXXXX being zip code)
-  
-  (require 'org-google-weather)
-  
-  ;; Embed location maps, with directions from home  
-  (require 'org-location-google-maps)
-  
 
 #+end_src emacs-lisp
 *** org variables
@@ -2227,6 +2235,7 @@ CLOSED: [2013-05-06 Mon 11:05]
 ** DONE defadvise erc-hide-current-message-p instead of monkeypatching erc-display-message for buffer-local erc-hide-list
 CLOSED: [2013-05-06 Mon 18:52]
 - State "DONE"       from "TODO"       [2013-05-06 Mon 18:52]
+** TODO Set up local el-get recipes directory so we don't have to track el-get perfectly
 ** TODO Divide out work setup from home setup
 *** TODO mu4e
 *** TODO erc
