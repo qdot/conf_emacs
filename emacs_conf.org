@@ -1587,7 +1587,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   
   (setq qdot/erc-status-allow-list
         '(("&bitlbee" . ("PART" "JOIN" "MODE" "NICK" "QUIT"))
-          ("znc-BitlBee" . ("PART" "JOIN" "MODE" "NICK" "QUIT"))))
+          ("znc-bitlbee" . ("PART" "JOIN" "MODE" "NICK" "QUIT"))))
   
   (defadvice erc-hide-current-message-p (around qdot/erc-hide-per-buffer-advice last (parsed) activate)
     "Addition to hide message predicate to check for channel
@@ -1621,6 +1621,10 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   
   (defvar qdot/erc-znc-nick "qdot")
   (defvar qdot/erc-znc-password "doesnotmatter")
+  (defvar qdot/erc-znc-networks '(("personal" . ("freenode"))
+                                  ("work" . ("mozilla"))))
+  (defvar qdot/erc-znc-remote-server "localhost")
+  (defvar qdot/erc-znc-port 9999)
   
   (defun qdot/erc-znc-connect (network)
     (erc :server qdot/erc-znc-remote-server
@@ -1634,7 +1638,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
     (save-excursion
       (let ((network-name (symbol-name (erc-network))))
         (set-buffer (erc-server-buffer))
-        (rename-buffer (concat "znc-" network-name))
+        (rename-buffer (concat "znc-" (downcase network-name)))
         (message (format "Renamed buffer to %s" network-name))))
     nil)
   
@@ -1644,18 +1648,9 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   
   (add-hook 'erc-after-connect 'qdot/erc-znc-initialize)
   
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; ZNC variables and utility functions
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (defvar qdot/erc-znc-networks '("freenode" "mozilla"))
-  (defvar qdot/erc-znc-remote-server "localhost")
-  (defvar qdot/erc-znc-port 9999)
-  
-  (defun qdot/erc-znc-start ()
+  (defun qdot/erc-znc-start (type)
     (interactive)
-    (mapcar 'qdot/erc-znc-connect qdot/erc-znc-networks))
+    (mapcar 'qdot/erc-znc-connect (cdr (assoc type qdot/erc-znc-networks))))
   
   (defun qdot/bitlbee-connect ()
     (interactive)
@@ -1714,8 +1709,8 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
      (lambda (arg)
        (when (and (erc-server-buffer-p arg)
                   (if bitlbee
-                      (string-match (buffer-name arg) "znc-BitlBee")
-                    (not (string-match (buffer-name arg) "znc-BitlBee"))))
+                      (string-match (buffer-name arg) "znc-bitlbee")
+                    (not (string-match (buffer-name arg) "znc-bitlbee"))))
          (save-excursion
            (set-buffer arg)
            (erc-quit-server "Wheee.")

@@ -86,6 +86,7 @@
   (if arg
       (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
 (defun qdot/sudo-edit-current-file ()
   "Open file in current buffer as root and edit via tramp"
   (interactive)
@@ -233,7 +234,7 @@
   (sauron-start)
   (qdot/monkey-patch-sr)
   (qdot/add-notify-hooks)
-  (qdot/erc-znc-start)
+  (qdot/erc-znc-start "personal")
   (qdot/bitlbee-connect)
   (qdot/personal-wg-setup)
   (wg-switch-to-workgroup "bitlbee")
