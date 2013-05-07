@@ -1737,7 +1737,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   
   (defalias 'qdot/kill-erc 'qdot/kill-irc)
 #+END_SRC  
-** programming-mode
+** prog-mode
 #+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
@@ -1757,8 +1757,6 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (setq show-paren-style 'expression)
   (defun qdot/programming-mode-hook ()
     (linum-mode 1)
-    ;; fci-mode violently broken at the moment (24.3 HEAD)
-    ;;  (fci-mode 1)
     ;; No tabs. Or wire hangers.
     (setq indent-tabs-mode nil)
     (make-variable-buffer-local 'show-paren-mode)
@@ -1770,19 +1768,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
     (set-face-attribute 'show-paren-match-face nil
             :weight 'bold :underline nil :overline nil :slant 'normal))
   
-  (add-hook 'emacs-lisp-mode-hook 'qdot/programming-mode-hook)
-  (add-hook 'cmake-mode-hook 'qdot/programming-mode-hook)
-  (add-hook 'c-mode-common-hook 'qdot/programming-mode-hook)
-  (add-hook 'haskell-mode-hook 'qdot/programming-mode-hook)
-  (add-hook 'java-mode-hook 'qdot/programming-mode-hook)
-  (add-hook 'js-mode-hook 'qdot/programming-mode-hook)
-  (add-hook 'js2-mode-hook 'qdot/programming-mode-hook)
-  (add-hook 'js3-mode-hook 'qdot/programming-mode-hook)
-  (add-hook 'nxml-mode-hook 'qdot/programming-mode-hook)
-  (add-hook 'xml-mode-hook 'qdot/programming-mode-hook)
-  (add-hook 'nxhtml-mode-hook 'qdot/programming-mode-hook)
-  (add-hook 'python-mode-hook 'qdot/programming-mode-hook)
-  
+  (add-hook 'prog-mode-hook 'qdot/programming-mode-hook)
   
 #+end_src
 ** Flymake
@@ -1898,15 +1884,10 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 #+end_src
 ** compilation mode
 #+begin_src emacs-lisp  
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; Hooks for recompilation and error maneuvering
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
   (require 'compile)
   (setq compilation-disable-input nil)
-  (setq compilation-scroll-output t)
+  (setq compilation-auto-jump-to-first-error t)
+  (setq compilation-scroll-output 'first-error)
   (setq mode-compile-always-save-buffer-p t)
   
   (defun qdot/recompile ()
@@ -2042,23 +2023,12 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 #+end_src  
 ** js2-mode
 #+begin_src emacs-lisp
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; Javascript settings
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
   (setq js-indent-level 2)
   (setq
    js2-auto-indent-p t
    js2-basic-offset 2
    js2-enter-indents-newline t
    js2-indent-on-enter-key t)
-  
-  ;; (add-hook 'compilation-mode-hook
-  ;;          (lambda ()
-  ;;            (setq comint-buffer-maximum-size 10240)))
-  ;; ;; (add-hook 'comint-output-filter-functions 'comint-truncate-buffer)))
   
   ;; Fix for .js files that have Java set as the mode (I'm looking at
   ;; you, mozilla-central)
@@ -2075,10 +2045,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (setq gdb-many-windows t)
   (setq gdb-show-main t)
   (setq gud-chdir-before-run nil)
-  (setq gud-tooltip-mode t)
-  
-  (setq compilation-auto-jump-to-first-error t)
-  (setq compilation-scroll-output 'first-error)
+  (setq gud-tooltip-mode t)  
 #+end_src
 ** elisp/lisp modes
 #+begin_src emacs-lisp  
