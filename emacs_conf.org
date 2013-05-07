@@ -2205,7 +2205,15 @@ CLOSED: [2013-05-03 Fri 21:39]
 ** DONE Fix IRC server buffer renaming functions
 CLOSED: [2013-05-03 Fri 21:39]
 - State "DONE"       from "TODO"       [2013-05-03 Fri 21:39]
-** TODO Divide down large configurations into org subnodes
+** DONE Divide down large configurations into org subnodes
+CLOSED: [2013-05-06 Mon 11:05]
+- State "DONE"       from "TODO"       [2013-05-06 Mon 11:05]
+** DONE Fix diminish mode sets
+CLOSED: [2013-05-06 Mon 11:05]
+- State "DONE"       from "TODO"       [2013-05-06 Mon 11:05]
+** DONE defadvise erc-hide-current-message-p instead of monkeypatching erc-display-message for buffer-local erc-hide-list
+CLOSED: [2013-05-06 Mon 18:52]
+- State "DONE"       from "TODO"       [2013-05-06 Mon 18:52]
 ** TODO Divide out work setup from home setup
 *** TODO mu4e
 *** TODO erc
@@ -2223,7 +2231,6 @@ CLOSED: [2013-05-03 Fri 21:39]
 - Development
   - Code/Project
   - gdb (?)
-** TODO Fix diminish mode sets
 ** TODO Remove sauron dbus
 ** TODO Redo CEDET Setup
 ** TODO Figure out issues with schedule export
