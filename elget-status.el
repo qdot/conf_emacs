@@ -94,6 +94,10 @@
  (epc status "installed" recipe
       (:name epc :description "An RPC stack for Emacs Lisp" :type github :pkgname "kiwanami/emacs-epc" :depends
 	     (deferred ctable)))
+ (eproject status "installed" recipe
+	   (:name eproject :description "File grouping (\"project\") extension for emacs" :type github :pkgname "jrockway/eproject" :load-path
+		  ("." "lang" "contrib")
+		  :features eproject))
  (erc-highlight-nicknames status "installed" recipe
 			  (:name erc-highlight-nicknames :description "Highlights nicknames" :type emacswiki :features erc-highlight-nicknames))
  (expand-region status "installed" recipe
@@ -127,6 +131,8 @@
 	      (("make" "requirements"))
 	      :submodule nil :depends
 	      (epc auto-complete)))
+ (jinja status "installed" recipe
+	(:name jinja :website "https://github.com/mitsuhiko/jinja2" :url "https://raw.github.com/mitsuhiko/jinja2/master/ext/jinja.el" :type http :description "Mostly ripped off django-mode by Lennart Borgman." :depends nxhtml :compile nil :features "jinja"))
  (js2-mode status "installed" recipe
 	   (:name js2-mode :website "https://github.com/mooz/js2-mode#readme" :description "An improved JavaScript editing mode" :type github :pkgname "mooz/js2-mode" :prepare
 		  (autoload 'js2-mode "js2-mode" nil t)))
