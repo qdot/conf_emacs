@@ -6,11 +6,15 @@ Setting up a few different variables for the different types of
 directories we have (configurations, locally stored versus el-get
 fetched libs, etc...)
 
-- Set up the base configuration directory
+- Set up the base configuration directory and filename
 #+begin_src emacs-lisp
   (defconst qdot/emacs-conf-dir
     (file-name-directory (or load-file-name (buffer-file-name)))
     "Directory for emacs configuration")
+
+  (defconst qdot/emacs-conf-file
+    (expand-file-name (concat qdot/emacs-conf-dir "emacs_conf.org"))
+    "Org-babel file for emacs configuration")
 #+end_src
 
 - Manually installed/maintained elisp directory
@@ -287,20 +291,26 @@ repo, though it can take a really, really, REALLY long time.
 #+end_src
 
 * Package Configuration
-** powerline
-#+BEGIN_SRC emacs-lisp
-  ;; (after 'powerline
-  ;;        (powerline-default-theme)
-  ;;        (custom-set-faces
-  ;;         '(mode-line ((t (:box nil))))
-  ;;         '(powerline-active1 ((t (:inherit mode-line :background "#444444"))) t)
-  ;;         '(powerline-active2 ((t (:inherit mode-line :background "#666666"))) t)))
-#+END_SRC
 ** qdot-funcs
 #+BEGIN_SRC emacs-lisp
   (require 'qdot-funcs)
   (global-set-key (kbd "C-c C-s") 'qdot/sudo-edit-current-file)
   (global-set-key (kbd "C-c C-r") 'qdot/reload-file)
+  ;; remap C-a to `smarter-move-beginning-of-line'
+  (global-set-key [remap move-beginning-of-line]
+                  'qdot/smarter-move-beginning-of-line)
+  
+#+END_SRC
+** powerline
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/start-powerline ()
+    (after 'powerline
+      (powerline-default-theme)
+      (setq powerline-default-separator 'zigzag)
+      (custom-set-faces
+       '(mode-line ((t (:box nil))))
+       '(powerline-active1 ((t (:inherit mode-line :background "#444444"))) t)
+       '(powerline-active2 ((t (:inherit mode-line :background "#666666"))) t))))
 #+END_SRC
 ** quick-yes
 Use M-y and M-n in y-or-n minibuffer prompts
@@ -308,6 +318,231 @@ Use M-y and M-n in y-or-n minibuffer prompts
   (require 'quick-yes)
 #+end_src
 
+** eshell
+#+BEGIN_SRC emacs-lisp
+  ;; Stealing from ESK, with some things removed
+  
+  (setq eshell-cmpl-cycle-completions nil
+        eshell-save-history-on-exit t
+        eshell-buffer-shorthand t
+        eshell-cmpl-dir-ignore "\\`\\(\\.\\.?\\|CVS\\|\\.svn\\|\\.git\\)/\\'")
+  
+  ;;;###autoload
+  (eval-after-load 'esh-opt
+    '(progn
+       (require 'em-prompt)
+       (require 'em-term)
+       (require 'em-cmpl)
+       (require 'em-rebind)
+       (setenv "PAGER" "cat")
+       (set-face-attribute 'eshell-prompt nil :foreground "turquoise1")
+       (add-hook 'eshell-mode-hook ;; for some reason this needs to be a hook
+                 '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-bol)))
+       (setq eshell-cmpl-cycle-completions nil)
+  
+       ;; TODO: submit these via M-x report-emacs-bug
+       (add-to-list 'eshell-visual-commands "ssh")
+       (add-to-list 'eshell-visual-commands "tail")
+       (add-to-list 'eshell-command-completions-alist
+                    '("gunzip" "gz\\'"))
+       (add-to-list 'eshell-command-completions-alist
+                    '("tar" "\\(\\.tar|\\.tgz\\|\\.tar\\.gz\\)\\'"))))
+  
+  ;;;###autoload
+  ;; (defun eshell/cds ()
+  ;;   "Change dirtory to the project's root."
+  ;;   (eshell/cd (locate-dominating-file default-directory "src")))
+  
+  ;; these two haven't made it upstream yet
+  ;;;###autoload
+  (when (not (functionp 'eshell/find))
+    (defun eshell/find (dir &rest opts)
+      (find-dired dir (mapconcat (lambda (arg)
+                                   (if (get-text-property 0 'escaped arg)
+                                       (concat "\"" arg "\"")
+                                     arg))
+                                 opts " "))))
+  
+  ;;;###autoload
+  (when (not (functionp 'eshell/rgrep))
+    (defun eshell/rgrep (&rest args)
+      "Use Emacs grep facility instead of calling external grep."
+      (eshell-grep "rgrep" args t)))
+  
+  ;;;###autoload
+  (defun eshell/extract (file)
+    (let ((command (some (lambda (x)
+                           (if (string-match-p (car x) file)
+                               (cadr x)))
+                         '((".*\.tar.bz2" "tar xjf")
+                           (".*\.tar.gz" "tar xzf")
+                           (".*\.bz2" "bunzip2")
+                           (".*\.rar" "unrar x")
+                           (".*\.gz" "gunzip")
+                           (".*\.tar" "tar xf")
+                           (".*\.tbz2" "tar xjf")
+                           (".*\.tgz" "tar xzf")
+                           (".*\.zip" "unzip")
+                           (".*\.Z" "uncompress")
+                           (".*" "echo 'Could not extract the file:'")))))
+      (eshell-command-result (concat command " " file))))
+  
+  (defface esk-eshell-error-prompt-face
+    '((((class color) (background dark)) (:foreground "red" :bold t))
+      (((class color) (background light)) (:foreground "red" :bold t)))
+    "Face for nonzero prompt results"
+    :group 'eshell-prompt)
+  
+  (add-hook 'eshell-after-prompt-hook
+            (defun esk-eshell-exit-code-prompt-face ()
+              (when (and eshell-last-command-status
+                         (not (zerop eshell-last-command-status)))
+                (let ((inhibit-read-only t))
+                  (add-text-properties
+                   (save-excursion (beginning-of-line) (point)) (point-max)
+                   '(face esk-eshell-error-prompt-face))))))
+  
+  (defun esk-eshell-in-dir (&optional prompt)
+    "Change the directory of an existing eshell to the directory of the file in
+  the current buffer or launch a new eshell if one isn't running. If the
+  current buffer does not have a file (e.g., a *scratch* buffer) launch or raise
+  eshell, as appropriate. Given a prefix arg, prompt for the destination
+  directory."
+    (interactive "P")
+    (let* ((name (buffer-file-name))
+           (dir (cond (prompt (read-directory-name "Directory: " nil nil t))
+                      (name (file-name-directory name))
+                      (t nil)))
+           (buffers (delq nil (mapcar (lambda (buf)
+                                        (with-current-buffer buf
+                                          (when (eq 'eshell-mode major-mode)
+                                            (buffer-name))))
+                                      (buffer-list))))
+           (buffer (cond ((eq 1 (length buffers)) (first buffers))
+                         ((< 1 (length buffers)) (ido-completing-read
+                                                  "Eshell buffer: " buffers nil t
+                                                  nil nil (first buffers)))
+                         (t (eshell)))))
+      (with-current-buffer buffer
+        (when dir
+          (eshell/cd (list dir))
+          (eshell-send-input))
+        (end-of-buffer)
+        (pop-to-buffer buffer))))
+  
+  ;;**** Git Completion
+  
+  (defun pcmpl-git-commands ()
+    "Return the most common git commands by parsing the git output."
+    (with-temp-buffer
+      (call-process-shell-command "git" nil (current-buffer) nil "help" "--all")
+      (goto-char 0)
+      (search-forward "available git commands in")
+      (let (commands)
+        (while (re-search-forward
+                "^[[:blank:]]+\\([[:word:]-.]+\\)[[:blank:]]*\\([[:word:]-.]+\\)?"
+                nil t)
+          (push (match-string 1) commands)
+          (when (match-string 2)
+            (push (match-string 2) commands)))
+        (sort commands #'string<))))
+  
+  (defconst pcmpl-git-commands (pcmpl-git-commands)
+    "List of `git' commands.")
+  
+  (defvar pcmpl-git-ref-list-cmd "git for-each-ref refs/ --format='%(refname)'"
+    "The `git' command to run to get a list of refs.")
+  
+  (defun pcmpl-git-get-refs (type)
+    "Return a list of `git' refs filtered by TYPE."
+    (with-temp-buffer
+      (insert (shell-command-to-string pcmpl-git-ref-list-cmd))
+      (goto-char (point-min))
+      (let (refs)
+        (while (re-search-forward (concat "^refs/" type "/\\(.+\\)$") nil t)
+          (push (match-string 1) refs))
+        (nreverse refs))))
+  
+  (defun pcmpl-git-remotes ()
+    "Return a list of remote repositories."
+    (split-string (shell-command-to-string "git remote")))
+  
+  (defun pcomplete/git ()
+    "Completion for `git'."
+    ;; Completion for the command argument.
+    (pcomplete-here* pcmpl-git-commands)
+    (cond
+     ((pcomplete-match "help" 1)
+      (pcomplete-here* pcmpl-git-commands))
+     ((pcomplete-match (regexp-opt '("pull" "push")) 1)
+      (pcomplete-here (pcmpl-git-remotes)))
+     ;; provide branch completion for the command `checkout'.
+     ((pcomplete-match "checkout" 1)
+      (pcomplete-here* (append (pcmpl-git-get-refs "heads")
+                               (pcmpl-git-get-refs "tags"))))
+     (t
+      (while (pcomplete-here (pcomplete-entries))))))
+  
+  ;;**** Bzr Completion
+  
+  (defun pcmpl-bzr-commands ()
+    "Return the most common bzr commands by parsing the bzr output."
+    (with-temp-buffer
+      (call-process-shell-command "bzr" nil (current-buffer) nil "help" "commands")
+      (goto-char 0)
+      (let (commands)
+        (while (re-search-forward "^\\([[:word:]-]+\\)[[:blank:]]+" nil t)
+          (push (match-string 1) commands))
+        (sort commands #'string<))))
+  
+  (defconst pcmpl-bzr-commands (pcmpl-bzr-commands)
+    "List of `bzr' commands.")
+  
+  (defun pcomplete/bzr ()
+    "Completion for `bzr'."
+    ;; Completion for the command argument.
+    (pcomplete-here* pcmpl-bzr-commands)
+    (cond
+     ((pcomplete-match "help" 1)
+      (pcomplete-here* pcmpl-bzr-commands))
+     (t
+      (while (pcomplete-here (pcomplete-entries))))))
+  
+  ;;**** Mercurial (hg) Completion
+  
+  (defun pcmpl-hg-commands ()
+    "Return the most common hg commands by parsing the hg output."
+    (with-temp-buffer
+      (call-process-shell-command "hg" nil (current-buffer) nil "-v" "help")
+      (goto-char 0)
+      (search-forward "list of commands:")
+      (let (commands
+            (bound (save-excursion
+                     (re-search-forward "^[[:alpha:]]")
+                     (forward-line 0)
+                     (point))))
+        (while (re-search-forward
+                "^[[:blank:]]\\([[:word:]]+\\(?:, [[:word:]]+\\)*\\)" bound t)
+          (let ((match (match-string 1)))
+            (if (not (string-match "," match))
+                (push (match-string 1) commands)
+              (dolist (c (split-string match ", ?"))
+                (push c commands)))))
+        (sort commands #'string<))))
+  
+  (defconst pcmpl-hg-commands (pcmpl-hg-commands)
+    "List of `hg' commands.")
+  
+  (defun pcomplete/hg ()
+    "Completion for `hg'."
+    ;; Completion for the command argument.
+    (pcomplete-here* pcmpl-hg-commands)
+    (cond
+     ((pcomplete-match "help" 1)
+      (pcomplete-here* pcmpl-hg-commands))
+     (t
+      (while (pcomplete-here (pcomplete-entries))))))
+#+END_SRC
 ** icomplete
 Incremental minibuffer completion
 #+begin_src emacs-lisp
@@ -315,13 +550,17 @@ Incremental minibuffer completion
   (setq icomplete-compute-delay 0)
 #+end_src
 
+** ispell
+#+BEGIN_SRC emacs-lisp
+  (setq ispell-personal-dictionary "~/.ispell-dict-personal")
+#+END_SRC
 ** color-theme
 #+begin_src emacs-lisp
   (color-theme-initialize)
   (color-theme-dark-laptop)     
 #+end_src
 
-** sml-modeline (scroll percentage info)
+** sml-modeline
 Modeline decorator to get rid of the horizontal scrollbar
 
 Via http://emacs-fu.blogspot.com/2010/03/showing-buffer-position-in-mode-line.html
@@ -652,7 +891,7 @@ My mail client of choice.
   (require 'mu4e-vars)
   (add-hook 'mu4e-main-mode-hook (lambda () (require 'mu4e-unread-main)))
   (when linux-p
-    (setq mu4e-mu-binary "/home/qdot/usr/bin/mu"))
+    (setq mu4e-mu-binary (concat qdot/emacs-autoinst-elisp-dir "mu4e/mu/mu")))
   (when macosx-p
     (setq mu4e-mu-binary "/opt/homebrew/bin/mu"))
   (setq mu4e-maildir "~/Mail") ;; top-level Maildir
@@ -762,6 +1001,7 @@ My mail client of choice.
           ("/mozilla/INBOX"                       . ?m)
           ("/nonpolynomial/Mozilla.bugzilla"      . ?b)
           ("/nonpolynomial/MailArchive.Kelly"     . ?k)
+          ("/nonpolynomial/MailArchive.Personal"  . ?p)
           ("/nonpolynomial/MailArchive.Receipts"  . ?r)
           ("/[Gmail].Sent Mail"                   . ?s)
           ("/[Gmail].Trash"                       . ?t)))
@@ -900,7 +1140,7 @@ My mail client of choice.
 *** Personal usage setup function
 #+BEGIN_SRC emacs-lisp
   (defun qdot/personal-wg-setup ()
-    (workgroups-mode 1)
+    ;;(workgroups-mode 1)
   
     (defun qdot/wg-filter-buffer-list-by-not-major-mode (major-mode buffer-list)
       "Return only those buffers in BUFFER-LIST in major-mode MAJOR-MODE."
@@ -1041,7 +1281,7 @@ My mail client of choice.
   (require 'org-screen)
   (require 'org-protocol)
   (require 'org-mobile)
-
+  (add-to-list 'org-export-backends 'md)
   (setq org-modules     (quote (org-bibtex
                                 org-crypt
                                 org-gnus
@@ -1378,7 +1618,7 @@ My mail client of choice.
   
   (setq org-refile-target-verify-function 'qdot/verify-refile-target)
 #+END_SRC
-** ERC
+** erc
 *** Module and variable setup
 #+begin_src emacs-lisp
   (require 'erc)
@@ -1649,7 +1889,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (add-hook 'erc-after-connect 'qdot/erc-znc-initialize)
   
   (defun qdot/erc-znc-start (type)
-    (interactive)
+    (interactive "MNetwork: ")
     (mapcar 'qdot/erc-znc-connect (cdr (assoc type qdot/erc-znc-networks))))
   
   (defun qdot/bitlbee-connect ()
@@ -1751,22 +1991,25 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (setq show-paren-delay 0)
   (setq show-paren-style 'expression)
   (defun qdot/programming-mode-hook ()
-    (linum-mode 1)
     ;; No tabs. Or wire hangers.
     (setq indent-tabs-mode nil)
     (make-variable-buffer-local 'show-paren-mode)
-    (show-paren-mode 1)
     (set-fill-column 80)
-    (flyspell-prog-mode)
+    (setq whitespace-line-column 80) ;; limit line length
+    (setq whitespace-style '(face lines-tail))
     (setq show-trailing-whitespace t)
     (set-face-background 'show-paren-match-face "#222")
     (set-face-attribute 'show-paren-match-face nil
             :weight 'bold :underline nil :overline nil :slant 'normal))
   
   (add-hook 'prog-mode-hook 'qdot/programming-mode-hook)
-  
+  ;;(add-hook 'prog-mode-hook 'whitespace-mode)
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  (add-hook 'prog-mode-hook 'show-paren-mode)
+  (add-hook 'prog-mode-hook 'linum-mode)
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 #+end_src
-** Flymake
+** flymake
 #+begin_src emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
@@ -1877,7 +2120,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   ;; doxymacs mode for editing doxygen
   (add-hook 'c-mode-common-hook 'doxymacs-mode) 
 #+end_src
-** compilation mode
+** compilation
 #+begin_src emacs-lisp  
   (require 'compile)
   (setq compilation-disable-input nil)
@@ -2042,7 +2285,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (setq gud-chdir-before-run nil)
   (setq gud-tooltip-mode t)  
 #+end_src
-** elisp/lisp modes
+** lisp-mode
 #+begin_src emacs-lisp  
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
@@ -2149,17 +2392,67 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 #+BEGIN_SRC emacs-lisp
   (projectile-global-mode 1)
 #+END_SRC
+** nxhtml
+#+BEGIN_SRC emacs-lisp
+  ;; Workaround the annoying warnings:
+  ;; Warning (mumamo-per-buffer-local-vars):
+  ;; Already 'permanent-local t: buffer-file-name
+  (when (and (equal emacs-major-version 24)
+             (>= emacs-minor-version 2))
+    (eval-after-load "mumamo"
+      '(setq mumamo-per-buffer-local-vars
+             (delq 'buffer-file-name mumamo-per-buffer-local-vars))))
+  (add-hook 'nxhtml-mode-hook (lambda () (linum-mode 1)))
+#+END_SRC
+** multiple-cursors
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+  
+#+END_SRC
+** scel
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'load-path "/home/qdot/.emacs_files/elisp/scel/el")
+  
+  (require 'sclang)
+  
+#+END_SRC
+** markdown
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'markdown-mode-hook 'turn-on-flyspell)
+#+END_SRC
 ** diminish
 #+begin_src emacs-lisp
   (require 'diminish)
   (add-hook 'yas-minor-mode-hook (lambda () (diminish 'yas-minor-mode " ÿ")))
-  (add-hook 'auto-complete-mode-hook (lambda () (diminish 'auto-complete-mode " α")))
+  (add-hook 'auto-complete-mode-hook (lambda () (diminish 'auto-complete-mode " a")))
   (add-hook 'org-mode-hook (lambda () (diminish 'org-indent-mode " ı")))
   (add-hook 'workgroups-mode-hook (lambda () (diminish 'workgroups-mode " ω")))
-  (eval-after-load "flyspell" '(diminish 'flyspell-mode " 仚"))
+  (eval-after-load "flyspell" '(diminish 'flyspell-mode " fs"))
   (after 'projectile (diminish 'projectile-mode " 🔫"))
 #+end_src
 
+** rename-modeline
+#+BEGIN_SRC emacs-lisp
+  (rename-modeline "js2-mode" js2-mode "JS2")
+#+END_SRC
+** rainbow-delimiters
+#+BEGIN_SRC emacs-lisp
+  (custom-set-faces
+   '(rainbow-delimiters-depth-1-face ((t (:foreground "cyan"))))
+   '(rainbow-delimiters-depth-2-face ((t (:foreground "green"))))
+   '(rainbow-delimiters-depth-3-face ((t (:foreground "yellow"))))
+   '(rainbow-delimiters-depth-4-face ((t (:foreground "orange"))))
+   '(rainbow-delimiters-depth-5-face ((t (:foreground "purple"))))
+   '(rainbow-delimiters-depth-6-face ((t (:foreground "khaki"))))
+   '(rainbow-delimiters-depth-7-face ((t (:foreground "#8b7500"))))
+   '(rainbow-delimiters-depth-8-face ((t (:foreground "#8b7500"))))
+   '(rainbow-delimiters-depth-9-face ((t (:foreground "#8b7500"))))
+   '(rainbow-delimiters-unmatched-face ((t (:foreground "red")))))
+  
+#+END_SRC
 * Automodes
 #+begin_src emacs-lisp
   ;; file extension mode recognition

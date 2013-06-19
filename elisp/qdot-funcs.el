@@ -228,8 +228,6 @@
 (defun qdot/start-desktop ()
   (interactive)
   (qdot/set-platform-font)
-  (when linux-p
-    (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el")))
   (org-agenda nil " ")
   (sauron-start)
   (qdot/monkey-patch-sr)
@@ -237,8 +235,71 @@
   (qdot/erc-znc-start "personal")
   (qdot/bitlbee-connect)
   (qdot/personal-wg-setup)
+  (workgroups-mode)
+  (when linux-p
+    (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el")))
+  (qdot/start-powerline)
   (wg-switch-to-workgroup "bitlbee")
   (qdot/bitlbee-resume-layout)
   (wg-switch-to-workgroup "twitter"))
 
-(provide 'qdot-funcs)
+;; Taken from http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
+(defun qdot/smarter-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line.
+
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+point reaches the beginning or end of the buffer, stop there."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+;; Taken from http://whattheemacsd.com//appearance.el-01.html
+(defmacro rename-modeline (package-name mode new-name)
+  `(eval-after-load ,package-name
+     '(defadvice ,mode (after rename-modeline activate)
+        (setq mode-name ,new-name))))
+
+(defun qdot/org-mode-list-subtree-headers (orgfile title)
+  (save-excursion
+    (progn
+      (set-buffer (find-file-noselect orgfile))
+      (goto-char (org-find-exact-headline-in-buffer title))
+      (org-with-wide-buffer
+       (org-narrow-to-subtree)
+       (let ((tree (org-element-parse-buffer 'element)) (num-hl 0) (num-el 0)
+             (header-list ()))
+         (org-element-map
+             tree
+             'headline
+           (lambda (hl)
+             (add-to-list 'header-list (plist-get (cadr hl) :title))))
+         header-list)))))
+
+(defun qdot/edit-org-package-config ()
+  (interactive)
+  (let
+      ((package-name
+        (ido-completing-read "Package: "
+                             (qdot/org-mode-list-subtree-headers
+                              qdot/emacs-conf-file
+                              "Package Configuration"))))
+    (find-file qdot/emacs-conf-file)
+    (goto-char (org-find-exact-headline-in-buffer package-name))
+    (show-entry)
+    (recenter)))
+
+  (provide 'qdot-funcs)
