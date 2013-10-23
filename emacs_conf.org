@@ -328,12 +328,15 @@ Use M-y and M-n in y-or-n minibuffer prompts
 
 ** eshell
 #+BEGIN_SRC emacs-lisp
-  ;; Stealing from ESK, with some things removed
+  ;; ;; Stealing from ESK, with some things removed
   
   (setq eshell-cmpl-cycle-completions nil
         eshell-save-history-on-exit t
         eshell-buffer-shorthand t
         eshell-cmpl-dir-ignore "\\`\\(\\.\\.?\\|CVS\\|\\.svn\\|\\.git\\)/\\'")
+  
+  ;; (add-hook 'eshell-mode-hook
+  ;;           '(lambda () (define-key eshell-mode-map "\t" 'pcomplete-list)))
   
   ;;;###autoload
   (eval-after-load 'esh-opt
@@ -356,11 +359,6 @@ Use M-y and M-n in y-or-n minibuffer prompts
        (add-to-list 'eshell-command-completions-alist
                     '("tar" "\\(\\.tar|\\.tgz\\|\\.tar\\.gz\\)\\'"))))
   
-  ;;;###autoload
-  ;; (defun eshell/cds ()
-  ;;   "Change dirtory to the project's root."
-  ;;   (eshell/cd (locate-dominating-file default-directory "src")))
-  
   ;; these two haven't made it upstream yet
   ;;;###autoload
   (when (not (functionp 'eshell/find))
@@ -377,23 +375,24 @@ Use M-y and M-n in y-or-n minibuffer prompts
       "Use Emacs grep facility instead of calling external grep."
       (eshell-grep "rgrep" args t)))
   
-  ;;;###autoload
-  (defun eshell/extract (file)
-    (let ((command (some (lambda (x)
-                           (if (string-match-p (car x) file)
-                               (cadr x)))
-                         '((".*\.tar.bz2" "tar xjf")
-                           (".*\.tar.gz" "tar xzf")
-                           (".*\.bz2" "bunzip2")
-                           (".*\.rar" "unrar x")
-                           (".*\.gz" "gunzip")
-                           (".*\.tar" "tar xf")
-                           (".*\.tbz2" "tar xjf")
-                           (".*\.tgz" "tar xzf")
-                           (".*\.zip" "unzip")
-                           (".*\.Z" "uncompress")
-                           (".*" "echo 'Could not extract the file:'")))))
-      (eshell-command-result (concat command " " file))))
+  ;; ;;;###autoload
+  ;; (defun eshell/extract (file)
+  ;;   (let ((command (some (lambda (x)
+  ;;                          (if (string-match-p (car x) file)
+  ;;                              (cadr x)))
+  ;;                        '((".*\.tar.bz2" "tar vxjf")
+  ;;                          (".*\.tar.gz" "tar vxzf")
+  ;;                          (".*\.bz2" "bunzip2")
+  ;;                          (".*\.rar" "unrar x")
+  ;;                          (".*\.gz" "gunzip")
+  ;;                          (".*\.tar" "tar xf")
+  ;;                          (".*\.tbz2" "tar xjf")
+  ;;                          (".*\.tgz" "tar xzf")
+  ;;                          (".*\.zip" "unzip")
+  ;;                          (".*\.Z" "uncompress")
+  ;;                          (".*\.deb" "dpkg -x")
+  ;;                          (".*" "echo 'Could not extract the file:'")))))
+  ;;     (eshell-command-result (concat command " " file))))
   
   (defface esk-eshell-error-prompt-face
     '((((class color) (background dark)) (:foreground "red" :bold t))
@@ -410,33 +409,33 @@ Use M-y and M-n in y-or-n minibuffer prompts
                    (save-excursion (beginning-of-line) (point)) (point-max)
                    '(face esk-eshell-error-prompt-face))))))
   
-  (defun esk-eshell-in-dir (&optional prompt)
-    "Change the directory of an existing eshell to the directory of the file in
-  the current buffer or launch a new eshell if one isn't running. If the
-  current buffer does not have a file (e.g., a *scratch* buffer) launch or raise
-  eshell, as appropriate. Given a prefix arg, prompt for the destination
-  directory."
-    (interactive "P")
-    (let* ((name (buffer-file-name))
-           (dir (cond (prompt (read-directory-name "Directory: " nil nil t))
-                      (name (file-name-directory name))
-                      (t nil)))
-           (buffers (delq nil (mapcar (lambda (buf)
-                                        (with-current-buffer buf
-                                          (when (eq 'eshell-mode major-mode)
-                                            (buffer-name))))
-                                      (buffer-list))))
-           (buffer (cond ((eq 1 (length buffers)) (first buffers))
-                         ((< 1 (length buffers)) (ido-completing-read
-                                                  "Eshell buffer: " buffers nil t
-                                                  nil nil (first buffers)))
-                         (t (eshell)))))
-      (with-current-buffer buffer
-        (when dir
-          (eshell/cd (list dir))
-          (eshell-send-input))
-        (end-of-buffer)
-        (pop-to-buffer buffer))))
+  ;; (defun esk-eshell-in-dir (&optional prompt)
+  ;;   "Change the directory of an existing eshell to the directory of the file in
+  ;; the current buffer or launch a new eshell if one isn't running. If the
+  ;; current buffer does not have a file (e.g., a *scratch* buffer) launch or raise
+  ;; eshell, as appropriate. Given a prefix arg, prompt for the destination
+  ;; directory."
+  ;;   (interactive "P")
+  ;;   (let* ((name (buffer-file-name))
+  ;;          (dir (cond (prompt (read-directory-name "Directory: " nil nil t))
+  ;;                     (name (file-name-directory name))
+  ;;                     (t nil)))
+  ;;          (buffers (delq nil (mapcar (lambda (buf)
+  ;;                                       (with-current-buffer buf
+  ;;                                         (when (eq 'eshell-mode major-mode)
+  ;;                                           (buffer-name))))
+  ;;                                     (buffer-list))))
+  ;;          (buffer (cond ((eq 1 (length buffers)) (first buffers))
+  ;;                        ((< 1 (length buffers)) (ido-completing-read
+  ;;                                                 "Eshell buffer: " buffers nil t
+  ;;                                                 nil nil (first buffers)))
+  ;;                        (t (eshell)))))
+  ;;     (with-current-buffer buffer
+  ;;       (when dir
+  ;;         (eshell/cd (list dir))
+  ;;         (eshell-send-input))
+  ;;       (end-of-buffer)
+  ;;       (pop-to-buffer buffer))))
   
   ;;**** Git Completion
   
@@ -491,7 +490,7 @@ Use M-y and M-n in y-or-n minibuffer prompts
      (t
       (while (pcomplete-here (pcomplete-entries))))))
   
-  ;;**** Bzr Completion
+  ;; ;;**** Bzr Completion
   
   (defun pcmpl-bzr-commands ()
     "Return the most common bzr commands by parsing the bzr output."
@@ -516,7 +515,7 @@ Use M-y and M-n in y-or-n minibuffer prompts
      (t
       (while (pcomplete-here (pcomplete-entries))))))
   
-  ;;**** Mercurial (hg) Completion
+  ;; ;;**** Mercurial (hg) Completion
   
   (defun pcmpl-hg-commands ()
     "Return the most common hg commands by parsing the hg output."
@@ -550,6 +549,59 @@ Use M-y and M-n in y-or-n minibuffer prompts
       (pcomplete-here* pcmpl-hg-commands))
      (t
       (while (pcomplete-here (pcomplete-entries))))))
+  
+  (defun ac-pcomplete ()
+    ;; eshell uses `insert-and-inherit' to insert a \t if no completion
+    ;; can be found, but this must not happen as auto-complete source
+    (flet ((insert-and-inherit (&rest args)))
+      ;; this code is stolen from `pcomplete' in pcomplete.el
+      (let* (tramp-mode ;; do not automatically complete remote stuff
+             (pcomplete-stub)
+             (pcomplete-show-list t) ;; inhibit patterns like * being deleted
+             pcomplete-seen pcomplete-norm-func
+             pcomplete-args pcomplete-last pcomplete-index
+             (pcomplete-autolist pcomplete-autolist)
+             (pcomplete-suffix-list pcomplete-suffix-list)
+             (candidates (pcomplete-completions))
+             (beg (pcomplete-begin))
+             ;; note, buffer text and completion argument may be
+             ;; different because the buffer text may bet transformed
+             ;; before being completed (e.g. variables like $HOME may be
+             ;; expanded)
+             (buftext (buffer-substring beg (point)))
+             (arg (nth pcomplete-index pcomplete-args)))
+        ;; we auto-complete only if the stub is non-empty and matches
+        ;; the end of the buffer text
+        (when (and (not (zerop (length pcomplete-stub)))
+                   (or (string= pcomplete-stub ; Emacs 23
+                                (substring buftext
+                                           (max 0
+                                                (- (length buftext)
+                                                   (length pcomplete-stub)))))
+                       (string= pcomplete-stub ; Emacs 24
+                                (substring arg
+                                           (max 0
+                                                (- (length arg)
+                                                   (length pcomplete-stub)))))))
+          ;; Collect all possible completions for the stub. Note that
+          ;; `candidates` may be a function, that's why we use
+          ;; `all-completions`.
+          (let* ((cnds (all-completions pcomplete-stub candidates))
+                 (bnds (completion-boundaries pcomplete-stub
+                                              candidates
+                                              nil
+                                              ""))
+                 (skip (- (length pcomplete-stub) (car bnds))))
+            ;; We replace the stub at the beginning of each candidate by
+            ;; the real buffer content.
+            (mapcar #'(lambda (cand) (concat buftext (substring cand skip)))
+                    cnds))))))
+  
+  (defvar ac-source-pcomplete
+    '((candidates . ac-pcomplete)))
+  
+  (add-hook 'eshell-mode-hook #'(lambda () (setq ac-sources '(ac-source-pcomplete))))
+  (add-to-list 'ac-modes 'eshell-mode)
 #+END_SRC
 ** icomplete
 Incremental minibuffer completion
