@@ -1146,8 +1146,8 @@ My mail client of choice.
   
 #+end_src
 
-** workgroups
-*** Variables
+** wg
+*** Basic Config
 #+begin_src emacs-lisp
   ;; Set the prefix key to tilde, what I normally use in screen
   (setq wg-prefix-key "`")
@@ -1159,7 +1159,7 @@ My mail client of choice.
   (setq wg-restore-associated-buffers nil)
   
   (setq wg-switch-to-first-workgroup-on-find-session-file nil)
-#+end_src emacs-lisp
+#+end_src
 *** uid-mismatch handling
 #+BEGIN_SRC emacs-lisp
   ;; Due to some buffers having issues when reloading (erc), uids start
