@@ -1982,21 +1982,22 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   ;; instance per network we want to connect to.
   ;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
+    
   (defvar qdot/erc-znc-nick "qdot")
   (defvar qdot/erc-znc-password "doesnotmatter")
   (defvar qdot/erc-znc-networks '(("personal" . ("freenode"))
-                                  ("work" . ("mozilla"))))
+                                  ("work" . ("mozilla"))
+                                  ("furnet" . ("furnet"))))
   (defvar qdot/erc-znc-remote-server "localhost")
   (defvar qdot/erc-znc-port 9999)
-  
+    
   (defun qdot/erc-znc-connect (network)
     (erc :server qdot/erc-znc-remote-server
          :port qdot/erc-znc-port
          :nick (format "%s/%s" qdot/erc-znc-nick network)
          :full-name "qdot"
          :password (format "%s/%s:%s" qdot/erc-znc-nick network qdot/erc-znc-password)))
-  
+    
   (defun qdot/erc-znc-rename-server-buffer ()
     (interactive)
     (save-excursion
@@ -2005,26 +2006,26 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
         (rename-buffer (concat "znc-" (downcase network-name)))
         (message (format "Renamed buffer to %s" network-name))))
     nil)
-  
+    
   (defun qdot/erc-znc-initialize (server nick)
     ;; Prepend all ZNC buffers with znc-
     (qdot/erc-znc-rename-server-buffer))
-  
+    
   (add-hook 'erc-after-connect 'qdot/erc-znc-initialize)
-  
+    
   (defun qdot/erc-znc-start (type)
     (interactive "MNetwork: ")
     (mapcar 'qdot/erc-znc-connect (cdr (assoc type qdot/erc-znc-networks))))
-  
+    
   (defun qdot/bitlbee-connect ()
     (interactive)
     (qdot/erc-znc-connect "bitlbee"))
-  
+    
   (defun qdot/bitlbee-reallocate-query-buffers ()
     ;; For each already opened query window, reallocate
     (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf))
           (qdot/filter 'erc-query-buffer-p (buffer-list))))
-  
+    
   (defun qdot/bitlbee-resume-layout ()
     (interactive)
     ;; If we havn't created a placeholder buffer yet, do so now, make it
