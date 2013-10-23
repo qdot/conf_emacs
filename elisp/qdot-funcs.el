@@ -155,7 +155,7 @@
 
 ;; Evaluate and replace preceding sexp
 
-(defun eval-and-replace ()
+(defun qdot/eval-and-replace ()
   "Replace the preceding sexp with its value."
   (interactive)
   (backward-kill-sexp)
@@ -231,7 +231,8 @@
   (org-agenda nil " ")
   (sauron-start)
   (qdot/monkey-patch-sr)
-  (qdot/add-notify-hooks)
+  (when linux-p
+    (qdot/add-notify-hooks))
   (qdot/erc-znc-start "personal")
   (qdot/bitlbee-connect)
   (qdot/personal-wg-setup)

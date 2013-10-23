@@ -120,7 +120,7 @@ We also need to do this as near the beginning as possible, since it crashes othe
   (when macosx-p
     (set-face-font 'default "consolas-11"))
   (when mswindows-p
-    (set-face-font 'default "consolas-8"))
+    (set-face-font 'default "consolas-10"))
   (when linux-p
     (when (member "Inconsolata" (font-family-list))
       (set-face-font 'default "inconsolata-11"))))
@@ -142,10 +142,12 @@ We also need to do this as near the beginning as possible, since it crashes othe
 Put autosave files (ie #foo#) in one place, *not* scattered all over
 the file system
 #+begin_src emacs-lisp
-(defvar autosave-dir (concat user-emacs-directory "autosaves/"))
-(make-directory autosave-dir t)
-(defun auto-save-file-name-p (filename)
-  (string-match "^#.*#$" (file-name-nondirectory filename)))
+  (defvar qdot/autosave-dir (concat user-emacs-directory "autosaves/"))
+  (make-directory qdot/autosave-dir t)
+  (defun qdot/auto-save-file-name-p (filename)
+    (string-match "^#.*#$" (file-name-nondirectory filename)))
+  (setq auto-save-file-name-transforms
+            `((".*" ,qdot/autosave-dir t)))
 #+end_src
 
 ** Backup file setup
@@ -155,9 +157,16 @@ filenames matching a regexp are backed up in the corresponding
 directory. Emacs will mkdir it if necessary.)
 
 #+begin_src emacs-lisp
-(defvar backup-dir (concat user-emacs-directory "backups/"))
-(make-directory backup-dir t)
-(setq backup-directory-alist (list (cons "." backup-dir)))
+  (setq qdot/backup-dir (expand-file-name (concat user-emacs-directory "backups/")))
+  (make-directory qdot/backup-dir t)
+  (setq
+     backup-by-copying t      ; don't clobber symlinks
+     backup-directory-alist
+      '(("." . "~/.emacs.d/backups"))    ; don't litter my fs tree
+     delete-old-versions t
+     kept-new-versions 6
+     kept-old-versions 2
+     version-control t)       ; use versioned backups
 #+end_src
 
 ** Modeline and display setup
@@ -198,6 +207,11 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (recentf-mode 1)
   ;; When region active, delete actually deletes it
   (delete-selection-mode 1)
+  
+  (defvar qdot/mail-p
+    linux-p
+    "Whether mail packages should be initialized")
+    
 #+end_src
 ** Package variables that need to be set before loading
 #+begin_src emacs-lisp
@@ -206,6 +220,11 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (setq jedi:setup-keys t)
   
 #+end_src
+** Server Setup
+#+BEGIN_SRC emacs-lisp
+  (setq server-use-tcp t)
+  (setq server-host "localhost")'
+#+END_SRC
 * Keybinds
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-w") 'backward-kill-word)
@@ -300,17 +319,6 @@ repo, though it can take a really, really, REALLY long time.
   (global-set-key [remap move-beginning-of-line]
                   'qdot/smarter-move-beginning-of-line)
   
-#+END_SRC
-** powerline
-#+BEGIN_SRC emacs-lisp
-  (defun qdot/start-powerline ()
-    (after 'powerline
-      (powerline-default-theme)
-      (setq powerline-default-separator 'zigzag)
-      (custom-set-faces
-       '(mode-line ((t (:box nil))))
-       '(powerline-active1 ((t (:inherit mode-line :background "#444444"))) t)
-       '(powerline-active2 ((t (:inherit mode-line :background "#666666"))) t))))
 #+END_SRC
 ** quick-yes
 Use M-y and M-n in y-or-n minibuffer prompts

@@ -7,8 +7,9 @@
 (add-hook 'after-init-hook
 	  `(lambda ()
 	     ;; Make sure we load our org-mode checkout first, otherwise shit happens.
-	     (add-to-list 'load-path "/home/qdot/.emacs_files/elisp_auto/org-mode/lisp/")
+	     (add-to-list 'load-path "~/.emacs_files/elisp_auto/org-mode/lisp/")
+	     (require 'cl)
 	     (require 'org)
-	     (org-babel-load-file (expand-file-name "emacs_conf.org" ,(file-name-directory (or load-file-name (buffer-file-name)))))))
+       (org-babel-load-file "~/.emacs_files/emacs_conf.org"))
 
 ;;; init.el ends here
