@@ -927,6 +927,8 @@ git management in emacs
   
   (global-set-key (kbd "M-g s") 'magit-status)
   
+  ;; Don't require confirm to stage changes
+  (setq magit-stage-all-confirm nil)
   
 #+end_src
 ** easy-pg
