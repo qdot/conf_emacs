@@ -2132,7 +2132,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   (add-hook 'prog-mode-hook 'show-paren-mode)
   (add-hook 'prog-mode-hook 'linum-mode)
-  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  ;;(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 #+end_src
 ** flymake
 #+begin_src emacs-lisp
