@@ -1330,11 +1330,14 @@ My mail client of choice.
 
 ** org-mode
 *** org modules
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (require 'org-checklist)
   (require 'org-screen)
   (require 'org-protocol)
   (require 'org-mobile)
+  (require 'org-habit)
+  (require 'org-bh)
+  
   (add-to-list 'org-export-backends 'md)
   (setq org-modules     (quote (org-bibtex
                                 org-crypt
@@ -1347,8 +1350,8 @@ My mail client of choice.
                                 org-irc
                                 org-protocol
                                 org-w3m)))
-
-#+end_src emacs-lisp
+  
+#+END_SRC
 *** org variables
 #+BEGIN_SRC emacs-lisp  
   (setq
@@ -1356,137 +1359,152 @@ My mail client of choice.
    org-global-properties (quote (("STYLE_ALL" . "habit")))
    ;; Use ~/emacs_org for storing files. Usually symlinked to Dropbox
    org-directory "~/emacs_org"
-  
+   
    ;; By default, at least timestamp done states
    org-log-done t
-  
+   
+   ;; Keep drawer for logs too
+   org-drawers (quote ("PROPERTIES" "LOGBOOK"))
+   
+   ;; We deal with stuck projects ourselves
+   org-stuck-projects (quote ("" nil nil ""))
+   
+   ;; Save clock data and state changes and notes in the LOGBOOK drawer
+   org-log-into-drawer t
+   org-clock-into-drawer t
+   
    ;; Start indented
    org-startup-indented t
-  
+   
    ;; Hide blank lines inside folded nodes
    org-cycle-separator-lines 0
-  
+   
    ;; Show notes in a task first
    org-reverse-note-order nil
-  
+   
    ;; Just show one day on the agenda
    org-agenda-ndays 1
-  
+   
    ;; Not sure, think I copied it from norang
    org-indent-indentation-per-level 2
-  
+   
    ;; Archive to the file name, assume we're not doubling up names across projects
    org-archive-location "~/emacs_org/archives/%s_archive::"
-  
+   
    ;; Don't really use priorities, turn them off
    org-enable-priority-commands nil
-  
+   
    ;; Do single letter confirm of links
    org-confirm-elisp-link-function 'y-or-n-p
-  
+   
    ;; Use IDO for target completion
    org-completion-use-ido t
-  
+   
    ;; Targets include this file and any file contributing to the agenda - up to 9 levels deep
    org-refile-targets (quote ((nil :maxlevel . 9) (org-agenda-files :maxlevel . 9)))
-  
+   
    ;; Use outline paths, but let IDO handle things
    org-refile-use-outline-path (quote file)
-  
+   
    ;; Allow refile to create parent tasks with confirmation
    org-refile-allow-creating-parent-nodes (quote confirm)
-  
+   
    ;; IDO now handles header finding
    org-outline-path-complete-in-steps nil
-  
+   
    ;; Yes it's long... but more is better ;
    org-clock-history-length 35
-  
+   
    ;; Resume clocking task on clock-in if the clock is open
    org-clock-in-resume t
-  
-   ;; Change task state to STARTED when clocking in
-   org-clock-in-switch-to-state "STARTED"
-  
+   
    ;; Save clock data and notes in the LOGBOOK drawer
    org-clock-into-drawer t
-  
+   
    ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
    org-clock-out-remove-zero-time-clocks t
-  
+   
    ;; Don't clock out when moving task to a done state
    org-clock-out-when-done nil
-  
+   
    ;; Save the running clock and all clock history when exiting Emacs, load it on startup
    org-clock-persist t
-  
+   
    ;; Don't use priorities and accidentally set them all the time, so just turn them off.
    org-enable-priority-commands nil
-  
+   
    ;; Don't use super/subscript, makes exports weird.
    org-use-sub-superscripts nil
-  
+   
    ;; The habit graph display column in the agenda
    org-habit-graph-column 50
-  
+   
    ;; warn 15 min in advance
    appt-message-warning-time 15
-  
+   
    ;; warn every 5 minutes
    appt-display-interval 5
-  
+   
    ;; show in the modeline
    appt-display-mode-line t
-  
+   
    ;; use our func
    appt-display-format 'nil
-  
+   
    ;; use speed commands
    org-use-speed-commands t
-  
+   
    ;; I like links being active ret
    org-return-follows-link t
-  
+   
    ;; Make lists cycle whether they're nodes or plain
    org-cycle-include-plain-lists t
-  
+   
    ;; Fontify org-src blocks like their language mode
    org-src-fontify-natively t
-  
+   
    ;; Turn on sticky agendas so we don't have to regenerate them
    org-agenda-sticky t
-  
+   
    ;; If there's a region, do whatever it is I'm trying to do to ALL headlines in
    ;; region
    org-loop-over-headlines-in-active-region t
-  
+   
    ;; This seemed like a good idea to have at t at first, but now it's driving me
    ;; crazy.
    org-special-ctrl-a/e nil
-  
+   
    org-special-ctrl-k t
    org-yank-adjusted-subtrees t
-  
+   
    org-align-all-tags t
-  
+   
    org-startup-folded t
-  
+   
+   ;; Don't lock to the week/month, and always show ahead 7 days unless told otherwise
+   org-agenda-start-on-weekday nil
+   org-agenda-ndays 7
+   
    ;; multiple pass pdf generation
    org-latex-to-pdf-process '("xelatex -interaction nonstopmode %f"
                               "xelatex -interaction nonstopmode %f")
-  
+   
    org-agenda-files (append
-                     (file-expand-wildcards "~/emacs_org/tasks.org")
-                     (file-expand-wildcards "~/emacs_org/email.org")
-                     (file-expand-wildcards "~/emacs_org/mozilla/*.org")
-                     (file-expand-wildcards "~/emacs_org/home/*.org")
-                     (file-expand-wildcards "~/emacs_org/nplabs/*.org")
-                     (file-expand-wildcards "~/emacs_org/travel/*.org")
-                     (file-expand-wildcards "~/emacs_org/projects/*.org")
-                     (file-expand-wildcards "~/emacs_org/personal/*.org"))
-  
+                     (file-expand-wildcards "~/emacs_org/*.org"))
+   
+   org-catch-invisible-edits 'error
+   
+   ;; No blank lines before headings
+   org-blank-before-new-entry (quote ((heading)
+                                      (plain-list-item . auto)))
    org-link-abbrev-alist
-   '(("bugzilla"  . "https://bugzilla.mozilla.org/show_bug.cgi?id=")))
+   '(("bugzilla"  . "https://bugzilla.mozilla.org/show_bug.cgi?id="))
+  
+   org-use-fast-todo-selection t
+  
+   org-treat-S-cursor-todo-selection-as-state-change nil
+   ;; For tag searches ignore tasks with scheduled and deadline dates
+   org-agenda-tags-todo-honor-ignore-options t)
   
 #+end_src
 *** Hooks
@@ -1515,16 +1533,44 @@ My mail client of choice.
 #+BEGIN_SRC emacs-lisp
   ;; Resume clocking tasks when emacs is restarted
   (org-clock-persistence-insinuate)
+  (setq bh/organization-task-id "6ef1b5e8-2a71-4aeb-8051-a2c22ba50665")
+  (setq
+   ;; Show lot of clocking history so it's easy to pick items off the C-F11 list
+   org-clock-history-length 23
+   ;; Resume clocking task on clock-in if the clock is open
+   org-clock-in-resume t
+   ;; Change tasks to NEXT when clocking in
+   org-clock-in-switch-to-state 'bh/clock-in-to-next
+   ;; Separate drawers for clocking and logs
+   org-drawers (quote ("PROPERTIES" "LOGBOOK"))
+   ;; Save clock data and state changes and notes in the LOGBOOK drawer
+   org-clock-into-drawer t
+   ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
+   org-clock-out-remove-zero-time-clocks t
+   ;; Clock out when moving task to a done state
+   org-clock-out-when-done t
+   ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+   org-clock-persist t
+   ;; Do not prompt to resume an active clock
+   org-clock-persist-query-resume nil
+   ;; Enable auto clock resolution for finding open clocks
+   org-clock-auto-clock-resolution (quote when-no-clock-is-running)
+   ;; Include current clocking task in clock reports
+   org-clock-report-include-clocking-task t)
 #+END_SRC
 *** Todo flow setup
 #+BEGIN_SRC emacs-lisp
-  ;; 3 different stage setups. First two are from norang, final is for
-  ;; events, so I can search for things like "all concerts I attended
-  ;; this year" via state and tags
-  (setq org-todo-keywords (quote ((sequence "TODO(t)" "STARTED(s!)" "|" "DONE(d!/!)")
-                                  (sequence "WAITING(w@/!)" "TOFILE(t@/!)" "SOMEDAY(S!)" "OPEN(O@)" "|" "CANCELLED(C@/!)" "CLOSED(c@/!)")
-                                  (sequence "EVENT(e)" "|" "ATTENDED(a!)" "SKIPPED(k!)")
-                                  (sequence "ORDER(z)" "ORDERED(o!)" "SHIPPED(h!)" "|" "ARRIVED(A!/!)"))))
+  ;; Straight up copied from norang now
+  (setq org-todo-keywords (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                                  (sequence "WAITING(w@/!)" "HOLD(h!/!)" "|" "CANCELLED(c@/!)"))))
+  (setq org-todo-state-tags-triggers
+        (quote (("CANCELLED" ("CANCELLED" . t))
+                ("WAITING" ("WAITING" . t))
+                ("HOLD" ("WAITING" . t) ("HOLD" . t))
+                (done ("WAITING") ("HOLD"))
+                ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 #+END_SRC
 *** Key bindings
 #+BEGIN_SRC emacs-lisp
@@ -1535,35 +1581,23 @@ My mail client of choice.
    (global-set-key "\C-ca" 'org-agenda)
    (global-set-key "\C-cb" 'org-iswitchb)
 #+END_SRC
-*** Capture  
+*** Capture
 #+BEGIN_SRC emacs-lisp
   ;; Once again, stolen from norang, except for the contacts one, which
   ;; was taken from the org-mode list.
   (setq org-capture-templates
         (quote
-         (("t" "todo" entry (file "~/emacs_org/tasks.org")
-           "* TODO %?
-     %u
-     %a")
+         (("t" "todo" entry (file "~/emacs_org/refile.org")
+           "* TODO %?\n%u\n%a\n" :clock-in t :clock-resume t)
           ("n" "note" entry (file "~/emacs_org/notes.org")
-           "* %?                                        :NOTE:
-     %u
-     %a")
+           "* %? :NOTE:\n%u\n%a" :clock-in t :clock-resume t)
           ("r" "mu4e email reply" entry (file "~/emacs_org/email.org")
-           "* %c"
-           :immediate-finish t)
-          ("w" "link" entry (file+headline "~/emacs_org/links.org" "Links")
-           "* %c                                        :link:"
-           :immediate-finish t)
-          ("s" "snowmew link" entry (file+headline "~/emacs_org/links.org" "Snowmew Links")
-           "* %c                                        :link:"
-           :immediate-finish t))))
-  
-  
+           "* %c" :immediate-finish t))))
 #+END_SRC
 *** Agenda
 #+BEGIN_SRC emacs-lisp
   ;; Personal agenda modes
+  (setq qdot/org-auto-exclude-tags '("hold" "habits"))
   (setq org-agenda-custom-commands
         (quote (("h" "Tasks for home" tags-todo "+HOME-someday" nil)
                 ("5" "Tasks for work" tags-todo "+WORK-someday" nil)
@@ -1574,15 +1608,51 @@ My mail client of choice.
                   (org-agenda-remove-tags t))
                  ("~/emacs_org/agenda.txt"))
                 ("w" agenda "Week with events and no daily/chores"
-                 ((org-agenda-ndays-to-span 7)
-                  (org-agenda-ndays 7)
-                  (org-agenda-filter-preset '("-daily"))))
+                  ((org-agenda-ndays 14)
+                   (org-agenda-filter-preset '("-daily"))))
                 (" " "Agenda"
                  ((agenda "" nil)
+                  (tags "REFILE"
+                        ((org-agenda-overriding-header "Tasks to Refile")
+                         (org-tags-match-list-sublevels nil)))
                   (tags "email"
                         ((org-agenda-overriding-header "Emails")
                          (org-tags-match-list-sublevels nil)
-                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("REPLIED"))))))))))
+                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("SENT" "CANCELLED")))))
+                  (tags-todo "-CANCELLED/!"
+                             ((org-agenda-overriding-header "Stuck Projects")
+                              (org-agenda-skip-function 'bh/skip-non-stuck-projects)
+                              (org-agenda-sorting-strategy
+                               '(priority-down category-keep))))
+                  (tags-todo "-HOLD-CANCELLED/!"
+                             ((org-agenda-overriding-header "Projects")
+                              (org-agenda-skip-function 'bh/skip-non-projects)
+                              (org-agenda-sorting-strategy
+                               '(priority-down category-keep))))
+                  (tags-todo "-CANCELLED/!NEXT"
+                             ((org-agenda-overriding-header "Project Next Tasks")
+                              (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
+                              (org-tags-match-list-sublevels t)
+                              (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+                              (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
+                              (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
+                              (org-agenda-sorting-strategy
+                               '(priority-down todo-state-down effort-up category-keep))))
+                  (tags-todo "-REFILE-CANCELLED-WAITING-EVENT/!"
+                             ((org-agenda-overriding-header (if (marker-buffer org-agenda-restrict-begin) "Project Subtasks" "Standalone Tasks"))
+                              (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
+                              (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+                              (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
+                              (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
+                              (org-agenda-sorting-strategy
+                               '(category-keep))))
+                  (tags-todo "-CANCELLED+WAITING/!"
+                             ((org-agenda-overriding-header "Waiting and Postponed Tasks")
+                              (org-agenda-skip-function 'bh/skip-stuck-projects)
+                              (org-tags-match-list-sublevels nil)
+                              (org-agenda-todo-ignore-scheduled 'future)
+                              (org-agenda-todo-ignore-deadlines 'future)))
+                  nil)))))
 #+END_SRC
 *** Appointment warning bindings
 #+BEGIN_SRC emacs-lisp
@@ -1615,7 +1685,7 @@ My mail client of choice.
            (cons mark entry))))
   
 #+END_SRC
-*** Faces  
+*** Faces
 #+BEGIN_SRC emacs-lisp
   ;; The following custom-set-faces create the highlights
   (custom-set-faces
@@ -1640,8 +1710,8 @@ My mail client of choice.
 #+BEGIN_SRC emacs-lisp
   (setq org-mobile-inbox-for-pull "~/emacs_org/tasks.org")
   (setq org-mobile-directory "~/Dropbox/MobileOrg")
-  (setq org-mobile-files '("~/emacs_org/tasks.org" "~/emacs_org/mozilla/B2G.org"))
-  (setq org-mobile-agendas nil)
+  (setq org-mobile-files '("~/emacs_org/personal/events.org"))
+  (setq org-mobile-agendas '("w"))
 #+END_SRC
 *** Disable org agenda window resizing
 #+BEGIN_SRC emacs-lisp
