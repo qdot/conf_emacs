@@ -2616,6 +2616,10 @@ https://github.com/jwiegley/use-package
 ** TODO Make python flymake deal with missing linters better
 ** TODO Make sauron only notify for twitter when mentions or PMs received.
 ** TODO Create named emacs instances, make them come up in correct xmonad instances
+** TODO Modeline customization
+** TODO Fix workgroups layouts
+** TODO Fix ERC privmsgs
+** TODO Fix org mode mailers
 ** DONE Set up BufferTimer
 CLOSED: [2013-05-04 Sat 00:54]
 - State "DONE"       from "TODO"       [2013-05-04 Sat 00:54]
@@ -2627,7 +2631,7 @@ https://github.com/rolandwalker/unicode-fonts
 ** DONE Check out js2-refactor
 CLOSED: [2013-05-03 Fri 23:57]
 - State "DONE"       from "TODO"       [2013-05-03 Fri 23:57]
-** CLOSED Think about non-fixed width for non-code buffers?
+** DONE Think about non-fixed width for non-code buffers?
 CLOSED: [2013-05-03 Fri 23:56]
 - State "CLOSED"     from "TODO"       [2013-05-03 Fri 23:56] \\
   No
@@ -2701,7 +2705,7 @@ CLOSED: [2012-10-15 Mon 15:36]
 :PROPERTIES:
 :ID: c315b3ab-448b-4134-af2f-0378af73dc24
 :END:
-** CLOSED Fix rope mode to always have ignore_bad_imports equal to True
+** DONE Fix rope mode to always have ignore_bad_imports equal to True
 CLOSED: [2013-04-17 Wed 21:23]
 - State "CLOSED"     from "TODO"       [2013-04-17 Wed 21:23] \\
   Not using rope anymore
@@ -2710,6 +2714,13 @@ CLOSED: [2013-04-17 Wed 21:23]
 :END:
    [2010-10-27 Wed]
    [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
+** TODO Check out elpy                                               :emacs:
+:PROPERTIES:
+:END:
+http://blog.jorgenschaefer.de/2013/04/elpy-10-released.html
+** TODO Make mu4e delete drafts after they are sent
+   [2013-07-05 Fri]
+
 ** ERC Nicklist rewrite
 *** TODO Create filter function to load things like lists of privmsg buffers
 *** TODO Use hl-mode for hilighting per line
@@ -2769,3 +2780,11 @@ CLOSED: [2013-02-26 Tue 21:32]
 http://www.digital-scurf.org/software/libgfshare
 *** TODO Speedbar setup for xmonad (automatic frame sizing)?
 *** TODO Make autorefiling function for messages from Kelly
+** Contexts
+*** Email
+**** TODO Fix files
+*** Compilation
+*** Scheduling
+**** TODO Move all org mode events to special events file?
+*** Communication
+*** Layout
