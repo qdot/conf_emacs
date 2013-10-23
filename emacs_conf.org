@@ -2500,70 +2500,15 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 
 #+END_SRC
 
-** projectile
-#+BEGIN_SRC emacs-lisp
-  (projectile-global-mode 1)
-#+END_SRC
+
 ** nxhtml
+Fix really annoying warning
 #+BEGIN_SRC emacs-lisp
-  ;; Workaround the annoying warnings:
-  ;; Warning (mumamo-per-buffer-local-vars):
-  ;; Already 'permanent-local t: buffer-file-name
-  (when (and (equal emacs-major-version 24)
+  (when (and (>= emacs-major-version 24)
              (>= emacs-minor-version 2))
     (eval-after-load "mumamo"
       '(setq mumamo-per-buffer-local-vars
              (delq 'buffer-file-name mumamo-per-buffer-local-vars))))
-  (add-hook 'nxhtml-mode-hook (lambda () (linum-mode 1)))
-#+END_SRC
-** multiple-cursors
-#+BEGIN_SRC emacs-lisp
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-  
-#+END_SRC
-** scel
-#+BEGIN_SRC emacs-lisp
-  (add-to-list 'load-path "/home/qdot/.emacs_files/elisp/scel/el")
-  
-  (require 'sclang)
-  
-#+END_SRC
-** markdown
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'markdown-mode-hook 'turn-on-flyspell)
-#+END_SRC
-** diminish
-#+begin_src emacs-lisp
-  (require 'diminish)
-  (add-hook 'yas-minor-mode-hook (lambda () (diminish 'yas-minor-mode " ÿ")))
-  (add-hook 'auto-complete-mode-hook (lambda () (diminish 'auto-complete-mode " a")))
-  (add-hook 'org-mode-hook (lambda () (diminish 'org-indent-mode " ı")))
-  (add-hook 'workgroups-mode-hook (lambda () (diminish 'workgroups-mode " ω")))
-  (eval-after-load "flyspell" '(diminish 'flyspell-mode " fs"))
-  (after 'projectile (diminish 'projectile-mode " 🔫"))
-#+end_src
-
-** rename-modeline
-#+BEGIN_SRC emacs-lisp
-  (rename-modeline "js2-mode" js2-mode "JS2")
-#+END_SRC
-** rainbow-delimiters
-#+BEGIN_SRC emacs-lisp
-  (custom-set-faces
-   '(rainbow-delimiters-depth-1-face ((t (:foreground "cyan"))))
-   '(rainbow-delimiters-depth-2-face ((t (:foreground "green"))))
-   '(rainbow-delimiters-depth-3-face ((t (:foreground "yellow"))))
-   '(rainbow-delimiters-depth-4-face ((t (:foreground "orange"))))
-   '(rainbow-delimiters-depth-5-face ((t (:foreground "purple"))))
-   '(rainbow-delimiters-depth-6-face ((t (:foreground "khaki"))))
-   '(rainbow-delimiters-depth-7-face ((t (:foreground "#8b7500"))))
-   '(rainbow-delimiters-depth-8-face ((t (:foreground "#8b7500"))))
-   '(rainbow-delimiters-depth-9-face ((t (:foreground "#8b7500"))))
-   '(rainbow-delimiters-unmatched-face ((t (:foreground "red")))))
-  
 #+END_SRC
 * Automodes
 #+begin_src emacs-lisp
