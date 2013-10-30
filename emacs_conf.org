@@ -82,7 +82,8 @@ Set up some simple platform finding variables that may or may not work
       (interactive)
       (when linux-p
         (custom-set-variables '(browse-url-firefox-program "firefox"))))
-  
+
+
     ;; Make sure we use firefox-trunk if it's on linux.
     (when (member t (mapcar (lambda (d) (file-exists-p (concat d "/firefox-trunk"))) exec-path))
       (qdot/set-firefox-trunk)))
@@ -1241,13 +1242,10 @@ My mail client of choice.
                                qdot/wg-buffer-list-filter-associated-not-irc))
   
     (defun qdot/wg-set-buffer-lists ()
-      (wg-set-workgroup-parameter (wg-get-workgroup "work") 
-                                  'wg-buffer-list-filter-order-alist 
-                                  '((default qdot/associated-not-irc qdot/not-irc all)))
       (wg-set-workgroup-parameter (wg-get-workgroup "scratch")
                                   'wg-buffer-list-filter-order-alist 
                                   '((qdot/not-irc all)))
-      (wg-set-workgroup-parameter (wg-get-workgroup "erc") 
+      (wg-set-workgroup-parameter (wg-get-workgroup "irc") 
                                   'wg-buffer-list-filter-order-alist 
                                   '((default qdot/erc-irc all)))
       (wg-set-workgroup-parameter (wg-get-workgroup "bitlbee") 
@@ -1777,6 +1775,7 @@ My mail client of choice.
         erc-interpret-mirc-color nil
         erc-insert-timestamp-function 'erc-insert-timestamp-left
         erc-kill-queries-on-quit nil
+        erc-auto-query 'bury
         erc-keywords nil)
   (setq erc-button-url-regexp
         "\\([-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]+\\.\\)+[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]*[-a-zA-Z0-9\\/]")
@@ -1796,17 +1795,11 @@ My mail client of choice.
         '(erc-current-nick-face erc-keyword-face))
   (setq erc-track-priority-faces-only 'all)
   
-  (add-hook 'erc-join-hook
-            (lambda ()
-              (make-local-variable 'blink-matching-paren)
-              (setq blink-matching-paren nil)))
-  
   (defun qdot/erc-turn-off-parens ()
-    (when (member (current-buffer) (erc-buffer-list))
       (setq completion-auto-help nil)
-      (setq blink-matching-paren nil)))
+      (setq blink-matching-paren nil))
   
-  (add-hook 'after-change-major-mode-hook 'qdot/erc-turn-off-parens)
+  (add-hook 'erc-mode-hook 'qdot/erc-turn-off-parens)
   
   (setq erc-hide-list '("PART" "JOIN" "QUIT" "NICK"))
 #+END_SRC
@@ -1827,121 +1820,6 @@ My mail client of choice.
   ;;(setq window-configuration-change-hook (cddr window-configuration-change-hook))
   
   ;;(add-hook 'window-configuration-change-hook 'qdot/erc-set-fill-columns)
-#+END_SRC
-*** Privmsg Window Allocation
-#+BEGIN_SRC emacs-lisp
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; Privmsg window allocation
-  ;;
-  ;; We create a buffer with a ton of windows pointing to the bitlbee-placeholder
-  ;; buffer. These can then be used to throw query windows into as they're
-  ;; created by IMs or IRC privmsgs, so we don't have to worry about ERC screwing
-  ;; with whatever buffer we're in now.
-  ;;
-  ;; Similarly, whenever we kill a query window, we should have it pop back to
-  ;; the placeholder buffer so it can be reused.
-  ;;
-  ;; We also make the assumption that the privmsg allocation frame is the one
-  ;; with the &bitlbee channel buffer in one of its windows. I just usually
-  ;; assume bitlbee is going to be running anyways, so this seemed ok for my
-  ;; setup.
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
-  
-  ;; Since we have our own allocator, just have ERC bury the buffers and then
-  ;; we'll take care of them ourselves
-  (setq erc-auto-query 'bury)
-  
-  (defun qdot/free-query-window-p (window)
-    (let ((r nil))
-      (if (string= "bitlbee-placeholder" (buffer-name (window-buffer window)))
-          (setq r t))
-      r))
-  
-  (defun qdot/erc-move-query-to-placeholder (buffer)
-    (let*
-        ((bitlbee-window (get-buffer-window "&bitlbee" t)))
-      (when bitlbee-window
-        (let*
-            ((bitlbee-window-list (window-list (window-frame bitlbee-window)))
-             (free-window-list (qdot/filter 'qdot/free-query-window-p bitlbee-window-list)))
-          (when (not (memq buffer (mapcar 'window-buffer bitlbee-window-list)))
-            (set-window-buffer (car free-window-list) buffer))))))
-  
-  (defun qdot/erc-privmsg-query-allocate (proc parsed)
-    ;; Find the frame holding the bitlbee& buffer. We'll consider that our privmsg window
-    ;; Once we find it, walk the windows until we find an open bitlbee-placeholder
-    ;; Set the window list to that so we can just pick the first window off the top
-    (if (get-buffer-window "&bitlbee" t)
-        (let*
-            ((nick (car (erc-parse-user (erc-response.sender parsed))))
-             (target (car (erc-response.command-args parsed)))
-             (msg (erc-response.contents parsed))
-             (query  (if (not erc-query-on-unjoined-chan-privmsg)
-                         nick
-                       (if (erc-current-nick-p target)
-                           nick
-                         target))))
-  
-          ;;If the buffer doesn't even exist yet, go ahead and run auto-query to make it happen
-          (if (not (erc-get-buffer query proc))
-              (erc-auto-query proc parsed))
-          ;;If we find one, allocate into that, otherwise, commense undefined behavior
-          (when (and (erc-current-nick-p target)
-                     (not (erc-is-message-ctcp-and-not-action-p msg))
-                     (not (get-buffer-window (erc-get-buffer query proc) t)))
-            (qdot/erc-move-query-to-placeholder (erc-get-buffer query proc)))))
-    nil)
-  
-  (add-hook 'erc-server-PRIVMSG-functions 'qdot/erc-privmsg-query-allocate)
-  
-  (defface qdot/im-highlight-face
-    '((((class color) (min-colors 88) (background dark))
-       :background "darkolivegreen"))
-    "Basic face for highlighting nicks on im list.")
-  
-  (defun qdot/hi-line-ize-phrase (phrase)
-    (concat "^.*\\(?:" phrase "\\).*$"))
-  
-  (defun qdot/highlight-nick-on-im (proc parsed)
-    (let*
-        ((nick (car (erc-parse-user (erc-response.sender parsed))))
-         (target (car (erc-response.command-args parsed)))
-         (msg (erc-response.contents parsed))
-         (buffer (or (get-buffer "*&bitlbee-nicklist*") (get-buffer " *&bitlbee-nicklist*")))
-         (query  (if (not erc-query-on-unjoined-chan-privmsg)
-                     nick
-                   (if (erc-current-nick-p target)
-                       nick
-                     target))))
-      (if buffer
-          (with-current-buffer buffer
-            (goto-char (point-min))
-            (when (not (eq (search-forward nick) (point-max)))
-              (highlight-lines-matching-regexp nick 'qdot/im-highlight-face)))))
-    nil)
-  
-  (defun qdot/unhighlight-nick ()
-    (interactive)
-    (let*
-        ((im (buffer-name (current-buffer))))
-      (when (string-match "aim-" im)
-        (with-current-buffer (get-buffer "*&bitlbee-nicklist*")
-          (unhighlight-regexp (qdot/hi-line-ize-phrase im)))))
-    nil)
-  
-  ;; (add-hook 'erc-server-PRIVMSG-functions 'qdot/highlight-nick-on-im)
-  
-  ;; Once we close a query window, return it to being a query placeholder window
-  
-  (defun qdot/erc-query-buffer-recycle ()
-    (if (and (erc-query-buffer-p (current-buffer)) (get-buffer "bitlbee-placeholder"))
-        (set-window-buffer (get-buffer-window (current-buffer)) (get-buffer "bitlbee-placeholder")))
-    nil)
-  
-  (add-hook 'kill-buffer-hook 'qdot/erc-query-buffer-recycle)
 #+END_SRC
 *** Make join/part showing buffer local
 Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
@@ -2020,24 +1898,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (defun qdot/bitlbee-connect ()
     (interactive)
     (qdot/erc-znc-connect "bitlbee"))
-    
-  (defun qdot/bitlbee-reallocate-query-buffers ()
-    ;; For each already opened query window, reallocate
-    (mapc (lambda (buf) (qdot/erc-move-query-to-placeholder buf))
-          (qdot/filter 'erc-query-buffer-p (buffer-list))))
-    
-  (defun qdot/bitlbee-resume-layout ()
-    (interactive)
-    ;; If we havn't created a placeholder buffer yet, do so now, make it
-    ;; readonly.
-    (with-current-buffer (get-buffer-create "bitlbee-placeholder")
-      (setq buffer-read-only t))
-    (save-excursion
-      ;; Bring up the bitlbee nicklist
-      (set-buffer "&bitlbee")
-      (erc-nicklist))
-    (wg-revert-workgroup (wg-get-workgroup "bitlbee"))
-    (qdot/bitlbee-reallocate-query-buffers))
+  
 #+END_SRC
 *** defadvice buffer clearing
 #+BEGIN_SRC emacs-lisp

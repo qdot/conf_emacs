@@ -41,14 +41,12 @@ should highlight that status.")
     (add-hook 'wg-switch-to-workgroup-hook
               (lambda ()
                 (cond
-                 ((eq (wg-get-workgroup "erc") (wg-current-workgroup))
+                 ((eq (wg-get-workgroup "irc") (wg-current-workgroup))
                   (qdot/remove-notify-type "freenode"))
-                 ((eq (wg-get-workgroup "mozilla") (wg-current-workgroup))
+                 ((eq (wg-get-workgroup "workirc") (wg-current-workgroup))
                   (qdot/remove-notify-type "mozilla"))
                  ((eq (wg-get-workgroup "bitlbee") (wg-current-workgroup))
                   (qdot/remove-notify-type "bitlbee"))
-                 ((eq (wg-get-workgroup "gnus") (wg-current-workgroup))
-                  (qdot/remove-notify-type "mail"))
                  ((eq (wg-get-workgroup "twitter") (wg-current-workgroup))
                   (qdot/remove-notify-type "twitter")))))
 

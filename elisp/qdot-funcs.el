@@ -238,11 +238,8 @@
   (qdot/personal-wg-setup)
   (workgroups-mode)
   (when linux-p
-    (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el")))
-  (qdot/start-powerline)
-  (wg-switch-to-workgroup "bitlbee")
-  (qdot/bitlbee-resume-layout)
-  (wg-switch-to-workgroup "twitter"))
+    (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el"))))
+
 
 ;; Taken from http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun qdot/smarter-move-beginning-of-line (arg)
