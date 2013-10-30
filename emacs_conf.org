@@ -2661,3 +2661,13 @@ http://www.digital-scurf.org/software/libgfshare
 CLOSED: [2013-10-29 Tue 20:55]
 *** Communication
 *** Layout
+* New Stuff
+#+BEGIN_SRC emacs-lisp
+  (require 'bitlmacs)
+  (bitlmacs/init-bitlmacs-placeholder)
+  (global-set-key [(control f1)] 'wg-switch-to-workgroup-at-index-1)
+  (global-set-key [(control f2)] 'wg-switch-to-workgroup-at-index-2)
+  (global-set-key [(control f3)] 'wg-switch-to-workgroup-at-index-3)
+  (global-set-key [(control f4)] 'wg-switch-to-workgroup-at-index-4)
+  (global-set-key [(control f5)] 'wg-switch-to-workgroup-at-index-5)
+#+END_SRC
