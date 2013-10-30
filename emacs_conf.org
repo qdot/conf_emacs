@@ -2397,6 +2397,34 @@ Extra hooks to functions from the qdot-funcs modules
   
 #+END_SRC
 * Tasks
+** TODO Remove sauron dbus
+** TODO Redo CEDET Setup
+** TODO Figure out issues with schedule export
+** TODO Make emacs autoblogging utility for blog and software sites
+:PROPERTIES:
+:ID: 1ce4cdcc-ddbe-48d6-9eb6-2b363d5db90c
+:END:
+   [2011-01-08 Sat]
+
+   [[file:~/git-projects/nonpolynomial.com/libraries/index.html::<H2>libnifalcon</H2>]]
+** TODO Work on eshell
+** TODO Make fill columns for ERC auto-set for workgroup sizes?
+** TODO Read Julian Danjou's config
+http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
+** TODO Check out UsePackage for emacs                               :emacs:
+https://github.com/jwiegley/use-package
+** TODO Work on memacs                                               :emacs:
+** TODO Make sauron only notify for twitter when mentions or PMs received.
+** TODO Create named emacs instances, make them come up in correct xmonad instances
+** TODO Modeline customization
+** TODO Fix org mode mailers
+** TODO Check out elpy                                               :emacs:
+:PROPERTIES:
+:END:
+http://blog.jorgenschaefer.de/2013/04/elpy-10-released.html
+** TODO Make mu4e delete drafts after they are sent
+   [2013-07-05 Fri]
+
 ** DONE Fix IRC killing functions
 CLOSED: [2013-05-03 Fri 21:39]
 - State "DONE"       from "TODO"       [2013-05-03 Fri 21:39]
@@ -2416,71 +2444,10 @@ CLOSED: [2013-05-06 Mon 18:52]
 CLOSED: [2013-05-06 Mon 20:52]
 - State "DONE"       from "TODO"       [2013-05-06 Mon 20:52]
 Used el-get-sources variable
-** TODO Divide out work setup from home setup
-*** TODO mu4e
-*** TODO erc
-- [ ] Make network starting/stopping functions that are interactive
-*** TODO workgroups
-- Personal
-  - mu4e
-  - freenode erc
-  - bitlbee erc
-  - twitter
-- Work
-  - mu4e
-  - mozilla erc
-  - privmsg erc
-- Development
-  - Code/Project
-  - gdb (?)
-** TODO Remove sauron dbus
-** TODO Redo CEDET Setup
-** TODO Figure out issues with schedule export
-** TODO Make header/source search look at the buffer list first
-   :PROPERTIES:
-   :ID:       831C60D2-5A9C-46C4-AFFD-D197F22E9731
-   :END:
-** TODO Extend jekyll script to deal with multiple blogs
-   :PROPERTIES:
-   :ID:       6B223E71-B699-4B9D-836B-C9F061DC93AD
-   :END:
-
-** TODO Make emacs autoblogging utility for blog and software sites
-:PROPERTIES:
-:ID: 1ce4cdcc-ddbe-48d6-9eb6-2b363d5db90c
-:END:
-   [2011-01-08 Sat]
-
-   [[file:~/git-projects/nonpolynomial.com/libraries/index.html::<H2>libnifalcon</H2>]]
-** TODO Check out projectile for emacs projects
-:PROPERTIES:
-:ID: 5c2bdb24-e177-45eb-a5c0-5b1ecacbbc45
-:END:
-https://github.com/bbatsov/projectile
-
-** TODO Check out ede which apparently now works with CMake?
-** TODO Work on eshell
-:PROPERTIES:
-:ID: f7db638c-c411-4f8f-b214-7e66ce0b1756
-:END:
-
-** TODO Make fill columns for ERC auto-set for workgroup sizes?
-** TODO Add C-c . to org-disputed-keys, change to C-c c for calendar bring-up versus cedet/ede
-** TODO Check out why rainbow delimiters don't like mozilla C++ files
-** TODO Read Julian Danjou's config
-http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
-** TODO Yank frame/window detection for emacs from rcirc/dbus script :emacs:
-http://www.emacswiki.org/emacs/rcircDbusNotification
-** TODO Check out UsePackage for emacs                               :emacs:
-https://github.com/jwiegley/use-package
-** TODO Work on memacs                                               :emacs:
-** TODO Make python flymake deal with missing linters better
-** TODO Make sauron only notify for twitter when mentions or PMs received.
-** TODO Create named emacs instances, make them come up in correct xmonad instances
-** TODO Modeline customization
-** TODO Fix workgroups layouts
-** TODO Fix ERC privmsgs
-** TODO Fix org mode mailers
+** DONE Fix workgroups layouts
+CLOSED: [2013-10-29 Tue 20:56]
+** DONE Fix ERC privmsgs
+CLOSED: [2013-10-29 Tue 20:56]
 ** DONE Set up BufferTimer
 CLOSED: [2013-05-04 Sat 00:54]
 - State "DONE"       from "TODO"       [2013-05-04 Sat 00:54]
@@ -2514,10 +2481,6 @@ CLOSED: [2013-05-03 Fri 22:14]
 ** DONE Load mu4e-unread-main as part of startup
 CLOSED: [2013-05-03 Fri 22:03]
 - State "DONE"       from "TODO"       [2013-05-03 Fri 22:03]
-** CANCELLED Make bitlbee workgroup regenerate whenever we get a new im
-CLOSED: [2013-05-03 Fri 19:33]
-- State "CLOSED"     from "TODO"       [2013-05-03 Fri 19:33] \\
-  No
 ** DONE Import contacts into BBDB3
 CLOSED: [2012-08-25 Sat 21:23]
 - State "DONE"       from "TODO"       [2012-08-25 Sat 21:23]
@@ -2548,6 +2511,85 @@ CLOSED: [2013-04-17 Wed 21:27]
 - State "DONE"       from "TODO"       [2013-04-17 Wed 21:27]
   [2012-03-30 Fri]
   [[file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power)%20{][file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power) {]]
+** DONE Fix rope mode to always have ignore_bad_imports equal to True
+CLOSED: [2013-04-17 Wed 21:23]
+- State "CLOSED"     from "TODO"       [2013-04-17 Wed 21:23] \\
+  Not using rope anymore
+:PROPERTIES:
+:ID: 0757ee32-8d03-4745-8f00-74023cc739a2
+:END:
+   [2010-10-27 Wed]
+   [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
+** CANCELLED Divide out work setup from home setup               :CANCELLED:
+CLOSED: [2013-10-29 Tue 21:00]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 21:00] \\
+  Or not. This works well enough as is
+:END:
+** CANCELLED Make header/source search look at the buffer list first :CANCELLED:
+CLOSED: [2013-10-29 Tue 20:59]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:59] \\
+  Or, you know, just use a better switcher routine.
+:END:
+   :PROPERTIES:
+   :ID:       831C60D2-5A9C-46C4-AFFD-D197F22E9731
+   :END:
+** CANCELLED Extend jekyll script to deal with multiple blogs    :CANCELLED:
+CLOSED: [2013-10-29 Tue 20:58]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:58] \\
+  Moved to pelican.
+:END:
+   :PROPERTIES:
+   :ID:       6B223E71-B699-4B9D-836B-C9F061DC93AD
+   :END:
+
+** CANCELLED Check out projectile for emacs projects             :CANCELLED:
+CLOSED: [2013-10-29 Tue 20:57]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:57] \\
+  Didn't really work out. Onto like eproject or something.
+:END:
+:PROPERTIES:
+:ID: 5c2bdb24-e177-45eb-a5c0-5b1ecacbbc45
+:END:
+https://github.com/bbatsov/projectile
+
+** CANCELLED Check out ede which apparently now works with CMake? :CANCELLED:
+CLOSED: [2013-10-29 Tue 20:57]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:57] \\
+  NONONONONONO
+:END:
+** CANCELLED Add C-c . to org-disputed-keys, change to C-c c for calendar bring-up versus cedet/ede :CANCELLED:
+CLOSED: [2013-10-29 Tue 20:57]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:57] \\
+  No. We're never going to use ede. Fuck CEDET.
+:END:
+** CANCELLED Check out why rainbow delimiters don't like mozilla C++ files :CANCELLED:
+CLOSED: [2013-10-29 Tue 20:56]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:56] \\
+  rainbow delimiters is just broken in c++
+:END:
+** CANCELLED Yank frame/window detection for emacs from rcirc/dbus script :emacs:CANCELLED:
+CLOSED: [2013-10-29 Tue 20:56]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:56]
+:END:
+http://www.emacswiki.org/emacs/rcircDbusNotification
+** CANCELLED Make python flymake deal with missing linters better :CANCELLED:
+CLOSED: [2013-10-29 Tue 20:56]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:56] \\
+  Using flycheck now, which deals better anyways
+:END:
+** CANCELLED Make bitlbee workgroup regenerate whenever we get a new im
+CLOSED: [2013-05-03 Fri 19:33]
+- State "CLOSED"     from "TODO"       [2013-05-03 Fri 19:33] \\
+  No
 ** CANCELLED Create special ERC buffer to show query buffer list
 CLOSED: [2012-10-15 Mon 15:47]
 - State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:47] \\
@@ -2566,37 +2608,32 @@ CLOSED: [2012-10-15 Mon 15:36]
 :PROPERTIES:
 :ID: c315b3ab-448b-4134-af2f-0378af73dc24
 :END:
-** DONE Fix rope mode to always have ignore_bad_imports equal to True
-CLOSED: [2013-04-17 Wed 21:23]
-- State "CLOSED"     from "TODO"       [2013-04-17 Wed 21:23] \\
-  Not using rope anymore
-:PROPERTIES:
-:ID: 0757ee32-8d03-4745-8f00-74023cc739a2
-:END:
-   [2010-10-27 Wed]
-   [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
-** TODO Check out elpy                                               :emacs:
-:PROPERTIES:
-:END:
-http://blog.jorgenschaefer.de/2013/04/elpy-10-released.html
-** TODO Make mu4e delete drafts after they are sent
-   [2013-07-05 Fri]
-
 ** ERC Nicklist rewrite
-*** TODO Create filter function to load things like lists of privmsg buffers
-*** TODO Use hl-mode for hilighting per line
+*** DONE Create filter function to load things like lists of privmsg buffers
+CLOSED: [2013-10-29 Tue 20:54]
+*** CANCELLED Use hl-mode for hilighting per line               :CANCELLED:
+CLOSED: [2013-10-29 Tue 20:54]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:54] \\
+  Just propertize by hand, hl-mode doesn't work well for multiple non-consecutive lines
+:END:
 *** TODO Remove cursor rendering
 *** TODO Rewrite menu/query function
 *** TODO Group handling?
 *** TODO Host fetch handling
-*** TODO Change nick/line faces based on status or privmsg
-*** TODO Make nicklist buffer show up in buffer list
-*** TODO Create command to clear erc-nicklist
+*** DONE Change nick/line faces based on status or privmsg
+CLOSED: [2013-10-29 Tue 20:55]
+*** DONE Make nicklist buffer show up in buffer list
+CLOSED: [2013-10-29 Tue 20:55]
+*** DONE Create command to clear erc-nicklist
+CLOSED: [2013-10-29 Tue 20:55]
   [2012-03-30 Fri]
-  [[file:~/code/mozbuild/mozilla-central/dom/wifi/WifiWorker.js::let%20sdkVersion%20%3D%2015%3B][file:~/code/mozbuild/mozilla-central/dom/wifi/WifiWorker.js::let sdkVersion = 15;]]
+
 ** ERC Privmsg mode
-*** TODO Make keymap for last/next privmsg
-*** TODO Make trigger to clear erc-nicklist status on access
+*** DONE Make keymap for last/next privmsg
+CLOSED: [2013-10-29 Tue 20:54]
+*** DONE Make trigger to clear erc-nicklist status on access
+CLOSED: [2013-10-29 Tue 20:54]
 *** TODO Gravatar image viewing?
 *** TODO Make ido only list IMs?
 ** Workgroups Update
@@ -2646,6 +2683,7 @@ http://www.digital-scurf.org/software/libgfshare
 **** TODO Fix files
 *** Compilation
 *** Scheduling
-**** TODO Move all org mode events to special events file?
+**** DONE Move all org mode events to special events file?
+CLOSED: [2013-10-29 Tue 20:55]
 *** Communication
 *** Layout
