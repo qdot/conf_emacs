@@ -2329,6 +2329,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (add-to-list 'auto-mode-alist '("\\.\\(xml\\|mxml\\)$" . nxml-mode))
   (add-to-list 'auto-mode-alist '("\\.asciidoc$" . adoc-mode))
   (add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
+  (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.jsm$" . js2-mode))
   (add-to-list 'auto-mode-alist '("ChangeLog\\.txt\\'" . change-log-mode))
