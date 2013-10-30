@@ -55,32 +55,10 @@ fetched libs, etc...)
 ** Platform Variables
 Set up some simple platform finding variables that may or may not work
 #+begin_src emacs-lisp
-(setq mswindows-p (string-match "windows" (symbol-name system-type)))
-(setq macosx-p (string-match "darwin" (symbol-name system-type)))
-(setq linux-p (string-match "gnu/linux" (symbol-name system-type)))
+  (setq mswindows-p (eq system-type 'windows-nt)
+  (setq macosx-p (eq system-type 'darwin)
+  (setq linux-p (eq system-type 'gnu/linux))
 #+end_src
-** Firefox Setup
-#+begin_src emacs-lisp
-  
-  (when linux-p
-    (defun qdot/set-firefox-trunk ()
-      "Set default browser to firefox-trunk regardless of OS default"
-      (interactive)
-      (when linux-p
-        (custom-set-variables '(browse-url-firefox-program "firefox-trunk"))))
-  
-    (defun qdot/set-firefox ()
-      "Set default browser to firefox regardless of OS default"
-      (interactive)
-      (when linux-p
-        (custom-set-variables '(browse-url-firefox-program "firefox"))))
-
-
-    ;; Make sure we use firefox-trunk if it's on linux.
-    (when (member t (mapcar (lambda (d) (file-exists-p (concat d "/firefox-trunk"))) exec-path))
-      (qdot/set-firefox-trunk)))
-#+end_src
-
 ** CEDET Loading
 Load cedet first, otherwise we'll conflict against the 1.1 repo stuff
 
@@ -101,23 +79,24 @@ Load cedet first, otherwise we'll conflict against the 1.1 repo stuff
 #+end_src
 
 ** Global font setup
-We know we have consolas on OS X, so use it
-
-We also need to do this as near the beginning as possible, since it crashes otherwise?
+Use fonts we either know we have, or can check for. This is a function
+because it has caused crashes multiple times in the past, usually due
+to being run on startup before rendering was set up correctly or
+something.
 
 #+begin_src emacs-lisp
-
-(defun qdot/set-platform-font ()
-  "Set the default font for the system type."
-  (interactive)
-  (when macosx-p
-    (set-face-font 'default "consolas-11"))
-  (when mswindows-p
-    (set-face-font 'default "consolas-10"))
-  (when linux-p
-    (when (member "Inconsolata" (font-family-list))
-      (set-face-font 'default "inconsolata-11"))))
-
+  (defun qdot/set-platform-font ()
+    "Set the default font for the system type."
+    (interactive)
+    (when macosx-p
+      (set-face-font 'default "consolas-11"))
+    (when mswindows-p
+      (set-face-font 'default "consolas-10"))
+    (when linux-p
+      (when (member "Inconsolata" (font-family-list))
+        (set-face-font 'default "inconsolata-11"))))
+  
+  (qdot/set-platform-font)
 #+end_src
 
 ** Platform specific meta keys
@@ -190,8 +169,7 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
     (setq
      ;; copy emacs clipboard to system
      x-select-enable-clipboard t
-     interprogram-paste-function 'x-cut-buffer-or-selection-value
-     ))
+     interprogram-paste-function 'x-cut-buffer-or-selection-value))
   
   (set-default 'indicate-empty-lines t)
   (global-auto-revert-mode t)
@@ -217,7 +195,7 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
 ** Server Setup
 #+BEGIN_SRC emacs-lisp
   (setq server-use-tcp t)
-  (setq server-host "localhost")'
+  (setq server-host "localhost")
 #+END_SRC
 * Keybinds
 #+begin_src emacs-lisp
