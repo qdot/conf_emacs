@@ -300,4 +300,14 @@ point reaches the beginning or end of the buffer, stop there."
     (show-entry)
     (recenter)))
 
-  (provide 'qdot-funcs)
+(defun qdot/set-firefox-trunk ()
+  "Set default browser to firefox-trunk regardless of OS default"
+  (interactive)
+  (custom-set-variables '(browse-url-firefox-program "firefox-trunk")))
+
+(defun qdot/set-firefox ()
+  "Set default browser to firefox regardless of OS default"
+  (interactive)
+  (custom-set-variables '(browse-url-firefox-program "firefox")))
+
+(provide 'qdot-funcs)
