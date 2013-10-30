@@ -55,8 +55,8 @@ fetched libs, etc...)
 ** Platform Variables
 Set up some simple platform finding variables that may or may not work
 #+begin_src emacs-lisp
-  (setq mswindows-p (eq system-type 'windows-nt)
-  (setq macosx-p (eq system-type 'darwin)
+  (setq mswindows-p (eq system-type 'windows-nt))
+  (setq macosx-p (eq system-type 'darwin))
   (setq linux-p (eq system-type 'gnu/linux))
 #+end_src
 ** CEDET Loading
