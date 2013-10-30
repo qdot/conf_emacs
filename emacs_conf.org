@@ -24,13 +24,6 @@ fetched libs, etc...)
     "Directory for manually installed/maintained elisp files")
 #+end_src
 
-- Non-elisp scripts directory
-#+begin_src emacs-lisp
-  (defconst qdot/emacs-scripts-dir
-    (expand-file-name (concat qdot/emacs-conf-dir "scripts/"))
-    "Directory for non-elisp scripts")
-#+end_src
-
 - el-get packages directory
 #+begin_src emacs-lisp
   (defconst qdot/emacs-autoinst-elisp-dir
@@ -48,7 +41,6 @@ fetched libs, etc...)
 
 - Add configuration and scripts directories to proper variables
 #+begin_src emacs-lisp
-  (add-to-list 'exec-path (expand-file-name qdot/emacs-scripts-dir))
   (add-to-list 'load-path (expand-file-name qdot/emacs-conf-dir))
   (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 #+end_src
