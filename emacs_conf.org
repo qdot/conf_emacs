@@ -174,6 +174,7 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (column-number-mode t)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
+  (scroll-bar-mode -1)
   (blink-cursor-mode -1)
   (global-font-lock-mode 1)
 #+end_src
@@ -611,20 +612,6 @@ Incremental minibuffer completion
 #+begin_src emacs-lisp
   (color-theme-initialize)
   (color-theme-dark-laptop)     
-#+end_src
-
-** sml-modeline
-Modeline decorator to get rid of the horizontal scrollbar
-
-Via http://emacs-fu.blogspot.com/2010/03/showing-buffer-position-in-mode-line.html
-
-#+begin_src emacs-lisp
-  (if (require 'sml-modeline nil 'noerror)    ;; use sml-modeline if available
-      (progn 
-        (sml-modeline-mode 1)                   ;; show buffer pos in the mode line
-        (scroll-bar-mode -1))                   ;; turn off the scrollbar
-    (scroll-bar-mode 1)                       ;; otherwise, show a scrollbar...
-    (set-scroll-bar-mode 'right))             ;; ... on the right
 #+end_src
 
 ** auto-complete
@@ -2354,14 +2341,9 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 #+END_SRC
 
 
-** nxhtml
-Fix really annoying warning
+** smart-mode-line
 #+BEGIN_SRC emacs-lisp
-  (when (and (>= emacs-major-version 24)
-             (>= emacs-minor-version 2))
-    (eval-after-load "mumamo"
-      '(setq mumamo-per-buffer-local-vars
-             (delq 'buffer-file-name mumamo-per-buffer-local-vars))))
+  (sml/setup)
 #+END_SRC
 * Automodes
 #+begin_src emacs-lisp
