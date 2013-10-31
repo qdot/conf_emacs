@@ -1991,26 +1991,6 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (unicode-fonts-setup)
   
 #+end_src
-** buffer-timer
-#+begin_src emacs-lisp
-  ;; (require 'buffer-timer)
-  
-  ;; ;; Example list of titles and regexps to group by.
-  ;; (setq buffer-timer-regexp-master-list
-  ;;       '(
-  ;;         ("idle" .
-  ;;          (("generic" . "^\\*idle\\*")
-  ;;           ("minibuf" . "^ \\*Minibuf-.*")))
-  ;;         ("emacs" . ".emacs_files/")
-  ;;         ("org-mode" . "emacs_org/")
-  ;;         ("personal" .
-  ;;          (("code" . "code/git-projects/")))
-  ;;         ("work" .
-  ;;          ("code" .
-  ;;           (("general" . "code/mozbuild")
-  ;;            ("m-c" . "code/mozbuild/mozilla-central")
-  ;;            ("b2g" . "code/mozbuild/B2G"))))))
-#+end_src
 ** smex
 #+BEGIN_SRC emacs-lisp
   ;; Bind smex over M-x, deals with sorting most used commands to front of IDO
