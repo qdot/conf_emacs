@@ -418,20 +418,23 @@ Incremental minibuffer completion
   (ac-flyspell-workaround)
   (ac-linum-workaround)
   (global-auto-complete-mode t)
-  (setq ac-auto-start 3)
-  (setq ac-dwim t)
-  (set-default 'ac-sources '(ac-source-yasnippet)) ;; ac-source-semantic))
+  (setq ac-auto-start 3
+        ac-dwim t
+        ac-quick-help-delay 1)
+  (define-key ac-complete-mode-map [tab] 'ac-expand)
+#+end_src
+** ielm
+#+BEGIN_SRC emacs-lisp
   (defun ielm-auto-complete ()
     "Enables `auto-complete' support in \\[ielm]."
     (setq ac-sources '(ac-source-functions
-           ac-source-variables
-           ac-source-features
-           ac-source-symbols
-           ac-source-words-in-same-mode-buffers))
+                       ac-source-variables
+                       ac-source-features
+                       ac-source-symbols
+                       ac-source-words-in-same-mode-buffers))
     (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
     (auto-complete-mode 1))
   (add-hook 'ielm-mode-hook 'ielm-auto-complete)
-  (define-key ac-complete-mode-map [tab] 'ac-expand)
 #+end_src
 
 ** recentf
