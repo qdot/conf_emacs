@@ -123,6 +123,15 @@
 	    (:name git-modes :description "GNU Emacs modes for various Git-related files" :type github :pkgname "magit/git-modes"))
  (gravatar status "installed" recipe
 	   (:name gravatar :description "Get Gravatars" :type http :url "http://git.gnus.org/cgit/gnus.git/plain/lisp/gravatar.el"))
+ (haskell-mode status "installed" recipe
+	       (:name haskell-mode :description "A Haskell editing mode" :type github :pkgname "haskell/haskell-mode" :info "." :build
+		      `(("make" ,(format "EMACS=%s" el-get-emacs)
+			 "all"))
+		      :post-init
+		      (progn
+			(require 'haskell-mode-autoloads)
+			(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+			(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation))))
  (icomplete+ status "installed" recipe
 	     (:name icomplete+ :description "Extensions to `icomplete.el'." :type emacswiki :features "icomplete+"))
  (ido-ubiquitous status "installed" recipe
@@ -222,6 +231,8 @@
 	   (:name pkg-info :description "Provide information about Emacs packages." :type github :pkgname "lunaryorn/pkg-info.el" :depends s))
  (popup status "installed" recipe
 	(:name popup :website "https://github.com/auto-complete/popup-el" :description "Visual Popup Interface Library for Emacs" :type github :pkgname "auto-complete/popup-el"))
+ (pos-tip status "installed" recipe
+	  (:name pos-tip :description "Show tooltip at point" :type emacswiki))
  (python status "installed" recipe
 	 (:name python :description "Python's flying circus support for Emacs (trunk version, hopefully Emacs 24.x compatible)" :type http :url "http://repo.or.cz/w/emacs.git/blob_plain/master:/lisp/progmodes/python.el"))
  (rainbow-delimiters status "installed" recipe
