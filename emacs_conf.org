@@ -1709,16 +1709,16 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   ;; Set defaults we expect
   (setq-default c-basic-offset 2)
   (setq-default py-indent-offset 2)
-  
-  ;; turn on linum mode for programming
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 2)
   (setq linum-format "%4d")
   
   ;; I don't always show parens, but when I do...
   (setq show-paren-delay 0)
   (setq show-paren-style 'expression)
+  
   (defun qdot/programming-mode-hook ()
     ;; No tabs. Or wire hangers.
-    (setq indent-tabs-mode nil)
     (make-variable-buffer-local 'show-paren-mode)
     (set-fill-column 80)
     (add-to-list 'ac-sources 'ac-source-yasnippet)
@@ -1730,15 +1730,14 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
             :weight 'bold :underline nil :overline nil :slant 'normal))
   
   (add-hook 'prog-mode-hook 'qdot/programming-mode-hook)
-  ;;(add-hook 'prog-mode-hook 'whitespace-mode)
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   (add-hook 'prog-mode-hook 'show-paren-mode)
   (add-hook 'prog-mode-hook 'linum-mode)
-  ;;(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+  
 #+end_src
 ** emacs-lisp-mode
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode-enable)
+
 #+END_SRC
 ** ielm
 #+BEGIN_SRC emacs-lisp
@@ -1798,11 +1797,8 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
     (doxymacs-font-lock)
     (local-set-key (kbd "\C-m") 'newline-and-indent)
     (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 2)))
-    (setq indent-tabs-mode nil)
-    (setq-default tab-width 2)
     (c-set-style "qdot/cc-code-style")
     (c-set-offset 'innamespace 0)
-    (local-set-key [(control tab)] 'semantic-complete-self-insert)
     (subword-mode 1))
   
   (add-hook 'c-mode-common-hook 'qdot/cc-mode-hook)
@@ -1851,12 +1847,6 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 #+end_src
 ** CEDET
 #+begin_src emacs-lisp  
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; CEDET settings
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
   ;; Emacs freaks out if this isn't set.
   (setq warning-suppress-types nil) 
   
@@ -1917,7 +1907,6 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (defun qdot/python-mode-hook()
     (lambda () (eldoc-mode 1))
     (setq tab-width 4)
-    (setq indent-tabs-mode nil)
     (setq py-indent-offset 4)
     (setq python-indent-offset 4)
     (set-variable 'python-indent-guess-indent-offset nil)
@@ -1965,12 +1954,6 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 #+end_src
 ** lisp-mode
 #+begin_src emacs-lisp  
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; lisp/elisp settings
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
   ;; eldoc mode for showing function calls in mode line
   (setq eldoc-idle-delay 0)
   (autoload 'turn-on-eldoc-mode "eldoc" nil t)
@@ -1979,6 +1962,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   
   ;; stealin' things from esk
   (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode-enable)
   
   (defun esk-remove-elc-on-save ()
     "If you're saving an elisp file, likely the .elc is no longer valid."
@@ -1990,20 +1974,6 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   
   (define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
   (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
-  
-  ;; TODO: look into parenface package
-  (defface esk-paren-face
-    '((((class color) (background dark))
-       (:foreground "grey50"))
-      (((class color) (background light))
-       (:foreground "grey55")))
-    "Face used to dim parentheses."
-    :group 'starter-kit-faces)
-  
-  (dolist (mode '(scheme emacs-lisp lisp))
-    (when (> (display-color-cells) 8)
-      (font-lock-add-keywords (intern (concat (symbol-name mode) "-mode"))
-                              '(("(\\|)" . 'esk-paren-face)))))
   
 #+end_src
 ** unicode-fonts
