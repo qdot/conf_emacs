@@ -1738,10 +1738,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+end_src
 ** emacs-lisp-mode
 #+BEGIN_SRC emacs-lisp
-  (defun qdot/el-mode-hook ()
-    (rainbow-delimiters-mode-enable))
-  
-  (add-hook 'emacs-lisp-mode-hook 'qdot/el-mode-hook)
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode-enable)
 #+END_SRC
 ** ielm
 #+BEGIN_SRC emacs-lisp
