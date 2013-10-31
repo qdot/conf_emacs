@@ -253,20 +253,6 @@ repo, though it can take a really, really, REALLY long time.
   (setq el-get-dir qdot/emacs-autoinst-elisp-dir)
   (setq el-get-verbose t)
   (setq el-get-status-file (expand-file-name (concat qdot/emacs-conf-dir "elget-status.el")))
-  (setq el-get-sources
-        '((:name "edebug-x"
-                :description "elisp debugging package"
-                :type github
-                :pkgname "ScottyB/edebug-x"
-                :url "http://github.com/ScottyB/edebug-x"
-                :features edebug-x)
-          (:name "powerline-milkypostman"
-                :description "Yet another emacs vim-powerline implementation"
-                :type github
-                :pkgname "milkypostman/powerline"
-                :url "http://github.com/milkypostman/powerline"
-                :features powerline powerline-seperators)))
-  
   (unless (require 'el-get nil t)
     (url-retrieve
      "https://github.com/dimitri/el-get/raw/master/el-get-install.el"
