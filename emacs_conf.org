@@ -421,22 +421,12 @@ Incremental minibuffer completion
   (setq ac-auto-start 3
         ac-dwim t
         ac-quick-help-delay 1)
+  (setq ac-use-menu-map t)
+  ;; Default settings
+  (define-key ac-menu-map "\C-n" 'ac-next)
+  (define-key ac-menu-map "\C-p" 'ac-previous)
   (define-key ac-complete-mode-map [tab] 'ac-expand)
 #+end_src
-** ielm
-#+BEGIN_SRC emacs-lisp
-  (defun ielm-auto-complete ()
-    "Enables `auto-complete' support in \\[ielm]."
-    (setq ac-sources '(ac-source-functions
-                       ac-source-variables
-                       ac-source-features
-                       ac-source-symbols
-                       ac-source-words-in-same-mode-buffers))
-    (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
-    (auto-complete-mode 1))
-  (add-hook 'ielm-mode-hook 'ielm-auto-complete)
-#+end_src
-
 ** recentf
 http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
 
@@ -1739,12 +1729,6 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+END_SRC  
 ** prog-mode
 #+begin_src emacs-lisp
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; load file modes for programming
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
   ;; Set defaults we expect
   (setq-default c-basic-offset 2)
   (setq-default py-indent-offset 2)
@@ -1760,6 +1744,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
     (setq indent-tabs-mode nil)
     (make-variable-buffer-local 'show-paren-mode)
     (set-fill-column 80)
+    (add-to-list 'ac-sources 'ac-source-yasnippet)
     (setq whitespace-line-column 80) ;; limit line length
     (setq whitespace-style '(face lines-tail))
     (setq show-trailing-whitespace t)
@@ -1774,6 +1759,27 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (add-hook 'prog-mode-hook 'linum-mode)
   ;;(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 #+end_src
+** emacs-lisp-mode
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/el-mode-hook ()
+    (rainbow-delimiters-mode-enable))
+  
+  (add-hook 'emacs-lisp-mode-hook 'qdot/el-mode-hook)
+#+END_SRC
+** ielm
+#+BEGIN_SRC emacs-lisp
+  (defun ielm-auto-complete ()
+    "Enables `auto-complete' support in \\[ielm]."
+    (setq ac-sources '(ac-source-functions
+                       ac-source-variables
+                       ac-source-features
+                       ac-source-symbols
+                       ac-source-words-in-same-mode-buffers))
+    (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
+    (auto-complete-mode 1))
+  (add-hook 'ielm-mode-hook 'ielm-auto-complete)
+#+end_src
+
 ** flycheck
 Using flycheck instead of flymake
 #+begin_src emacs-lisp
@@ -2144,6 +2150,20 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 ** smart-mode-line
 #+BEGIN_SRC emacs-lisp
   (sml/setup)
+#+END_SRC
+** rainbow-delimiters
+#+BEGIN_SRC emacs-lisp
+  (custom-set-faces
+   '(rainbow-delimiters-depth-1-face ((t (:foreground "green" :weight extra-bold))))
+   '(rainbow-delimiters-depth-2-face ((t (:foreground "forestgreen" :weight bold))))
+   '(rainbow-delimiters-depth-3-face ((t (:foreground "lightseagreen" :weight bold))))
+   '(rainbow-delimiters-depth-4-face ((t (:foreground "lightskyblue" :weight bold))))
+   '(rainbow-delimiters-depth-5-face ((t (:foreground "cyan" :weight bold))))
+   '(rainbow-delimiters-depth-6-face ((t (:foreground "steelblue" :weight bold))))
+   '(rainbow-delimiters-depth-7-face ((t (:foreground "orchid" :weight bold))))
+   '(rainbow-delimiters-depth-8-face ((t (:foreground "purple" :weight bold))))
+   '(rainbow-delimiters-depth-9-face ((t (:foreground "hotpink" :weight bold))))
+   '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold)))))
 #+END_SRC
 * Automodes
 #+begin_src emacs-lisp
