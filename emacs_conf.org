@@ -199,11 +199,9 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
 #+END_SRC
 * Keybinds
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-w") 'backward-kill-word)
   (global-set-key (kbd "C-c r") 'revert-buffer)
   (global-set-key (kbd "C-c v") 'visual-line-mode)
   (global-set-key (kbd "C-c e") 'eval-and-replace)
-  (global-set-key (kbd "C-c s") 'shell-current-directory)
   (global-set-key (kbd "C-x C-k") 'kill-region)
   (global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
   (global-set-key (kbd "C-c C-m") 'execute-extended-command)
@@ -230,8 +228,6 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
                   (lambda ()
                     (interactive)
                     (join-line -1)))
-  
-  (global-set-key (kbd "C-x f") 'find-file-in-project)  
 #+end_src
 
 * Macros
