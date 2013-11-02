@@ -1992,6 +1992,13 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 ** smart-mode-line
 #+BEGIN_SRC emacs-lisp
   (sml/setup)
+  (add-to-list 'sml/replacer-regexp-list '("^~/code/git-projects/" ":GP:"))
+  (add-to-list 'sml/replacer-regexp-list '("^~/.emacs_files/" ":EF:"))
+  (add-to-list 'sml/replacer-regexp-list '("^~/code/mozbuild/" ":MOZ:"))
+  (setq sml/hidden-modes
+        '(" yas"
+          " SP"
+          " Fly"))
 #+END_SRC
 ** rainbow-delimiters
 #+BEGIN_SRC emacs-lisp
@@ -2052,12 +2059,13 @@ http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
 https://github.com/jwiegley/use-package
 ** TODO Work on memacs                                               :emacs:
 ** TODO Make sauron only notify for twitter when mentions or PMs received.
-** TODO Create named emacs instances, make them come up in correct xmonad instances
-** TODO Modeline customization
+** TODO Create named emacs instances, make them come up in correct xmonad desktops
 ** TODO Fix org mode mailers
 ** TODO Make mu4e delete drafts after they are sent
    [2013-07-05 Fri]
 
+** DONE Modeline customization
+CLOSED: [2013-11-02 Sat 16:09]
 ** DONE Use smartparens with highlighting
 CLOSED: [2013-11-02 Sat 14:57]
 http://emacsredux.com/blog/2013/11/01/highlight-matching-delimiters-with-smartparens
