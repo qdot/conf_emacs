@@ -2007,10 +2007,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (global-set-key (kbd "C-x r C-x")   'rm-exchange-point-and-mark)
   (global-set-key (kbd "C-x r C-w")   'rm-kill-region)
   (global-set-key (kbd "C-x r M-w")   'rm-kill-ring-save)
-
 #+END_SRC
-
-
 ** smart-mode-line
 #+BEGIN_SRC emacs-lisp
   (sml/setup)
@@ -2077,13 +2074,18 @@ https://github.com/jwiegley/use-package
 ** TODO Create named emacs instances, make them come up in correct xmonad instances
 ** TODO Modeline customization
 ** TODO Fix org mode mailers
-** TODO Check out elpy                                               :emacs:
-:PROPERTIES:
-:END:
-http://blog.jorgenschaefer.de/2013/04/elpy-10-released.html
 ** TODO Make mu4e delete drafts after they are sent
    [2013-07-05 Fri]
 
+** TODO Use smartparens with highlighting
+http://emacsredux.com/blog/2013/11/01/highlight-matching-delimiters-with-smartparens
+** DONE Make convenience function to edit config of current major mode
+CLOSED: [2013-11-01 Fri 21:06]
+** DONE Check out elpy                                               :emacs:
+CLOSED: [2013-11-01 Fri 21:34]
+:PROPERTIES:
+:END:
+http://blog.jorgenschaefer.de/2013/04/elpy-10-released.html
 ** DONE Fix IRC killing functions
 CLOSED: [2013-05-03 Fri 21:39]
 - State "DONE"       from "TODO"       [2013-05-03 Fri 21:39]
