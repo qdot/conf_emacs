@@ -280,6 +280,23 @@ Use M-y and M-n in y-or-n minibuffer prompts
   (require 'quick-yes)
 #+end_src
 
+** auto-complete
+#+begin_src emacs-lisp
+  (require 'auto-complete-config)
+  (ac-config-default)
+  (ac-flyspell-workaround)
+  (ac-linum-workaround)
+  (global-auto-complete-mode t)
+  (setq ac-auto-start 3
+        ac-dwim t
+        ac-quick-help-delay 1)
+  (setq ac-use-menu-map t)
+  ;; Default settings
+  (define-key ac-menu-map "\C-n" 'ac-next)
+  (define-key ac-menu-map "\C-p" 'ac-previous)
+  (define-key ac-complete-mode-map [tab] 'ac-expand)
+#+end_src
+
 ** eshell
 #+BEGIN_SRC emacs-lisp
   ;; ;; Stealing from ESK, with some things removed
@@ -409,23 +426,6 @@ Incremental minibuffer completion
 #+begin_src emacs-lisp
   (color-theme-initialize)
   (color-theme-dark-laptop)     
-#+end_src
-
-** auto-complete
-#+begin_src emacs-lisp
-  (require 'auto-complete-config)
-  (ac-config-default)
-  (ac-flyspell-workaround)
-  (ac-linum-workaround)
-  (global-auto-complete-mode t)
-  (setq ac-auto-start 3
-        ac-dwim t
-        ac-quick-help-delay 1)
-  (setq ac-use-menu-map t)
-  ;; Default settings
-  (define-key ac-menu-map "\C-n" 'ac-next)
-  (define-key ac-menu-map "\C-p" 'ac-previous)
-  (define-key ac-complete-mode-map [tab] 'ac-expand)
 #+end_src
 ** recentf
 http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
