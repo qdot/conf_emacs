@@ -607,12 +607,16 @@ Turn on ansi in shells
   ;; taken from http://bitbucket.org/kcfelix/emacsd/src/tip/init.el
   (defun qdot/dired-init ()
     "Bunch of stuff to run for dired, either immediately or when it's
-          loaded."
+            loaded."
     (define-key dired-mode-map (kbd "C-s") 'dired-isearch-filenames-regexp)
     (define-key dired-mode-map (kbd "C-M-s") 'dired-isearch-filenames))
   
-  (eval-after-load 'dired
-      (qdot/dired-init))
+  ;; if dired's already loaded, then the keymap will be bound
+  (if (boundp 'dired-mode-map)
+      ;; we're good to go; just add our bindings
+      (qdot/dired-init)
+    ;; it's not loaded yet, so add our bindings to the load-hook
+    (add-hook 'dired-load-hook 'qdot/dired-init))
   
   ;; Additions to dired
   ;; http://nflath.com/2009/07/dired/
