@@ -300,6 +300,15 @@ point reaches the beginning or end of the buffer, stop there."
     (show-entry)
     (recenter)))
 
+(defun qdot/edit-current-major-code-config ()
+  (interactive)
+  (let ((mode major-mode))
+    (find-file qdot/emacs-conf-file)
+    (goto-char (org-find-exact-headline-in-buffer (symbol-name mode)))
+    (show-entry)
+    (recenter)))
+
+
 (defun qdot/set-firefox-trunk ()
   "Set default browser to firefox-trunk regardless of OS default"
   (interactive)
