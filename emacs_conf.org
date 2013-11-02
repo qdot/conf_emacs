@@ -1964,6 +1964,10 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   
 #+end_src
 ** unicode-fonts
+Map unicode characters into the global character set. Really only
+needed in ERC/twitter, and takes a while to load, so making loads mode
+specific.
+
 On debian derivatives, this will also require some font packages:
 - ttf-indic-fonts
 - fonts-sil*
@@ -1975,7 +1979,12 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 
 #+begin_src emacs-lisp
   (require 'unicode-fonts)
-  (unicode-fonts-setup)
+  (defun qdot/setup-unicode-fonts ()
+    (when (not unicode-fonts-setup-done)
+      (unicode-fonts-setup)))
+  
+  (add-hook 'twittering-mode-hook 'qdot/setup-unicode-fonts)
+  (add-hook 'erc-mode-hook 'qdot/setup-unicode-fonts)
   
 #+end_src
 ** smex
