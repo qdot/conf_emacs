@@ -1488,66 +1488,45 @@ My mail client of choice.
   
   (setq org-refile-target-verify-function 'qdot/verify-refile-target)
 #+END_SRC
-** erc
+** erc-mode
 *** Module and variable setup
 #+begin_src emacs-lisp
   (require 'erc)
-  
   (require 'erc-fill)
-  (erc-fill-mode t)
-  
   (require 'erc-ring)
-  (erc-ring-mode t)
-  
   (require 'erc-match)
-  
-  ;; For bitlbee
   (require 'erc-nicklist)
-  
-  (load-library "erc-highlight-nicknames")
+  (require 'erc-highlight-nicknames)
   (add-to-list 'erc-modules 'highlight-nicknames)
-  ;; (add-to-list 'erc-modules 'scrolltobottom)
   (add-to-list 'erc-modules 'match)
   (erc-update-modules)
-  
-  (erc-match-enable)
-  (erc-match-mode 1)
-  
-  (erc-timestamp-mode t)
-  
   (setq erc-timestamp-only-if-changed-flag nil
         erc-timestamp-format "[%H:%M] "
         erc-fill-prefix "      "
-        erc-timestamp-mode t
         erc-max-buffer-size 20000
         erc-interpret-mirc-color nil
         erc-insert-timestamp-function 'erc-insert-timestamp-left
         erc-kill-queries-on-quit nil
         erc-auto-query 'bury
-        erc-keywords nil)
-  (setq erc-button-url-regexp
-        "\\([-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]+\\.\\)+[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]*[-a-zA-Z0-9\\/]")
+        erc-keywords nil
+        erc-button-url-regexp "\\([-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]+\\.\\)+[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]*[-a-zA-Z0-9\\/]"
+        erc-fill-function 'erc-fill-static
+        erc-fill-static-center 0
+        ;; Don't track common events
+        erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                  "324" "329" "332" "333" "353" "477")
+        erc-current-nick-highlight-type 'nick
+        erc-track-use-faces t
+        erc-track-faces-priority-list '(erc-current-nick-face erc-keyword-face)
+        erc-track-priority-faces-only 'all)
   
-  (setq erc-keywords nil)
-  (setq erc-fill-function 'erc-fill-static)
-  (setq erc-fill-static-center 0)
+  (defun qdot/erc-mode-hook ()
+    ;; Don't really need paren matching when I'm trying to chat
+    (setq blink-matching-paren nil)
+    ;; ERC should only pop comp buffers if REALLY needed
+    (setq completion-auto-help 'lazy))
   
-  ;; Don't track common events
-  (setq erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
-                                  "324" "329" "332" "333" "353" "477"))
-  
-  (setq erc-current-nick-highlight-type 'nick)
-  
-  (setq erc-track-use-faces t)
-  (setq erc-track-faces-priority-list
-        '(erc-current-nick-face erc-keyword-face))
-  (setq erc-track-priority-faces-only 'all)
-  
-  (defun qdot/erc-turn-off-parens ()
-      (setq completion-auto-help nil)
-      (setq blink-matching-paren nil))
-  
-  (add-hook 'erc-mode-hook 'qdot/erc-turn-off-parens)
+  (add-hook 'erc-mode-hook 'qdot/erc-mode-hook)
   
   (setq erc-hide-list '("PART" "JOIN" "QUIT" "NICK"))
 #+END_SRC
