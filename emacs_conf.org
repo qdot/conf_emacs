@@ -1902,26 +1902,20 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
     (local-set-key (kbd "C-c C-r") 'semantic-symref))
   (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)
 #+end_src  
-** python
+** python-mode
 #+begin_src emacs-lisp
   (defun qdot/python-mode-hook()
-    (lambda () (eldoc-mode 1))
     (setq tab-width 4)
     (setq py-indent-offset 4)
     (setq python-indent-offset 4)
     (set-variable 'python-indent-guess-indent-offset nil)
-    (subword-mode 1)
-    (jedi:setup)
-    (set (make-local-variable 'ac-find-function) 'ac-python-find))
+    (subword-mode 1))
   
-  ;; (add-hook 'python-mode-hook 'qdot/ac-config-python)
+  (elpy-enable)
+  (setq elpy-rpc-backend "jedi")
+  
   (add-hook 'python-mode-hook 'qdot/python-mode-hook)
-  
-  ;; Guess tabs/spaces for python mode indentation
-  (add-hook 'python-mode-hook (lambda ()
-                                (when indent-tabs-mode
-                                  (guess-style-guess-tab-width))))
-  #+end_src  
+#+end_src  
 ** js2-mode
 #+begin_src emacs-lisp
   (setq js-indent-level 2)
