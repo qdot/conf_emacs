@@ -1706,6 +1706,11 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   
   (defalias 'qdot/kill-erc 'qdot/kill-irc)
 #+END_SRC  
+** smartparens
+#+BEGIN_SRC emacs-lisp
+  (require 'smartparens-config)
+  (smartparens-global-mode t)
+#+END_SRC
 ** prog-mode
 #+begin_src emacs-lisp
   ;; Set defaults we expect
@@ -1715,27 +1720,19 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (setq-default tab-width 2)
   (setq linum-format "%4d")
   
-  ;; I don't always show parens, but when I do...
-  (setq show-paren-delay 0)
-  (setq show-paren-style 'expression)
-  
   (defun qdot/programming-mode-hook ()
     ;; No tabs. Or wire hangers.
-    (make-variable-buffer-local 'show-paren-mode)
     (set-fill-column 80)
+  
     (add-to-list 'ac-sources 'ac-source-yasnippet)
     (setq whitespace-line-column 80) ;; limit line length
     (setq whitespace-style '(face lines-tail))
-    (setq show-trailing-whitespace t)
-    (set-face-background 'show-paren-match-face "#222")
-    (set-face-attribute 'show-paren-match-face nil
-            :weight 'bold :underline nil :overline nil :slant 'normal))
+    (setq show-trailing-whitespace t))
   
   (add-hook 'prog-mode-hook 'qdot/programming-mode-hook)
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-  (add-hook 'prog-mode-hook 'show-paren-mode)
+  (add-hook 'prog-mode-hook 'show-smartparens-mode)
   (add-hook 'prog-mode-hook 'linum-mode)
-  
 #+end_src
 ** ielm
 #+BEGIN_SRC emacs-lisp
@@ -1797,12 +1794,13 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
     (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 2)))
     (c-set-style "qdot/cc-code-style")
     (c-set-offset 'innamespace 0)
+    (semantic-mode 1)
     (subword-mode 1))
   
   (add-hook 'c-mode-common-hook 'qdot/cc-mode-hook)
   
   ;; doxymacs mode for editing doxygen
-  (add-hook 'c-mode-common-hook 'doxymacs-mode) 
+  (add-hook 'c-mode-common-hook 'doxymacs-mode)
 #+end_src
 ** compilation
 #+begin_src emacs-lisp  
@@ -1867,15 +1865,12 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (require 'semantic/decorate/include)
   (require 'semantic/lex-spp)
   
-  (semantic-mode 1)
-  
   ;; need to add CEDET contrib to bring in eassist
   (add-to-list 'load-path (expand-file-name 
          (concat
           qdot/emacs-autoinst-elisp-dir "cedet/contrib")))
   
   (require 'eassist)
-  ;; (global-ede-mode 1)
   
   (setq-default semanticdb-default-save-directory "~/.emacs_meta/semanticdb/"
           semanticdb-default-system-save-directory "~/.emacs_meta/semanticdb/")
@@ -2075,7 +2070,8 @@ https://github.com/jwiegley/use-package
 ** TODO Make mu4e delete drafts after they are sent
    [2013-07-05 Fri]
 
-** TODO Use smartparens with highlighting
+** DONE Use smartparens with highlighting
+CLOSED: [2013-11-02 Sat 14:57]
 http://emacsredux.com/blog/2013/11/01/highlight-matching-delimiters-with-smartparens
 ** DONE Make convenience function to edit config of current major mode
 CLOSED: [2013-11-01 Fri 21:06]
