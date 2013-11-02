@@ -512,9 +512,7 @@ Address book
 #+begin_src emacs-lisp
 (require 'yasnippet)
 (yas-global-mode 1)
-(yas/load-directory "~/.emacs_files/elisp_auto/yasnippet/snippets")
 #+end_src
-
 ** ido
 #+begin_src emacs-lisp
   (require 'ido)
