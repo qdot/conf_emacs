@@ -701,6 +701,7 @@ My mail client of choice.
     (setq mu4e-html2text-command "w3m -dump -T text/html")
     (setq mu4e-view-prefer-html t)
     (setq mu4e-use-fancy-chars t)
+    (setq mu4e-hide-index-messages t)
     (setq mu4e-update-interval 300)
     (setq mu4e-attachment-dir  "~/Downloads")
     (when (fboundp 'imagemagick-register-types)
