@@ -2392,4 +2392,9 @@ CLOSED: [2013-10-29 Tue 20:55]
   (global-set-key [(control f3)] 'wg-switch-to-workgroup-at-index-3)
   (global-set-key [(control f4)] 'wg-switch-to-workgroup-at-index-4)
   (global-set-key [(control f5)] 'wg-switch-to-workgroup-at-index-5)
+  (global-set-key [(control XF86AudioNext)] 'wg-switch-to-workgroup-at-index-5)
+  (global-set-key [(control right)] 'sp-forward-slurp-sexp)
+  (global-set-key [(control left)] 'sp-forward-barf-sexp)
+  (global-set-key [(control meta right)] 'sp-backward-slurp-sexp)
+  (global-set-key [(control meta left)] 'sp-backward-barf-sexp)
 #+END_SRC
