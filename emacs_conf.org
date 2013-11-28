@@ -208,6 +208,9 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (global-set-key (kbd "C-c C-k") 'kill-region)
   (global-set-key (kbd "C-M-g") 'goto-line)
   
+  ;; Don't need backgrounding
+  (global-set-key (kbd "C-Z") nil)
+  
   ;; Stealin' from esk
   
   ;; Start eshell or switch to it if it's active.
