@@ -1693,6 +1693,8 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+BEGIN_SRC emacs-lisp
   (require 'smartparens-config)
   (smartparens-global-mode t)
+  ;; I start words with ' a lot when I chat apparently
+  (sp-local-pair 'erc-mode "'" nil :actions nil)
 #+END_SRC
 ** prog-mode
 #+begin_src emacs-lisp
