@@ -2020,6 +2020,13 @@ From http://users.teilar.gr/~g1951d/ - Symbola
    '(rainbow-delimiters-depth-9-face ((t (:foreground "hotpink" :weight bold))))
    '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold)))))
 #+END_SRC
+** web-mode
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/web-mode-hook ()
+    (add-to-list 'ac-sources 'ac-source-yasnippet)
+    (auto-complete-mode))
+  (add-hook 'web-mode-hook 'qdot/web-mode-hook)
+#+END_SRC
 * Automodes
 #+begin_src emacs-lisp
   ;; file extension mode recognition
