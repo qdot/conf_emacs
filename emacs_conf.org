@@ -1896,11 +1896,12 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
     (setq tab-width 4)
     (setq py-indent-offset 4)
     (setq python-indent-offset 4)
-    (set-variable 'python-indent-guess-indent-offset nil)
+    (set-variable 'python-indent-guess-indent-offset nil t)
+    (set-variable 'fill-paragraph-function 'python-fill-paragraph t)
     (subword-mode 1))
   
-  (elpy-enable)
-  (setq elpy-rpc-backend "jedi")
+  ;;(elpy-enable)
+  ;;(setq elpy-rpc-backend "jedi")
   
   (add-hook 'python-mode-hook 'qdot/python-mode-hook)
 #+end_src  
