@@ -682,6 +682,10 @@ git management in emacs
   ;; Don't require confirm to stage changes
   (setq magit-stage-all-confirm nil)
   
+  ;; https://coderwall.com/p/s8agwq
+  (eval-after-load "magit"
+    '(mapc (apply-partially 'add-to-list 'magit-repo-dirs)
+                 '("~/code/mozbuild/gecko-dev" "~/code/mozbuild/gaia")))
 #+end_src
 ** easy-pg
 gpg file auto query/loading
