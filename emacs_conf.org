@@ -2038,6 +2038,12 @@ From http://users.teilar.gr/~g1951d/ - Symbola
     (auto-complete-mode))
   (add-hook 'web-mode-hook 'qdot/web-mode-hook)
 #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (require 'lilypond-mode)
+  ;; Having fancy-comments on seems to completely screw indentation of single %
+  ;; comments, which the mode uses for M-; comment blocks. Is fine to just be off.
+  (setq LilyPond-fancy-comments nil)
+#+END_SRC
 * Automodes
 #+begin_src emacs-lisp
   ;; file extension mode recognition
@@ -2056,6 +2062,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
   
 #+end_src
 * Hooks
