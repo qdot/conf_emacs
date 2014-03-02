@@ -203,11 +203,12 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (global-set-key (kbd "C-c v") 'visual-line-mode)
   (global-set-key (kbd "C-c e") 'eval-and-replace)
   (global-set-key (kbd "C-x C-k") 'kill-region)
+  (global-set-key (kbd "C-x k") 'qdot/kill-this-buffer)
   (global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
   (global-set-key (kbd "C-c C-m") 'execute-extended-command)
   (global-set-key (kbd "C-c C-k") 'kill-region)
   (global-set-key (kbd "C-M-g") 'goto-line)
-  
+  (global-set-key (kbd "M-o") 'other-window)
   ;; Don't need backgrounding
   (global-set-key (kbd "C-Z") nil)
   
@@ -231,6 +232,8 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
                   (lambda ()
                     (interactive)
                     (join-line -1)))
+  
+  (put 'downcase-region 'disabled nil)
 #+end_src
 
 * Macros
@@ -1330,10 +1333,14 @@ My mail client of choice.
 #+BEGIN_SRC emacs-lisp
   ;; I use C-M-r to start org-remember
   (global-set-key (kbd "C-M-R") 'org-capture)
-   ;; Most of this ripped from http://doc.norang.ca/org-mode.html
-   (global-set-key "\C-cl" 'org-store-link)
-   (global-set-key "\C-ca" 'org-agenda)
-   (global-set-key "\C-cb" 'org-iswitchb)
+  ;; Most of this ripped from http://doc.norang.ca/org-mode.html
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
+#+END_SRC
+*** Speed key bindings
+#+BEGIN_SRC emacs-lisp
+  (setq org-speed-commands-user (quote (("S" . widen))))
 #+END_SRC
 *** Capture
 #+BEGIN_SRC emacs-lisp
