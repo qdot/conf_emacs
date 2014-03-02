@@ -2054,9 +2054,9 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 #+END_SRC
 ** keyfreq
 #+BEGIN_SRC emacs-lisp
-  (require 'keyfreq)
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1)
+  ;; (require 'keyfreq)
+  ;; (keyfreq-mode 1)
+  ;; (keyfreq-autosave-mode 1)
 #+END_SRC
 ** multiterm
 #+BEGIN_SRC emacs-lisp
