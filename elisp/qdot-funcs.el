@@ -319,4 +319,9 @@ point reaches the beginning or end of the buffer, stop there."
   (interactive)
   (custom-set-variables '(browse-url-firefox-program "firefox")))
 
+;; http://www.masteringemacs.org/articles/2014/02/28/my-emacs-keybindings/
+(defun qdot/kill-this-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
+
 (provide 'qdot-funcs)
