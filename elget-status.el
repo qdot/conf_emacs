@@ -137,6 +137,11 @@
         (:name fuzzy :website "https://github.com/auto-complete/fuzzy-el" :description "Fuzzy matching utilities for GNU Emacs" :type github :pkgname "auto-complete/fuzzy-el"))
  (ggtags status "installed" recipe
          (:name ggtags :description "Use GNU Global in Emacs." :type github :pkgname "leoliu/ggtags"))
+ (git-gutter status "installed" recipe
+             (:name git-gutter :description "Emacs port of GitGutter Sublime Text 2 Plugin" :website "https://github.com/syohex/emacs-git-gutter" :type github :pkgname "syohex/emacs-git-gutter"))
+ (git-gutter-fringe status "installed" recipe
+                    (:name git-gutter-fringe :type github :pkgname "syohex/emacs-git-gutter-fringe" :description "Fringe version of git-gutter.el" :depends
+                           (git-gutter fringe-helper)))
  (git-modes status "installed" recipe
             (:name git-modes :description "GNU Emacs modes for various Git-related files" :type github :pkgname "magit/git-modes"))
  (gravatar status "installed" recipe

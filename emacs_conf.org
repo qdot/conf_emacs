@@ -2072,6 +2072,10 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 #+BEGIN_SRC emacs-lisp
 (global-pretty-mode t)
 #+END_SRC
+** git-gutter-fringe
+#+BEGIN_SRC emacs-lisp
+(require 'git-gutter)
+#+END_SRC
 * Keybinds
 #+begin_src emacs-lisp
   (bind-key "C-c r"             'revert-buffer)
