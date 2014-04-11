@@ -260,6 +260,8 @@
                       ("gnu" . "http://elpa.gnu.org/packages/")
                       ("marmalade" . "http://marmalade-repo.org/packages/")
                       ("SC" . "http://joseito.republika.pl/sunrise-commander/"))))))
+ (page-break-lines status "installed" recipe
+                   (:name page-break-lines :website "https://github.com/purcell/page-break-lines" :description "A global mode which displays ugly form feed characters as tidy horizontal rules" :type github :pkgname "purcell/page-break-lines"))
  (parenface status "installed" recipe
             (:name parenface :description "Provide a face for parens in lisp modes." :type http :url "http://www.davep.org/emacs/parenface.el" :features "parenface"))
  (pelican-mode status "installed" recipe

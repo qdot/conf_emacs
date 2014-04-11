@@ -2064,6 +2064,10 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (require 'bitlmacs)
   (bitlmacs/init-bitlmacs-placeholder)
 #+END_SRC
+** page-break-lines
+#+BEGIN_SRC emacs-lisp
+  (global-page-break-lines-mode)
+#+END_SRC
 * Keybinds
 #+begin_src emacs-lisp
   (bind-key "C-c r"             'revert-buffer)
@@ -2149,10 +2153,12 @@ Extra hooks to functions from the qdot-funcs modules
 ** TODO Check out git-messenger
 [2013-07-22 Mon]
 https://github.com/syohex/emacs-git-messenger
-** TODO Add browse-kill-ring in el-get
+** DONE Add browse-kill-ring in el-get
+CLOSED: [2014-04-10 Thu 20:21]
 [2013-07-22 Mon]
 
-** TODO El-get page-break-lines
+** DONE El-get page-break-lines
+CLOSED: [2014-04-10 Thu 20:22]
 [2013-07-22 Mon]
 ** TODO Check out pretty-mode-plus
 https://github.com/akatov/pretty-mode-plus
