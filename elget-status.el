@@ -25,6 +25,8 @@
               (bbdb-initialize)))
  (bind-key status "installed" recipe
            (:name bind-key :description "Simplify key binding calls in elisp" :type github :pkgname "emacsattic/bind-key"))
+ (bitlmacs status "installed" recipe
+           (:name bitlmacs :description "bitlbee + ERC = emacs IM client" :type github :pkgname "qdot/bitlmacs"))
  (browse-kill-ring status "installed" recipe
                    (:name browse-kill-ring :description "Interactively insert items from kill-ring" :type github :pkgname "browse-kill-ring/browse-kill-ring" :prepare
                           (progn
@@ -279,6 +281,8 @@
  (pyvenv status "installed" recipe
          (:name pyvenv :website "https://github.com/jorgenschaefer/pyvenv" :description "Python virtual environment interface for Emacs" :type github :pkgname "jorgenschaefer/pyvenv" :post-init
                 (el-get-envpath-prepend "PYTHONPATH" default-directory)))
+ (qblog status "installed" recipe
+        (:name qblog :description "Extension of blogging utilities for Pelican for NP Labs Blogs. DO NOT ACCEPT INTO MAIN EL-GET LINE." :type github :pkgname "qdot/qblog"))
  (rainbow-delimiters status "installed" recipe
                      (:name rainbow-delimiters :website "https://github.com/jlr/rainbow-delimiters#readme" :description "Color nested parentheses, brackets, and braces according to their depth." :type github :pkgname "jlr/rainbow-delimiters"))
  (rainbow-mode status "installed" recipe
