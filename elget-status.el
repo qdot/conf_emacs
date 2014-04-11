@@ -23,6 +23,8 @@
               `("./autogen.sh" "./configure" "make")
               :features bbdb-loaddefs :autoloads nil :info "doc" :post-init
               (bbdb-initialize)))
+ (bind-key status "installed" recipe
+           (:name bind-key :description "Simplify key binding calls in elisp" :type github :pkgname "emacsattic/bind-key"))
  (browse-kill-ring status "installed" recipe
                    (:name browse-kill-ring :description "Interactively insert items from kill-ring" :type github :pkgname "browse-kill-ring/browse-kill-ring" :prepare
                           (progn

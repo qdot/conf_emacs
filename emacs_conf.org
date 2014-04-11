@@ -95,7 +95,7 @@ something.
     (when linux-p
       (when (member "Inconsolata" (font-family-list))
         (set-face-font 'default "inconsolata-11"))))
-  
+
   (qdot/set-platform-font)
 #+end_src
 
@@ -141,6 +141,16 @@ directory. Emacs will mkdir it if necessary.)
      version-control t)       ; use versioned backups
 #+end_src
 
+** Save History setup
+#+BEGIN_SRC emacs-lisp
+(setq savehist-file (concat user-emacs-directory "savehist"))
+(savehist-mode 1)
+(setq savehist-save-minibuffer-history 1)
+(setq savehist-additional-variables
+      '(kill-ring
+        search-ring
+        regexp-search-ring))
+#+END_SRC
 ** Modeline and display setup
 Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/improving-performance-emacs-display-engine/
 #+begin_src emacs-lisp
@@ -192,50 +202,15 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (setq jedi:setup-keys t)
   
 #+end_src
+** Reset yes-or-no-p to y-or-n-p
+#+begin_src emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+#+end_src
 ** Server Setup
 #+BEGIN_SRC emacs-lisp
-  (setq server-use-tcp t)
-  (setq server-host "localhost")
+  ;;(setq server-use-tcp t)
+  ;;(setq server-host "localhost")
 #+END_SRC
-* Keybinds
-#+begin_src emacs-lisp
-  (global-set-key (kbd "C-c r") 'revert-buffer)
-  (global-set-key (kbd "C-c v") 'visual-line-mode)
-  (global-set-key (kbd "C-c e") 'eval-and-replace)
-  (global-set-key (kbd "C-x C-k") 'kill-region)
-  (global-set-key (kbd "C-x k") 'qdot/kill-this-buffer)
-  (global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
-  (global-set-key (kbd "C-c C-m") 'execute-extended-command)
-  (global-set-key (kbd "C-c C-k") 'kill-region)
-  (global-set-key (kbd "C-M-g") 'goto-line)
-  (global-set-key (kbd "M-o") 'other-window)
-  ;; Don't need backgrounding
-  (global-set-key (kbd "C-Z") nil)
-  
-  ;; Stealin' from esk
-  
-  ;; Start eshell or switch to it if it's active.
-  (global-set-key (kbd "C-x m") 'eshell)
-  
-  ;; Start a new eshell even if one is active.
-  (global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
-  
-  ;; Start a regular shell if you prefer that.
-  (global-set-key (kbd "C-x C-m") 'shell)
-  
-  ;; Make this like shell. And also make emacs completely unusable for anyone
-  ;; else. :D
-  (global-set-key (kbd "C-w") 'backward-kill-word)
-  
-  ;; http://whattheemacsd.com//key-bindings.el-03.html
-  (global-set-key (kbd "M-j")
-                  (lambda ()
-                    (interactive)
-                    (join-line -1)))
-  
-  (put 'downcase-region 'disabled nil)
-#+end_src
-
 * Macros
 ** eval-after-load macro
 Taken from https://github.com/milkypostman/dotemacs/blob/master/init.el
@@ -270,6 +245,10 @@ repo, though it can take a really, really, REALLY long time.
 #+end_src
 
 * Package Configuration
+** bind-key
+#+BEGIN_SRC emacs-lisp
+  (require 'bind-key)
+#+END_SRC
 ** qdot-funcs
 #+BEGIN_SRC emacs-lisp
   (require 'qdot-funcs)
@@ -280,12 +259,6 @@ repo, though it can take a really, really, REALLY long time.
                   'qdot/smarter-move-beginning-of-line)
   
 #+END_SRC
-** quick-yes
-Use M-y and M-n in y-or-n minibuffer prompts
-#+begin_src emacs-lisp
-  (require 'quick-yes)
-#+end_src
-
 ** auto-complete
 #+begin_src emacs-lisp
   (require 'auto-complete-config)
@@ -1022,22 +995,23 @@ My mail client of choice.
 ** sauron
 *** Variables
 #+begin_src emacs-lisp
-  (setq sauron-separate-frame nil)
-  (setq sauron-dbus-cookie t)
-  (setq
-   sauron-max-line-length 200
-   ;; 60 was a little long, and there's a lot of times I switch away quickly after
-   ;; replying.
-   sauron-nick-insensitivity 5
-  
-   ;; you probably want to add your own nickname to the these patterns
-   sauron-watch-patterns
-   '("qDot_" "qDot" "subgirl" "bokeh" "xiuv")
-  
-   ;; you probably want to add you own nick here as well
-   sauron-watch-nicks
-   '("qDot_" "qDot" "aim-xiuvx" "aim-bokehcat" "aim-subgirl13"))
-  
+  (setq sauron-separate-frame nil
+        sauron-modules '(sauron-erc
+                         sauron-org
+                         sauron-notifications
+                         sauron-twittering)
+        sauron-max-line-length 200
+        ;; 60 was a little long, and there's a lot of times I switch away quickly after
+        ;; replying.
+        sauron-nick-insensitivity 5
+
+        ;; you probably want to add your own nickname to the these patterns
+        sauron-watch-patterns
+        '("qDot_" "qDot" "subgirl" "bokeh" "xiuv")
+
+        sauron-watch-nicks
+        '("qDot_" "qDot" "aim-xiuvx" "aim-bokehcat" "aim-subgirl13"))
+
   ;; external module to handle special xmonad notifications setup
   (require 'qdot-sauron-notifications)
 #+end_src
@@ -2074,22 +2048,64 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   ;; (keyfreq-mode 1)
   ;; (keyfreq-autosave-mode 1)
 #+END_SRC
-** multiterm
+** qblog
 #+BEGIN_SRC emacs-lisp
-  (setq multi-term-program "/bin/zsh") ;; or use zsh...
-  
-  (global-set-key (kbd "C-c t") 'multi-term-next)
-  (global-set-key (kbd "C-c T") 'multi-term) ;; create a new one
-  
-  (setq qdot/term-keylist
-        '(("C-a" . qdot/smarter-move-beginning-of-line)
-          ("C-e" . move-end-of-line)))
-  
-  (dolist (key qdot/term-keylist)
-    (add-to-list 'term-bind-key-alist key))
+(require 'qblog)
+#+END_SRC
 ** flx
 #+BEGIN_SRC emacs-lisp
 (require 'flx-ido)
+#+END_SRC
+** bitlmacs
+#+BEGIN_SRC emacs-lisp
+  (require 'bitlmacs)
+  (bitlmacs/init-bitlmacs-placeholder)
+#+END_SRC
+* Keybinds
+#+begin_src emacs-lisp
+  (bind-key "C-c r"             'revert-buffer)
+  (bind-key "C-c v"             'visual-line-mode)
+  (bind-key "C-c e"             'eval-and-replace)
+  (bind-key "C-x C-k"           'kill-region)
+  (bind-key "C-x k"             'qdot/kill-this-buffer)
+  (bind-key "C-x C-b"           'ibuffer-other-window)
+  (bind-key "C-c C-m"           'execute-extended-command)
+  (bind-key "C-c C-k"           'kill-region)
+  (bind-key "C-M-g"             'goto-line)
+  (bind-key "M-o"               'other-window)
+  (bind-key "C->"               'mc/mark-next-like-this)
+  (bind-key "C-<"               'mc/mark-previous-like-this)
+  (bind-key "C-*"               'mc/mark-all-like-this)
+  (bind-key "C-c SPC"           'ace-jump-mode)
+  (bind-key "C-x C-m"           'shell)
+  (bind-key "C-w"               'backward-kill-word) ;; make this like shell.
+  (bind-key "C-x m"             'eshell)
+  (bind-key "<C-f1>"            'wg-switch-to-workgroup-at-index-1)
+  (bind-key "<C-f2>"            'wg-switch-to-workgroup-at-index-2)
+  (bind-key "<C-f3>"            'wg-switch-to-workgroup-at-index-3)
+  (bind-key "<C-f4>"            'wg-switch-to-workgroup-at-index-4)
+  (bind-key "<C-f5>"            'wg-switch-to-workgroup-at-index-5)
+  (bind-key "<C-XF86AudioNext>" 'wg-switch-to-workgroup-at-index-5)
+  (bind-key "<C-right>"         'sp-forward-slurp-sexp)
+  (bind-key "<C-left>"          'sp-forward-barf-sexp)
+  (bind-key "<C-M-right>"       'sp-backward-slurp-sexp)
+  (bind-key "<C-M-left>"        'sp-backward-barf-sexp)
+  (bind-key "C-x M"   (lambda () (interactive) (eshell t)))
+  ;; Don't need backgrounding
+  (bind-key "C-z" nil)
+
+  ;; Stealin' from esk
+
+  ;; http://whattheemacsd.com//key-bindings.el-03.html
+  (bind-key "M-j"
+            (lambda ()
+              (interactive)
+              (join-line -1)))
+
+#+end_src
+* Function Warnings/Disables
+#+BEGIN_SRC emacs-lisp
+(put 'downcase-region 'disabled nil)
 #+END_SRC
 * Automodes
 #+begin_src emacs-lisp
@@ -2126,6 +2142,11 @@ Extra hooks to functions from the qdot-funcs modules
   
 #+END_SRC
 * Tasks
+** TODO Add ability to open transcribe project related to lilypond file
+** TODO Find all package
+** TODO Find edit-list package
+** TODO Add next-spec-day for arbitrary scheduling updates in org-mode
+https://github.com/chenfengyuan/elisp/blob/master/next-spec-day.el
 ** TODO Check out git-messenger
 [2013-07-22 Mon]
 https://github.com/syohex/emacs-git-messenger
@@ -2145,14 +2166,13 @@ http://nullprogram.com/blog/2012/10/31/
 
 ** TODO Fix agenda display of mozilla subtree in email task file
 ** TODO Make org date function that will show events on certain days AFTER a certain date
-** TODO Go through config
+** DONE Go through config
+CLOSED: [2014-04-10 Thu 19:28]
 http://zeekat.nl/articles/making-emacs-work-for-me.html
 ** TODO Fix git gutter mode?
 https://github.com/syohex/emacs-git-gutter-fringe
 ** TODO Do more configuration on smart-mode-line
 https://github.com/Bruce-Connor/smart-mode-line
-** TODO Remove sauron dbus
-** TODO Redo CEDET Setup
 ** TODO Figure out issues with schedule export
 ** TODO Make emacs autoblogging utility for blog and software sites
 :PROPERTIES:
@@ -2174,6 +2194,20 @@ https://github.com/jwiegley/use-package
 ** TODO Make mu4e delete drafts after they are sent
    [2013-07-05 Fri]
 
+** DONE Add sachac's mc keybindings
+CLOSED: [2014-04-10 Thu 19:09]
+("C->" . mc/mark-next-like-this)
+("C-<" . mc/mark-previous-like-this)
+("C-*" . mc/mark-all-like-this)
+("C-c SPC" . ace-jump-mode)
+** DONE Check out Sacha Chua's emacs config
+CLOSED: [2014-04-10 Thu 18:37]
+https://github.com/sachac/.emacs.d/blob/gh-pages/Sacha.org
+** DONE Add bind-key recipe to el-get
+CLOSED: [2014-04-10 Thu 18:52]
+https://github.com/emacsattic/bind-key
+** DONE Remove sauron dbus
+CLOSED: [2014-04-10 Thu 18:36]
 ** DONE Modeline customization
 CLOSED: [2013-11-02 Sat 16:09]
 ** DONE Use smartparens with highlighting
@@ -2281,6 +2315,12 @@ CLOSED: [2013-04-17 Wed 21:23]
 :END:
    [2010-10-27 Wed]
    [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
+** CANCELLED Redo CEDET Setup                                    :CANCELLED:
+CLOSED: [2014-04-10 Thu 18:31]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2014-04-10 Thu 18:31] \\
+  Not happening. I give up.
+:END:
 ** CANCELLED Divide out work setup from home setup               :CANCELLED:
 CLOSED: [2013-10-29 Tue 21:00]
 :LOGBOOK:
@@ -2448,18 +2488,3 @@ http://www.digital-scurf.org/software/libgfshare
 CLOSED: [2013-10-29 Tue 20:55]
 *** Communication
 *** Layout
-* New Stuff
-#+BEGIN_SRC emacs-lisp
-  (require 'bitlmacs)
-  (bitlmacs/init-bitlmacs-placeholder)
-  (global-set-key [(control f1)] 'wg-switch-to-workgroup-at-index-1)
-  (global-set-key [(control f2)] 'wg-switch-to-workgroup-at-index-2)
-  (global-set-key [(control f3)] 'wg-switch-to-workgroup-at-index-3)
-  (global-set-key [(control f4)] 'wg-switch-to-workgroup-at-index-4)
-  (global-set-key [(control f5)] 'wg-switch-to-workgroup-at-index-5)
-  (global-set-key [(control XF86AudioNext)] 'wg-switch-to-workgroup-at-index-5)
-  (global-set-key [(control right)] 'sp-forward-slurp-sexp)
-  (global-set-key [(control left)] 'sp-forward-barf-sexp)
-  (global-set-key [(control meta right)] 'sp-backward-slurp-sexp)
-  (global-set-key [(control meta left)] 'sp-backward-barf-sexp)
-#+END_SRC
