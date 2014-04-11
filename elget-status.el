@@ -275,6 +275,11 @@
         (:name popup :website "https://github.com/auto-complete/popup-el" :description "Visual Popup Interface Library for Emacs" :type github :pkgname "auto-complete/popup-el"))
  (pos-tip status "installed" recipe
           (:name pos-tip :description "Show tooltip at point" :type emacswiki))
+ (pretty-mode-plus status "installed" recipe
+                   (:name pretty-mode-plus :description "Redisplay parts of the buffer as pretty symbols." :type github :pkgname "akatov/pretty-mode" :prepare
+                          (progn
+                            (autoload 'turn-on-pretty-mode "pretty-mode")
+                            (autoload 'global-pretty-mode "pretty-mode"))))
  (python status "installed" recipe
          (:name python :description "Python's flying circus support for Emacs (trunk version, hopefully Emacs 24.x compatible)" :type http :url "http://repo.or.cz/w/emacs.git/blob_plain/master:/lisp/progmodes/python.el"))
  (python-environment status "installed" recipe

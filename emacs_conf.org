@@ -2068,6 +2068,10 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 #+BEGIN_SRC emacs-lisp
   (global-page-break-lines-mode)
 #+END_SRC
+** pretty-mode-plus
+#+BEGIN_SRC emacs-lisp
+(global-pretty-mode t)
+#+END_SRC
 * Keybinds
 #+begin_src emacs-lisp
   (bind-key "C-c r"             'revert-buffer)
