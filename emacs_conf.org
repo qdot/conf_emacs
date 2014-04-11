@@ -2162,15 +2162,6 @@ Extra hooks to functions from the qdot-funcs modules
 ** TODO Check out git-messenger
 [2013-07-22 Mon]
 https://github.com/syohex/emacs-git-messenger
-** DONE Add browse-kill-ring in el-get
-CLOSED: [2014-04-10 Thu 20:21]
-[2013-07-22 Mon]
-
-** DONE El-get page-break-lines
-CLOSED: [2014-04-10 Thu 20:22]
-[2013-07-22 Mon]
-** TODO Check out pretty-mode-plus
-https://github.com/akatov/pretty-mode-plus
 ** TODO Check out Skewer for emacs
 :LOGBOOK:
 CLOCK: [2013-07-24 Wed 14:57]--[2013-07-24 Wed 14:58] =>  0:01
@@ -2180,31 +2171,41 @@ http://nullprogram.com/blog/2012/10/31/
 
 ** TODO Fix agenda display of mozilla subtree in email task file
 ** TODO Make org date function that will show events on certain days AFTER a certain date
-** TODO Fix git gutter mode?
+** TODO Make fill columns for ERC auto-set for workgroup sizes?
+** TODO Read Julian Danjou's config
+http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
+** TODO Work on memacs                                               :emacs:
+** TODO Make sauron only notify for twitter when mentions or PMs received.
+** TODO Create named emacs instances, make them come up in correct xmonad desktops
+** TODO Make mu4e delete drafts after they are sent
+   [2013-07-05 Fri]
+
+** DONE Fix git gutter mode?
+CLOSED: [2014-04-10 Thu 20:58]
 https://github.com/syohex/emacs-git-gutter-fringe
-** TODO Do more configuration on smart-mode-line
+Seems to work now?
+
+** DONE Do more configuration on smart-mode-line
+CLOSED: [2014-04-10 Thu 20:44]
 https://github.com/Bruce-Connor/smart-mode-line
-** TODO Figure out issues with schedule export
-** TODO Make emacs autoblogging utility for blog and software sites
+** DONE Make emacs autoblogging utility for blog and software sites
+CLOSED: [2014-04-10 Thu 20:44]
 :PROPERTIES:
 :ID: 1ce4cdcc-ddbe-48d6-9eb6-2b363d5db90c
 :END:
    [2011-01-08 Sat]
 
    [[file:~/git-projects/nonpolynomial.com/libraries/index.html::<H2>libnifalcon</H2>]]
-** TODO Work on eshell
-** TODO Make fill columns for ERC auto-set for workgroup sizes?
-** TODO Read Julian Danjou's config
-http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
-** TODO Check out UsePackage for emacs                               :emacs:
-https://github.com/jwiegley/use-package
-** TODO Work on memacs                                               :emacs:
-** TODO Make sauron only notify for twitter when mentions or PMs received.
-** TODO Create named emacs instances, make them come up in correct xmonad desktops
-** TODO Fix org mode mailers
-** TODO Make mu4e delete drafts after they are sent
-   [2013-07-05 Fri]
+** DONE Add browse-kill-ring in el-get
+CLOSED: [2014-04-10 Thu 20:21]
+[2013-07-22 Mon]
 
+** DONE El-get page-break-lines
+CLOSED: [2014-04-10 Thu 20:22]
+[2013-07-22 Mon]
+** DONE Check out pretty-mode-plus
+CLOSED: [2014-04-10 Thu 20:28]
+https://github.com/akatov/pretty-mode-plus
 ** DONE Add next-spec-day for arbitrary scheduling updates in org-mode
 CLOSED: [2014-04-10 Thu 20:19]
 https://github.com/chenfengyuan/elisp/blob/master/next-spec-day.el
@@ -2338,6 +2339,31 @@ CLOSED: [2013-04-17 Wed 21:23]
 :END:
    [2010-10-27 Wed]
    [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
+** CANCELLED Figure out issues with schedule export              :CANCELLED:
+CLOSED: [2014-04-10 Thu 20:44]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2014-04-10 Thu 20:44] \\
+  Not using it anymore
+:END:
+** CANCELLED Check out UsePackage for emacs                :emacs:CANCELLED:
+CLOSED: [2014-04-10 Thu 20:42]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2014-04-10 Thu 20:42] \\
+  Gonna be hard to use with el-get. Eh.
+:END:
+https://github.com/jwiegley/use-package
+** CANCELLED Fix org mode mailers                                :CANCELLED:
+CLOSED: [2014-04-10 Thu 20:41]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2014-04-10 Thu 20:41] \\
+  Removed mailers. Need a cleaner method.
+:END:
+** CANCELLED Work on eshell                                      :CANCELLED:
+CLOSED: [2014-04-10 Thu 20:34]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2014-04-10 Thu 20:34] \\
+  Nope.
+:END:
 ** CANCELLED Redo CEDET Setup                                    :CANCELLED:
 CLOSED: [2014-04-10 Thu 18:31]
 :LOGBOOK:
@@ -2453,7 +2479,7 @@ CLOSED: [2013-10-29 Tue 20:55]
 CLOSED: [2013-10-29 Tue 20:55]
   [2012-03-30 Fri]
 
-** ERC Privmsg mode
+** Bitlmacs
 *** DONE Make keymap for last/next privmsg
 CLOSED: [2013-10-29 Tue 20:54]
 *** DONE Make trigger to clear erc-nicklist status on access
@@ -2511,3 +2537,7 @@ http://www.digital-scurf.org/software/libgfshare
 CLOSED: [2013-10-29 Tue 20:55]
 *** Communication
 *** Layout
+** Maintenance Checklist
+- Modes to add to smart-mode-line
+- Directories to add to smart-mode-line
+- Key bindings
