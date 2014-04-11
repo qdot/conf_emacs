@@ -1,4 +1,4 @@
-(setq qdot/emacs-conf-dir (expand-file-name "~/.emacs_files_24/"))
+(setq qdot/emacs-conf-dir (expand-file-name "~/.emacs_files/"))
 (setq qdot/emacs-autoinst-elisp-dir (expand-file-name 
 				     (concat qdot/emacs-conf-dir "elisp_auto/")))
 
@@ -18,7 +18,3 @@
 
 (load-library (concat qdot/emacs-conf-dir "emacs_conf_org_mode.el"))
 (setq org-agenda-sticky nil)
-
-(defun qdot/daily-agenda-kyle ()
-	(org-batch-agenda " " org-agenda-ndays 7 org-agenda-include-diary nil))
-

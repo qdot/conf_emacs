@@ -26,14 +26,14 @@ def main():
 
   proc = subprocess.Popen(("emacs -batch -l %s" % args.filename).split(" "), stdout=subprocess.PIPE)
   (body, meh) = proc.communicate()
- 
-  try:
-    smtpObj = smtplib.SMTP(mail_server, 587)
-    smtpObj.login(mail_sender, mail_password)
-    smtpObj.sendmail(mail_sender, receivers, message % (mail_sender, args.rec, datetime.datetime.now(), body))
-    print "Successfully sent email"
-  except smtplib.SMTPException:
-    print "Error: unable to send email"    
+  print body
+  # try:
+  #   smtpObj = smtplib.SMTP(mail_server, 587)
+  #   smtpObj.login(mail_sender, mail_password)
+  #   smtpObj.sendmail(mail_sender, receivers, message % (mail_sender, args.rec, datetime.datetime.now(), body))
+  #   print "Successfully sent email"
+  # except smtplib.SMTPException:
+  #   print "Error: unable to send email"    
 
 if __name__ == "__main__":
   sys.exit(main())
