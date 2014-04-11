@@ -51,8 +51,12 @@
                :build/windows-nt
                ("echo #!/bin/sh > tmp.sh & echo touch `/usr/bin/find . -name Makefile` >> tmp.sh & echo make FIND=/usr/bin/find >> tmp.sh" "sed 's/^M$//' tmp.sh  > tmp2.sh" "sh ./tmp2.sh" "rm ./tmp.sh ./tmp2.sh")
                :features nil :lazy nil :post-init
-               (unless
-                   (featurep 'cedet-devel-load)
+               (if
+                   (or
+                    (featurep 'cedet-devel-load)
+                    (featurep 'eieio))
+                   (message
+                    (concat "Emacs' built-in CEDET has already been loaded!  Restart" " Emacs to load CEDET from el-get instead."))
                  (load
                   (expand-file-name "cedet-devel-load.el" pdir)))))
  (cl-lib status "installed" recipe
@@ -85,23 +89,20 @@
                   ("./lisp")
                   :build
                   ("./bootstrap" "./configure" "make")
+                  :build/darwin
+                  ("sed -i -e 's/-fexpensive-optimizations//' ./c/Makefile.am" "sed -i -e 's/inline/static inline/' ./c/doxymacs_parser.c" "./bootstrap" "./configure" "make")
                   :features doxymacs))
  (dynamic-fonts status "installed" recipe
                 (:name dynamic-fonts :depends persistent-soft :type github :description "Set faces based on available fonts" :pkgname "rolandwalker/dynamic-fonts"))
  (edebug-x status "installed" recipe
-           (:name "edebug-x" :description "elisp debugging package" :type github :pkgname "ScottyB/edebug-x" :url "http://github.com/ScottyB/edebug-x" :features edebug-x))
+           (:name edebug-x :website "https://github.com/ScottyB/edebug-x" :description "Utilities for making edebug easier to use" :type github :pkgname "ScottyB/edebug-x"))
  (el-get status "installed" recipe
-         (:name el-get :website "https://github.com/dimitri/el-get#readme" :description "Manage the external elisp bits and pieces you depend upon." :type github :branch "4.stable" :pkgname "dimitri/el-get" :info "." :load "el-get.el"))
+         (:name el-get :website "https://github.com/dimitri/el-get#readme" :description "Manage the external elisp bits and pieces you depend upon." :type github :branch "master" :pkgname "dimitri/el-get" :info "." :load "el-get.el"))
  (elisp-slime-nav status "installed" recipe
                   (:name elisp-slime-nav :type github :pkgname "purcell/elisp-slime-nav" :description "Slime-style navigation for Emacs Lisp" :prepare
                          (add-hook 'emacs-lisp-mode-hook
                                    (defun turn-elisp-slime-nav-on nil
                                      (elisp-slime-nav-mode t)))))
- (elpy status "installed" recipe
-       (:name elpy :website "https://github.com/jorgenschaefer/elpy" :description "Emacs Python Development Environment" :type github :pkgname "jorgenschaefer/elpy" :post-init
-              (el-get-envpath-prepend "PYTHONPATH" default-directory)
-              :depends
-              (auto-complete yasnippet virtualenv highlight-indentation find-file-in-project idomenu iedit nose jedi rope)))
  (epc status "installed" recipe
       (:name epc :description "An RPC stack for Emacs Lisp" :type github :pkgname "kiwanami/emacs-epc" :depends
              (deferred ctable)))
@@ -119,9 +120,11 @@
     (:name f :website "https://github.com/rejeep/f.el" :description "Modern API for working with files and directories in Emacs" :type github :pkgname "rejeep/f.el"))
  (find-file-in-project status "installed" recipe
                        (:name find-file-in-project :type github :pkgname "technomancy/find-file-in-project" :description "Quick access to project files in Emacs"))
+ (flx status "installed" recipe
+      (:name flx :description "Fuzzy matching with good sorting in ido" :type github :pkgname "lewang/flx" :features flx-ido))
  (flycheck status "installed" recipe
-           (:name flycheck :type github :pkgname "lunaryorn/flycheck" :description "On-the-fly syntax checking extension" :build
-                  ("cd doc && makeinfo flycheck.texi")
+           (:name flycheck :type github :pkgname "flycheck/flycheck" :description "On-the-fly syntax checking extension" :build
+                  '(("makeinfo" "-o" "doc/flycheck.info" "doc/flycheck.texi"))
                   :info "./doc" :depends
                   (s dash cl-lib f pkg-info)))
  (fringe-helper status "installed" recipe
@@ -129,7 +132,7 @@
  (fuzzy status "installed" recipe
         (:name fuzzy :website "https://github.com/auto-complete/fuzzy-el" :description "Fuzzy matching utilities for GNU Emacs" :type github :pkgname "auto-complete/fuzzy-el"))
  (ggtags status "installed" recipe
-         (:name ggtags :description "Use GNU Global in Emacs" :type github :pkgname "leoliu/ggtags" :features ggtags))
+         (:name ggtags :description "Use GNU Global in Emacs." :type github :pkgname "leoliu/ggtags"))
  (git-modes status "installed" recipe
             (:name git-modes :description "GNU Emacs modes for various Git-related files" :type github :pkgname "magit/git-modes"))
  (gravatar status "installed" recipe
@@ -165,6 +168,8 @@
  (js2-mode status "installed" recipe
            (:name js2-mode :website "https://github.com/mooz/js2-mode#readme" :description "An improved JavaScript editing mode" :type github :pkgname "mooz/js2-mode" :prepare
                   (autoload 'js2-mode "js2-mode" nil t)))
+ (json-mode status "installed" recipe
+            (:name json-mode :description "Major mode for editing JSON files, extends the builtin js-mode to add better syntax highlighting for JSON." :type github :pkgname "joshwnj/json-mode"))
  (magit status "installed" recipe
         (:name magit :website "https://github.com/magit/magit#readme" :description "It's Magit! An Emacs mode for Git." :type github :pkgname "magit/magit" :depends
                (cl-lib git-modes)
@@ -197,6 +202,8 @@
                 ("./configure")
                 ("make"))
               :load-path "mu4e"))
+ (multi-term status "installed" recipe
+             (:name multi-term :description "A mode based on term.el, for managing multiple terminal buffers in Emacs." :type emacswiki :features multi-term))
  (multiple-cursors status "installed" recipe
                    (:name multiple-cursors :description "An experiment in adding multiple cursors to emacs" :type github :pkgname "magnars/multiple-cursors.el" :features multiple-cursors))
  (nose status "installed" recipe
@@ -240,23 +247,36 @@
                        (boundp 'package-subdirectory-regexp)
                      (defconst package-subdirectory-regexp "^\\([^.].*\\)-\\([0-9]+\\(?:[.][0-9]+\\)*\\)$" "Regular expression matching the name of\n a package subdirectory. The first subexpression is the package\n name. The second subexpression is the version string."))
                    (setq package-archives
-                         '(("ELPA" . "http://tromey.com/elpa/")
-                           ("gnu" . "http://elpa.gnu.org/packages/")
-                           ("marmalade" . "http://marmalade-repo.org/packages/")
-                           ("SC" . "http://joseito.republika.pl/sunrise-commander/"))))))
+                         (bound-and-true-p package-archives))
+                   (mapc
+                    (lambda
+                      (pa)
+                      (add-to-list 'package-archives pa 'append))
+                    '(("ELPA" . "http://tromey.com/elpa/")
+                      ("gnu" . "http://elpa.gnu.org/packages/")
+                      ("marmalade" . "http://marmalade-repo.org/packages/")
+                      ("SC" . "http://joseito.republika.pl/sunrise-commander/"))))))
  (parenface status "installed" recipe
             (:name parenface :description "Provide a face for parens in lisp modes." :type http :url "http://www.davep.org/emacs/parenface.el" :features "parenface"))
+ (pelican-mode status "installed" recipe
+               (:name pelican-mode :website "https://github.com/joewreschnig/pelican-mode" :description "Emacs utilities for the pelican blogging package" :type github :pkgname "joewreschnig/pelican-mode"))
  (persistent-soft status "installed" recipe
                   (:name persistent-soft :type github :description "Persistent storage, returning nil on failure" :pkgname "rolandwalker/persistent-soft"))
  (pkg-info status "installed" recipe
            (:name pkg-info :description "Provide information about Emacs packages." :type github :pkgname "lunaryorn/pkg-info.el" :depends
-                  (s epl)))
+                  (dash epl)))
  (popup status "installed" recipe
         (:name popup :website "https://github.com/auto-complete/popup-el" :description "Visual Popup Interface Library for Emacs" :type github :pkgname "auto-complete/popup-el"))
  (pos-tip status "installed" recipe
           (:name pos-tip :description "Show tooltip at point" :type emacswiki))
  (python status "installed" recipe
          (:name python :description "Python's flying circus support for Emacs (trunk version, hopefully Emacs 24.x compatible)" :type http :url "http://repo.or.cz/w/emacs.git/blob_plain/master:/lisp/progmodes/python.el"))
+ (python-environment status "installed" recipe
+                     (:name python-environment :description "Python virtualenv API for Emacs Lisp" :type github :pkgname "tkf/emacs-python-environment" :depends
+                            (deferred)))
+ (pyvenv status "installed" recipe
+         (:name pyvenv :website "https://github.com/jorgenschaefer/pyvenv" :description "Python virtual environment interface for Emacs" :type github :pkgname "jorgenschaefer/pyvenv" :post-init
+                (el-get-envpath-prepend "PYTHONPATH" default-directory)))
  (rainbow-delimiters status "installed" recipe
                      (:name rainbow-delimiters :website "https://github.com/jlr/rainbow-delimiters#readme" :description "Color nested parentheses, brackets, and braces according to their depth." :type github :pkgname "jlr/rainbow-delimiters"))
  (rainbow-mode status "installed" recipe
@@ -275,7 +295,9 @@
          (:name sauron :description "enhanced tracking of the world inside and outside your emacs" :website "https://github.com/djcb/sauron" :type github :pkgname "djcb/sauron" :prepare
                 (autoload 'sauron-start "sauron" "Start sauron." t)))
  (smart-mode-line status "installed" recipe
-                  (:name smart-mode-line :type github :pkgname "Bruce-Connor/smart-mode-line" :description "Colorized modeline with multiple cleanup options"))
+                  (:name smart-mode-line :description "A color coded smart mode-line." :website "https://github.com/Bruce-Connor/smart-mode-line" :type github :depends
+                         (dash)
+                         :pkgname "Bruce-Connor/smart-mode-line"))
  (smartparens status "installed" recipe
               (:name smartparens :description "Autoinsert pairs of defined brackets and wrap regions" :type github :pkgname "Fuco1/smartparens" :depends dash))
  (smex status "installed" recipe
@@ -289,8 +311,6 @@
                 (:name unicode-fonts :depends
                        (dynamic-fonts ucs-utils)
                        :type github :description "Configure Unicode fonts" :pkgname "rolandwalker/unicode-fonts"))
- (virtualenv status "installed" recipe
-             (:name virtualenv :description "Virtualenv for Python" :type github :pkgname "aculich/virtualenv.el"))
  (web-mode status "installed" recipe
            (:name web-mode :description "emacs major mode for editing PHP/JSP/ASP HTML templates (with embedded CSS and JS blocks)" :type github :pkgname "fxbois/web-mode"))
  (workgroups status "installed" recipe
@@ -314,4 +334,4 @@
                                 (concat el-get-dir
                                         (file-name-as-directory "yasnippet")
                                         "snippets")))))
-                   :compile nil :submodule nil)))
+                   :compile nil :submodule t)))
