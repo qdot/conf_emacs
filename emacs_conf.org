@@ -1068,7 +1068,7 @@ My mail client of choice.
   (require 'org-mobile)
   (require 'org-habit)
   (require 'org-bh)
-  
+
   (add-to-list 'org-export-backends 'md)
   (setq org-modules     (quote (org-bibtex
                                 org-crypt
@@ -1081,7 +1081,10 @@ My mail client of choice.
                                 org-irc
                                 org-protocol
                                 org-w3m)))
-  
+
+  ;; This comes out of elisp/next-spec-day.el. Should see about getting this into
+  ;; org-contrib or something.
+  (require 'org-next-spec-day)
 #+END_SRC
 *** org variables
 #+BEGIN_SRC emacs-lisp  
