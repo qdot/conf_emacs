@@ -1993,6 +1993,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (sml/setup)
   (add-to-list 'sml/replacer-regexp-list '("^~/code/git-projects/" ":GP:"))
   (add-to-list 'sml/replacer-regexp-list '("^~/.emacs_files/" ":EF:"))
+  (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox/" ":DB:"))
   (add-to-list 'sml/replacer-regexp-list '("^~/code/mozbuild/" ":MOZ:"))
   (setq sml/hidden-modes
         '(" yas"
