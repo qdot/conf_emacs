@@ -1518,7 +1518,8 @@ My mail client of choice.
   (setq erc-timestamp-only-if-changed-flag nil
         erc-timestamp-format "[%H:%M] "
         erc-fill-prefix "      "
-        erc-max-buffer-size 20000
+        erc-max-buffer-size 50000
+        erc-truncate-buffer-on-save t
         erc-interpret-mirc-color nil
         erc-insert-timestamp-function 'erc-insert-timestamp-left
         erc-kill-queries-on-quit nil
@@ -1544,6 +1545,10 @@ My mail client of choice.
   (add-hook 'erc-mode-hook 'qdot/erc-mode-hook)
   
   (setq erc-hide-list '("PART" "JOIN" "QUIT" "NICK"))
+  
+  (add-hook 'erc-insert-post-hook
+            'erc-truncate-buffer)
+  
 #+END_SRC
 *** Fill column resetting
 #+BEGIN_SRC emacs-lisp
