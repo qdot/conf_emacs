@@ -13,3 +13,18 @@
 [submodule "elisp_local/apel"]
 	path = elisp_local/apel
 	url = git://github.com/wanderlust/apel.git
+[submodule "dev-packages/cedet"]
+	path = dev-packages/cedet
+	url = git://github.com/emacsmirror/cedet
+[submodule "dev-packages/mu"]
+	path = dev-packages/mu
+	url = git://github.com/djcb/mu
+[submodule "dev-packages/bitlmacs"]
+	path = dev-packages/bitlmacs
+	url = git://github.com/qdot/bitlmacs
+[submodule "dev-packages/qblog"]
+	path = dev-packages/qblog
+	url = git://github.com/qdot/qblog
+[submodule "dev-packages/pelican-mode"]
+	path = dev-packages/pelican-mode
+	url = git://github.com/qdot/pelican-mode
