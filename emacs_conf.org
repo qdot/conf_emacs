@@ -814,7 +814,9 @@ Address book
 **** org setup
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    :ensure org-plus-contrib)
+    :ensure org-plus-contrib
+    :mode (("\\.org_archive\\'"  . org-mode)
+           ("\\.org\\'"  . org-mode)))
 #+END_SRC
 **** org modules
 #+BEGIN_SRC emacs-lisp
@@ -1384,16 +1386,17 @@ Using flycheck instead of flymake
 #+end_src
 *** haskell-mode                                                  :package:
 #+begin_src emacs-lisp
-  (use-package haskell-mode
-    :ensure haskell-mode
-    :init
-    (progn
-      (require 'inf-haskell)
-      (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-      (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-      (add-hook 'haskell-mode-hook 'font-lock-mode)
-      (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
-      (setq haskell-font-lock-symbols t)))
+    (use-package haskell-mode
+      :ensure haskell-mode
+      :mode ("\\.hs$" . haskell-mode)
+      :init
+      (progn
+        (require 'inf-haskell)
+        (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+        (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+        (add-hook 'haskell-mode-hook 'font-lock-mode)
+        (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
+        (setq haskell-font-lock-symbols t)))
 #+end_src
 *** smerge                                                        :package:
 http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
@@ -1464,7 +1467,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   
   (global-set-key [f5] 'qdot/recompile)
 #+end_src
-*** CEDET                                                         :package:
+*** cedet                                                         :package:
 #+begin_src emacs-lisp  
   (use-package cedet
     :ensure cedet
@@ -1546,6 +1549,8 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 #+begin_src emacs-lisp
   (use-package js2-mode
     :ensure js2-mode
+    :mode (("\\.js\\'" . js2-mode)
+           ("\\.jsm\\'" . js2-mode))
     :init
     (progn
       (setq js-indent-level 2)
@@ -1604,6 +1609,7 @@ Q
 *** lilypond-mode                                                 :package:
 #+BEGIN_SRC emacs-lisp
   (require 'lilypond-mode)
+  (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
   ;; Having fancy-comments on seems to completely screw indentation of single %
   ;; comments, which the mode uses for M-; comment blocks. Is fine to just be off.
   (setq LilyPond-fancy-comments nil)
@@ -1613,6 +1619,14 @@ Q
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
     :ensure web-mode
+    :mode (("\\.html\\'" . web-mode)
+           ("\\.phtml\\'" . web-mode)
+           ("\\.tpl\\.php\\'" . web-mode)
+           ("\\.jsp\\'" . web-mode)
+           ("\\.as[cp]x\\'" . web-mode)
+           ("\\.erb\\'" . web-mode)
+           ("\\.mustache\\'" . web-mode)
+           ("\\.djhtml\\'" . web-mode))
     :init
     (progn
       (defun qdot/web-mode-hook ()
@@ -1653,6 +1667,23 @@ Q
      '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
 #+END_SRC
 
+*** nxml-mode                                                     :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package nxml-mode
+    :mode ("\\.\\(xml\\|mxml\\)\\'" . nxml-mode))
+#+END_SRC
+*** change-log-mode                                               :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package change-log-mode
+    :mode ("ChangeLog\\.txt\\'" . change-log-mode))
+#+END_SRC
+** Writing
+*** adoc-mode                                                     :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package adoc-mode
+    :ensure adoc-mode
+    :mode ("\\.asciidoc\\'" . adoc-mode))
+#+END_SRC
 ** Social (IRC, Twitter, Etc)
 *** bitlmacs                                                      :package:
 #+BEGIN_SRC emacs-lisp
@@ -2301,27 +2332,6 @@ gpg file auto query/loading
 #+BEGIN_SRC emacs-lisp
 (put 'downcase-region 'disabled nil)
 #+END_SRC
-* Automodes
-#+begin_src emacs-lisp
-  ;; file extension mode recognition
-  (add-to-list 'auto-mode-alist '("\\.\\(xml\\|mxml\\)$" . nxml-mode))
-  (add-to-list 'auto-mode-alist '("\\.asciidoc$" . adoc-mode))
-  (add-to-list 'auto-mode-alist '("\\.hs$" . haskell-mode))
-  (add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsm$" . js2-mode))
-  (add-to-list 'auto-mode-alist '("ChangeLog\\.txt\\'" . change-log-mode))
-  (add-to-list 'auto-mode-alist '("\\.org_archive$"  . org-mode))
-  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
-  
-#+end_src
 * Startup Timing Output
 Taken from jwiegley's conf
 https://github.com/jwiegley/dot-emacs/blob/master/init.el
@@ -2375,7 +2385,8 @@ http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
 ** TODO Make mu4e delete drafts after they are sent
    [2013-07-05 Fri]
 
-** TODO Convert requires to use-package calls
+** DONE Convert requires to use-package calls
+CLOSED: [2014-04-11 Fri 21:31]
 ** DONE Fix git gutter mode?
 CLOSED: [2014-04-10 Thu 20:58]
 https://github.com/syohex/emacs-git-gutter-fringe
