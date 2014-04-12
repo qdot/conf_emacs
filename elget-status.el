@@ -1,5 +1,9 @@
 ((ace-jump-mode status "installed" recipe
                 (:name ace-jump-mode :website "https://github.com/winterTTr/ace-jump-mode/wiki" :description "A quick cursor location minor mode for emacs" :type github :pkgname "winterTTr/ace-jump-mode" :features ace-jump-mode))
+ (ace-link status "installed" recipe
+           (:name ace-link :website "https://github.com/abo-abo/ace-link/" :description "ace-jump-mode for links in help/info buffers" :type github :pkgname "abo-abo/ace-link" :depends
+                  (ace-jump-mode)
+                  :features ace-link))
  (adoc-mode status "installed" recipe
             (:name adoc-mode :website "https://github.com/sensorflo/adoc-mode/wiki" :description "A major-mode for editing AsciiDoc files in Emacs." :type github :pkgname "sensorflo/adoc-mode" :depends markup-faces))
  (auto-complete status "installed" recipe
@@ -23,8 +27,6 @@
               `("./autogen.sh" "./configure" "make")
               :features bbdb-loaddefs :autoloads nil :info "doc" :post-init
               (bbdb-initialize)))
- (bind-key status "installed" recipe
-           (:name bind-key :description "Simplify key binding calls in elisp" :type github :pkgname "emacsattic/bind-key"))
  (bitlmacs status "installed" recipe
            (:name bitlmacs :description "bitlbee + ERC = emacs IM client" :type github :pkgname "qdot/bitlmacs"))
  (browse-kill-ring status "installed" recipe
@@ -215,6 +217,8 @@
              (:name multi-term :description "A mode based on term.el, for managing multiple terminal buffers in Emacs." :type emacswiki :features multi-term))
  (multiple-cursors status "installed" recipe
                    (:name multiple-cursors :description "An experiment in adding multiple cursors to emacs" :type github :pkgname "magnars/multiple-cursors.el" :features multiple-cursors))
+ (noflet status "installed" recipe
+         (:name noflet :description "nic's overriding flet, for fleting functions for the purpose of decorating them" :type github :pkgname "nicferrier/emacs-noflet"))
  (nose status "installed" recipe
        (:type github :pkgname "emacsmirror/nose" :name nose :website "https://bitbucket.org/durin42/nosemacs" :description "Emacs extension to provide easy nosetest integration." :type emacsmirror :pkgname nose))
  (org-buffers status "installed" recipe
@@ -329,6 +333,8 @@
                 (:name unicode-fonts :depends
                        (dynamic-fonts ucs-utils)
                        :type github :description "Configure Unicode fonts" :pkgname "rolandwalker/unicode-fonts"))
+ (use-package status "installed" recipe
+              (:name use-package :type github :description "A use-package declaration for simplifying your .emacs" :pkgname "jwiegley/use-package"))
  (web-mode status "installed" recipe
            (:name web-mode :description "emacs major mode for editing PHP/JSP/ASP HTML templates (with embedded CSS and JS blocks)" :type github :pkgname "fxbois/web-mode"))
  (workgroups status "installed" recipe
