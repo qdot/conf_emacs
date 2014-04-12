@@ -1601,6 +1601,12 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 
       (add-hook 'python-mode-hook 'qdot/python-mode-hook)))
 #+end_src  
+*** elpy                                                          :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package elpy
+    :ensure elpy
+    :interpreter ("python" . python-mode))
+#+END_SRC
 *** js2-mode                                                      :package:
 #+begin_src emacs-lisp
   (use-package js2-mode
@@ -1758,8 +1764,10 @@ Q
 ** Social (IRC, Twitter, Etc)
 *** bitlmacs                                                      :package:
 #+BEGIN_SRC emacs-lisp
-  ;;(require 'bitlmacs)
-  ;;(bitlmacs/init-bitlmacs-placeholder)
+  (use-package bitlmacs
+    :load-path "~/.emacs_files/dev-packages/bitlmacs"
+    :init
+    (bitlmacs/init-bitlmacs-placeholder))
 #+END_SRC
 
 *** sauron                                                        :package:
