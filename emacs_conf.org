@@ -492,8 +492,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 #+BEGIN_SRC emacs-lisp
   (use-package ace-jump-mode
     :ensure ace-jump-mode
-    :init
-    (define-key global-map (kbd "C-x SPC") 'ace-jump-mode))
+    :bind  ("C-x SPC" . ace-jump-mode))
 #+END_SRC
 *** rect-mark                                                     :package:
 #+BEGIN_SRC emacs-lisp
@@ -543,6 +542,12 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 *** multiple-cursors                                              :package:
 #+BEGIN_SRC emacs-lisp
   (use-package multiple-cursors
+    :commands (mc/mark-next-like-this
+               mc/mark-previous-like-this
+               mc/mark-all-like-this)
+    :bind (("C->" . mc/mark-next-like-this)
+           ("C-<" . mc/mark-previous-like-this)
+           ("C-*" . mc/mark-all-like-this))
     :ensure multiple-cursors)
 #+END_SRC
 ** Email
@@ -813,13 +818,15 @@ Address book
 *** org-mode                                                      :package:
 **** org setup
 #+BEGIN_SRC emacs-lisp
-  (use-package org
-    :ensure org-plus-contrib
-    :mode (("\\.org_archive\\'"  . org-mode)
-           ("\\.org\\'"  . org-mode)))
+    (use-package org
+      :ensure org-plus-contrib
+      :mode (("\\.org_archive\\'"  . org-mode)
+             ("\\.org\\'"  . org-mode))
+      :init (require 'org))
 #+END_SRC
 **** org modules
 #+BEGIN_SRC emacs-lisp
+  (require 'org)
   (require 'org-checklist)
   (require 'org-screen)
   (require 'org-protocol)
@@ -1246,6 +1253,20 @@ Address book
     :ensure auto-complete
     :init
     (progn
+      (use-package ac-dabbrev
+        :ensure ac-dabbrev)
+      (use-package ac-etags
+        :ensure ac-etags)
+      (use-package ac-ispell
+        :ensure ac-ispell)
+      (use-package ac-js2
+        :ensure ac-js2)
+      (use-package auto-complete-clang
+        :ensure auto-complete-clang)
+      (use-package auto-complete-c-headers
+        :ensure auto-complete-c-headers)
+      (use-package auto-complete-nxml
+        :ensure auto-complete-nxml)
       (require 'auto-complete-config)
       (ac-config-default)
       (ac-flyspell-workaround)
@@ -1321,6 +1342,10 @@ git management in emacs
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
     :ensure smartparens
+    :bind (("<C-right>"   . sp-forward-slurp-sexp)
+           ("<C-left>"    . sp-forward-barf-sexp)
+           ("<C-M-right>" . sp-backward-slurp-sexp)
+           ("<C-M-left>"  . sp-backward-barf-sexp))
     :init
     (progn
       (require 'smartparens-config)
@@ -1398,10 +1423,10 @@ Using flycheck instead of flymake
         (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
         (setq haskell-font-lock-symbols t)))
 #+end_src
-*** smerge                                                        :package:
+*** smerge-mode                                                   :package:
 http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
 #+begin_src emacs-lisp  
-  (use-package smerge
+  (use-package smerge-mode
     :init
     (progn
       (defun sm-try-smerge ()
@@ -2158,6 +2183,12 @@ gpg file auto query/loading
 #+begin_src emacs-lisp
   (use-package workgroups2
     :ensure workgroups2
+    :bind (("<C-f1>"             . wg-switch-to-workgroup-at-index-1)
+           ("<C-f2>"             . wg-switch-to-workgroup-at-index-2)
+           ("<C-f3>"             . wg-switch-to-workgroup-at-index-3)
+           ("<C-f4>"             . wg-switch-to-workgroup-at-index-4)
+           ("<C-f5>"             . wg-switch-to-workgroup-at-index-5)
+           ("<C-XF86AudioNext>"  . wg-switch-to-workgroup-at-index-5))
     :init
     (progn
       (setq
@@ -2288,34 +2319,17 @@ gpg file auto query/loading
 
 * Keybinds
 #+begin_src emacs-lisp
-  (bind-key "C-c r"             'revert-buffer)
-  (bind-key "C-c v"             'visual-line-mode)
-  (bind-key "C-c e"             'eval-and-replace)
-  (bind-key "C-x C-k"           'kill-region)
-  (bind-key "C-x k"             'qdot/kill-this-buffer)
-  (bind-key "C-x C-b"           'ibuffer-other-window)
-  (bind-key "C-c C-m"           'execute-extended-command)
-  (bind-key "C-c C-k"           'kill-region)
-  (bind-key "C-M-g"             'goto-line)
-  (bind-key "M-o"               'other-window)
-  (bind-key "C->"               'mc/mark-next-like-this)
-  (bind-key "C-<"               'mc/mark-previous-like-this)
-  (bind-key "C-*"               'mc/mark-all-like-this)
-  (bind-key "C-c SPC"           'ace-jump-mode)
-  (bind-key "C-x C-m"           'shell)
-  (bind-key "C-w"               'backward-kill-word) ;; make this like shell.
-  (bind-key "C-x m"             'eshell)
-  (bind-key "<C-f1>"            'wg-switch-to-workgroup-at-index-1)
-  (bind-key "<C-f2>"            'wg-switch-to-workgroup-at-index-2)
-  (bind-key "<C-f3>"            'wg-switch-to-workgroup-at-index-3)
-  (bind-key "<C-f4>"            'wg-switch-to-workgroup-at-index-4)
-  (bind-key "<C-f5>"            'wg-switch-to-workgroup-at-index-5)
-  (bind-key "<C-XF86AudioNext>" 'wg-switch-to-workgroup-at-index-5)
-  (bind-key "<C-right>"         'sp-forward-slurp-sexp)
-  (bind-key "<C-left>"          'sp-forward-barf-sexp)
-  (bind-key "<C-M-right>"       'sp-backward-slurp-sexp)
-  (bind-key "<C-M-left>"        'sp-backward-barf-sexp)
-  (bind-key "C-x M"   (lambda () (interactive) (eshell t)))
+  (bind-key "C-c r"   'revert-buffer)
+  (bind-key "C-c v"   'visual-line-mode)
+  (bind-key "C-c e"   'eval-and-replace)
+  (bind-key "C-x C-k" 'kill-region)
+  (bind-key "C-x k"   'qdot/kill-this-buffer)
+  (bind-key "C-x C-b" 'ibuffer-other-window)
+  (bind-key "C-c C-m" 'execute-extended-command)
+  (bind-key "C-c C-k" 'kill-region)
+  (bind-key "C-M-g"   'goto-line)
+  (bind-key "M-o"     'other-window)
+  (bind-key "C-w"     'backward-kill-word) ;; make this like shell.
   ;; Don't need backgrounding
   (bind-key "C-z" nil)
 
@@ -2753,10 +2767,13 @@ CLOSED: [2013-10-29 Tue 20:55]
 ** TODO Do we still need CEDET loader?
 ** TODO Turn off redisplay hack to try and fix ERC privmsg updating?
 ** TODO Figure out packages needed for auto-complete
-** TODO Redistribute keybinds into use-package calls
+** DONE Redistribute keybinds into use-package calls
+CLOSED: [2014-04-11 Fri 22:48]
+** TODO Figure out how mu4e is going to work with no ELPA/MELPA
 ** TODO Clean up mu4e config
 ** TODO Figure out how to hook up prog mode?
-** TODO Move all automodes to :mode in use-package
+** DONE Move all automodes to :mode in use-package
+CLOSED: [2014-04-11 Fri 22:34]
 ** TODO org-mode config + use-package?
 ** TODO Collapse diminishes into use-package calls
 ** TODO Figure out what to do about erc-highlight-nicks
