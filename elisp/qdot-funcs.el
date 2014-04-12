@@ -271,30 +271,28 @@ point reaches the beginning or end of the buffer, stop there."
      '(defadvice ,mode (after rename-modeline activate)
         (setq mode-name ,new-name))))
 
-(defun qdot/org-mode-list-subtree-headers (orgfile title)
+(defun qdot/get-package-nodes (orgfile)
   (save-excursion
     (progn
       (set-buffer (find-file-noselect orgfile))
-      (goto-char (org-find-exact-headline-in-buffer title))
       (org-with-wide-buffer
-       (org-narrow-to-subtree)
        (let ((tree (org-element-parse-buffer 'element)) (num-hl 0) (num-el 0)
              (header-list ()))
          (org-element-map
              tree
              'headline
            (lambda (hl)
-             (add-to-list 'header-list (plist-get (cadr hl) :title))))
+             (when (member "package" (org-element-property :tags hl))
+               (add-to-list 'header-list (plist-get (cadr hl) :title)))))
          header-list)))))
 
-(defun qdot/edit-org-package-config ()
+(defun qdot/edit-org-package-config (&optional mode)
   (interactive)
   (let
-      ((package-name
-        (ido-completing-read "Package: "
-                             (qdot/org-mode-list-subtree-headers
-                              qdot/emacs-conf-file
-                              "Package Configuration"))))
+      ((package-name (or mode
+                       (ido-completing-read "Package: "
+                                            (qdot/get-package-nodes
+                                             qdot/emacs-conf-file)))))
     (find-file qdot/emacs-conf-file)
     (goto-char (org-find-exact-headline-in-buffer package-name))
     (show-entry)
@@ -302,12 +300,7 @@ point reaches the beginning or end of the buffer, stop there."
 
 (defun qdot/edit-current-major-code-config ()
   (interactive)
-  (let ((mode major-mode))
-    (find-file qdot/emacs-conf-file)
-    (goto-char (org-find-exact-headline-in-buffer (symbol-name mode)))
-    (show-entry)
-    (recenter)))
-
+  (qdot/edit-org-package-config (symbol-name major-mode)))
 
 (defun qdot/set-firefox-trunk ()
   "Set default browser to firefox-trunk regardless of OS default"

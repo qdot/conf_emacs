@@ -226,7 +226,16 @@ Taken from https://github.com/milkypostman/dotemacs/blob/master/init.el
   `(eval-after-load ,mode
      '(progn ,@body)))
 #+END_SRC
-* Package
+* Package Configuration
+This section contains installation and configuration information for
+all the packages I use. 
+
+In order to quickly access configurations, the org nodes are named
+after the mode the package exposes, as well as having each
+configuration node tagged with the 'package' tag. Using the qdot/edit-org-package-config
+and qdot/
+** Package Packages (Need to be loaded first)
+*** package.el                                                    :package:
 #+BEGIN_SRC emacs-lisp
   (setq package-enable-at-startup nil
         package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -236,20 +245,16 @@ Taken from https://github.com/milkypostman/dotemacs/blob/master/init.el
                            ("elpy" . "http://jorgenschaefer.github.io/packages/"))
         package-user-dir qdot/emacs-package-dir)
   (package-initialize)
+#+END_SRC
+*** use-package                                                   :package:
+#+BEGIN_SRC emacs-lisp
   ;; Make sure we have use-package installed
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
   (require 'use-package)
 #+END_SRC
-* Package Configuration
-** bind-key
-bind-key is actually part of jwiegley's use-package, but really cleans
-up binding calls.
-#+BEGIN_SRC emacs-lisp
-  (use-package bind-key)
-#+END_SRC
-** qdot-funcs
+** qdot-funcs                                                      :package:
 #+BEGIN_SRC emacs-lisp
   (require 'qdot-funcs)
   (global-set-key (kbd "C-c C-s") 'qdot/sudo-edit-current-file)
@@ -259,7 +264,7 @@ up binding calls.
                   'qdot/smarter-move-beginning-of-line)
   
 #+END_SRC
-** color-theme
+** color-theme                                                     :package:
 #+begin_src emacs-lisp
   (use-package color-theme
     :ensure color-theme
@@ -268,7 +273,7 @@ up binding calls.
       (color-theme-initialize)
       (color-theme-dark-laptop)))
 #+end_src
-** auto-complete
+** auto-complete                                                   :package:
 #+begin_src emacs-lisp
   (use-package auto-complete
     :ensure auto-complete
@@ -289,7 +294,7 @@ up binding calls.
       (define-key ac-complete-mode-map [tab] 'ac-expand)))
 #+end_src
 
-** eshell
+** eshell                                                          :package:
 #+BEGIN_SRC emacs-lisp
   (use-package eshell
     :ensure eshell
@@ -408,17 +413,17 @@ up binding calls.
       (add-hook 'eshell-mode-hook #'(lambda () (setq ac-sources '(ac-source-pcomplete))))))
 
 #+END_SRC
-** icomplete
+** icomplete                                                       :package:
 Incremental minibuffer completion
 #+begin_src emacs-lisp
   (icomplete-mode 1)
   (setq icomplete-compute-delay 0)
 #+end_src
-** ispell
+** ispell                                                          :package:
 #+BEGIN_SRC emacs-lisp
   (setq ispell-personal-dictionary "~/.ispell-dict-personal")
 #+END_SRC
-** recentf
+** recentf                                                         :package:
 http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
 
 #+begin_src emacs-lisp
@@ -445,7 +450,7 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
       'ansi-color-filter-apply)
 #+end_src
 
-** twittering-mode
+** twittering-mode                                                 :package:
 #+begin_src emacs-lisp
   (use-package twittering-mode
     :ensure twittering-mode
@@ -462,7 +467,7 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
               ":mentions"
               ":direct_messages"))))
 #+end_src
-** bbdb
+** bbdb                                                            :package:
 Address book
 #+begin_src emacs-lisp
   (use-package bbdb
@@ -508,14 +513,14 @@ Address book
        ;;'(( "From" . "no.?reply\\|DAEMON\\|daemon\\|facebookmail\\|twitter")))
        bbdb/mail-auto-create-p nil)))
 #+end_src
-** yasnippet
+** yasnippet                                                       :package:
 #+begin_src emacs-lisp
   (use-package yasnippet
     :ensure yasnippet
     :init
     (yas-global-mode 1))
 #+end_src
-** ido
+** ido                                                             :package:
 #+begin_src emacs-lisp
   (use-package ido
     :init
@@ -526,7 +531,7 @@ Address book
       (setq ido-execute-command-cache nil)
       (setq ido-create-new-buffer 'always)))
 #+end_src
-** uniquify
+** uniquify                                                        :package:
 Make buffer names unique, handy when opening files with similar names
 #+begin_src emacs-lisp
   (use-package uniquify
@@ -537,7 +542,7 @@ Make buffer names unique, handy when opening files with similar names
             uniquify-after-kill-buffer-p t
             uniquify-ignore-buffers-re "^\\*")))
 #+end_src
-** windmove
+** windmove                                                        :package:
 Move between windows using shift-[arrow key]
 #+begin_src emacs-lisp
   (use-package windmove
@@ -547,7 +552,7 @@ Move between windows using shift-[arrow key]
         (windmove-default-keybindings))))
 #+end_src
 
-** saveplace
+** saveplace                                                       :package:
 Make sure I always come back to the same place in a file
 http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 
@@ -560,7 +565,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   
 #+end_src
 
-** tramp
+** tramp                                                           :package:
 #+begin_src emacs-lisp
   (use-package tramp
     :commands tramp
@@ -568,7 +573,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (progn
       (setq tramp-default-method "ssh")))
 #+end_src
-** ibuffer
+** ibuffer                                                         :package:
 List buffers in a dired-ish way
 #+begin_src emacs-lisp
   (use-package ibuffer
@@ -601,7 +606,7 @@ List buffers in a dired-ish way
                 (lambda ()
                   (ibuffer-switch-to-saved-filter-groups "default")))))
 #+end_src
-** ansi-color
+** ansi-color                                                      :package:
 Turn on ansi in shells
 #+begin_src emacs-lisp
   (use-package ansi-color
@@ -610,7 +615,7 @@ Turn on ansi in shells
     :init
     (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
 #+end_src
-** dired
+** dired                                                           :package:
 #+begin_src emacs-lisp
   (use-package dired
     :commands dired
@@ -658,7 +663,7 @@ Turn on ansi in shells
         (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)))
 #+end_src
 
-** magit
+** magit                                                           :package:
 git management in emacs
 #+begin_src emacs-lisp
   (use-package magit
@@ -705,7 +710,7 @@ git management in emacs
         '(mapc (apply-partially 'add-to-list 'magit-repo-dirs)
                '("~/code/mozbuild/gecko-dev" "~/code/mozbuild/gaia")))))
 #+end_src
-** easy-pg
+** easy-pg                                                         :package:
 gpg file auto query/loading
 #+begin_src emacs-lisp
   (use-package epa-file
@@ -714,7 +719,7 @@ gpg file auto query/loading
       (epa-file-enable)
       (setq epa-file-cache-passphrase-for-symmetric-encryption t)))
 #+end_src
-** mu4e
+** mu4e                                                            :package:
 My mail client of choice.
 *** mu4e variables/functions to be used across sessions
 #+BEGIN_SRC emacs-lisp
@@ -864,7 +869,7 @@ My mail client of choice.
       (add-to-list 'mu4e-bookmarks
                    '("maildir:/mozilla/INBOX flag:unread" "Mozilla Unread" ?m) t)))
 #+END_SRC
-** smtpmail
+** smtpmail                                                        :package:
 #+begin_src emacs-lisp  
   ;; sending mail -- replace USERNAME with your gmail username
   ;; also, make sure the gnutls command line utils are installed
@@ -917,7 +922,7 @@ My mail client of choice.
       (setq message-sendmail-envelope-from 'header)
       (add-hook 'message-send-mail-hook 'choose-msmtp-account)))
 #+end_src
-** message-mode
+** message-mode                                                    :package:
 #+begin_src emacs-lisp
   ;; add Cc and Bcc headers to the message buffer
   (use-package message-mode
@@ -929,7 +934,7 @@ My mail client of choice.
       (setq message-kill-buffer-on-exit t)
       (add-hook 'message-mode-hook 'turn-on-flyspell 'append)))
 #+end_src
-** wg
+** wg                                                              :package:
 *** Basic Config
 #+begin_src emacs-lisp
   (use-package workgroups2
@@ -1046,7 +1051,7 @@ My mail client of choice.
   ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
   ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))  
 #+end_src
-** sauron
+** sauron                                                          :package:
 *** Variables
 #+begin_src emacs-lisp
   (use-package sauron
@@ -1117,7 +1122,7 @@ My mail client of choice.
       nil))
 #+end_src
 
-** org-mode
+** org-mode                                                        :package:
 *** org setup
 #+BEGIN_SRC emacs-lisp
   (use-package org
@@ -1543,7 +1548,7 @@ My mail client of choice.
   
   (setq org-refile-target-verify-function 'qdot/verify-refile-target)
 #+END_SRC
-** erc-mode
+** erc-mode                                                        :package:
 *** Module and variable setup
 #+begin_src emacs-lisp
   (use-package erc
@@ -1747,7 +1752,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   
   (defalias 'qdot/kill-erc 'qdot/kill-irc)
 #+END_SRC  
-** smartparens
+** smartparens                                                     :package:
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
     :ensure smartparens
@@ -1758,7 +1763,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
       ;; I start words with ' a lot when I chat apparently
       (sp-local-pair 'erc-mode "'" nil :actions nil)))
 #+END_SRC
-** prog-mode
+** prog-mode                                                       :package:
 #+begin_src emacs-lisp
   ;; Set defaults we expect
   (setq-default c-basic-offset 2)
@@ -1781,7 +1786,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (add-hook 'prog-mode-hook 'show-smartparens-mode)
   (add-hook 'prog-mode-hook 'linum-mode)
 #+end_src
-** ielm
+** ielm                                                            :package:
 #+BEGIN_SRC emacs-lisp
   (defun ielm-auto-complete ()
     "Enables `auto-complete' support in \\[ielm]."
@@ -1795,7 +1800,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (add-hook 'ielm-mode-hook 'ielm-auto-complete)
 #+end_src
 
-** flycheck
+** flycheck                                                        :package:
 Using flycheck instead of flymake
 #+begin_src emacs-lisp
   (use-package flycheck
@@ -1814,7 +1819,7 @@ Using flycheck instead of flymake
                                        (message) line-end))
                                :modes (js-mode js2-mode js3-mode))))
 #+end_src
-** haskell-mode
+** haskell-mode                                                    :package:
 #+begin_src emacs-lisp
   (use-package haskell-mode
     :ensure haskell-mode
@@ -1827,7 +1832,7 @@ Using flycheck instead of flymake
       (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
       (setq haskell-font-lock-symbols t)))
 #+end_src
-** smerge
+** smerge                                                          :package:
 http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
 #+begin_src emacs-lisp  
   (use-package smerge
@@ -1841,7 +1846,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 
       (add-hook 'find-file-hook 'sm-try-smerge t)))
 #+end_src
-** cc-mode
+** cc-mode                                                         :package:
 #+begin_src emacs-lisp
   (defun qdot/cc-mode-hook ()
     (doxymacs-font-lock)
@@ -1857,7 +1862,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   ;; doxymacs mode for editing doxygen
   (add-hook 'c-mode-common-hook 'doxymacs-mode)
 #+end_src
-** compilation
+** compilation                                                     :package:
 #+begin_src emacs-lisp  
   (require 'compile)
   (setq compilation-disable-input nil)
@@ -1896,7 +1901,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   
   (global-set-key [f5] 'qdot/recompile)
 #+end_src
-** CEDET
+** CEDET                                                           :package:
 #+begin_src emacs-lisp  
   (use-package cedet
     :ensure cedet
@@ -1955,7 +1960,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
         (local-set-key (kbd "C-c C-r") 'semantic-symref))
       (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)))
 #+end_src  
-** python-mode
+** python-mode                                                     :package:
 #+begin_src emacs-lisp
   (use-package python-mode
     :ensure python-mode
@@ -1974,7 +1979,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 
       (add-hook 'python-mode-hook 'qdot/python-mode-hook)))
 #+end_src  
-** js2-mode
+** js2-mode                                                        :package:
 #+begin_src emacs-lisp
   (use-package js2-mode
     :ensure js2-mode
@@ -1998,7 +2003,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
                   (flycheck-mode)
                   (flycheck-select-checker 'javascript-gjshint)))))
 #+end_src
-** gdb
+** gdb                                                             :package:
 #+begin_src emacs-lisp
   ;; Turn off non-stop by default. All or nothing, damnit.
   (setq gdb-non-stop-setting nil)
@@ -2008,7 +2013,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (setq gud-chdir-before-run nil)
   (setq gud-tooltip-mode t)  
 #+end_src
-** emacs-lisp-mode
+** emacs-lisp-mode                                                 :package:
 #+begin_src emacs-lisp  
   ;; eldoc mode for showing function calls in mode line
   (setq eldoc-idle-delay 0)
@@ -2032,7 +2037,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
   
 #+end_src
-** unicode-fonts
+** unicode-fonts                                                   :package:
 Map unicode characters into the global character set. Really only
 needed in ERC/twitter, and takes a while to load, so making loads mode
 specific.
@@ -2058,7 +2063,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
       (add-hook 'twittering-mode-hook 'qdot/setup-unicode-fonts)
       (add-hook 'erc-mode-hook 'qdot/setup-unicode-fonts)))
 #+end_src
-** smex
+** smex                                                            :package:
 #+BEGIN_SRC emacs-lisp
   (use-package smex
     :ensure smex
@@ -2069,7 +2074,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
       (global-set-key (kbd "M-X") 'smex-major-mode-commands)
       (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)))
 #+END_SRC
-** expand-region
+** expand-region                                                   :package:
 #+BEGIN_SRC emacs-lisp
   (use-package expand-region
     :ensure expand-region
@@ -2077,14 +2082,14 @@ From http://users.teilar.gr/~g1951d/ - Symbola
     (progn
       (global-set-key (kbd "C-=") 'er/expand-region)))
 #+END_SRC
-** ace-jump-mode
+** ace-jump-mode                                                   :package:
 #+BEGIN_SRC emacs-lisp
   (use-package ace-jump-mode
     :ensure ace-jump-mode
     :init
     (define-key global-map (kbd "C-x SPC") 'ace-jump-mode))
 #+END_SRC
-** rect-mark
+** rect-mark                                                       :package:
 #+BEGIN_SRC emacs-lisp
   (use-package rect-mark
     :ensure rect-mark
@@ -2095,7 +2100,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
       (global-set-key (kbd "C-x r C-w")   'rm-kill-region)
       (global-set-key (kbd "C-x r M-w")   'rm-kill-ring-save)))
 #+END_SRC
-** smart-mode-line
+** smart-mode-line                                                 :package:
 #+BEGIN_SRC emacs-lisp
   (use-package smart-mode-line
     :ensure smart-mode-line
@@ -2111,7 +2116,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
               " SP"
               " Fly"))))
 #+END_SRC
-** rainbow-delimiters
+** rainbow-delimiters                                              :package:
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
     :ensure rainbow-delimiters
@@ -2128,7 +2133,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
      '(rainbow-delimiters-depth-9-face ((t (:foreground "hotpink" :weight bold))))
      '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
 #+END_SRC
-** web-mode
+** web-mode                                                        :package:
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
     :ensure web-mode
@@ -2139,7 +2144,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
         (auto-complete-mode))
       (add-hook 'web-mode-hook 'qdot/web-mode-hook)))
 #+END_SRC
-** multiterm
+** multiterm                                                       :package:
 #+BEGIN_SRC emacs-lisp
   (use-package multi-term
     :ensure multi-term
@@ -2161,44 +2166,44 @@ From http://users.teilar.gr/~g1951d/ - Symbola
       (dolist (key qdot/term-keylist)
         (add-to-list 'term-bind-key-alist key))))
 #+END_SRC
-** lilypond-mode
+** lilypond-mode                                                   :package:
 #+BEGIN_SRC emacs-lisp
   (require 'lilypond-mode)
   ;; Having fancy-comments on seems to completely screw indentation of single %
   ;; comments, which the mode uses for M-; comment blocks. Is fine to just be off.
   (setq LilyPond-fancy-comments nil)
 #+END_SRC
-** qblog
+** qblog                                                           :package:
 #+BEGIN_SRC emacs-lisp
 ;;(require 'qblog)
 #+END_SRC
-** flx-ido
+** flx-ido                                                         :package:
 #+BEGIN_SRC emacs-lisp
   (use-package flx-ido
     :ensure flx-ido
     :init
     (require 'flx-ido))
 #+END_SRC
-** bitlmacs
+** bitlmacs                                                        :package:
 #+BEGIN_SRC emacs-lisp
   ;;(require 'bitlmacs)
   ;;(bitlmacs/init-bitlmacs-placeholder)
 #+END_SRC
-** page-break-lines
+** page-break-lines                                                :package:
 #+BEGIN_SRC emacs-lisp
   (use-package page-break-lines
     :ensure page-break-lines
     :init
     (global-page-break-lines-mode))
 #+END_SRC
-** pretty-mode-plus
+** pretty-mode-plus                                                :package:
 #+BEGIN_SRC emacs-lisp
   (use-package pretty-mode-plus
     :ensure pretty-mode-plus
     :init
     (global-pretty-mode t))
 #+END_SRC
-** git-gutter-fringe
+** git-gutter-fringe                                               :package:
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter-fringe
     :ensure git-gutter-fringe)
