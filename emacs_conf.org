@@ -35,6 +35,22 @@ fetched libs, etc...)
     "Directory for elisp packages from elpa/melpa")
 #+end_src
 
+- packages that aren't in MELPA/ELPA/etc that we have to maintain
+  repos for. Things like CEDET and mu, as well as packages I'm
+  actively developing at the moment.
+#+begin_src emacs-lisp
+  (defconst qdot/emacs-dev-package-dir
+    (expand-file-name (concat qdot/emacs-conf-dir "dev-packages/"))
+    "Directory for elisp packages for which we pull and/or maintain repos")
+#+end_src
+
+- yasnippets directory
+#+begin_src emacs-lisp
+  (defconst qdot/emacs-snippets-dir
+    (expand-file-name (concat qdot/emacs-conf-dir "snippets/"))
+    "Directory for snippets for yasnippet")
+#+end_src
+
 - As of emacs 23, ~/.emacs.d is user-emacs-directory
 #+begin_src emacs-lisp
   (setq custom-file (concat user-emacs-directory "emacs_conf_custom.el"))
@@ -551,6 +567,18 @@ From http://users.teilar.gr/~g1951d/ - Symbola
            ("C-*" . mc/mark-all-like-this))
     :ensure multiple-cursors)
 #+END_SRC
+*** browse-kill-ring                                              :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package browse-kill-ring
+    :ensure browse-kill-ring
+    :commands browse-kill-ring)
+#+END_SRC
+*** undo-tree                                                     :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :ensure undo-tree
+    :commands undo-tree)
+#+END_SRC
 ** Email
 *** mu4e                                                          :package:
 My mail client of choice.
@@ -559,10 +587,11 @@ My mail client of choice.
   ;; mu4e is not avaialble on melpa since it's part of mu
   (use-package mu4e
     :if qdot/mail-p
-    :disabled t
+    :load-path "~/.emacs_files/dev-packages/mu/mu4e"
     :commands mu4e
     :init
     (progn
+      (require 'mu4e)
       (require 'mu4e-vars)
       (add-hook 'mu4e-main-mode-hook (lambda () (require 'mu4e-unread-main)))
       (when macosx-p
@@ -1288,9 +1317,10 @@ Address book
   (use-package yasnippet
     :ensure yasnippet
     :init
-    (yas-global-mode 1))
+    (progn
+      (add-to-list 'yas-snippet-dirs qdot/emacs-snippets-dir)
+      (yas-global-mode 1)))
 #+end_src
-
 *** magit                                                         :package:
 git management in emacs
 #+begin_src emacs-lisp
@@ -1703,12 +1733,27 @@ Q
   (use-package change-log-mode
     :mode ("ChangeLog\\.txt\\'" . change-log-mode))
 #+END_SRC
+*** edebug-x                                                      :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package edebug-x
+    :ensure edebug-x)
+#+END_SRC
 ** Writing
 *** adoc-mode                                                     :package:
 #+BEGIN_SRC emacs-lisp
   (use-package adoc-mode
     :ensure adoc-mode
     :mode ("\\.asciidoc\\'" . adoc-mode))
+#+END_SRC
+*** markdown-mode                                                 :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package markdown-mode
+    :ensure markdown-mode)
+#+END_SRC
+*** pelican-mode                                                  :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package pelican-mode
+    :load-path "~/.emacs_files/dev-packages/pelican-mode")
 #+END_SRC
 ** Social (IRC, Twitter, Etc)
 *** bitlmacs                                                      :package:
@@ -1818,8 +1863,8 @@ Q
       (require 'erc-ring)
       (require 'erc-match)
       (require 'erc-nicklist)
-      ;;(require 'erc-highlight-nicknames)
-      ;;(add-to-list 'erc-modules 'highlight-nicknames)
+      (require 'erc-highlight-nicknames)
+      (add-to-list 'erc-modules 'highlight-nicknames)
       (add-to-list 'erc-modules 'match)
       (erc-update-modules)
       (setq erc-timestamp-only-if-changed-flag nil
@@ -2315,7 +2360,8 @@ gpg file auto query/loading
 #+END_SRC
 *** qblog                                                         :package:
 #+BEGIN_SRC emacs-lisp
-;;(require 'qblog)
+  (use-package qblog
+    :load-path "~/.emacs_files/dev-packages/qblog")
 #+END_SRC
 
 * Keybinds
@@ -2764,22 +2810,33 @@ CLOSED: [2013-10-29 Tue 20:55]
 - Directories to add to smart-mode-line
 - Key bindings
   - Workgroups changes
-* Package Switchover
-** TODO Do we still need CEDET loader?
-** TODO Turn off redisplay hack to try and fix ERC privmsg updating?
-** TODO Figure out packages needed for auto-complete
-** DONE Redistribute keybinds into use-package calls
+** Package Switchover
+*** TODO Do we still need CEDET loader? Or CEDET at /all/?
+*** TODO Clean up mu4e config
+*** TODO Figure out how to hook up prog mode?
+*** TODO org-mode config + use-package?
+*** TODO Collapse diminishes into use-package calls
+*** TODO Modes missing from ELPA/MELPA
+- [X] pelican-mode
+- [X] cedet
+- [X] mu4e
+- [ ] doxymacs
+*** DONE Figure out how mu4e is going to work with no ELPA/MELPA
+CLOSED: [2014-04-12 Sat 15:28]
+*** DONE Figure out what to do about erc-highlight-nicks
+CLOSED: [2014-04-12 Sat 15:39]
+Just keeping it in elisp directory for now
+*** DONE Readd qblog and bitlmacs
+CLOSED: [2014-04-12 Sat 15:38]
+*** DONE Turn off redisplay hack to try and fix ERC privmsg updating?
+CLOSED: [2014-04-12 Sat 14:57]
+*** DONE Figure out packages needed for auto-complete
+CLOSED: [2014-04-12 Sat 14:57]
+*** DONE Redistribute keybinds into use-package calls
 CLOSED: [2014-04-11 Fri 22:48]
-** TODO Figure out how mu4e is going to work with no ELPA/MELPA
-** TODO Clean up mu4e config
-** TODO Figure out how to hook up prog mode?
-** DONE Move all automodes to :mode in use-package
+*** DONE Move all automodes to :mode in use-package
 CLOSED: [2014-04-11 Fri 22:34]
-** TODO org-mode config + use-package?
-** TODO Collapse diminishes into use-package calls
-** TODO Figure out what to do about erc-highlight-nicks
-** TODO Readd qblog and bitlmacs
-** Timing and Memory
+*** Timing and Memory
 | Type                 | Load Time | Memory |
 |----------------------+-----------+--------|
 | emacs -q             |       0.0 |   18.9 |
