@@ -21,9 +21,11 @@ actually understand why I do what I do.
 
 ** Package Management via el-get
 
-Package management happens by way of el-get, available at
+Package management happens by way of package.el using ELPA/MELPA/etc.
+All packages that cannot be sync'd via that method are kept as git
+submodules in the dev-packages directory.
 
-http://github.com/dimitri/el-get/
-
-My el-get config is in elget-status.el, that will sync all of the
-packages I use. Warning: there are a lot.
+On first start, MELPA/ELPA packages will sync automatically due to how
+I use use-package. However, the packages in dev-packages will need to
+be sync'd as submodules and in some cases (cedet, mu) built by hand if
+they are to be used.
