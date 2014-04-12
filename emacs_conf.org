@@ -232,8 +232,10 @@ all the packages I use.
 
 In order to quickly access configurations, the org nodes are named
 after the mode the package exposes, as well as having each
-configuration node tagged with the 'package' tag. Using the qdot/edit-org-package-config
-and qdot/
+configuration node tagged with the 'package' tag. Using the
+qdot/edit-org-package-config and qdot/edit-current-major-mode-config
+functions in the qdot-funcs module allows me to easily access
+configurations without having to search through the org file.
 ** Package Packages (Need to be loaded first)
 *** package.el                                                    :package:
 #+BEGIN_SRC emacs-lisp
@@ -254,17 +256,8 @@ and qdot/
     (package-install 'use-package))
   (require 'use-package)
 #+END_SRC
-** qdot-funcs                                                      :package:
-#+BEGIN_SRC emacs-lisp
-  (require 'qdot-funcs)
-  (global-set-key (kbd "C-c C-s") 'qdot/sudo-edit-current-file)
-  (global-set-key (kbd "C-c C-r") 'qdot/reload-file)
-  ;; remap C-a to `smarter-move-beginning-of-line'
-  (global-set-key [remap move-beginning-of-line]
-                  'qdot/smarter-move-beginning-of-line)
-  
-#+END_SRC
-** color-theme                                                     :package:
+** Emacs Customization
+*** color-theme                                                   :package:
 #+begin_src emacs-lisp
   (use-package color-theme
     :ensure color-theme
@@ -273,157 +266,15 @@ and qdot/
       (color-theme-initialize)
       (color-theme-dark-laptop)))
 #+end_src
-** auto-complete                                                   :package:
-#+begin_src emacs-lisp
-  (use-package auto-complete
-    :ensure auto-complete
-    :init
-    (progn
-      (require 'auto-complete-config)
-      (ac-config-default)
-      (ac-flyspell-workaround)
-      (ac-linum-workaround)
-      (global-auto-complete-mode t)
-      (setq ac-auto-start 3
-            ac-dwim t
-            ac-quick-help-delay 1)
-      (setq ac-use-menu-map t)
-      ;; Default settings
-      (define-key ac-menu-map "\C-n" 'ac-next)
-      (define-key ac-menu-map "\C-p" 'ac-previous)
-      (define-key ac-complete-mode-map [tab] 'ac-expand)))
-#+end_src
 
-** eshell                                                          :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package eshell
-    :ensure eshell
-    :commands eshell
-    :init
-    (progn
-      ;; ;; Stealing from ESK, with some things removed
-
-      (setq eshell-cmpl-cycle-completions nil
-            eshell-save-history-on-exit t
-            eshell-buffer-shorthand t
-            eshell-cmpl-dir-ignore "\\`\\(\\.\\.?\\|CVS\\|\\.svn\\|\\.git\\)/\\'")
-
-  ;;;###autoload
-      (eval-after-load 'esh-opt
-        '(progn
-           (require 'em-prompt)
-           (require 'em-term)
-           (require 'em-cmpl)
-           (require 'em-rebind)
-           (setenv "PAGER" "cat")
-           (set-face-attribute 'eshell-prompt nil :foreground "turquoise1")
-           (add-hook 'eshell-mode-hook ;; for some reason this needs to be a hook
-                     '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-bol)))
-           (setq eshell-cmpl-cycle-completions nil)
-
-           ;; TODO: submit these via M-x report-emacs-bug
-           (add-to-list 'eshell-visual-commands "ssh")
-           (add-to-list 'eshell-visual-commands "tail")
-           (add-to-list 'eshell-command-completions-alist
-                        '("gunzip" "gz\\'"))
-           (add-to-list 'eshell-command-completions-alist
-                        '("tar" "\\(\\.tar|\\.tgz\\|\\.tar\\.gz\\)\\'"))))
-
-      ;; these two haven't made it upstream yet
-  ;;;###autoload
-      (when (not (functionp 'eshell/find))
-        (defun eshell/find (dir &rest opts)
-          (find-dired dir (mapconcat (lambda (arg)
-                                       (if (get-text-property 0 'escaped arg)
-                                           (concat "\"" arg "\"")
-                                         arg))
-                                     opts " "))))
-
-  ;;;###autoload
-      (when (not (functionp 'eshell/rgrep))
-        (defun eshell/rgrep (&rest args)
-          "Use Emacs grep facility instead of calling external grep."
-          (eshell-grep "rgrep" args t)))
-
-      (defface esk-eshell-error-prompt-face
-        '((((class color) (background dark)) (:foreground "red" :bold t))
-          (((class color) (background light)) (:foreground "red" :bold t)))
-        "Face for nonzero prompt results"
-        :group 'eshell-prompt)
-
-      (add-hook 'eshell-after-prompt-hook
-                (defun esk-eshell-exit-code-prompt-face ()
-                  (when (and eshell-last-command-status
-                             (not (zerop eshell-last-command-status)))
-                    (let ((inhibit-read-only t))
-                      (add-text-properties
-                       (save-excursion (beginning-of-line) (point)) (point-max)
-                       '(face esk-eshell-error-prompt-face))))))
-
-      (defun ac-pcomplete ()
-        ;; eshell uses `insert-and-inherit' to insert a \t if no completion
-        ;; can be found, but this must not happen as auto-complete source
-        (flet ((insert-and-inherit (&rest args)))
-          ;; this code is stolen from `pcomplete' in pcomplete.el
-          (let* (tramp-mode ;; do not automatically complete remote stuff
-                 (pcomplete-stub)
-                 (pcomplete-show-list t) ;; inhibit patterns like * being deleted
-                 pcomplete-seen pcomplete-norm-func
-                 pcomplete-args pcomplete-last pcomplete-index
-                 (pcomplete-autolist pcomplete-autolist)
-                 (pcomplete-suffix-list pcomplete-suffix-list)
-                 (candidates (pcomplete-completions))
-                 (beg (pcomplete-begin))
-                 ;; note, buffer text and completion argument may be
-                 ;; different because the buffer text may bet transformed
-                 ;; before being completed (e.g. variables like $HOME may be
-                 ;; expanded)
-                 (buftext (buffer-substring beg (point)))
-                 (arg (nth pcomplete-index pcomplete-args)))
-            ;; we auto-complete only if the stub is non-empty and matches
-            ;; the end of the buffer text
-            (when (and (not (zerop (length pcomplete-stub)))
-                       (or (string= pcomplete-stub ; Emacs 23
-                                    (substring buftext
-                                               (max 0
-                                                    (- (length buftext)
-                                                       (length pcomplete-stub)))))
-                           (string= pcomplete-stub ; Emacs 24
-                                    (substring arg
-                                               (max 0
-                                                    (- (length arg)
-                                                       (length pcomplete-stub)))))))
-              ;; Collect all possible completions for the stub. Note that
-              ;; `candidates` may be a function, that's why we use
-              ;; `all-completions`.
-              (let* ((cnds (all-completions pcomplete-stub candidates))
-                     (bnds (completion-boundaries pcomplete-stub
-                                                  candidates
-                                                  nil
-                                                  ""))
-                     (skip (- (length pcomplete-stub) (car bnds))))
-                ;; We replace the stub at the beginning of each candidate by
-                ;; the real buffer content.
-                (mapcar #'(lambda (cand) (concat buftext (substring cand skip)))
-                        cnds))))))
-
-      (defvar ac-source-pcomplete
-        '((candidates . ac-pcomplete)))
-      (add-to-list 'ac-modes 'eshell-mode)
-      (add-hook 'eshell-mode-hook #'(lambda () (setq ac-sources '(ac-source-pcomplete))))))
-
-#+END_SRC
-** icomplete                                                       :package:
+*** icomplete                                                     :package:
 Incremental minibuffer completion
 #+begin_src emacs-lisp
   (icomplete-mode 1)
   (setq icomplete-compute-delay 0)
 #+end_src
-** ispell                                                          :package:
-#+BEGIN_SRC emacs-lisp
-  (setq ispell-personal-dictionary "~/.ispell-dict-personal")
-#+END_SRC
-** recentf                                                         :package:
+
+*** recentf                                                       :package:
 http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
 
 #+begin_src emacs-lisp
@@ -450,77 +301,7 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
       'ansi-color-filter-apply)
 #+end_src
 
-** twittering-mode                                                 :package:
-#+begin_src emacs-lisp
-  (use-package twittering-mode
-    :ensure twittering-mode
-    :commands twit
-    :init
-    (progn
-      (setq twittering-icon-mode t)
-      (setq twittering-timer-interval 600)
-      (setq twittering-url-show-status nil)
-      (add-hook 'twittering-edit-mode-hook 'turn-on-flyspell 'append)
-      (add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
-      (setq twittering-initial-timeline-spec-string
-            '(":home"
-              ":mentions"
-              ":direct_messages"))))
-#+end_src
-** bbdb                                                            :package:
-Address book
-#+begin_src emacs-lisp
-  (use-package bbdb
-    :ensure bbdb
-    :commands bbdb
-    :init
-    (progn
-      (bbdb-initialize 'gnus 'message)
-      ;; (bbdb-mua-auto-update-init 'gnus 'message)
-      ;; Most of the following ripped from
-      ;; http://emacs-fu.blogspot.com/2009/08/managing-e-mail-addresses-with-bbdb.html
-      (setq
-       bbdb-offer-save 1
-       bbdb-phone-style 'nil
-       bbdb-use-pop-up t ;; allow popups for addresses
-       bbdb-electric-p t ;; be disposable with SPC
-       bbdb-popup-target-lines 1 ;; very small
-
-       bbdb-dwim-net-address-allow-redundancy t ;; always use full name
-       bbdb-quiet-about-name-mismatches 2 ;; show name-mismatches 2 secs
-
-       bbdb-north-american-phone-numbers-p nil ;; Make sure that telephone numbers are international
-
-       bbdb-always-add-address t ;; add new addresses to existing contacts automatically
-       bbdb-canonicalize-redundant-nets-p t ;; x@foo.bar.cx => x@bar.cx
-
-       bbdb-completion-type nil ;; complete on anything
-
-       bbdb-complete-name-allow-cycling t ;; cycle through matches
-       ;; this only works partially
-
-       bbdb-message-caching-enabled t ;; be fast
-       bbdb-use-alternate-names t ;; use AKA
-
-       bbdb-elided-display t ;; single-line addressesq
-
-       ;; auto-create addresses from mail
-       ;; bbdb/mail-auto-create-p 'bbdb-ignore-some-messages-hook
-       ;; bbdb-ignore-some-messages-alist ;; don't ask about fake addresses
-       ;; NOTE: there can be only one entry per header (such as To, From)
-       ;; http://flex.ee.uec.ac.jp/texi/bbdb/bbdb_11.html
-
-       ;;'(( "From" . "no.?reply\\|DAEMON\\|daemon\\|facebookmail\\|twitter")))
-       bbdb/mail-auto-create-p nil)))
-#+end_src
-** yasnippet                                                       :package:
-#+begin_src emacs-lisp
-  (use-package yasnippet
-    :ensure yasnippet
-    :init
-    (yas-global-mode 1))
-#+end_src
-** ido                                                             :package:
+*** ido                                                           :package:
 #+begin_src emacs-lisp
   (use-package ido
     :init
@@ -531,7 +312,7 @@ Address book
       (setq ido-execute-command-cache nil)
       (setq ido-create-new-buffer 'always)))
 #+end_src
-** uniquify                                                        :package:
+*** uniquify                                                      :package:
 Make buffer names unique, handy when opening files with similar names
 #+begin_src emacs-lisp
   (use-package uniquify
@@ -542,7 +323,7 @@ Make buffer names unique, handy when opening files with similar names
             uniquify-after-kill-buffer-p t
             uniquify-ignore-buffers-re "^\\*")))
 #+end_src
-** windmove                                                        :package:
+*** windmove                                                      :package:
 Move between windows using shift-[arrow key]
 #+begin_src emacs-lisp
   (use-package windmove
@@ -552,7 +333,7 @@ Move between windows using shift-[arrow key]
         (windmove-default-keybindings))))
 #+end_src
 
-** saveplace                                                       :package:
+*** saveplace                                                     :package:
 Make sure I always come back to the same place in a file
 http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 
@@ -565,7 +346,13 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
   
 #+end_src
 
-** tramp                                                           :package:
+
+*** ispell                                                        :package:
+#+BEGIN_SRC emacs-lisp
+  (setq ispell-personal-dictionary "~/.ispell-dict-personal")
+#+END_SRC
+
+*** tramp                                                         :package:
 #+begin_src emacs-lisp
   (use-package tramp
     :commands tramp
@@ -573,7 +360,7 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
     (progn
       (setq tramp-default-method "ssh")))
 #+end_src
-** ibuffer                                                         :package:
+*** ibuffer                                                       :package:
 List buffers in a dired-ish way
 #+begin_src emacs-lisp
   (use-package ibuffer
@@ -606,16 +393,7 @@ List buffers in a dired-ish way
                 (lambda ()
                   (ibuffer-switch-to-saved-filter-groups "default")))))
 #+end_src
-** ansi-color                                                      :package:
-Turn on ansi in shells
-#+begin_src emacs-lisp
-  (use-package ansi-color
-    :ensure ansi-color
-    :commands shell
-    :init
-    (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
-#+end_src
-** dired                                                           :package:
+*** dired                                                         :package:
 #+begin_src emacs-lisp
   (use-package dired
     :commands dired
@@ -663,65 +441,109 @@ Turn on ansi in shells
         (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)))
 #+end_src
 
-** magit                                                           :package:
-git management in emacs
+
+*** unicode-fonts                                                 :package:
+Map unicode characters into the global character set. Really only
+needed in ERC/twitter, and takes a while to load, so making loads mode
+specific.
+
+On debian derivatives, this will also require some font packages:
+- ttf-indic-fonts
+- fonts-sil*
+- ttf-dejavu
+
+Plus
+From http://www.quivira-font.com/downloads.php - Quivira
+From http://users.teilar.gr/~g1951d/ - Symbola
+
 #+begin_src emacs-lisp
-  (use-package magit
-    :ensure magit
-    :commands magit
+  (use-package unicode-fonts
+    :ensure unicode-fonts
     :init
     (progn
-      ;; Turn on narrowing
-      (put 'narrow-to-region 'disabled nil)
-      (setq magit-completing-read-function
-            'magit-ido-completing-read)
+      (defun qdot/setup-unicode-fonts ()
+        (when (not unicode-fonts-setup-done)
+          (unicode-fonts-setup)))
 
-      (add-hook 'magit-log-edit-mode-hook 'turn-on-flyspell 'append)
-
-      ;; Set up diffing faces, and always full screen magit
-      (eval-after-load 'magit
-        '(progn
-           (set-face-foreground 'magit-diff-add "green1")
-           (set-face-foreground 'magit-diff-del "red1")
-           (set-face-background 'magit-diff-add "#004400")
-           (set-face-background 'magit-diff-del "#440000")
-           (set-face-background 'magit-item-highlight "#1f2727")
-           ;; full screen magit-status
-
-           (defadvice magit-status (around magit-fullscreen activate)
-             (window-configuration-to-register :magit-fullscreen)
-             ad-do-it
-             (delete-other-windows))
-           (defun magit-quit-session ()
-             "Restores the previous window configuration and kills the magit buffer"
-             (interactive)
-             (kill-buffer)
-             (jump-to-register :magit-fullscreen))
-
-           (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
-
-      (global-set-key (kbd "M-g s") 'magit-status)
-
-      ;; Don't require confirm to stage changes
-      (setq magit-stage-all-confirm nil)
-
-      ;; https://coderwall.com/p/s8agwq
-      (eval-after-load "magit"
-        '(mapc (apply-partially 'add-to-list 'magit-repo-dirs)
-               '("~/code/mozbuild/gecko-dev" "~/code/mozbuild/gaia")))))
+      (add-hook 'twittering-mode-hook 'qdot/setup-unicode-fonts)
+      (add-hook 'erc-mode-hook 'qdot/setup-unicode-fonts)))
 #+end_src
-** easy-pg                                                         :package:
-gpg file auto query/loading
-#+begin_src emacs-lisp
-  (use-package epa-file
+
+*** smex                                                          :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package smex
+    :ensure smex
     :init
     (progn
-      (epa-file-enable)
-      (setq epa-file-cache-passphrase-for-symmetric-encryption t)))
-#+end_src
-** mu4e                                                            :package:
+      ;; Bind smex over M-x, deals with sorting most used commands to front of IDO
+      (global-set-key (kbd "M-x") 'smex)
+      (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+      (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)))
+#+END_SRC
+*** expand-region                                                 :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region
+    :ensure expand-region
+    :init
+    (progn
+      (global-set-key (kbd "C-=") 'er/expand-region)))
+#+END_SRC
+*** ace-jump-mode                                                 :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-jump-mode
+    :ensure ace-jump-mode
+    :init
+    (define-key global-map (kbd "C-x SPC") 'ace-jump-mode))
+#+END_SRC
+*** rect-mark                                                     :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package rect-mark
+    :ensure rect-mark
+    :init
+    (progn
+      (global-set-key (kbd "C-x r C-SPC") 'rm-set-mark)
+      (global-set-key (kbd "C-x r C-x")   'rm-exchange-point-and-mark)
+      (global-set-key (kbd "C-x r C-w")   'rm-kill-region)
+      (global-set-key (kbd "C-x r M-w")   'rm-kill-ring-save)))
+#+END_SRC
+*** smart-mode-line                                               :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package smart-mode-line
+    :ensure smart-mode-line
+    :init
+    (progn
+      (sml/setup)
+      (add-to-list 'sml/replacer-regexp-list '("^~/code/git-projects/" ":GP:"))
+      (add-to-list 'sml/replacer-regexp-list '("^~/.emacs_files/" ":EF:"))
+      (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox/" ":DB:"))
+      (add-to-list 'sml/replacer-regexp-list '("^~/code/mozbuild/" ":MOZ:"))
+      (setq sml/hidden-modes
+            '(" yas"
+              " SP"
+              " Fly"))))
+#+END_SRC
+
+*** page-break-lines                                              :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package page-break-lines
+    :ensure page-break-lines
+    :init
+    (global-page-break-lines-mode))
+#+END_SRC
+
+*** flx-ido                                                       :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package flx-ido
+    :ensure flx-ido
+    :init
+    (flx-ido-mode 1)
+    (setq ido-use-faces nil))
+#+END_SRC
+
+** Email
+*** mu4e                                                          :package:
 My mail client of choice.
-*** mu4e variables/functions to be used across sessions
+**** mu4e variables/functions to be used across sessions
 #+BEGIN_SRC emacs-lisp
   ;; mu4e is not avaialble on melpa since it's part of mu
   (use-package mu4e
@@ -869,7 +691,7 @@ My mail client of choice.
       (add-to-list 'mu4e-bookmarks
                    '("maildir:/mozilla/INBOX flag:unread" "Mozilla Unread" ?m) t)))
 #+END_SRC
-** smtpmail                                                        :package:
+*** smtpmail                                                      :package:
 #+begin_src emacs-lisp  
   ;; sending mail -- replace USERNAME with your gmail username
   ;; also, make sure the gnutls command line utils are installed
@@ -922,7 +744,7 @@ My mail client of choice.
       (setq message-sendmail-envelope-from 'header)
       (add-hook 'message-send-mail-hook 'choose-msmtp-account)))
 #+end_src
-** message-mode                                                    :package:
+*** message-mode                                                  :package:
 #+begin_src emacs-lisp
   ;; add Cc and Bcc headers to the message buffer
   (use-package message-mode
@@ -934,201 +756,62 @@ My mail client of choice.
       (setq message-kill-buffer-on-exit t)
       (add-hook 'message-mode-hook 'turn-on-flyspell 'append)))
 #+end_src
-** wg                                                              :package:
-*** Basic Config
+
+** Productivity
+*** bbdb                                                          :package:
+Address book
 #+begin_src emacs-lisp
-  (use-package workgroups2
-    :ensure workgroups2
+  (use-package bbdb
+    :ensure bbdb
+    :commands bbdb
     :init
     (progn
+      (bbdb-initialize 'gnus 'message)
+      ;; (bbdb-mua-auto-update-init 'gnus 'message)
+      ;; Most of the following ripped from
+      ;; http://emacs-fu.blogspot.com/2009/08/managing-e-mail-addresses-with-bbdb.html
       (setq
-       ;; Set the prefix key to tilde, what I normally use in screen
-       wg-prefix-key "`"
-       ;; Turn off animations
-       wg-morph-on nil
-       ;; Turn off saving on exit
-       wg-emacs-exit-save-behavior nil
-       ;; Turn off reloading of workgroup file lists
-       wg-restore-associated-buffers nil
-       wg-switch-to-first-workgroup-on-find-session-file nil)))
-#+end_src
-*** uid-mismatch handling
-#+BEGIN_SRC emacs-lisp
-  ;; Due to some buffers having issues when reloading (erc), uids start
-  ;; to mismatch which massively trips up workgroups. This is function
-  ;; redefinition allows us to set the action when a mismatch happens.
-  
-  (defvar wg-error-on-uid-mismatch t
-    "Whether or not we should throw an error when buffer uids
-  mismatch, or just throw a message and reset them to what we think
-  they should be.")
-  
-  (setq wg-error-on-uid-mismatch nil)
-  
-  (defun wg-set-buffer-uid-or-error (uid &optional buffer)
-    "Set BUFFER's buffer local value of `wg-buffer-uid' to UID.
-  If BUFFER already has a buffer local value of `wg-buffer-uid',
-  and it's not equal to UID, error."
-    (if wg-buffer-uid
-        (if (string= wg-buffer-uid uid) uid
-          (if wg-error-on-uid-mismatch
-              (error "uids don't match %S and %S for %S" 
-                     uid wg-buffer-uid
-                     (if buffer (buffer-name buffer) 
-                       (buffer-name (current-buffer))))
-            (setq wg-buffer-uid uid)
-            (message "uids don't match %S and %S for %S" 
-                     uid wg-buffer-uid
-                     (if buffer (buffer-name buffer) 
-                       (buffer-name (current-buffer))))))
-      (setq wg-buffer-uid uid)))
-#+END_SRC
-*** Personal usage setup function
-#+BEGIN_SRC emacs-lisp
-  (defun qdot/personal-wg-setup ()
-    ;;(workgroups-mode 1)
-  
-    (defun qdot/wg-filter-buffer-list-by-not-major-mode (major-mode buffer-list)
-      "Return only those buffers in BUFFER-LIST in major-mode MAJOR-MODE."
-      (remove-if (lambda (mm) (eq mm major-mode))
-                 buffer-list :key 'wg-buffer-major-mode))
-  
-    (defun qdot/wg-filter-buffer-list-by-erc-query (server buffer-list)
-      "Return only those buffers in BUFFER-LIST in major-mode MAJOR-MODE."
-      (remove-if-not (lambda (buf) (erc-query-buffer-p (get-buffer buf)))
-                     buffer-list :key 'buffer-name))
-  
-    (defun qdot/wg-buffer-list-filter-not-irc (workgroup buffer-list)
-      "Return only those buffers in BUFFER-LIST in `erc-mode'."
-      (qdot/wg-filter-buffer-list-by-not-major-mode 'erc-mode buffer-list))
-  
-    (defun qdot/wg-buffer-list-filter-associated-not-irc (workgroup buffer-list)
-      "Return only those buffers in BUFFER-LIST in `erc-mode'."
-      (qdot/wg-filter-buffer-list-by-not-major-mode
-       'erc-mode (wg-buffer-list-filter-associated workgroup buffer-list)))
-  
-  
-    (defun qdot/wg-buffer-list-filter-erc-channel (workgroup buffer-list)
-      "Return only those buffers in BUFFER-LIST in `erc-mode'."
-      (wg-filter-buffer-list-by-regexp 
-       "^#" (wg-filter-buffer-list-by-major-mode 'erc-mode buffer-list)))
-  
-    (defun qdot/wg-buffer-list-filter-erc-query (workgroup buffer-list)
-      "Return only those buffers in BUFFER-LIST in `erc-mode'."
-      (qdot/wg-filter-buffer-list-by-erc-query 'erc-mode buffer-list))
-  
-    (add-to-list
-     'wg-buffer-list-filter-definitions
-     '(qdot/erc-query "qdot/erc-query" qdot/wg-buffer-list-filter-erc-query))
-    (add-to-list
-     'wg-buffer-list-filter-definitions
-     '(qdot/erc-irc "qdot/erc-channel" qdot/wg-buffer-list-filter-erc-channel))
-    (add-to-list
-     'wg-buffer-list-filter-definitions
-     '(qdot/not-irc "qdot/not-irc" qdot/wg-buffer-list-filter-not-irc))
-  
-    (add-to-list
-     'wg-buffer-list-filter-definitions
-     '(qdot/associated-not-irc "qdot/associated-not-irc" 
-                               qdot/wg-buffer-list-filter-associated-not-irc))
-  
-    (defun qdot/wg-set-buffer-lists ()
-      (wg-set-workgroup-parameter (wg-get-workgroup "scratch")
-                                  'wg-buffer-list-filter-order-alist 
-                                  '((qdot/not-irc all)))
-      (wg-set-workgroup-parameter (wg-get-workgroup "irc") 
-                                  'wg-buffer-list-filter-order-alist 
-                                  '((default qdot/erc-irc all)))
-      (wg-set-workgroup-parameter (wg-get-workgroup "bitlbee") 
-                                  'wg-buffer-list-filter-order-alist 
-                                  '((default qdot/erc-query all))))
-  
-    (defun qdot/wg-load ()
-      (interactive)
-      (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el"))
-      (qdot/wg-set-buffer-lists)))
-  
-  ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
-  ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))  
-#+end_src
-** sauron                                                          :package:
-*** Variables
-#+begin_src emacs-lisp
-  (use-package sauron
-    :ensure sauron
-    :commands sauron-start
-    :init
-    (progn
-      (setq sauron-separate-frame nil
-            sauron-modules '(sauron-erc
-                             sauron-org
-                             sauron-notifications
-                             sauron-twittering)
-            sauron-max-line-length 200
-            ;; 60 was a little long, and there's a lot of times I switch away quickly after
-            ;; replying.
-            sauron-nick-insensitivity 5
+       bbdb-offer-save 1
+       bbdb-phone-style 'nil
+       bbdb-use-pop-up t ;; allow popups for addresses
+       bbdb-electric-p t ;; be disposable with SPC
+       bbdb-popup-target-lines 1 ;; very small
 
-            ;; you probably want to add your own nickname to the these patterns
-            sauron-watch-patterns
-            '("qDot_" "qDot" "subgirl" "bokeh" "xiuv")
+       bbdb-dwim-net-address-allow-redundancy t ;; always use full name
+       bbdb-quiet-about-name-mismatches 2 ;; show name-mismatches 2 secs
 
-            sauron-watch-nicks
-            '("qDot_" "qDot" "aim-xiuvx" "aim-bokehcat" "aim-subgirl13"))
-      ;; external module to handle special xmonad notifications setup
-      (require 'qdot-sauron-notifications)))
-#+end_src
-*** Monkeypatching IM status message
-#+BEGIN_SRC emacs-lisp
-  (defun qdot/monkey-patch-sr ()
-    (interactive)
-    ;; Monkeypatching sauron's ERC hook until I write a msg string formatter for it
-    (defun sr-erc-PRIVMSG-hook-func (proc parsed)
-      "Hook function, to be called for erc-matched-hook."
-      (let* ( (me      (erc-current-nick))
-              (sender  (car (erc-parse-user (erc-response.sender parsed))))
-              (channel (car (erc-response.command-args parsed)))
-              (msg     (sr-erc-msg-clean (erc-response.contents parsed)))
-              (nw      (symbol-name (erc-network)))
-              (for-me  (string= me channel))
-              (prio
-               (cond
-                ((string= sender "root") 2)  ;; e.g. bitlbee stuff; low-prio
-                (for-me                  3)  ;; private msg for me => prio 4
-                ((string-match me msg)   3)  ;; I'm mentioned => prio 3
-                (t       2)))  ;; default
-              (target (if (buffer-live-p (get-buffer channel))
-                          (with-current-buffer (get-buffer channel)
-                            (point-marker)))))
-        (sauron-add-event
-         'erc
-         prio
-         (concat
-          (propertize sender 'face 'sauron-highlight1-face) "@"
-          (propertize channel 'face 'sauron-highlight2-face) " on "
-          (propertize nw 'face 'sauron-highlight2-face)
-          (if (string-match "#" channel)
-              (propertize " msg" 'face 'sauron-highlight1-face)
-            (propertize " privmsg" 'face 'sauron-highlight1-face)))
-         (lexical-let* ((target-mark target)
-                        (target-buf (if for-me sender channel)))
-           (lambda ()
-             (sauron-switch-to-marker-or-buffer (or target-mark target-buf))))
-         `( :event   privmsg
-                     :sender ,sender
-                     :me     ,me
-                     :channel ,channel
-                     :msg    ,msg)))
-      nil))
+       bbdb-north-american-phone-numbers-p nil ;; Make sure that telephone numbers are international
+
+       bbdb-always-add-address t ;; add new addresses to existing contacts automatically
+       bbdb-canonicalize-redundant-nets-p t ;; x@foo.bar.cx => x@bar.cx
+
+       bbdb-completion-type nil ;; complete on anything
+
+       bbdb-complete-name-allow-cycling t ;; cycle through matches
+       ;; this only works partially
+
+       bbdb-message-caching-enabled t ;; be fast
+       bbdb-use-alternate-names t ;; use AKA
+
+       bbdb-elided-display t ;; single-line addressesq
+
+       ;; auto-create addresses from mail
+       ;; bbdb/mail-auto-create-p 'bbdb-ignore-some-messages-hook
+       ;; bbdb-ignore-some-messages-alist ;; don't ask about fake addresses
+       ;; NOTE: there can be only one entry per header (such as To, From)
+       ;; http://flex.ee.uec.ac.jp/texi/bbdb/bbdb_11.html
+
+       ;;'(( "From" . "no.?reply\\|DAEMON\\|daemon\\|facebookmail\\|twitter")))
+       bbdb/mail-auto-create-p nil)))
 #+end_src
 
-** org-mode                                                        :package:
-*** org setup
+*** org-mode                                                      :package:
+**** org setup
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :ensure org-plus-contrib)
 #+END_SRC
-*** org modules
+**** org modules
 #+BEGIN_SRC emacs-lisp
   (require 'org-checklist)
   (require 'org-screen)
@@ -1154,7 +837,7 @@ My mail client of choice.
   ;; org-contrib or something.
   (require 'org-next-spec-day)
 #+END_SRC
-*** org variables
+**** org variables
 #+BEGIN_SRC emacs-lisp  
   (setq
    ;; global STYLE property values for completion
@@ -1309,7 +992,7 @@ My mail client of choice.
    org-agenda-tags-todo-honor-ignore-options t)
   
 #+end_src
-*** Hooks
+**** Hooks
 #+BEGIN_SRC emacs-lisp
   ;; flyspell mode for spell checking everywhere
   (add-hook 'org-mode-hook 'turn-on-flyspell 'append)
@@ -1331,7 +1014,7 @@ My mail client of choice.
             '(lambda () (hl-line-mode 1))
             'append)
 #+end_src
-*** Clocking
+**** Clocking
 #+BEGIN_SRC emacs-lisp
   ;; Resume clocking tasks when emacs is restarted
   (org-clock-persistence-insinuate)
@@ -1360,7 +1043,7 @@ My mail client of choice.
    ;; Include current clocking task in clock reports
    org-clock-report-include-clocking-task t)
 #+END_SRC
-*** Todo flow setup
+**** Todo flow setup
 #+BEGIN_SRC emacs-lisp
   ;; Straight up copied from norang now
   (setq org-todo-keywords (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
@@ -1374,7 +1057,7 @@ My mail client of choice.
                 ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 #+END_SRC
-*** Key bindings
+**** Key bindings
 #+BEGIN_SRC emacs-lisp
   ;; I use C-M-r to start org-remember
   (global-set-key (kbd "C-M-R") 'org-capture)
@@ -1383,11 +1066,11 @@ My mail client of choice.
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cb" 'org-iswitchb)
 #+END_SRC
-*** Speed key bindings
+**** Speed key bindings
 #+BEGIN_SRC emacs-lisp
   (setq org-speed-commands-user (quote (("S" . widen))))
 #+END_SRC
-*** Capture
+**** Capture
 #+BEGIN_SRC emacs-lisp
   ;; Once again, stolen from norang, except for the contacts one, which
   ;; was taken from the org-mode list.
@@ -1400,7 +1083,7 @@ My mail client of choice.
           ("r" "mu4e email reply" entry (file "~/emacs_org/email.org")
            "* %c" :immediate-finish t))))
 #+END_SRC
-*** Agenda
+**** Agenda
 #+BEGIN_SRC emacs-lisp
   ;; Personal agenda modes
   (setq qdot/org-auto-exclude-tags '("hold" "habits"))
@@ -1460,7 +1143,7 @@ My mail client of choice.
                               (org-agenda-todo-ignore-deadlines 'future)))
                   nil)))))
 #+END_SRC
-*** Appointment warning bindings
+**** Appointment warning bindings
 #+BEGIN_SRC emacs-lisp
   ;; Org mode notifications via aptp
   ;; the appointment notification facility
@@ -1470,7 +1153,7 @@ My mail client of choice.
   ;; update appt each time agenda opened
   (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 #+END_SRC
-*** Functions
+**** Functions
 #+BEGIN_SRC emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; http://kanis.fr/blog-emacs.html#%20Diary%20block%20without%20week%2Dend
@@ -1491,7 +1174,7 @@ My mail client of choice.
            (cons mark entry))))
   
 #+END_SRC
-*** Faces
+**** Faces
 #+BEGIN_SRC emacs-lisp
   ;; The following custom-set-faces create the highlights
   (custom-set-faces
@@ -1512,14 +1195,14 @@ My mail client of choice.
   (set-face-background 'org-block-end-line "#333")
   (set-face-background 'org-block-background "#222")
 #+END_SRC
-*** Mobile Org
+**** Mobile Org
 #+BEGIN_SRC emacs-lisp
   (setq org-mobile-inbox-for-pull "~/emacs_org/tasks.org")
   (setq org-mobile-directory "~/Dropbox/MobileOrg")
   (setq org-mobile-files '("~/emacs_org/personal/events.org"))
   (setq org-mobile-agendas '("w"))
 #+END_SRC
-*** Disable org agenda window resizing
+**** Disable org agenda window resizing
 #+BEGIN_SRC emacs-lisp
   (defvar org-agenda-no-resize nil
     "When non-nil, don't let org-mode resize windows for you")
@@ -1532,12 +1215,12 @@ My mail client of choice.
     (when (not org-agenda-no-resize)
       ad-do-it))
 #+END_SRC
-*** Habit reloading
+**** Habit reloading
 #+BEGIN_SRC emacs-lisp
   ;; Turn habits on at 6am every morning
   (run-at-time "06:00" 86400 '(lambda () (setq org-habit-show-habits t)))
 #+END_SRC
-*** Refile settings
+**** Refile settings
 #+BEGIN_SRC emacs-lisp
   ;; Taken from http://doc.norang.ca/org-mode.html
   ;; Refile settings
@@ -1548,211 +1231,86 @@ My mail client of choice.
   
   (setq org-refile-target-verify-function 'qdot/verify-refile-target)
 #+END_SRC
-** erc-mode                                                        :package:
-*** Module and variable setup
+
+** Programming
+*** auto-complete                                                 :package:
 #+begin_src emacs-lisp
-  (use-package erc
-    :ensure erc-hl-nicks
-    :commands erc
+  (use-package auto-complete
+    :ensure auto-complete
     :init
     (progn
-      (require 'erc-fill)
-      (require 'erc-ring)
-      (require 'erc-match)
-      (require 'erc-nicklist)
-      ;;(require 'erc-highlight-nicknames)
-      ;;(add-to-list 'erc-modules 'highlight-nicknames)
-      (add-to-list 'erc-modules 'match)
-      (erc-update-modules)
-      (setq erc-timestamp-only-if-changed-flag nil
-            erc-timestamp-format "[%H:%M] "
-            erc-fill-prefix "      "
-            erc-max-buffer-size 50000
-            erc-truncate-buffer-on-save t
-            erc-interpret-mirc-color nil
-            erc-insert-timestamp-function 'erc-insert-timestamp-left
-            erc-kill-queries-on-quit nil
-            erc-auto-query 'bury
-            erc-keywords nil
-            erc-button-url-regexp "\\([-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]+\\.\\)+[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]*[-a-zA-Z0-9\\/]"
-            erc-fill-function 'erc-fill-static
-            erc-fill-static-center 0
-            ;; Don't track common events
-            erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
-                                      "324" "329" "332" "333" "353" "477")
-            erc-current-nick-highlight-type 'nick
-            erc-track-use-faces t
-            erc-track-faces-priority-list '(erc-current-nick-face erc-keyword-face)
-            erc-track-priority-faces-only 'all)
+      (require 'auto-complete-config)
+      (ac-config-default)
+      (ac-flyspell-workaround)
+      (ac-linum-workaround)
+      (global-auto-complete-mode t)
+      (setq ac-auto-start 3
+            ac-dwim t
+            ac-quick-help-delay 1)
+      (setq ac-use-menu-map t)
+      ;; Default settings
+      (define-key ac-menu-map "\C-n" 'ac-next)
+      (define-key ac-menu-map "\C-p" 'ac-previous)
+      (define-key ac-complete-mode-map [tab] 'ac-expand)))
+#+end_src
 
-      (defun qdot/erc-mode-hook ()
-        ;; Don't really need paren matching when I'm trying to chat
-        (setq blink-matching-paren nil)
-        ;; ERC should only pop comp buffers if REALLY needed
-        (setq completion-auto-help 'lazy))
+*** yasnippet                                                     :package:
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :ensure yasnippet
+    :init
+    (yas-global-mode 1))
+#+end_src
 
-      (add-hook 'erc-mode-hook 'qdot/erc-mode-hook)
+*** magit                                                         :package:
+git management in emacs
+#+begin_src emacs-lisp
+  (use-package magit
+    :ensure magit
+    :commands magit
+    :init
+    (progn
+      ;; Turn on narrowing
+      (put 'narrow-to-region 'disabled nil)
+      (setq magit-completing-read-function
+            'magit-ido-completing-read)
 
-      (setq erc-hide-list '("PART" "JOIN" "QUIT" "NICK"))
+      (add-hook 'magit-log-edit-mode-hook 'turn-on-flyspell 'append)
 
-      (add-hook 'erc-insert-post-hook
-                'erc-truncate-buffer)))
-#+END_SRC
-*** Fill column resetting
-#+BEGIN_SRC emacs-lisp
-  (make-variable-buffer-local 'erc-fill-column)
-  (defun qdot/erc-set-fill-columns ()
-    (interactive)
-    (save-excursion
-      (walk-windows
-       (lambda (w)
-         (let ((buffer (window-buffer w)))
-           (set-buffer buffer)
-           (when (eq major-mode 'erc-mode)
-             (message "Window size: %d" (window-width w))
-             (setq erc-fill-column (- (window-width w) 2))))))))
-  
-  ;;(setq window-configuration-change-hook (cddr window-configuration-change-hook))
-  
-  ;;(add-hook 'window-configuration-change-hook 'qdot/erc-set-fill-columns)
-#+END_SRC
-*** Make join/part showing buffer local
-Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
-#+BEGIN_SRC emacs-lisp
-  (defvar qdot/erc-status-allow-list nil
-    "alist of channels and the event messages to show for them.")
-  
-  (setq qdot/erc-status-allow-list
-        '(("&bitlbee" . ("PART" "JOIN" "MODE" "NICK" "QUIT"))
-          ("znc-bitlbee" . ("PART" "JOIN" "MODE" "NICK" "QUIT"))))
-  
-  (defadvice erc-hide-current-message-p (around qdot/erc-hide-per-buffer-advice last (parsed) activate)
-    "Addition to hide message predicate to check for channel
-  specific or network specific join/part showing. PART/JOIN/MODE
-  messages can be parsed per channel. NICK/QUIT are parsed per
-  network."
-    (let* ((command (erc-response.command parsed))
-           (command-args (erc-response.command-args parsed))
-           (sender (car (erc-parse-user (erc-response.sender parsed))))
-           (channel (if (member command '("PART" "JOIN" "MODE"))
-                         (car command-args)
-                       (buffer-name (current-buffer)))))
-          (if (and (assoc channel qdot/erc-status-allow-list)
-                   (member command (assoc channel qdot/erc-status-allow-list)))
-              nil
-            ad-do-it)))
-#+END_SRC
-*** ZNC Connection Setup
-#+BEGIN_SRC emacs-lisp
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;
-  ;; ZNC IRC Bouncer Setup
-  ;;
-  ;; I use the ZNC IRC bouncer to keep IRC connected, kinda like screen, except
-  ;; far more complicated and only useful for one thing. Yay!
-  ;;
-  ;; ZNC divides up networks to be one per account, so we have to start once ERC
-  ;; instance per network we want to connect to.
-  ;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
-  (defvar qdot/erc-znc-nick "qdot")
-  (defvar qdot/erc-znc-password "doesnotmatter")
-  (defvar qdot/erc-znc-networks '(("personal" . ("freenode"))
-                                  ("work" . ("mozilla"))))
-  (defvar qdot/erc-znc-remote-server "localhost")
-  (defvar qdot/erc-znc-port 9999)
-  
-  (defun qdot/erc-znc-connect (network)
-    (erc :server qdot/erc-znc-remote-server
-         :port qdot/erc-znc-port
-         :nick (format "%s/%s" qdot/erc-znc-nick network)
-         :full-name "qdot"
-         :password (format "%s/%s:%s" qdot/erc-znc-nick network qdot/erc-znc-password)))
-  
-  (defun qdot/erc-znc-rename-server-buffer ()
-    (interactive)
-    (save-excursion
-      (let ((network-name (symbol-name (erc-network))))
-        (set-buffer (erc-server-buffer))
-        (rename-buffer (concat "znc-" (downcase network-name)))
-        (message (format "Renamed buffer to %s" network-name))))
-    nil)
-  
-  (defun qdot/erc-znc-initialize (server nick)
-    ;; Prepend all ZNC buffers with znc-
-    (qdot/erc-znc-rename-server-buffer))
-  
-  (add-hook 'erc-after-connect 'qdot/erc-znc-initialize)
-  
-  (defun qdot/erc-znc-start (type)
-    (interactive "MNetwork: ")
-    (mapcar 'qdot/erc-znc-connect (cdr (assoc type qdot/erc-znc-networks))))
-  
-  (defun qdot/bitlbee-connect ()
-    (interactive)
-    (qdot/erc-znc-connect "bitlbee"))
-  
-#+END_SRC
-*** defadvice buffer clearing
-#+BEGIN_SRC emacs-lisp
-  (defun qdot/clear-irc-buffer ()
-    "If the current buffer is and ERC buffer, clear all text out of
-  it.
-  
-  This function exists due to the fact that calling /CLEAR only
-  recenters the buffer so that prior history cannot be seen.
-  "
-    (interactive)
-    (when (member (current-buffer) (erc-buffer-list))
-      (erc-truncate-buffer-to-size 0)))
-  
-  (defadvice erc-cmd-CLEAR (before qdot/erc-actually-clear last () activate)
-    (qdot/clear-irc-buffer))
-#+END_SRC
-*** Kill all buffers
-#+BEGIN_SRC emacs-lisp
-  (defun qdot/erc-kill-all-channel-buffers ()
-    (interactive)
-    (dolist (channel (erc-buffer-list))
-      (when (string-match-p "#" (buffer-name channel))
-        (save-excursion
-          (set-buffer channel)
-          (kill-buffer)))))
-  
-  ;; Walk all of the server buffers first
-  ;; Close those first, which autodetaches us from channels
-  ;; Then go back through and close everything
-  
-  (defun qdot/kill-erc-buffers (bitlbee)
-    (mapcar
-     (lambda (arg)
-       (when (and (erc-server-buffer-p arg)
-                  (if bitlbee
-                      (string-match (buffer-name arg) "znc-bitlbee")
-                    (not (string-match (buffer-name arg) "znc-bitlbee"))))
-         (save-excursion
-           (set-buffer arg)
-           (erc-quit-server "Wheee.")
-           (if (get-buffer-process arg)
-               (delete-process (get-buffer-process arg)))
-           (kill-buffer))))
-     (buffer-list)))
-  
-  (defun qdot/kill-irc ()
-    (interactive)
-    (qdot/kill-erc-buffers nil))
-  
-  (defun qdot/kill-bitlbee ()
-    (interactive)
-    (qdot/kill-erc-buffers t))
-  
-  (add-hook 'kill-emacs-hook 'qdot/kill-irc)
-  (add-hook 'kill-emacs-hook 'qdot/kill-bitlbee)
-  
-  (defalias 'qdot/kill-erc 'qdot/kill-irc)
-#+END_SRC  
-** smartparens                                                     :package:
+      ;; Set up diffing faces, and always full screen magit
+      (eval-after-load 'magit
+        '(progn
+           (set-face-foreground 'magit-diff-add "green1")
+           (set-face-foreground 'magit-diff-del "red1")
+           (set-face-background 'magit-diff-add "#004400")
+           (set-face-background 'magit-diff-del "#440000")
+           (set-face-background 'magit-item-highlight "#1f2727")
+           ;; full screen magit-status
+
+           (defadvice magit-status (around magit-fullscreen activate)
+             (window-configuration-to-register :magit-fullscreen)
+             ad-do-it
+             (delete-other-windows))
+           (defun magit-quit-session ()
+             "Restores the previous window configuration and kills the magit buffer"
+             (interactive)
+             (kill-buffer)
+             (jump-to-register :magit-fullscreen))
+
+           (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
+
+      (global-set-key (kbd "M-g s") 'magit-status)
+
+      ;; Don't require confirm to stage changes
+      (setq magit-stage-all-confirm nil)
+
+      ;; https://coderwall.com/p/s8agwq
+      (eval-after-load "magit"
+        '(mapc (apply-partially 'add-to-list 'magit-repo-dirs)
+               '("~/code/mozbuild/gecko-dev" "~/code/mozbuild/gaia")))))
+#+end_src
+
+*** smartparens                                                   :package:
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
     :ensure smartparens
@@ -1763,7 +1321,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
       ;; I start words with ' a lot when I chat apparently
       (sp-local-pair 'erc-mode "'" nil :actions nil)))
 #+END_SRC
-** prog-mode                                                       :package:
+*** prog-mode                                                     :package:
 #+begin_src emacs-lisp
   ;; Set defaults we expect
   (setq-default c-basic-offset 2)
@@ -1786,7 +1344,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (add-hook 'prog-mode-hook 'show-smartparens-mode)
   (add-hook 'prog-mode-hook 'linum-mode)
 #+end_src
-** ielm                                                            :package:
+*** ielm                                                          :package:
 #+BEGIN_SRC emacs-lisp
   (defun ielm-auto-complete ()
     "Enables `auto-complete' support in \\[ielm]."
@@ -1800,7 +1358,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (add-hook 'ielm-mode-hook 'ielm-auto-complete)
 #+end_src
 
-** flycheck                                                        :package:
+*** flycheck                                                      :package:
 Using flycheck instead of flymake
 #+begin_src emacs-lisp
   (use-package flycheck
@@ -1819,7 +1377,7 @@ Using flycheck instead of flymake
                                        (message) line-end))
                                :modes (js-mode js2-mode js3-mode))))
 #+end_src
-** haskell-mode                                                    :package:
+*** haskell-mode                                                  :package:
 #+begin_src emacs-lisp
   (use-package haskell-mode
     :ensure haskell-mode
@@ -1832,7 +1390,7 @@ Using flycheck instead of flymake
       (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
       (setq haskell-font-lock-symbols t)))
 #+end_src
-** smerge                                                          :package:
+*** smerge                                                        :package:
 http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
 #+begin_src emacs-lisp  
   (use-package smerge
@@ -1846,7 +1404,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 
       (add-hook 'find-file-hook 'sm-try-smerge t)))
 #+end_src
-** cc-mode                                                         :package:
+*** cc-mode                                                       :package:
 #+begin_src emacs-lisp
   (defun qdot/cc-mode-hook ()
     (doxymacs-font-lock)
@@ -1862,7 +1420,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   ;; doxymacs mode for editing doxygen
   (add-hook 'c-mode-common-hook 'doxymacs-mode)
 #+end_src
-** compilation                                                     :package:
+*** compilation                                                   :package:
 #+begin_src emacs-lisp  
   (require 'compile)
   (setq compilation-disable-input nil)
@@ -1901,7 +1459,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   
   (global-set-key [f5] 'qdot/recompile)
 #+end_src
-** CEDET                                                           :package:
+*** CEDET                                                         :package:
 #+begin_src emacs-lisp  
   (use-package cedet
     :ensure cedet
@@ -1960,7 +1518,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
         (local-set-key (kbd "C-c C-r") 'semantic-symref))
       (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)))
 #+end_src  
-** python-mode                                                     :package:
+*** python-mode                                                   :package:
 #+begin_src emacs-lisp
   (use-package python-mode
     :ensure python-mode
@@ -1979,7 +1537,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 
       (add-hook 'python-mode-hook 'qdot/python-mode-hook)))
 #+end_src  
-** js2-mode                                                        :package:
+*** js2-mode                                                      :package:
 #+begin_src emacs-lisp
   (use-package js2-mode
     :ensure js2-mode
@@ -2003,7 +1561,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
                   (flycheck-mode)
                   (flycheck-select-checker 'javascript-gjshint)))))
 #+end_src
-** gdb                                                             :package:
+*** gdb                                                           :package:
 #+begin_src emacs-lisp
   ;; Turn off non-stop by default. All or nothing, damnit.
   (setq gdb-non-stop-setting nil)
@@ -2013,7 +1571,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (setq gud-chdir-before-run nil)
   (setq gud-tooltip-mode t)  
 #+end_src
-** emacs-lisp-mode                                                 :package:
+*** emacs-lisp-mode                                               :package:
 #+begin_src emacs-lisp  
   ;; eldoc mode for showing function calls in mode line
   (setq eldoc-idle-delay 0)
@@ -2037,86 +1595,42 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
   
 #+end_src
-** unicode-fonts                                                   :package:
-Map unicode characters into the global character set. Really only
-needed in ERC/twitter, and takes a while to load, so making loads mode
-specific.
+Q
+*** lilypond-mode                                                 :package:
+#+BEGIN_SRC emacs-lisp
+  (require 'lilypond-mode)
+  ;; Having fancy-comments on seems to completely screw indentation of single %
+  ;; comments, which the mode uses for M-; comment blocks. Is fine to just be off.
+  (setq LilyPond-fancy-comments nil)
+#+END_SRC
 
-On debian derivatives, this will also require some font packages:
-- ttf-indic-fonts
-- fonts-sil*
-- ttf-dejavu
+*** web-mode                                                      :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package web-mode
+    :ensure web-mode
+    :init
+    (progn
+      (defun qdot/web-mode-hook ()
+        (add-to-list 'ac-sources 'ac-source-yasnippet)
+        (auto-complete-mode))
+      (add-hook 'web-mode-hook 'qdot/web-mode-hook)))
+#+END_SRC
 
-Plus
-From http://www.quivira-font.com/downloads.php - Quivira
-From http://users.teilar.gr/~g1951d/ - Symbola
+*** pretty-mode-plus                                              :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package pretty-mode-plus
+    :ensure pretty-mode-plus
+    :init
+    (global-pretty-mode t))
+#+END_SRC
+*** git-gutter-fringe                                             :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter-fringe
+    :ensure git-gutter-fringe
+    :commands git-gutter git-gutter:toggle )
+#+END_SRC
 
-#+begin_src emacs-lisp
-  (use-package unicode-fonts
-    :ensure unicode-fonts
-    :init
-    (progn
-      (defun qdot/setup-unicode-fonts ()
-        (when (not unicode-fonts-setup-done)
-          (unicode-fonts-setup)))
-
-      (add-hook 'twittering-mode-hook 'qdot/setup-unicode-fonts)
-      (add-hook 'erc-mode-hook 'qdot/setup-unicode-fonts)))
-#+end_src
-** smex                                                            :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package smex
-    :ensure smex
-    :init
-    (progn
-      ;; Bind smex over M-x, deals with sorting most used commands to front of IDO
-      (global-set-key (kbd "M-x") 'smex)
-      (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-      (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)))
-#+END_SRC
-** expand-region                                                   :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package expand-region
-    :ensure expand-region
-    :init
-    (progn
-      (global-set-key (kbd "C-=") 'er/expand-region)))
-#+END_SRC
-** ace-jump-mode                                                   :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package ace-jump-mode
-    :ensure ace-jump-mode
-    :init
-    (define-key global-map (kbd "C-x SPC") 'ace-jump-mode))
-#+END_SRC
-** rect-mark                                                       :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package rect-mark
-    :ensure rect-mark
-    :init
-    (progn
-      (global-set-key (kbd "C-x r C-SPC") 'rm-set-mark)
-      (global-set-key (kbd "C-x r C-x")   'rm-exchange-point-and-mark)
-      (global-set-key (kbd "C-x r C-w")   'rm-kill-region)
-      (global-set-key (kbd "C-x r M-w")   'rm-kill-ring-save)))
-#+END_SRC
-** smart-mode-line                                                 :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package smart-mode-line
-    :ensure smart-mode-line
-    :init
-    (progn
-      (sml/setup)
-      (add-to-list 'sml/replacer-regexp-list '("^~/code/git-projects/" ":GP:"))
-      (add-to-list 'sml/replacer-regexp-list '("^~/.emacs_files/" ":EF:"))
-      (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox/" ":DB:"))
-      (add-to-list 'sml/replacer-regexp-list '("^~/code/mozbuild/" ":MOZ:"))
-      (setq sml/hidden-modes
-            '(" yas"
-              " SP"
-              " Fly"))))
-#+END_SRC
-** rainbow-delimiters                                              :package:
+*** rainbow-delimiters                                            :package:
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
     :ensure rainbow-delimiters
@@ -2133,18 +1647,310 @@ From http://users.teilar.gr/~g1951d/ - Symbola
      '(rainbow-delimiters-depth-9-face ((t (:foreground "hotpink" :weight bold))))
      '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
 #+END_SRC
-** web-mode                                                        :package:
+
+** Social (IRC, Twitter, Etc)
+*** bitlmacs                                                      :package:
 #+BEGIN_SRC emacs-lisp
-  (use-package web-mode
-    :ensure web-mode
+  ;;(require 'bitlmacs)
+  ;;(bitlmacs/init-bitlmacs-placeholder)
+#+END_SRC
+
+*** sauron                                                        :package:
+**** Variables
+#+begin_src emacs-lisp
+  (use-package sauron
+    :ensure sauron
+    :commands sauron-start
     :init
     (progn
-      (defun qdot/web-mode-hook ()
-        (add-to-list 'ac-sources 'ac-source-yasnippet)
-        (auto-complete-mode))
-      (add-hook 'web-mode-hook 'qdot/web-mode-hook)))
+      (setq sauron-separate-frame nil
+            sauron-modules '(sauron-erc
+                             sauron-org
+                             sauron-notifications
+                             sauron-twittering)
+            sauron-max-line-length 200
+            ;; 60 was a little long, and there's a lot of times I switch away quickly after
+            ;; replying.
+            sauron-nick-insensitivity 5
+
+            ;; you probably want to add your own nickname to the these patterns
+            sauron-watch-patterns
+            '("qDot_" "qDot" "subgirl" "bokeh" "xiuv")
+
+            sauron-watch-nicks
+            '("qDot_" "qDot" "aim-xiuvx" "aim-bokehcat" "aim-subgirl13"))
+      ;; external module to handle special xmonad notifications setup
+      (require 'qdot-sauron-notifications)))
+#+end_src
+**** Monkeypatching IM status message
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/monkey-patch-sr ()
+    (interactive)
+    ;; Monkeypatching sauron's ERC hook until I write a msg string formatter for it
+    (defun sr-erc-PRIVMSG-hook-func (proc parsed)
+      "Hook function, to be called for erc-matched-hook."
+      (let* ( (me      (erc-current-nick))
+              (sender  (car (erc-parse-user (erc-response.sender parsed))))
+              (channel (car (erc-response.command-args parsed)))
+              (msg     (sr-erc-msg-clean (erc-response.contents parsed)))
+              (nw      (symbol-name (erc-network)))
+              (for-me  (string= me channel))
+              (prio
+               (cond
+                ((string= sender "root") 2)  ;; e.g. bitlbee stuff; low-prio
+                (for-me                  3)  ;; private msg for me => prio 4
+                ((string-match me msg)   3)  ;; I'm mentioned => prio 3
+                (t       2)))  ;; default
+              (target (if (buffer-live-p (get-buffer channel))
+                          (with-current-buffer (get-buffer channel)
+                            (point-marker)))))
+        (sauron-add-event
+         'erc
+         prio
+         (concat
+          (propertize sender 'face 'sauron-highlight1-face) "@"
+          (propertize channel 'face 'sauron-highlight2-face) " on "
+          (propertize nw 'face 'sauron-highlight2-face)
+          (if (string-match "#" channel)
+              (propertize " msg" 'face 'sauron-highlight1-face)
+            (propertize " privmsg" 'face 'sauron-highlight1-face)))
+         (lexical-let* ((target-mark target)
+                        (target-buf (if for-me sender channel)))
+           (lambda ()
+             (sauron-switch-to-marker-or-buffer (or target-mark target-buf))))
+         `( :event   privmsg
+                     :sender ,sender
+                     :me     ,me
+                     :channel ,channel
+                     :msg    ,msg)))
+      nil))
+#+end_src
+
+*** twittering-mode                                               :package:
+#+begin_src emacs-lisp
+  (use-package twittering-mode
+    :ensure twittering-mode
+    :commands twit
+    :init
+    (progn
+      (setq twittering-icon-mode t)
+      (setq twittering-timer-interval 600)
+      (setq twittering-url-show-status nil)
+      (add-hook 'twittering-edit-mode-hook 'turn-on-flyspell 'append)
+      (add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
+      (setq twittering-initial-timeline-spec-string
+            '(":home"
+              ":mentions"
+              ":direct_messages"))))
+#+end_src
+
+*** erc-mode                                                      :package:
+**** Module and variable setup
+#+begin_src emacs-lisp
+  (use-package erc
+    :ensure erc-hl-nicks
+    :commands erc
+    :init
+    (progn
+      (require 'erc-fill)
+      (require 'erc-ring)
+      (require 'erc-match)
+      (require 'erc-nicklist)
+      ;;(require 'erc-highlight-nicknames)
+      ;;(add-to-list 'erc-modules 'highlight-nicknames)
+      (add-to-list 'erc-modules 'match)
+      (erc-update-modules)
+      (setq erc-timestamp-only-if-changed-flag nil
+            erc-timestamp-format "[%H:%M] "
+            erc-fill-prefix "      "
+            erc-max-buffer-size 50000
+            erc-truncate-buffer-on-save t
+            erc-interpret-mirc-color nil
+            erc-insert-timestamp-function 'erc-insert-timestamp-left
+            erc-kill-queries-on-quit nil
+            erc-auto-query 'bury
+            erc-keywords nil
+            erc-button-url-regexp "\\([-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]+\\.\\)+[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]*[-a-zA-Z0-9\\/]"
+            erc-fill-function 'erc-fill-static
+            erc-fill-static-center 0
+            ;; Don't track common events
+            erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                      "324" "329" "332" "333" "353" "477")
+            erc-current-nick-highlight-type 'nick
+            erc-track-use-faces t
+            erc-track-faces-priority-list '(erc-current-nick-face erc-keyword-face)
+            erc-track-priority-faces-only 'all)
+
+      (defun qdot/erc-mode-hook ()
+        ;; Don't really need paren matching when I'm trying to chat
+        (setq blink-matching-paren nil)
+        ;; ERC should only pop comp buffers if REALLY needed
+        (setq completion-auto-help 'lazy))
+
+      (add-hook 'erc-mode-hook 'qdot/erc-mode-hook)
+
+      (setq erc-hide-list '("PART" "JOIN" "QUIT" "NICK"))
+
+      (add-hook 'erc-insert-post-hook
+                'erc-truncate-buffer)))
 #+END_SRC
-** multiterm                                                       :package:
+**** Fill column resetting
+#+BEGIN_SRC emacs-lisp
+  (make-variable-buffer-local 'erc-fill-column)
+  (defun qdot/erc-set-fill-columns ()
+    (interactive)
+    (save-excursion
+      (walk-windows
+       (lambda (w)
+         (let ((buffer (window-buffer w)))
+           (set-buffer buffer)
+           (when (eq major-mode 'erc-mode)
+             (message "Window size: %d" (window-width w))
+             (setq erc-fill-column (- (window-width w) 2))))))))
+  
+  ;;(setq window-configuration-change-hook (cddr window-configuration-change-hook))
+  
+  ;;(add-hook 'window-configuration-change-hook 'qdot/erc-set-fill-columns)
+#+END_SRC
+**** Make join/part showing buffer local
+Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
+#+BEGIN_SRC emacs-lisp
+  (defvar qdot/erc-status-allow-list nil
+    "alist of channels and the event messages to show for them.")
+  
+  (setq qdot/erc-status-allow-list
+        '(("&bitlbee" . ("PART" "JOIN" "MODE" "NICK" "QUIT"))
+          ("znc-bitlbee" . ("PART" "JOIN" "MODE" "NICK" "QUIT"))))
+  
+  (defadvice erc-hide-current-message-p (around qdot/erc-hide-per-buffer-advice last (parsed) activate)
+    "Addition to hide message predicate to check for channel
+  specific or network specific join/part showing. PART/JOIN/MODE
+  messages can be parsed per channel. NICK/QUIT are parsed per
+  network."
+    (let* ((command (erc-response.command parsed))
+           (command-args (erc-response.command-args parsed))
+           (sender (car (erc-parse-user (erc-response.sender parsed))))
+           (channel (if (member command '("PART" "JOIN" "MODE"))
+                         (car command-args)
+                       (buffer-name (current-buffer)))))
+          (if (and (assoc channel qdot/erc-status-allow-list)
+                   (member command (assoc channel qdot/erc-status-allow-list)))
+              nil
+            ad-do-it)))
+#+END_SRC
+**** ZNC Connection Setup
+#+BEGIN_SRC emacs-lisp
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;
+  ;; ZNC IRC Bouncer Setup
+  ;;
+  ;; I use the ZNC IRC bouncer to keep IRC connected, kinda like screen, except
+  ;; far more complicated and only useful for one thing. Yay!
+  ;;
+  ;; ZNC divides up networks to be one per account, so we have to start once ERC
+  ;; instance per network we want to connect to.
+  ;;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  
+  (defvar qdot/erc-znc-nick "qdot")
+  (defvar qdot/erc-znc-password "doesnotmatter")
+  (defvar qdot/erc-znc-networks '(("personal" . ("freenode"))
+                                  ("work" . ("mozilla"))))
+  (defvar qdot/erc-znc-remote-server "localhost")
+  (defvar qdot/erc-znc-port 9999)
+  
+  (defun qdot/erc-znc-connect (network)
+    (erc :server qdot/erc-znc-remote-server
+         :port qdot/erc-znc-port
+         :nick (format "%s/%s" qdot/erc-znc-nick network)
+         :full-name "qdot"
+         :password (format "%s/%s:%s" qdot/erc-znc-nick network qdot/erc-znc-password)))
+  
+  (defun qdot/erc-znc-rename-server-buffer ()
+    (interactive)
+    (save-excursion
+      (let ((network-name (symbol-name (erc-network))))
+        (set-buffer (erc-server-buffer))
+        (rename-buffer (concat "znc-" (downcase network-name)))
+        (message (format "Renamed buffer to %s" network-name))))
+    nil)
+  
+  (defun qdot/erc-znc-initialize (server nick)
+    ;; Prepend all ZNC buffers with znc-
+    (qdot/erc-znc-rename-server-buffer))
+  
+  (add-hook 'erc-after-connect 'qdot/erc-znc-initialize)
+  
+  (defun qdot/erc-znc-start (type)
+    (interactive "MNetwork: ")
+    (mapcar 'qdot/erc-znc-connect (cdr (assoc type qdot/erc-znc-networks))))
+  
+  (defun qdot/bitlbee-connect ()
+    (interactive)
+    (qdot/erc-znc-connect "bitlbee"))
+  
+#+END_SRC
+**** defadvice buffer clearing
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/clear-irc-buffer ()
+    "If the current buffer is and ERC buffer, clear all text out of
+  it.
+  
+  This function exists due to the fact that calling /CLEAR only
+  recenters the buffer so that prior history cannot be seen.
+  "
+    (interactive)
+    (when (member (current-buffer) (erc-buffer-list))
+      (erc-truncate-buffer-to-size 0)))
+  
+  (defadvice erc-cmd-CLEAR (before qdot/erc-actually-clear last () activate)
+    (qdot/clear-irc-buffer))
+#+END_SRC
+**** Kill all buffers
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/erc-kill-all-channel-buffers ()
+    (interactive)
+    (dolist (channel (erc-buffer-list))
+      (when (string-match-p "#" (buffer-name channel))
+        (save-excursion
+          (set-buffer channel)
+          (kill-buffer)))))
+  
+  ;; Walk all of the server buffers first
+  ;; Close those first, which autodetaches us from channels
+  ;; Then go back through and close everything
+  
+  (defun qdot/kill-erc-buffers (bitlbee)
+    (mapcar
+     (lambda (arg)
+       (when (and (erc-server-buffer-p arg)
+                  (if bitlbee
+                      (string-match (buffer-name arg) "znc-bitlbee")
+                    (not (string-match (buffer-name arg) "znc-bitlbee"))))
+         (save-excursion
+           (set-buffer arg)
+           (erc-quit-server "Wheee.")
+           (if (get-buffer-process arg)
+               (delete-process (get-buffer-process arg)))
+           (kill-buffer))))
+     (buffer-list)))
+  
+  (defun qdot/kill-irc ()
+    (interactive)
+    (qdot/kill-erc-buffers nil))
+  
+  (defun qdot/kill-bitlbee ()
+    (interactive)
+    (qdot/kill-erc-buffers t))
+  
+  (add-hook 'kill-emacs-hook 'qdot/kill-irc)
+  (add-hook 'kill-emacs-hook 'qdot/kill-bitlbee)
+  
+  (defalias 'qdot/kill-erc 'qdot/kill-irc)
+#+END_SRC  
+
+** Terminals
+*** multiterm                                                     :package:
 #+BEGIN_SRC emacs-lisp
   (use-package multi-term
     :ensure multi-term
@@ -2166,48 +1972,284 @@ From http://users.teilar.gr/~g1951d/ - Symbola
       (dolist (key qdot/term-keylist)
         (add-to-list 'term-bind-key-alist key))))
 #+END_SRC
-** lilypond-mode                                                   :package:
+
+*** eshell                                                        :package:
 #+BEGIN_SRC emacs-lisp
-  (require 'lilypond-mode)
-  ;; Having fancy-comments on seems to completely screw indentation of single %
-  ;; comments, which the mode uses for M-; comment blocks. Is fine to just be off.
-  (setq LilyPond-fancy-comments nil)
+  (use-package eshell
+    :ensure eshell
+    :commands eshell
+    :init
+    (progn
+      ;; ;; Stealing from ESK, with some things removed
+
+      (setq eshell-cmpl-cycle-completions nil
+            eshell-save-history-on-exit t
+            eshell-buffer-shorthand t
+            eshell-cmpl-dir-ignore "\\`\\(\\.\\.?\\|CVS\\|\\.svn\\|\\.git\\)/\\'")
+
+  ;;;###autoload
+      (eval-after-load 'esh-opt
+        '(progn
+           (require 'em-prompt)
+           (require 'em-term)
+           (require 'em-cmpl)
+           (require 'em-rebind)
+           (setenv "PAGER" "cat")
+           (set-face-attribute 'eshell-prompt nil :foreground "turquoise1")
+           (add-hook 'eshell-mode-hook ;; for some reason this needs to be a hook
+                     '(lambda () (define-key eshell-mode-map "\C-a" 'eshell-bol)))
+           (setq eshell-cmpl-cycle-completions nil)
+
+           ;; TODO: submit these via M-x report-emacs-bug
+           (add-to-list 'eshell-visual-commands "ssh")
+           (add-to-list 'eshell-visual-commands "tail")
+           (add-to-list 'eshell-command-completions-alist
+                        '("gunzip" "gz\\'"))
+           (add-to-list 'eshell-command-completions-alist
+                        '("tar" "\\(\\.tar|\\.tgz\\|\\.tar\\.gz\\)\\'"))))
+
+      ;; these two haven't made it upstream yet
+  ;;;###autoload
+      (when (not (functionp 'eshell/find))
+        (defun eshell/find (dir &rest opts)
+          (find-dired dir (mapconcat (lambda (arg)
+                                       (if (get-text-property 0 'escaped arg)
+                                           (concat "\"" arg "\"")
+                                         arg))
+                                     opts " "))))
+
+  ;;;###autoload
+      (when (not (functionp 'eshell/rgrep))
+        (defun eshell/rgrep (&rest args)
+          "Use Emacs grep facility instead of calling external grep."
+          (eshell-grep "rgrep" args t)))
+
+      (defface esk-eshell-error-prompt-face
+        '((((class color) (background dark)) (:foreground "red" :bold t))
+          (((class color) (background light)) (:foreground "red" :bold t)))
+        "Face for nonzero prompt results"
+        :group 'eshell-prompt)
+
+      (add-hook 'eshell-after-prompt-hook
+                (defun esk-eshell-exit-code-prompt-face ()
+                  (when (and eshell-last-command-status
+                             (not (zerop eshell-last-command-status)))
+                    (let ((inhibit-read-only t))
+                      (add-text-properties
+                       (save-excursion (beginning-of-line) (point)) (point-max)
+                       '(face esk-eshell-error-prompt-face))))))
+
+      (defun ac-pcomplete ()
+        ;; eshell uses `insert-and-inherit' to insert a \t if no completion
+        ;; can be found, but this must not happen as auto-complete source
+        (flet ((insert-and-inherit (&rest args)))
+          ;; this code is stolen from `pcomplete' in pcomplete.el
+          (let* (tramp-mode ;; do not automatically complete remote stuff
+                 (pcomplete-stub)
+                 (pcomplete-show-list t) ;; inhibit patterns like * being deleted
+                 pcomplete-seen pcomplete-norm-func
+                 pcomplete-args pcomplete-last pcomplete-index
+                 (pcomplete-autolist pcomplete-autolist)
+                 (pcomplete-suffix-list pcomplete-suffix-list)
+                 (candidates (pcomplete-completions))
+                 (beg (pcomplete-begin))
+                 ;; note, buffer text and completion argument may be
+                 ;; different because the buffer text may bet transformed
+                 ;; before being completed (e.g. variables like $HOME may be
+                 ;; expanded)
+                 (buftext (buffer-substring beg (point)))
+                 (arg (nth pcomplete-index pcomplete-args)))
+            ;; we auto-complete only if the stub is non-empty and matches
+            ;; the end of the buffer text
+            (when (and (not (zerop (length pcomplete-stub)))
+                       (or (string= pcomplete-stub ; Emacs 23
+                                    (substring buftext
+                                               (max 0
+                                                    (- (length buftext)
+                                                       (length pcomplete-stub)))))
+                           (string= pcomplete-stub ; Emacs 24
+                                    (substring arg
+                                               (max 0
+                                                    (- (length arg)
+                                                       (length pcomplete-stub)))))))
+              ;; Collect all possible completions for the stub. Note that
+              ;; `candidates` may be a function, that's why we use
+              ;; `all-completions`.
+              (let* ((cnds (all-completions pcomplete-stub candidates))
+                     (bnds (completion-boundaries pcomplete-stub
+                                                  candidates
+                                                  nil
+                                                  ""))
+                     (skip (- (length pcomplete-stub) (car bnds))))
+                ;; We replace the stub at the beginning of each candidate by
+                ;; the real buffer content.
+                (mapcar #'(lambda (cand) (concat buftext (substring cand skip)))
+                        cnds))))))
+
+      (defvar ac-source-pcomplete
+        '((candidates . ac-pcomplete)))
+      (add-to-list 'ac-modes 'eshell-mode)
+      (add-hook 'eshell-mode-hook #'(lambda () (setq ac-sources '(ac-source-pcomplete))))))
+
 #+END_SRC
-** qblog                                                           :package:
+*** ansi-color                                                    :package:
+Turn on ansi in shells
+#+begin_src emacs-lisp
+  (use-package ansi-color
+    :ensure ansi-color
+    :commands shell
+    :init
+    (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
+#+end_src
+
+
+
+
+
+
+** Misc
+*** easy-pg                                                       :package:
+gpg file auto query/loading
+#+begin_src emacs-lisp
+  (use-package epa-file
+    :init
+    (progn
+      (epa-file-enable)
+      (setq epa-file-cache-passphrase-for-symmetric-encryption t)))
+#+end_src
+*** wg                                                            :package:
+**** Basic Config
+#+begin_src emacs-lisp
+  (use-package workgroups2
+    :ensure workgroups2
+    :init
+    (progn
+      (setq
+       ;; Set the prefix key to tilde, what I normally use in screen
+       wg-prefix-key "`"
+       ;; Turn off animations
+       wg-morph-on nil
+       ;; Turn off saving on exit
+       wg-emacs-exit-save-behavior nil
+       ;; Turn off reloading of workgroup file lists
+       wg-restore-associated-buffers nil
+       wg-switch-to-first-workgroup-on-find-session-file nil)))
+#+end_src
+**** uid-mismatch handling
+#+BEGIN_SRC emacs-lisp
+  ;; Due to some buffers having issues when reloading (erc), uids start
+  ;; to mismatch which massively trips up workgroups. This is function
+  ;; redefinition allows us to set the action when a mismatch happens.
+  
+  (defvar wg-error-on-uid-mismatch t
+    "Whether or not we should throw an error when buffer uids
+  mismatch, or just throw a message and reset them to what we think
+  they should be.")
+  
+  (setq wg-error-on-uid-mismatch nil)
+  
+  (defun wg-set-buffer-uid-or-error (uid &optional buffer)
+    "Set BUFFER's buffer local value of `wg-buffer-uid' to UID.
+  If BUFFER already has a buffer local value of `wg-buffer-uid',
+  and it's not equal to UID, error."
+    (if wg-buffer-uid
+        (if (string= wg-buffer-uid uid) uid
+          (if wg-error-on-uid-mismatch
+              (error "uids don't match %S and %S for %S" 
+                     uid wg-buffer-uid
+                     (if buffer (buffer-name buffer) 
+                       (buffer-name (current-buffer))))
+            (setq wg-buffer-uid uid)
+            (message "uids don't match %S and %S for %S" 
+                     uid wg-buffer-uid
+                     (if buffer (buffer-name buffer) 
+                       (buffer-name (current-buffer))))))
+      (setq wg-buffer-uid uid)))
+#+END_SRC
+**** Personal usage setup function
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/personal-wg-setup ()
+    ;;(workgroups-mode 1)
+  
+    (defun qdot/wg-filter-buffer-list-by-not-major-mode (major-mode buffer-list)
+      "Return only those buffers in BUFFER-LIST in major-mode MAJOR-MODE."
+      (remove-if (lambda (mm) (eq mm major-mode))
+                 buffer-list :key 'wg-buffer-major-mode))
+  
+    (defun qdot/wg-filter-buffer-list-by-erc-query (server buffer-list)
+      "Return only those buffers in BUFFER-LIST in major-mode MAJOR-MODE."
+      (remove-if-not (lambda (buf) (erc-query-buffer-p (get-buffer buf)))
+                     buffer-list :key 'buffer-name))
+  
+    (defun qdot/wg-buffer-list-filter-not-irc (workgroup buffer-list)
+      "Return only those buffers in BUFFER-LIST in `erc-mode'."
+      (qdot/wg-filter-buffer-list-by-not-major-mode 'erc-mode buffer-list))
+  
+    (defun qdot/wg-buffer-list-filter-associated-not-irc (workgroup buffer-list)
+      "Return only those buffers in BUFFER-LIST in `erc-mode'."
+      (qdot/wg-filter-buffer-list-by-not-major-mode
+       'erc-mode (wg-buffer-list-filter-associated workgroup buffer-list)))
+  
+  
+    (defun qdot/wg-buffer-list-filter-erc-channel (workgroup buffer-list)
+      "Return only those buffers in BUFFER-LIST in `erc-mode'."
+      (wg-filter-buffer-list-by-regexp 
+       "^#" (wg-filter-buffer-list-by-major-mode 'erc-mode buffer-list)))
+  
+    (defun qdot/wg-buffer-list-filter-erc-query (workgroup buffer-list)
+      "Return only those buffers in BUFFER-LIST in `erc-mode'."
+      (qdot/wg-filter-buffer-list-by-erc-query 'erc-mode buffer-list))
+  
+    (add-to-list
+     'wg-buffer-list-filter-definitions
+     '(qdot/erc-query "qdot/erc-query" qdot/wg-buffer-list-filter-erc-query))
+    (add-to-list
+     'wg-buffer-list-filter-definitions
+     '(qdot/erc-irc "qdot/erc-channel" qdot/wg-buffer-list-filter-erc-channel))
+    (add-to-list
+     'wg-buffer-list-filter-definitions
+     '(qdot/not-irc "qdot/not-irc" qdot/wg-buffer-list-filter-not-irc))
+  
+    (add-to-list
+     'wg-buffer-list-filter-definitions
+     '(qdot/associated-not-irc "qdot/associated-not-irc" 
+                               qdot/wg-buffer-list-filter-associated-not-irc))
+  
+    (defun qdot/wg-set-buffer-lists ()
+      (wg-set-workgroup-parameter (wg-get-workgroup "scratch")
+                                  'wg-buffer-list-filter-order-alist 
+                                  '((qdot/not-irc all)))
+      (wg-set-workgroup-parameter (wg-get-workgroup "irc") 
+                                  'wg-buffer-list-filter-order-alist 
+                                  '((default qdot/erc-irc all)))
+      (wg-set-workgroup-parameter (wg-get-workgroup "bitlbee") 
+                                  'wg-buffer-list-filter-order-alist 
+                                  '((default qdot/erc-query all))))
+  
+    (defun qdot/wg-load ()
+      (interactive)
+      (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el"))
+      (qdot/wg-set-buffer-lists)))
+  
+  ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
+  ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))  
+#+end_src
+
+*** qdot-funcs                                                    :package:
+#+BEGIN_SRC emacs-lisp
+  (require 'qdot-funcs)
+  (global-set-key (kbd "C-c C-s") 'qdot/sudo-edit-current-file)
+  (global-set-key (kbd "C-c C-r") 'qdot/reload-file)
+  ;; remap C-a to `smarter-move-beginning-of-line'
+  (global-set-key [remap move-beginning-of-line]
+                  'qdot/smarter-move-beginning-of-line)
+  
+#+END_SRC
+*** qblog                                                         :package:
 #+BEGIN_SRC emacs-lisp
 ;;(require 'qblog)
 #+END_SRC
-** flx-ido                                                         :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package flx-ido
-    :ensure flx-ido
-    :init
-    (require 'flx-ido))
-#+END_SRC
-** bitlmacs                                                        :package:
-#+BEGIN_SRC emacs-lisp
-  ;;(require 'bitlmacs)
-  ;;(bitlmacs/init-bitlmacs-placeholder)
-#+END_SRC
-** page-break-lines                                                :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package page-break-lines
-    :ensure page-break-lines
-    :init
-    (global-page-break-lines-mode))
-#+END_SRC
-** pretty-mode-plus                                                :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package pretty-mode-plus
-    :ensure pretty-mode-plus
-    :init
-    (global-pretty-mode t))
-#+END_SRC
-** git-gutter-fringe                                               :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package git-gutter-fringe
-    :ensure git-gutter-fringe)
-#+END_SRC
+
 * Keybinds
 #+begin_src emacs-lisp
   (bind-key "C-c r"             'revert-buffer)
