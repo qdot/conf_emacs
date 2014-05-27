@@ -1734,13 +1734,6 @@ Q
       (add-hook 'web-mode-hook 'qdot/web-mode-hook)))
 #+END_SRC
 
-*** pretty-mode-plus                                              :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package pretty-mode-plus
-    :ensure pretty-mode-plus
-    :init
-    (global-pretty-mode t))
-#+END_SRC
 *** git-gutter-fringe                                             :package:
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter-fringe
