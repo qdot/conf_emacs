@@ -1171,8 +1171,8 @@ Address book
                   (org-agenda-remove-tags t))
                  ("~/emacs_org/agenda.txt"))
                 ("w" agenda "Week with events and no daily/chores"
-                  ((org-agenda-ndays 14)
-                   (org-agenda-filter-preset '("-daily"))))
+                 ((org-agenda-ndays 14)
+                  (org-agenda-filter-preset '("-daily"))))
                 (" " "Agenda"
                  ((agenda "" nil)
                   (tags "REFILE"
@@ -1182,16 +1182,23 @@ Address book
                         ((org-agenda-overriding-header "Emails")
                          (org-tags-match-list-sublevels nil)
                          (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("SENT" "CANCELLED")))))
+                  (tags-todo "-HOLD-CANCELLED/!"
+                             ((org-agenda-overriding-header "Live Projects")
+                              (org-agenda-skip-function 'bh/skip-non-projects)
+                              (org-tags-match-list-sublevels 'indented)
+                              (org-agenda-sorting-strategy
+                               '(category-keep))))
                   (tags-todo "-CANCELLED/!"
                              ((org-agenda-overriding-header "Stuck Projects")
                               (org-agenda-skip-function 'bh/skip-non-stuck-projects)
                               (org-agenda-sorting-strategy
-                               '(priority-down category-keep))))
-                  (tags-todo "-HOLD-CANCELLED/!"
-                             ((org-agenda-overriding-header "Projects")
+                               '(category-keep))))
+                  (tags-todo "+CANCELLED+WAITING/!"
+                             ((org-agenda-overriding-header "Waiting and Postponed Projects")
                               (org-agenda-skip-function 'bh/skip-non-projects)
-                              (org-agenda-sorting-strategy
-                               '(priority-down category-keep))))
+                              (org-tags-match-list-sublevels nil)
+                              (org-agenda-todo-ignore-scheduled 'future)
+                              (org-agenda-todo-ignore-deadlines 'future)))
                   (tags-todo "-CANCELLED/!NEXT"
                              ((org-agenda-overriding-header "Project Next Tasks")
                               (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
