@@ -767,7 +767,6 @@ My mail client of choice.
   ;; package 'gnutls-bin' in Debian/Ubuntu, 'gnutls' in Archlinux.
   (use-package smtpmail
     :if qdot/mail-p
-    :disabled t
     :init
     (progn
       (setq message-send-mail-function 'smtpmail-send-it
