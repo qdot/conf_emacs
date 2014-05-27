@@ -1774,6 +1774,12 @@ Q
   (use-package edebug-x
     :ensure edebug-x)
 #+END_SRC
+*** lua                                                           :package:
+#+BEGIN_SRC emacs-lisp
+    (use-package lua-mode
+      :ensure lua-mode
+      :mode ("\\.lua\\'" . lua-mode))
+#+END_SRC
 ** Writing
 *** adoc-mode                                                     :package:
 #+BEGIN_SRC emacs-lisp
