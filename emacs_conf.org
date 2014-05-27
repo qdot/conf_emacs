@@ -1802,6 +1802,7 @@ Q
 #+BEGIN_SRC emacs-lisp
   (use-package bitlmacs
     :load-path "~/.emacs_files/dev-packages/bitlmacs"
+    :disabled t
     :init
     (bitlmacs/init-bitlmacs-placeholder))
 #+END_SRC
