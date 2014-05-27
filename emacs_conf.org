@@ -2106,21 +2106,22 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+BEGIN_SRC emacs-lisp
   (use-package multi-term
     :ensure multi-term
+    :disabled t
     :init
     (progn
       ;; Turn off yas otherwise tab screws up
       (add-hook 'term-mode-hook (lambda()
                                   (yas-minor-mode -1)))
-
+  
       (setq multi-term-program "/bin/zsh") ;; or use zsh...
-
+  
       (global-set-key (kbd "C-c t") 'multi-term-next)
       (global-set-key (kbd "C-c T") 'multi-term) ;; create a new one
-
+  
       (setq qdot/term-keylist
             '(("C-a" . qdot/smarter-move-beginning-of-line)
               ("C-e" . move-end-of-line)))
-
+  
       (dolist (key qdot/term-keylist)
         (add-to-list 'term-bind-key-alist key))))
 #+END_SRC
