@@ -2260,40 +2260,32 @@ Turn on ansi in shells
 
 
 
-** Misc
-*** easy-pg                                                       :package:
-gpg file auto query/loading
-#+begin_src emacs-lisp
-  (use-package epa-file
-    :init
-    (progn
-      (epa-file-enable)
-      (setq epa-file-cache-passphrase-for-symmetric-encryption t)))
-#+end_src
+** Window Management
 *** wg                                                            :package:
 **** Basic Config
 #+begin_src emacs-lisp
-    (use-package workgroups2
-      :ensure workgroups2
-      :bind (("<C-f1>"             . wg-switch-to-workgroup-at-index-1)
-             ("<C-f2>"             . wg-switch-to-workgroup-at-index-2)
-             ("<C-f3>"             . wg-switch-to-workgroup-at-index-3)
-             ("<C-f4>"             . wg-switch-to-workgroup-at-index-4)
-             ("<C-f5>"             . wg-switch-to-workgroup-at-index-5)
-             ("<C-XF86AudioNext>"  . wg-switch-to-workgroup-at-index-5)
-             ("C-x b"              . wg-switch-to-buffer))
-      :init
-      (progn
-        (setq
-         ;; Set the prefix key to tilde, what I normally use in screen
-         wg-prefix-key "`"
-         ;; Turn off animations
-         wg-morph-on nil
-         ;; Turn off saving on exit
-         wg-emacs-exit-save-behavior nil
-         ;; Turn off reloading of workgroup file lists
-         wg-restore-associated-buffers nil
-         wg-switch-to-first-workgroup-on-find-session-file nil)))
+  (use-package workgroups2
+    :ensure workgroups2
+    :commands workgroups-mode
+    :bind (("<C-f1>"             . wg-switch-to-workgroup-at-index-1)
+           ("<C-f2>"             . wg-switch-to-workgroup-at-index-2)
+           ("<C-f3>"             . wg-switch-to-workgroup-at-index-3)
+           ("<C-f4>"             . wg-switch-to-workgroup-at-index-4)
+           ("<C-f5>"             . wg-switch-to-workgroup-at-index-5)
+           ("<C-XF86AudioNext>"  . wg-switch-to-workgroup-at-index-5)
+           ("C-x b"              . wg-switch-to-buffer))
+    :init
+    (progn
+      (setq
+       ;; Set the prefix key to tilde, what I normally use in screen
+       wg-prefix-key "`"
+       ;; Turn off animations
+       wg-morph-on nil
+       ;; Turn off saving on exit
+       wg-emacs-exit-save-behavior nil
+       ;; Turn off reloading of workgroup file lists
+       wg-restore-associated-buffers nil
+       wg-switch-to-first-workgroup-on-find-session-file nil)))
 #+end_src
 **** uid-mismatch handling
 #+BEGIN_SRC emacs-lisp
