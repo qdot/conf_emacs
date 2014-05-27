@@ -2386,6 +2386,20 @@ Turn on ansi in shells
   ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
   ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))  
 #+end_src
+*** popwin                                                          :package:
+#+BEGIN_SRC emacs-lisp
+()
+#+END_SRC
+** Misc
+*** easy-pg                                                       :package:
+gpg file auto query/loading
+#+begin_src emacs-lisp
+  (use-package epa-file
+    :init
+    (progn
+      (epa-file-enable)
+      (setq epa-file-cache-passphrase-for-symmetric-encryption t)))
+#+end_src
 
 *** qdot-funcs                                                    :package:
 #+BEGIN_SRC emacs-lisp
