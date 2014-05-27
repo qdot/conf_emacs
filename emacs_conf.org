@@ -1652,23 +1652,26 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
            ("\\.jsm\\'" . js2-mode))
     :init
     (progn
-      (setq js-indent-level 2)
-      (setq
-       js2-auto-indent-p t
-       js2-basic-offset 2
-       js2-enter-indents-newline t
-       js2-indent-on-enter-key t)
-
+      (add-hook 'js2-mode-hook
+                (lambda ()
+                  (setq
+                   js2-auto-indent-p t
+                   js2-basic-offset 2
+                   js2-bounce-indent-p t
+                   js2-enter-indents-newline t
+                   js2-indent-on-enter-key t)))
+  
       ;; Fix for .js files that have Java set as the mode (I'm looking at
       ;; you, mozilla-central)
       (add-hook 'java-mode-hook
                 (lambda ()
                   (when (string-match "\\.js\\'" buffer-file-name)
                     (js2-mode))))
-      (add-hook 'js2-mode-hook
-                (lambda ()
-                  (flycheck-mode)
-                  (flycheck-select-checker 'javascript-gjshint)))))
+      ;; (add-hook 'js2-mode-hook
+      ;;           (lambda ()
+      ;;             (flycheck-mode)
+      ;;             (flycheck-select-checker 'javascript-gjshint))))
+      ))
 #+end_src
 *** gdb                                                           :package:
 #+begin_src emacs-lisp
