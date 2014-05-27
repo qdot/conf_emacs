@@ -1056,13 +1056,15 @@ Address book
                                       (plain-list-item . auto)))
    org-link-abbrev-alist
    '(("bugzilla"  . "https://bugzilla.mozilla.org/show_bug.cgi?id="))
-  
+
    org-use-fast-todo-selection t
-  
+
    org-treat-S-cursor-todo-selection-as-state-change nil
    ;; For tag searches ignore tasks with scheduled and deadline dates
-   org-agenda-tags-todo-honor-ignore-options t)
-  
+   org-agenda-tags-todo-honor-ignore-options t
+
+   org-agenda-compact-blocks t)
+
 #+end_src
 **** Hooks
 #+BEGIN_SRC emacs-lisp
