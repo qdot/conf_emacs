@@ -1630,14 +1630,20 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
         (setq py-indent-offset 4)
         (setq python-indent-offset 4)
         (set-variable 'python-indent-guess-indent-offset nil t)
-        (set-variable 'fill-paragraph-function 'python-fill-paragraph t)
+        (set-variable 'fill-paragraph-function 'py-fill-paragraph t)
+        (setq ac-sources (append '(ac-source-yasnippet) ac-sources))
         (subword-mode 1))
-
+  
       ;;(elpy-enable)
       ;;(setq elpy-rpc-backend "jedi")
-
+  
       (add-hook 'python-mode-hook 'qdot/python-mode-hook)))
 #+end_src  
+*** nose                                                          :package:
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package nose
+  ;;   :ensure nose)
+#+END_SRC
 *** elpy                                                          :package:
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
