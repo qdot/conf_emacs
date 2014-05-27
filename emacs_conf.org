@@ -470,9 +470,10 @@ From http://users.teilar.gr/~g1951d/ - Symbola
       (defun qdot/setup-unicode-fonts ()
         (when (not unicode-fonts-setup-done)
           (unicode-fonts-setup)))
-
-      (add-hook 'twittering-mode-hook 'qdot/setup-unicode-fonts)
-      (add-hook 'erc-mode-hook 'qdot/setup-unicode-fonts)))
+  
+      ;;(add-hook 'twittering-mode-hook 'qdot/setup-unicode-fonts)
+      ;;(add-hook 'erc-mode-hook 'qdot/setup-unicode-fonts)
+      ))
 #+end_src
 
 *** smex                                                          :package:
