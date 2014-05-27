@@ -340,16 +340,6 @@ Make buffer names unique, handy when opening files with similar names
             uniquify-after-kill-buffer-p t
             uniquify-ignore-buffers-re "^\\*")))
 #+end_src
-*** windmove                                                      :package:
-Move between windows using shift-[arrow key]
-#+begin_src emacs-lisp
-  (use-package windmove
-    :init
-    (progn
-      (when (fboundp 'windmove-default-keybindings)
-        (windmove-default-keybindings))))
-#+end_src
-
 *** saveplace                                                     :package:
 Make sure I always come back to the same place in a file
 http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
@@ -505,12 +495,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
     (progn
       (global-set-key (kbd "C-=") 'er/expand-region)))
 #+END_SRC
-*** ace-jump-mode                                                 :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package ace-jump-mode
-    :ensure ace-jump-mode
-    :bind  ("C-x SPC" . ace-jump-mode))
-#+END_SRC
+
 *** rect-mark                                                     :package:
 #+BEGIN_SRC emacs-lisp
   (use-package rect-mark
@@ -578,6 +563,40 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (use-package undo-tree
     :ensure undo-tree
     :commands undo-tree)
+#+END_SRC
+** Emacs Navigation
+*** ace-jump-mode                                                   :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-jump-mode
+    :ensure ace-jump-mode
+    :bind  ("C-x SPC" . ace-jump-mode))
+#+END_SRC
+
+*** windmove                                                      :package:
+Move between windows using shift-[arrow key]
+#+begin_src emacs-lisp
+  (use-package windmove
+    :init
+    (progn
+      (when (fboundp 'windmove-default-keybindings)
+        (windmove-default-keybindings))))
+#+end_src
+
+*** ace-window                                                    :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :ensure ace-window
+    :init
+    (progn
+      (global-set-key (kbd "M-p") 'ace-window)
+      (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
+#+END_SRC
+*** ace-link                                                      :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-link
+    :ensure ace-link
+    :init
+    (ace-link-setup-default))
 #+END_SRC
 ** Email
 *** mu4e                                                          :package:
