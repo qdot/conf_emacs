@@ -1282,6 +1282,10 @@ Address book
                               (org-tags-match-list-sublevels nil)
                               (org-agenda-todo-ignore-scheduled 'future)
                               (org-agenda-todo-ignore-deadlines 'future)))
+                  (tags "-REFILE/"
+                        ((org-agenda-overriding-header "Tasks to Archive")
+                         (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
+                         (org-tags-match-list-sublevels nil)))
                   nil)))))
 #+END_SRC
 **** Appointment warning bindings
