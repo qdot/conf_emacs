@@ -591,6 +591,11 @@ From http://users.teilar.gr/~g1951d/ - Symbola
     :ensure undo-tree
     :commands undo-tree)
 #+END_SRC
+*** hidden-mode-line-mode                                         :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package hidden-mode-line-mode
+    :commands hidden-mode-line-mode)
+#+END_SRC
 ** Emacs Navigation
 *** ace-jump-mode                                                   :package:
 #+BEGIN_SRC emacs-lisp
