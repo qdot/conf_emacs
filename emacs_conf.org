@@ -1586,18 +1586,20 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 *** cc-mode                                                       :package:
 #+begin_src emacs-lisp
   (defun qdot/cc-mode-hook ()
-    (doxymacs-font-lock)
-    (local-set-key (kbd "\C-m") 'newline-and-indent)
+    ;; (doxymacs-font-lock)
+    (bind-key "C-m" 'newline-and-indent c-mode-map)
+    (bind-key "C-o" 'ff-find-other-file c-mode-map)
     (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 2)))
     (c-set-style "qdot/cc-code-style")
     (c-set-offset 'innamespace 0)
     (semantic-mode 1)
     (subword-mode 1))
-  
+
   (add-hook 'c-mode-common-hook 'qdot/cc-mode-hook)
-  
+
   ;; doxymacs mode for editing doxygen
-  (add-hook 'c-mode-common-hook 'doxymacs-mode)
+  ;; doxymacs isn't in elpa. :(
+  ;; (add-hook 'c-mode-common-hook 'doxymacs-mode)
 #+end_src
 *** compilation                                                   :package:
 #+begin_src emacs-lisp  
