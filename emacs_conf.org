@@ -231,6 +231,20 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
 #+begin_src emacs-lisp
 (fset 'yes-or-no-p 'y-or-n-p)
 #+end_src
+** No Dialog on yes-or-no-p
+https://superuser.com/questions/125569/how-to-fix-emacs-popup-dialogs-on-mac-os-x
+#+begin_src emacs-lisp
+(when macosx-p
+ (defadvice yes-or-no-p (around prevent-dialog activate)
+   "Prevent yes-or-no-p from activating a dialog"
+   (let ((use-dialog-box nil))
+     ad-do-it))
+
+ (defadvice y-or-n-p (around prevent-dialog-yorn activate)
+   "Prevent y-or-n-p from activating a dialog"
+   (let ((use-dialog-box nil))
+     ad-do-it)))
+#+end_src
 ** Server Setup
 #+BEGIN_SRC emacs-lisp
   ;;(setq server-use-tcp t)
