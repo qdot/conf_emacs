@@ -1735,29 +1735,36 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
     :ensure elpy
     :interpreter ("python" . python-mode))
 #+END_SRC
-*** js2-mode                                                      :package:
+*** js3-mode                                                        :package:
 #+begin_src emacs-lisp
-  (use-package js2-mode
-    :ensure js2-mode
-    :mode (("\\.js\\'" . js2-mode)
-           ("\\.jsm\\'" . js2-mode))
+  (use-package js3-mode
+    :ensure js3-mode
+    :mode (("\\.js\\'" . js3-mode)
+           ("\\.jsm\\'" . js3-mode))
     :init
     (progn
-      (add-hook 'js2-mode-hook
-                (lambda ()
-                  (setq
-                   js2-auto-indent-p t
-                   js2-basic-offset 2
-                   js2-bounce-indent-p t
-                   js2-enter-indents-newline t
-                   js2-indent-on-enter-key t)))
-  
+      (defun qdot/js3-mode-hook ()
+        (setq
+         js3-auto-indent-p t
+         js3-curly-indent-offset 0
+         js3-enter-indents-newline t
+         js3-expr-indent-offset 2
+         js3-indent-on-enter-key t
+         js3-lazy-commas t
+         js3-lazy-dots t
+         js3-lazy-operators t
+         js3-paren-indent-offset 2
+         js3-consistent-level-indent-inner-bracket t
+         js3-square-indent-offset 4)
+        (linum-mode))
+      (add-hook 'js3-mode-hook 'qdot/js3-mode-hook)
+
       ;; Fix for .js files that have Java set as the mode (I'm looking at
       ;; you, mozilla-central)
       (add-hook 'java-mode-hook
                 (lambda ()
                   (when (string-match "\\.js\\'" buffer-file-name)
-                    (js2-mode))))
+                    (js3-mode))))
       ;; (add-hook 'js2-mode-hook
       ;;           (lambda ()
       ;;             (flycheck-mode)
