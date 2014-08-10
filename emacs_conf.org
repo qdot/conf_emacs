@@ -1120,6 +1120,9 @@ Address book
    ;; For tag searches ignore tasks with scheduled and deadline dates
    org-agenda-tags-todo-honor-ignore-options t
 
+   ;; Include agenda archive files when searching for things
+   org-agenda-text-search-extra-files (quote (agenda-archives))
+   
    org-agenda-compact-blocks t)
 
 #+end_src
