@@ -57,6 +57,7 @@ fetched libs, etc...)
   (if (not (file-exists-p custom-file))
       (with-temp-buffer
         (write-file custom-file)))
+  (load-file custom-file)
 #+end_src
 
 - Add configuration and scripts directories to proper variables
