@@ -2643,6 +2643,24 @@ Extra hooks to functions from the qdot-funcs modules
   
 #+END_SRC
 * Tasks
+** TODO Check out hungry-delete mode
+https://github.com/nflath/hungry-delete
+** TODO Have org mode daily agenda show up on xmonad background (conky?)
+** TODO Redo workgroups so that org mode comes up in window 1
+** TODO Unbind erc privmsg/channels notifications from sauron
+** TODO Have bitlmacs fix network bonding for IMs on reconnect (just /query again)
+:LOGBOOK:
+CLOCK: [2013-11-06 Wed 13:59]--[2013-11-06 Wed 14:00] =>  0:01
+:END:
+[2013-11-06 Wed]
+[[irc:/localhost:9999/&bitlbee][irc session 'localhost:9999/&bitlbee']]
+
+** TODO bitlmacs highlights IRC nicks when they talk in channels if they also have a privmsg open
+** TODO Add repo search capability for magit-repo-dirs               :emacs:
+:LOGBOOK:
+CLOCK: [2014-03-02 Sun 14:17]--[2014-03-02 Sun 14:18] =>  0:01
+:END:
+[2014-03-02 Sun]
 ** TODO Add ability to open transcribe project related to lilypond file
 ** TODO Check out git-messenger
 [2013-07-22 Mon]
@@ -2826,7 +2844,19 @@ CLOSED: [2013-04-17 Wed 21:23]
 :END:
    [2010-10-27 Wed]
    [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
-** CANCELLED Figure out issues with schedule export              :CANCELLED:
+** DONE Fix platform font setting to autoset if face actually exists :emacs:
+CLOSED: [2013-11-27 Wed 17:07]
+[2013-10-25 Fri]
+[[file:~/code/git-projects/buttplug/todo.org::*How%20to%20deal%20with%20plugins%20like%20websocket,%20where%20we%20don't%20want%20process%20per%20device?][How to deal with plugins like websocket, where we don't want process per device?]]
+
+** DONE Check out flx                                                :emacs:
+CLOSED: [2014-06-11 Wed 19:57]
+https://github.com/lewang/flx
+
+** DONE Try mobileorg one more time
+CLOSED: [2014-06-17 Tue 19:19]
+
+** CANCELLED Figure out issues with schedule export               :CANCELLED:
 CLOSED: [2014-04-10 Thu 20:44]
 :LOGBOOK:
 - State "CANCELLED"  from "TODO"       [2014-04-10 Thu 20:44] \\
