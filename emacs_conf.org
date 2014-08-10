@@ -1407,8 +1407,6 @@ Address book
         :ensure ac-etags)
       (use-package ac-ispell
         :ensure ac-ispell)
-      (use-package ac-js2
-        :ensure ac-js2)
       (use-package auto-complete-clang
         :ensure auto-complete-clang)
       (use-package auto-complete-c-headers
