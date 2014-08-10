@@ -1342,9 +1342,9 @@ Address book
 #+END_SRC
 **** Mobile Org
 #+BEGIN_SRC emacs-lisp
-  (setq org-mobile-inbox-for-pull "~/emacs_org/tasks.org")
+  (setq org-mobile-inbox-for-pull "~/emacs_org/refile.org")
   (setq org-mobile-directory "~/Dropbox/MobileOrg")
-  (setq org-mobile-files '("~/emacs_org/personal/events.org"))
+  (setq org-mobile-files '("~/emacs_org/events.org" "~/emacs_org/tasks.org"))
   (setq org-mobile-agendas '("w"))
 #+END_SRC
 **** Disable org agenda window resizing
