@@ -1872,6 +1872,11 @@ Q
   (use-package nxml-mode
     :mode ("\\.\\(xml\\|mxml\\)\\'" . nxml-mode))
 #+END_SRC
+*** idl-mode                                                      :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package idl-mode
+    :mode ("\\.\\(idl\\|webidl\\)\\'" . idl-mode))
+#+END_SRC
 *** change-log-mode                                               :package:
 #+BEGIN_SRC emacs-lisp
   (use-package change-log-mode
@@ -1887,6 +1892,11 @@ Q
     (use-package lua-mode
       :ensure lua-mode
       :mode ("\\.lua\\'" . lua-mode))
+#+END_SRC
+*** git-timemachine                                               :package:
+#+BEGIN_SRC emacs-lisp
+    (use-package git-timemachine
+      :ensure git-timemachine)
 #+END_SRC
 ** Writing
 *** adoc-mode                                                     :package:
@@ -2499,6 +2509,15 @@ Turn on ansi in shells
 ()
 #+END_SRC
 ** Misc
+*** proced                                                        :package:
+#+BEGIN_SRC emacs-lisp
+  (setq proced-auto-update-interval 2)
+
+  (defun qdot/proced-settings ()
+    (proced-toggle-auto-update t))
+
+  (add-hook 'proced-mode-hook 'qdot/proced-settings)
+#+END_SRC
 *** easy-pg                                                       :package:
 gpg file auto query/loading
 #+begin_src emacs-lisp
