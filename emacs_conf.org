@@ -1536,7 +1536,7 @@ git management in emacs
   (add-hook 'ielm-mode-hook 'ielm-auto-complete)
 #+end_src
 
-*** flycheck                                                      :package:
+*** flycheck                                                        :package:
 Using flycheck instead of flymake
 #+begin_src emacs-lisp
   (use-package flycheck
