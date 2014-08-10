@@ -109,6 +109,11 @@ something.
   (defun qdot/set-platform-font ()
     "Set the default font for the system type."
     (interactive)
+    ;; If we have symbola on the system, use that to fill in as needed without
+    ;; having to use unicode-fonts package.
+    (when (member "Symbola" (font-family-list))
+      (set-fontset-font "fontset-default" nil 
+                    (font-spec :size 20 :name "Symbola")))
     (when macosx-p
       (set-face-font 'default "consolas-11"))
     (when mswindows-p
@@ -116,7 +121,6 @@ something.
     (when linux-p
       (when (member "Inconsolata" (font-family-list))
         (set-face-font 'default "inconsolata-11"))))
-
   (qdot/set-platform-font)
 #+end_src
 
