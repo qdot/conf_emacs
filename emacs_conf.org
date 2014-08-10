@@ -1377,6 +1377,23 @@ Address book
   (setq org-refile-target-verify-function 'qdot/verify-refile-target)
 #+END_SRC
 
+**** Org Babel
+#+BEGIN_SRC emacs-lisp
+  (require 'ob-lilypond)
+  (org-babel-do-load-languages
+    'org-babel-load-languages
+    '(
+      (emacs-lisp . t)
+      (sh t)
+      (org t)
+      (lilypond t)))
+
+  (defun qdot/org-confirm-babel-evaluate (lang body)
+    (and (not (string= lang "emacs-lisp"))
+         (not (string= lang "lilypond"))
+         (not (string= lang "ditaa"))))
+  (setq org-confirm-babel-evaluate 'qdot/org-confirm-babel-evaluate)
+#+END_SRC
 ** Programming
 *** auto-complete                                                 :package:
 #+begin_src emacs-lisp
