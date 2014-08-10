@@ -1804,6 +1804,13 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
   (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
 
+  ;; Enable jumping to elisp via help mode
+  ;; http://emacsredux.com/blog/2014/06/18/quickly-find-emacs-lisp-sources/
+
+  (define-key 'help-command (kbd "C-l") 'find-library)
+  (define-key 'help-command (kbd "C-f") 'find-function)
+  (define-key 'help-command (kbd "C-k") 'find-function-on-key)
+  (define-key 'help-command (kbd "C-v") 'find-variable)
 #+end_src
 Q
 *** lilypond-mode                                                 :package:
