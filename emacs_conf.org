@@ -998,6 +998,12 @@ Address book
    
    ;; Archive to the file name, assume we're not doubling up names across projects
    org-archive-location "~/emacs_org/archives/%s_archive::"
+
+   ;; Sometimes I may want to archive undone things
+   org-archive-mark-done nil
+
+   ;; Always save inherited tags when archiving
+   org-archive-subtree-add-inherited-tags t
    
    ;; Don't really use priorities, turn them off
    org-enable-priority-commands nil
