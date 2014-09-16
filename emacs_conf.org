@@ -1242,10 +1242,9 @@ Address book
                   (tags "REFILE"
                         ((org-agenda-overriding-header "Tasks to Refile")
                          (org-tags-match-list-sublevels nil)))
-                  (tags "email"
+                  (tags "email+TODO=\"TODO\""
                         ((org-agenda-overriding-header "Emails")
-                         (org-tags-match-list-sublevels nil)
-                         (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("SENT" "CANCELLED")))))
+                         (org-tags-match-list-sublevels nil)))
                   (tags-todo "-HOLD-CANCELLED/!"
                              ((org-agenda-overriding-header "Live Projects")
                               (org-agenda-skip-function 'bh/skip-non-projects)
@@ -1338,11 +1337,20 @@ Address book
    '(org-headline-done
      ((((class color) (min-colors 16) (background dark))
        (:foreground "LightSalmon" :strike-through t)))))
-  
+
   ;; Set org babel backgrounds so we get nice blocks
   (set-face-background 'org-block-begin-line "#333")
   (set-face-background 'org-block-end-line "#333")
   (set-face-background 'org-block-background "#222")
+
+  (setq org-tag-faces
+        '(("mozilla" . (:foreground "DarkOrange3"))
+          ("habits" . (:foreground "slate gray"))
+          ("projects" . (:foreground "blue violet"))
+          ("addimation" . (:foreground "PaleGreen4"))
+          ("event" . (:foreground "deep pink"))))
+
+
 #+END_SRC
 **** Mobile Org
 #+BEGIN_SRC emacs-lisp
