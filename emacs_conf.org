@@ -1082,7 +1082,7 @@ Address book
    org-src-fontify-natively t
    
    ;; Turn on sticky agendas so we don't have to regenerate them
-   org-agenda-sticky t
+   org-agenda-sticky nil
    
    ;; If there's a region, do whatever it is I'm trying to do to ALL headlines in
    ;; region
