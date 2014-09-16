@@ -176,6 +176,10 @@ directory. Emacs will mkdir it if necessary.)
         search-ring
         regexp-search-ring))
 #+END_SRC
+** Function enabling
+#+BEGIN_SRC emacs-lisp
+  (put 'erase-buffer 'disabled nil)
+#+END_SRC
 ** Modeline and display setup
 Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/improving-performance-emacs-display-engine/
 #+begin_src emacs-lisp
