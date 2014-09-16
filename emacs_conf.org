@@ -3,7 +3,7 @@
 #+PROPERTY: comments both
 * Startup Timing
 #+BEGIN_SRC emacs-lisp
-(defconst emacs-start-time (current-time))
+  (defconst emacs-start-time (current-time))
 #+END_SRC
 * Directory Configuration
 Setting up a few different variables for the different types of
