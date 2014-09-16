@@ -2397,7 +2397,7 @@ Turn on ansi in shells
 
 
 ** Window Management
-*** wg                                                            :package:
+*** workgroups                                                      :package:
 **** Basic Config
 #+begin_src emacs-lisp
   (use-package workgroups2
