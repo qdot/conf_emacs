@@ -2407,8 +2407,11 @@ Turn on ansi in shells
            ("<C-f2>"             . wg-switch-to-workgroup-at-index-2)
            ("<C-f3>"             . wg-switch-to-workgroup-at-index-3)
            ("<C-f4>"             . wg-switch-to-workgroup-at-index-4)
+           ("<C-XF86AudioPlay>"  . wg-switch-to-workgroup-at-index-4)
            ("<C-f5>"             . wg-switch-to-workgroup-at-index-5)
            ("<C-XF86AudioNext>"  . wg-switch-to-workgroup-at-index-5)
+           ("<C-f6>"             . wg-switch-to-workgroup-at-index-6)
+           ("<C-f7>"             . wg-switch-to-workgroup-at-index-7)
            ("C-x b"              . wg-switch-to-buffer))
     :init
     (progn
@@ -2421,6 +2424,8 @@ Turn on ansi in shells
        wg-emacs-exit-save-behavior nil
        ;; Turn off reloading of workgroup file lists
        wg-restore-associated-buffers nil
+       ;; Turn buffer list handling back on
+       wg-mess-with-buffer-list t
        wg-switch-to-first-workgroup-on-find-session-file nil)))
 #+end_src
 **** uid-mismatch handling
@@ -2458,69 +2463,72 @@ Turn on ansi in shells
 #+BEGIN_SRC emacs-lisp
   (defun qdot/personal-wg-setup ()
     ;;(workgroups-mode 1)
-  
+
     (defun qdot/wg-filter-buffer-list-by-not-major-mode (major-mode buffer-list)
       "Return only those buffers in BUFFER-LIST in major-mode MAJOR-MODE."
       (remove-if (lambda (mm) (eq mm major-mode))
                  buffer-list :key 'wg-buffer-major-mode))
-  
+
     (defun qdot/wg-filter-buffer-list-by-erc-query (server buffer-list)
       "Return only those buffers in BUFFER-LIST in major-mode MAJOR-MODE."
       (remove-if-not (lambda (buf) (erc-query-buffer-p (get-buffer buf)))
                      buffer-list :key 'buffer-name))
-  
+
     (defun qdot/wg-buffer-list-filter-not-irc (workgroup buffer-list)
       "Return only those buffers in BUFFER-LIST in `erc-mode'."
       (qdot/wg-filter-buffer-list-by-not-major-mode 'erc-mode buffer-list))
-  
+
     (defun qdot/wg-buffer-list-filter-associated-not-irc (workgroup buffer-list)
       "Return only those buffers in BUFFER-LIST in `erc-mode'."
       (qdot/wg-filter-buffer-list-by-not-major-mode
        'erc-mode (wg-buffer-list-filter-associated workgroup buffer-list)))
-  
-  
+
+
     (defun qdot/wg-buffer-list-filter-erc-channel (workgroup buffer-list)
       "Return only those buffers in BUFFER-LIST in `erc-mode'."
-      (wg-filter-buffer-list-by-regexp 
+      (wg-filter-buffer-list-by-regexp
        "^#" (wg-filter-buffer-list-by-major-mode 'erc-mode buffer-list)))
-  
+
     (defun qdot/wg-buffer-list-filter-erc-query (workgroup buffer-list)
       "Return only those buffers in BUFFER-LIST in `erc-mode'."
       (qdot/wg-filter-buffer-list-by-erc-query 'erc-mode buffer-list))
-  
-    (add-to-list
-     'wg-buffer-list-filter-definitions
-     '(qdot/erc-query "qdot/erc-query" qdot/wg-buffer-list-filter-erc-query))
-    (add-to-list
-     'wg-buffer-list-filter-definitions
-     '(qdot/erc-irc "qdot/erc-channel" qdot/wg-buffer-list-filter-erc-channel))
-    (add-to-list
-     'wg-buffer-list-filter-definitions
-     '(qdot/not-irc "qdot/not-irc" qdot/wg-buffer-list-filter-not-irc))
-  
-    (add-to-list
-     'wg-buffer-list-filter-definitions
-     '(qdot/associated-not-irc "qdot/associated-not-irc" 
-                               qdot/wg-buffer-list-filter-associated-not-irc))
-  
+
+    ;; (add-to-list
+    ;;  'wg-buffer-list-filter-definitions
+    ;;  '(qdot/erc-query "qdot/erc-query" qdot/wg-buffer-list-filter-erc-query))
+    ;; (add-to-list
+    ;;  'wg-buffer-list-filter-definitions
+    ;;  '(qdot/erc-irc "qdot/erc-channel" qdot/wg-buffer-list-filter-erc-channel))
+    ;; (add-to-list
+    ;;  'wg-buffer-list-filter-definitions
+    ;;  '(qdot/not-irc "qdot/not-irc" qdot/wg-buffer-list-filter-not-irc))
+
+    ;; (add-to-list
+    ;;  'wg-buffer-list-filter-definitions
+    ;;  '(qdot/associated-not-irc "qdot/associated-not-irc"
+    ;;                            qdot/wg-buffer-list-filter-associated-not-irc))
+
     (defun qdot/wg-set-buffer-lists ()
-      (wg-set-workgroup-parameter (wg-get-workgroup "scratch")
-                                  'wg-buffer-list-filter-order-alist 
-                                  '((qdot/not-irc all)))
-      (wg-set-workgroup-parameter (wg-get-workgroup "irc") 
-                                  'wg-buffer-list-filter-order-alist 
+      ;; (wg-set-workgroup-parameter (wg-get-workgroup "scratch")
+      ;;                             'wg-buffer-list-filter-order-alist
+      ;;                             '((qdot/not-irc all)))
+      (wg-set-workgroup-parameter (wg-get-workgroup "personalirc")
+                                  'wg-buffer-list-filter-order-alist
                                   '((default qdot/erc-irc all)))
-      (wg-set-workgroup-parameter (wg-get-workgroup "bitlbee") 
-                                  'wg-buffer-list-filter-order-alist 
+      (wg-set-workgroup-parameter (wg-get-workgroup "workirc")
+                                  'wg-buffer-list-filter-order-alist
+                                  '((default qdot/erc-irc all)))
+      (wg-set-workgroup-parameter (wg-get-workgroup "bitlbee")
+                                  'wg-buffer-list-filter-order-alist
                                   '((default qdot/erc-query all))))
-  
-    (defun qdot/wg-load ()
-      (interactive)
-      (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el"))
-      (qdot/wg-set-buffer-lists)))
-  
+    (qdot/wg-set-buffer-lists))
+    ;; (defun qdot/wg-load ()
+    ;;   (interactive)
+    ;;   (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el"))
+    ;;   (qdot/wg-set-buffer-lists)))
+
   ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
-  ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))  
+  ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))
 #+end_src
 *** popwin                                                          :package:
 #+BEGIN_SRC emacs-lisp
