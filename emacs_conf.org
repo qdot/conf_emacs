@@ -648,10 +648,10 @@ My mail client of choice.
     (progn
       (require 'mu4e)
       (require 'mu4e-vars)
-      (use-package mu4e-maildirs-extension
-        :ensure mu4e-maildirs-extension
-        :init
-        (mu4e-maildirs-extension))
+      ;; (use-package mu4e-maildirs-extension
+      ;;   :ensure mu4e-maildirs-extension
+      ;;   :init
+      ;;   (mu4e-maildirs-extension))
       (when macosx-p
         (setq mu4e-mu-binary "/opt/homebrew/bin/mu"))
       (setq mu4e-maildir "~/Mail") ;; top-level Maildir
@@ -666,15 +666,15 @@ My mail client of choice.
       (setq mu4e-view-show-images t)
       (setq mu4e-view-show-addresses t)
       (setq mail-user-agent 'mu4e-user-agent)
-  
+
       ;; Make mu4e-maildirs-extension only show unread directories
-      (defun qdot/mu4e-maildirs-extension-propertize-func (item)
-        (when (> (plist-get item :unread) 0)
-            (mu4e-maildirs-extension-propertize-handler item)))
-  
-      (setq mu4e-maildirs-extension-propertize-func 'qdot/mu4e-maildirs-extension-propertize-func)
+      ;; (defun qdot/mu4e-maildirs-extension-propertize-func (item)
+      ;;   (when (> (plist-get item :unread) 0)
+      ;;       (mu4e-maildirs-extension-propertize-handler item)))
+
+      ;; (setq mu4e-maildirs-extension-propertize-func 'qdot/mu4e-maildirs-extension-propertize-func)
       (require 'org-mu4e)
-  
+
       (defun qdot/mu4e-set-account ()
         "Set the account for composing a message."
         (interactive)
