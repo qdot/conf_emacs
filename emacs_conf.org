@@ -1910,6 +1910,11 @@ Q
     (use-package git-timemachine
       :ensure git-timemachine)
 #+END_SRC
+*** indent-guide                                                  :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package indent-guide
+    :ensure indent-guide)
+#+END_SRC
 ** Writing
 *** adoc-mode                                                     :package:
 #+BEGIN_SRC emacs-lisp
