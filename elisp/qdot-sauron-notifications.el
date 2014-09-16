@@ -36,21 +36,21 @@ should highlight that status.")
     (let ((status-file (concat qdot/status-file-directory type)))
       (when (and (file-exists-p status-file) (member type qdot/status-types))
         (delete-file status-file))))
+  (defun qdot/wg-remove-notifications ()
+    (cond
+     ((eq (wg-get-workgroup "personalirc") (wg-current-workgroup))
+      (qdot/remove-notify-type "freenode"))
+     ((eq (wg-get-workgroup "workirc") (wg-current-workgroup))
+      (qdot/remove-notify-type "mozilla"))
+     ((eq (wg-get-workgroup "bitlbee") (wg-current-workgroup))
+      (qdot/remove-notify-type "bitlbee"))
+     ((eq (wg-get-workgroup "twitter") (wg-current-workgroup))
+      (qdot/remove-notify-type "twitter"))))
+
+  (add-hook 'wg-after-switch-to-workgroup-hook 'qdot/wg-remove-notifications)
 
   (defun qdot/add-notify-hooks ()
-    (add-hook 'wg-switch-to-workgroup-hook
-              (lambda ()
-                (cond
-                 ((eq (wg-get-workgroup "irc") (wg-current-workgroup))
-                  (qdot/remove-notify-type "freenode"))
-                 ((eq (wg-get-workgroup "workirc") (wg-current-workgroup))
-                  (qdot/remove-notify-type "mozilla"))
-                 ((eq (wg-get-workgroup "bitlbee") (wg-current-workgroup))
-                  (qdot/remove-notify-type "bitlbee"))
-                 ((eq (wg-get-workgroup "twitter") (wg-current-workgroup))
-                  (qdot/remove-notify-type "twitter")))))
-
     (add-hook 'sauron-event-added-functions
-              'qdot/add-notify-type)))
+              'qdot/add-notify-type))
 
-(provide 'qdot-sauron-notifications)
+  (provide 'qdot-sauron-notifications))
