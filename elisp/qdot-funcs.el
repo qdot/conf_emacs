@@ -227,18 +227,25 @@
 
 (defun qdot/start-desktop ()
   (interactive)
-  (qdot/set-platform-font)
+  (workgroups-mode 1)
+  ;; (qdot/personal-wg-setup)
+  (when linux-p
+    (wg-find-session-file "~/.emacs_workgroups"))
   (org-agenda nil " ")
   (sauron-start)
-  (qdot/monkey-patch-sr)
+  (mu4e)
   (when linux-p
     (qdot/add-notify-hooks))
-  (qdot/erc-znc-start "personal")
   (qdot/bitlbee-connect)
-  (qdot/personal-wg-setup)
-  (workgroups-mode)
-  (when linux-p
-    (wg-find-session-file (concat qdot/emacs-conf-dir "workgroups/linux-wg.el"))))
+  (qdot/erc-znc-start "personal")
+  (qdot/erc-znc-start "work")
+  ;; Wait until all the IRC networks connect. 5s is usually enough.
+  (run-at-time "5 sec" nil
+               (lambda ()
+                 (switch-to-buffer-other-window "&bitlbee")
+                 (erc-nicklist)
+                 (wg-revert-all-workgroups)
+                 (wg-switch-to-workgroup "org"))))
 
 
 ;; Taken from http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
