@@ -169,9 +169,12 @@ Prefer UTF-8 everywhere
 Set up some simple platform finding variables
 
 #+BEGIN_SRC emacs-lisp
-  (setq mswindows-p (eq system-type 'windows-nt))
-  (setq macosx-p (eq system-type 'darwin))
-  (setq linux-p (eq system-type 'gnu/linux))
+  (defvar mswindows-p (eq system-type 'windows-nt)
+    "True if using windows, nil otherwise")
+  (defvar macosx-p (eq system-type 'darwin)
+    "True if using Mac OS X, nil otherwise")
+  (defvar linux-p (eq system-type 'gnu/linux)
+    "True if using Linux, nil otherwise")
 #+END_SRC
 
 Don't need startup screens
