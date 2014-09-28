@@ -165,7 +165,6 @@
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
 
-
 ;; Delete current buffer and file
 ;; http://blog.tuxicity.se/elisp/emacs/2010/11/16/delete-file-and-buffer-in-emacs.html
 
@@ -182,7 +181,6 @@
         (kill-buffer buffer)
         (message "File '%s' successfully removed" filename)))))
 
-
 ;; Insert a uuid at current position using uuidgen
 
 (defun qdot/insert-uuid ()
@@ -191,13 +189,11 @@
   (shell-command-on-region (point) (point) "uuidgen" t)
   (delete-backward-char 1))
 
-
 ;; Clear kill ring
 
 (defun qdot/clear-kill-ring ()
   "Clear the kill ring variable"
   (setq kill-ring nil))
-
 
 ;; Override org-agenda-open-in-other-window
 
@@ -233,7 +229,9 @@
     (wg-find-session-file "~/.emacs_workgroups"))
   (org-agenda nil " ")
   (sauron-start)
-  (mu4e)
+  ;; Only start mu4e when we have mail drive mounted.
+  (when (file-exists-p "~/Mail/Sent")
+    (mu4e))
   (when linux-p
     (qdot/add-notify-hooks))
   (qdot/bitlbee-connect)
