@@ -639,6 +639,13 @@ From http://users.teilar.gr/~g1951d/ - Symbola
   (use-package hidden-mode-line-mode
     :commands hidden-mode-line-mode)
 #+END_SRC
+*** paradox                                                       :package:
+Paradox makes the package list pretty and adds some stats to the listings.
+#+BEGIN_SRC emacs-lisp
+  (use-package paradox
+    :ensure paradox
+    :commands (paradox-list-packages))
+#+END_SRC
 ** Emacs Navigation
 *** ace-jump-mode                                                   :package:
 #+BEGIN_SRC emacs-lisp
