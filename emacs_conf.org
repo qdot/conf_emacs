@@ -30,7 +30,8 @@ can just load the output from that when needed.
 #+BEGIN_SRC emacs-lisp
   (defconst qdot/emacs-start-time (current-time))
 #+END_SRC
-* Directory Configuration
+* Basic Setup
+** Directory Configuration
 Setting up a few different variables for the different types of
 directories we have (configurations, locally stored versus el-get
 fetched libs, etc...)
@@ -91,7 +92,6 @@ fetched libs, etc...)
   (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 #+END_SRC
 
-* Basic Setup
 ** Variables
 Anything in this section relates to the core setup of emacs. At this
 point, there are no packages loaded, so this is just for setting up
