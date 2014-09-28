@@ -2786,8 +2786,10 @@ Extra hooks to functions from the qdot-funcs modules
 ** TODO Check out hungry-delete mode
 https://github.com/nflath/hungry-delete
 ** TODO Have org mode daily agenda show up on xmonad background (conky?)
-** TODO Redo workgroups so that org mode comes up in window 1
-** TODO Unbind erc privmsg/channels notifications from sauron
+** DONE Redo workgroups so that org mode comes up in window 1
+CLOSED: [2014-09-28 Sun 00:31]
+** DONE Unbind erc privmsg/channels notifications from sauron
+CLOSED: [2014-09-28 Sun 00:31]
 ** TODO Have bitlmacs fix network bonding for IMs on reconnect (just /query again)
 :LOGBOOK:
 CLOCK: [2013-11-06 Wed 13:59]--[2013-11-06 Wed 14:00] =>  0:01
@@ -2795,7 +2797,6 @@ CLOCK: [2013-11-06 Wed 13:59]--[2013-11-06 Wed 14:00] =>  0:01
 [2013-11-06 Wed]
 [[irc:/localhost:9999/&bitlbee][irc session 'localhost:9999/&bitlbee']]
 
-** TODO bitlmacs highlights IRC nicks when they talk in channels if they also have a privmsg open
 ** TODO Add repo search capability for magit-repo-dirs               :emacs:
 :LOGBOOK:
 CLOCK: [2014-03-02 Sun 14:17]--[2014-03-02 Sun 14:18] =>  0:01
@@ -2815,13 +2816,15 @@ http://nullprogram.com/blog/2012/10/31/
 ** TODO Fix agenda display of mozilla subtree in email task file
 ** TODO Make org date function that will show events on certain days AFTER a certain date
 ** TODO Make fill columns for ERC auto-set for workgroup sizes?
-** TODO Read Julian Danjou's config
-http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
 ** TODO Work on memacs                                               :emacs:
 ** TODO Make sauron only notify for twitter when mentions or PMs received.
 ** TODO Create named emacs instances, make them come up in correct xmonad desktops
 ** TODO Make mu4e delete drafts after they are sent
    [2013-07-05 Fri]
+
+** DONE Read Julian Danjou's config
+CLOSED: [2014-09-28 Sun 00:28]
+http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
 
 ** DONE Convert requires to use-package calls
 CLOSED: [2014-04-11 Fri 21:31]
@@ -3115,40 +3118,64 @@ CLOSED: [2012-10-15 Mon 15:36]
 :PROPERTIES:
 :ID: c315b3ab-448b-4134-af2f-0378af73dc24
 :END:
-** ERC Nicklist rewrite
-*** DONE Create filter function to load things like lists of privmsg buffers
+
+** TODO Bitlmacs
+*** TODO ERC Nicklist rewrite
+**** DONE Create filter function to load things like lists of privmsg buffers
 CLOSED: [2013-10-29 Tue 20:54]
-*** CANCELLED Use hl-mode for hilighting per line               :CANCELLED:
+**** CANCELLED Use hl-mode for hilighting per line             :CANCELLED:
 CLOSED: [2013-10-29 Tue 20:54]
 :LOGBOOK:
 - State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:54] \\
   Just propertize by hand, hl-mode doesn't work well for multiple non-consecutive lines
 :END:
-*** TODO Remove cursor rendering
-*** TODO Rewrite menu/query function
-*** TODO Group handling?
-*** TODO Host fetch handling
-*** DONE Change nick/line faces based on status or privmsg
+**** TODO Remove cursor rendering
+**** TODO Rewrite menu/query function
+**** TODO Group handling?
+**** TODO Host fetch handling
+**** DONE Change nick/line faces based on status or privmsg
 CLOSED: [2013-10-29 Tue 20:55]
-*** DONE Make nicklist buffer show up in buffer list
+**** DONE Make nicklist buffer show up in buffer list
 CLOSED: [2013-10-29 Tue 20:55]
-*** DONE Create command to clear erc-nicklist
+**** DONE Create command to clear erc-nicklist
 CLOSED: [2013-10-29 Tue 20:55]
   [2012-03-30 Fri]
 
-** Bitlmacs
 *** DONE Make keymap for last/next privmsg
 CLOSED: [2013-10-29 Tue 20:54]
 *** DONE Make trigger to clear erc-nicklist status on access
 CLOSED: [2013-10-29 Tue 20:54]
 *** TODO Gravatar image viewing?
 *** TODO Make ido only list IMs?
-** Workgroups Update
-*** TODO Divide functionality into modules
-*** TODO Removing pickling, make configuration files human readable
-*** TODO Make more features enable/disable-able
-*** TODO Per-workgroup buffer list implementations
-*** TODO Stop workgroups.el from reloading file lists for workgroups
+*** TODO bitlmacs highlights IRC nicks when they talk in channels if they also have a privmsg open
+
+** CANCELLED Workgroups Update
+Was going to start 
+*** CANCELLED Divide functionality into modules                 :CANCELLED:
+CLOSED: [2014-09-28 Sun 00:32]
+:LOGBOOK:  
+- State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
+:END:      
+*** CANCELLED Removing pickling, make configuration files human readable :CANCELLED:
+CLOSED: [2014-09-28 Sun 00:32]
+:LOGBOOK:  
+- State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
+:END:      
+*** CANCELLED Make more features enable/disable-able            :CANCELLED:
+CLOSED: [2014-09-28 Sun 00:32]
+:LOGBOOK:  
+- State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
+:END:      
+*** CANCELLED Per-workgroup buffer list implementations         :CANCELLED:
+CLOSED: [2014-09-28 Sun 00:32]
+:LOGBOOK:  
+- State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
+:END:      
+*** CANCELLED Stop workgroups.el from reloading file lists for workgroups :CANCELLED:
+CLOSED: [2014-09-28 Sun 00:32]
+:LOGBOOK:  
+- State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
+:END:      
 ** mu4e/gnupg
 *** DONE Set all past email address in mu4e-user-mail-address-list
 CLOSED: [2013-02-18 Mon 22:21]
@@ -3200,7 +3227,8 @@ CLOSED: [2013-10-29 Tue 20:55]
 - Key bindings
   - Workgroups changes
 ** Package Switchover
-*** TODO Do we still need CEDET loader? Or CEDET at /all/?
+*** DONE Do we still need CEDET loader? Or CEDET at /all/?
+CLOSED: [2014-09-28 Sun 00:33]
 *** TODO Clean up mu4e config
 *** TODO Figure out how to hook up prog mode?
 *** TODO org-mode config + use-package?
@@ -3226,9 +3254,10 @@ CLOSED: [2014-04-11 Fri 22:48]
 *** DONE Move all automodes to :mode in use-package
 CLOSED: [2014-04-11 Fri 22:34]
 *** Timing and Memory
-| Type                 | Load Time | Memory |
-|----------------------+-----------+--------|
-| emacs -q             |       0.0 |   18.9 |
-| Old el-get config    |     5.162 |   56.0 |
-| use-package, no opts |     2.794 |   48.6 |
-|                      |           |        |
+| Type                             | Load Time | Memory |
+|----------------------------------+-----------+--------|
+| emacs -q                         |       0.0 |   13.4 |
+| Old el-get config                |     5.162 |   56.0 |
+| use-package, no opts             |     2.794 |   48.6 |
+| use-package, fixed delay loading |     1.615 |   34.6 |
+
