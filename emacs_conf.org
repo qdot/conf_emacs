@@ -675,6 +675,14 @@ Move between windows using shift-[arrow key]
     (ace-link-setup-default))
 #+END_SRC
 ** Email
+*** Setup
+Conditions under which mail apps and variables should be loaded.
+
+#+BEGIN_SRC emacs-lisp
+  (defvar qdot/mail-p
+    linux-p
+    "Whether mail packages should be initialized")
+#+END_SRC
 *** mu4e                                                          :package:
 My mail client of choice.
 **** mu4e variables/functions to be used across sessions
