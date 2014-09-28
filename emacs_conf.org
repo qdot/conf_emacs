@@ -8,6 +8,17 @@
 #+HTML_HEAD: <link rel="stylesheet" href="org.css" type="text/css" />
 #+LANGUAGE: en
 #+PROPERTY: comments both
+* Documentation
+** Introduction
+If you ever needed proof that I'm OCD, here you go.
+** Handling Multiple Configuration Blocks
+Some of the packages I use require a LOT of initialization. mu4e,
+org-mode, and erc all contain small novels worth of config. In order
+to provide literate programming descriptions of multiple configuration
+blocks for a package, I tangle large configs into their own files
+using properties in the org tree. I leave the use-package call in the
+main org file, and call load-file on the tangled file from the config
+block of use-package.
 * Init File
 :PROPERTIES:
 :header-args: :tangle init.el
