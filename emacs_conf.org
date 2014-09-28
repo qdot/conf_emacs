@@ -976,15 +976,13 @@ Address book
 *** org-mode                                                      :package:
 **** org setup
 #+BEGIN_SRC emacs-lisp
-    (use-package org
-      :ensure org-plus-contrib
-      :mode (("\\.org_archive\\'"  . org-mode)
-             ("\\.org\\'"  . org-mode))
-      :init (require 'org))
+  (use-package org
+    :ensure org-plus-contrib
+    :mode (("\\.org_archive\\'"  . org-mode)
+           ("\\.org\\'"  . org-mode)))
 #+END_SRC
 **** org modules
 #+BEGIN_SRC emacs-lisp
-  (require 'org)
   (require 'org-checklist)
   (require 'org-screen)
   (require 'org-protocol)
