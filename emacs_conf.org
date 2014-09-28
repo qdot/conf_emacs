@@ -4,7 +4,7 @@
 #+STARTUP:  align fold nodlcheck content
 #+OPTIONS:  H:4 num:nil toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t
 #+OPTIONS:  skip:nil d:(HIDE) tags:not-in-toc
-#+PROPERTY: header-args :results none :noweb yes
+#+PROPERTY: header-args :results none :noweb yes :tangle yes
 #+HTML_HEAD: <link rel="stylesheet" href="org.css" type="text/css" />
 #+LANGUAGE: en
 #+PROPERTY: comments both
