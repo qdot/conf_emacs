@@ -2071,9 +2071,10 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
           nil))
       ;; external module to handle special xmonad notifications setup
       (require 'qdot-sauron-notifications)
-      (qdot/monkey-patch-sr)
-      (qdot/add-notify-hooks)))
-#+end_src
+      (add-hook 'sauron-mode-hook 'qdot/monkey-patch-sr)
+      (add-hook 'sauron-mode-hook 'qdot/add-notify-hooks)))
+
+#+END_SRC
 **** Monkeypatching IM status message
 #+BEGIN_SRC emacs-lisp
 #+END_SRC
