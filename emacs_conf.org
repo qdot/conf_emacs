@@ -706,174 +706,108 @@ Jump to a link in info/help windows.
 ** Email
 *** Setup
 Conditions under which mail apps and variables should be loaded.
+Current condition is to make sure mail dir is mounted.
 
 #+BEGIN_SRC emacs-lisp
   (defvar qdot/mail-p
-    linux-p
+    (file-exists-p "~/Mail/sent")
     "Whether mail packages should be initialized")
 #+END_SRC
 *** mu4e                                                          :package:
-My mail client of choice.
-**** mu4e variables/functions to be used across sessions
+I use mu/mu4e for local mail handling, sync'd via offlineimap.
+
+I just use a checkout of the git repo instead of relying on a package.
+This is due to mu4e being built into the mu git repo, and the bleeding
+edge of mu usually having useful things without too much breakage,
+
+Note that all configuration outside of the use-package call will
+tangle to an external file.
+
 #+BEGIN_SRC emacs-lisp
-  ;; mu4e is not avaialble on melpa since it's part of mu
   (use-package mu4e
     :load-path "~/.emacs_files/dev-packages/mu/mu4e"
     :commands (mu4e)
-    :init
+    :config
     (progn
-      (require 'mu4e)
-      (require 'mu4e-vars)
-      ;; (use-package mu4e-maildirs-extension
-      ;;   :ensure mu4e-maildirs-extension
-      ;;   :init
-      ;;   (mu4e-maildirs-extension))
-      (when macosx-p
-        (setq mu4e-mu-binary "/opt/homebrew/bin/mu"))
-      (setq mu4e-maildir "~/Mail") ;; top-level Maildir
-      (setq mu4e-html2text-command "w3m -dump -T text/html")
-      (setq mu4e-view-prefer-html t)
-      (setq mu4e-use-fancy-chars t)
-      (setq mu4e-hide-index-messages t)
-      (setq mu4e-update-interval 300)
-      (setq mu4e-attachment-dir  "~/Downloads")
-      (when (fboundp 'imagemagick-register-types)
-        (imagemagick-register-types))
-      (setq mu4e-view-show-images t)
-      (setq mu4e-view-show-addresses t)
-      (setq mail-user-agent 'mu4e-user-agent)
-      ;; No signature
-      (setq mu4e-compose-signature nil)
-      ;; Make mu4e-maildirs-extension only show unread directories
-      ;; (defun qdot/mu4e-maildirs-extension-propertize-func (item)
-      ;;   (when (> (plist-get item :unread) 0)
-      ;;       (mu4e-maildirs-extension-propertize-handler item)))
-
-      ;; (setq mu4e-maildirs-extension-propertize-func 'qdot/mu4e-maildirs-extension-propertize-func)
-      (require 'org-mu4e)
-
-      (defun qdot/mu4e-set-account ()
-        "Set the account for composing a message."
-        (interactive)
-        (let* ((account
-                (if mu4e-compose-parent-message
-                    (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
-                      (string-match "/\\(.*?\\)/" maildir)
-                      (match-string 1 maildir))
-                  (completing-read (format "Compose with account: (%s) "
-                                           (mapconcat #'(lambda (var) (car var)) qdot/mu4e-account-alist "/"))
-                                   (mapcar #'(lambda (var) (car var)) qdot/mu4e-account-alist)
-                                   nil t nil nil (caar qdot/mu4e-account-alist))))
-               (account-vars (cdr (assoc account qdot/mu4e-account-alist))))
-          (if account-vars
-              (mapc #'(lambda (var)
-                        (set (car var) (cadr var)))
-                    account-vars)
-            (error "No email account found"))))
-
-      (add-hook 'mu4e-compose-pre-hook 'qdot/mu4e-set-account)
-
-      (require 'gnus-dired)
-      ;; make the `gnus-dired-mail-buffers' function also work on
-      ;; message-mode derived modes, such as mu4e-compose-mode
-      (defun gnus-dired-mail-buffers ()
-        "Return a list of active message buffers."
-        (let (buffers)
-          (save-current-buffer
-            (dolist (buffer (buffer-list t))
-              (set-buffer buffer)
-              (when (and (derived-mode-p 'message-mode)
-                         (null message-sent-message-via))
-                (push (buffer-name buffer) buffers))))
-          (nreverse buffers)))
-
-      (setq gnus-dired-mail-mode 'mu4e-user-agent)
-      (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
-
-      ;; Create a header action for marking as needs reply
-      (defun qdot/mu4e-org-needs-reply (msg)
-        (let* ((msgid   (or (plist-get msg :message-id) "<none>"))
-               (msgfrom (car (mu4e-message-field msg :from)))
-               link)
-          ;; Manually concat the link because I suck at figuring out how org-mode
-          ;; elisp works
-          (setq link (concat "REPLY "
-                             (format-time-string (cdr org-time-stamp-formats) (mu4e-message-field msg :date))
-                             " [[mu4e:msgid:" msgid "][" (car msgfrom) " <" (cdr msgfrom) "> : "
-                             (funcall org-mu4e-link-desc-func msg) "]]" ))
-          (kill-new link)
-          (org-capture nil "r")))
-
-      (require 'mu4e-headers)
-      (add-to-list 'mu4e-headers-actions '("org reply task" . qdot/mu4e-org-needs-reply) t)
-
-      (require 'mu4e-contrib)
-      (add-to-list 'mu4e-headers-actions '("mark all read" . mu4e-headers-mark-all-unread-read) t))
-    (when qdot/mail-p
-      (setq mu4e-user-mail-address-list (list "kyle@nonpolynomial.com"
-                                              "kyle@knot-theory.com"
-                                              "qdot76367@gmail.com"
-                                              "t-kylem@microsoft.com"
-                                              "kmachulis@mozilla.com"
-                                              "kyle@510systems.com"
-                                              "kyle@kipr.org"
-                                              "qdot@mozilla.com"
-                                              "qdot@knot-theory.com"
-                                              "qdot@nonpolynomial.com"
-                                              "qdot@deathbots.com"
-                                              "qdot@ia1hacking.com"
-                                              "alex@mmorgy.com"
-                                              "alexp@mmorgy.com"
-                                              "isabelle@mmorgy.com"
-                                              "qdot@mmorgy.com"
-                                              "tips@mmorgy.com"
-                                              "qdot@numberporn.com"
-                                              "qdot@opendildonics.org"
-                                              "kyle@openyou.org"
-                                              "qdot@slashdong.org"
-                                              "tips@slashdong.org"
-                                              "mage@ou.edu"
-                                              "mage@gothic.net"
-                                              "mage@ionet.net"
-                                              "mage@galstar.net"))
-
-      ;; setup some handy shortcuts
-      (setq mu4e-maildir-shortcuts
-            '(("/nonpolynomial/INBOX"                 . ?i)
-              ("/mozilla/INBOX"                       . ?m)
-              ("/nonpolynomial/Mozilla.bugzilla"      . ?b)
-              ("/nonpolynomial/MailArchive.Kelly"     . ?k)
-              ("/nonpolynomial/MailArchive.Personal"  . ?p)
-              ("/nonpolynomial/MailArchive.Receipts"  . ?r)
-              ("/[Gmail].Sent Mail"                   . ?s)
-              ("/[Gmail].Trash"                       . ?t)))
-
-      (setq qdot/mu4e-account-alist
-            '(("nonpolynomial"
-               (mu4e-sent-folder "/nonpolynomial/[Gmail].Sent Mail")
-               (mu4e-drafts-folder "/nonpolynomial/[Gmail].Drafts")
-               (user-mail-address "kyle@nonpolynomial.com")
-               (smtpmail-default-smtp-server "smtp.gmail.com")
-               (smtpmail-local-domain "nonpolynomial.com")
-               (smtpmail-smtp-server "smtp.gmail.com")
-               (smtpmail-stream-type starttls)
-               (smtpmail-smtp-service 587))
-              ("mozilla"
-               (mu4e-sent-folder "/mozilla/Sent")
-               (mu4e-drafts-folder "/mozilla/Drafts")
-               (user-mail-address "kmachulis@mozilla.com")
-               (smtpmail-default-smtp-server "smtp.")
-               (smtpmail-local-domain "mozilla.com")
-               (smtpmail-smtp-server "smtp.gmail.com")
-               (smtpmail-stream-type starttls)
-               (smtpmail-smtp-service 587))))
-
-      (add-to-list 'mu4e-bookmarks
-                   '("maildir:/nonpolynomial/INBOX flag:unread" "Nonpolynomial Unread" ?n) t)
-      (add-to-list 'mu4e-bookmarks
-                   '("maildir:/mozilla/INBOX flag:unread" "Mozilla Unread" ?m) t)))
+      (require 'qdot-mu4e-config)))
 #+END_SRC
-**** dired specialization for attaching files
+
+**** mu4e Configuration
+:PROPERTIES:
+:header-args: :tangle qdot-mu4e-config.el
+:END:
+***** Package variable setup
+Sets basic directories, how often to update, etc. Nothing special,
+except for turning off the damn "sent from my mu4e" default signature.
+#+BEGIN_SRC emacs-lisp
+  "Set up variables needed for mu4e package"
+  (require 'org-mu4e)
+  (when macosx-p
+    (setq mu4e-mu-binary "/opt/homebrew/bin/mu"))
+  (setq mu4e-maildir "~/Mail")
+  (setq mu4e-view-prefer-html t)
+  (setq mu4e-use-fancy-chars t)
+  (setq mu4e-hide-index-messages t)
+  (setq mu4e-update-interval 300)
+  (setq mu4e-attachment-dir  "~/Downloads")
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types))
+  (setq mu4e-view-show-images t)
+  (setq mu4e-view-show-addresses t)
+  (setq mail-user-agent 'mu4e-user-agent)
+  (setq mu4e-compose-signature nil)
+#+END_SRC
+
+***** HTML Mail viewing
+Use emacs's built in shr (simple html renderer) parsing for html mail.
+Slow, but works everywhere.
+
+Idea taken from the mu mailing list.
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/mu4e-setup-html-mail ()
+    "Set up method for viewing HTML mail"
+    (setq shr-width fill-column)
+    (setq shr-bullet " ")
+
+    (defun shr-html2text ()
+      "Replacement for standard html2text using shr."
+      (interactive)
+      (let ((dom (libxml-parse-html-region (point-min) (point-max))))
+        (erase-buffer)
+        (shr-insert-document dom)
+        (goto-char (point-min))))
+
+    (setq mu4e-html2text-command 'shr-html2text))
+#+END_SRC
+
+***** Account selection
+When sending a new email, allow selection of which account it should
+be sent from based on the list of accounts provided.
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/mu4e-set-account ()
+    "Set the account for composing a message."
+    (interactive)
+    (let* ((account
+            (if mu4e-compose-parent-message
+                (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
+                  (string-match "/\\(.*?\\)/" maildir)
+                  (match-string 1 maildir))
+              (completing-read (format "Compose with account: (%s) "
+                                       (mapconcat #'(lambda (var) (car var)) qdot/mu4e-account-alist "/"))
+                               (mapcar #'(lambda (var) (car var)) qdot/mu4e-account-alist)
+                               nil t nil nil (caar qdot/mu4e-account-alist))))
+           (account-vars (cdr (assoc account qdot/mu4e-account-alist))))
+      (if account-vars
+          (mapc #'(lambda (var)
+                    (set (car var) (cadr var)))
+                account-vars)
+        (error "No email account found"))))
+
+  (add-hook 'mu4e-compose-pre-hook 'qdot/mu4e-set-account)
+
+#+END_SRC
+***** Attachments using dired
+Select attachments to emails using dired
 #+BEGIN_SRC emacs-lisp
   (require 'gnus-dired)
   ;; make the `gnus-dired-mail-buffers' function also work on
@@ -883,14 +817,106 @@ My mail client of choice.
     (let (buffers)
       (save-current-buffer
         (dolist (buffer (buffer-list t))
-    (set-buffer buffer)
-    (when (and (derived-mode-p 'message-mode)
-      (null message-sent-message-via))
-      (push (buffer-name buffer) buffers))))
+          (set-buffer buffer)
+          (when (and (derived-mode-p 'message-mode)
+                     (null message-sent-message-via))
+            (push (buffer-name buffer) buffers))))
       (nreverse buffers)))
 
   (setq gnus-dired-mail-mode 'mu4e-user-agent)
   (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
+#+END_SRC
+***** Header Actions
+In header view, create an mu4e action that will create a new org-mode
+task to remind me to reply to the email. This assumes I'll look at
+org-mode, which is kind of adorable, but hey, good intentions!
+#+BEGIN_SRC emacs-lisp
+  ;; Create a header action for marking as needs reply
+  (defun qdot/mu4e-org-needs-reply (msg)
+    (let* ((msgid   (or (plist-get msg :message-id) "<none>"))
+           (msgfrom (car (mu4e-message-field msg :from)))
+           link)
+      ;; Manually concat the link because I suck at figuring out how org-mode
+      ;; elisp works
+      (setq link (concat "REPLY "
+                         (format-time-string (cdr org-time-stamp-formats) (mu4e-message-field msg :date))
+                         " [[mu4e:msgid:" msgid "][" (car msgfrom) " <" (cdr msgfrom) "> : "
+                         (funcall org-mu4e-link-desc-func msg) "]]" ))
+      (kill-new link)
+      (org-capture nil "r")))
+  (require 'mu4e-headers)
+  (add-to-list 'mu4e-headers-actions '("org reply task" . qdot/mu4e-org-needs-reply) t)
+  (require 'mu4e-contrib)
+  (add-to-list 'mu4e-headers-actions '("mark all read" . mu4e-headers-mark-all-unread-read) t)
+#+END_SRC
+***** Mail account information
+#+BEGIN_SRC emacs-lisp
+  (setq mu4e-user-mail-address-list (list "kyle@nonpolynomial.com"
+                                          "kyle@knot-theory.com"
+                                          "qdot76367@gmail.com"
+                                          "t-kylem@microsoft.com"
+                                          "kmachulis@mozilla.com"
+                                          "kyle@510systems.com"
+                                          "kyle@kipr.org"
+                                          "qdot@mozilla.com"
+                                          "qdot@knot-theory.com"
+                                          "qdot@nonpolynomial.com"
+                                          "qdot@deathbots.com"
+                                          "qdot@ia1hacking.com"
+                                          "alex@mmorgy.com"
+                                          "alexp@mmorgy.com"
+                                          "isabelle@mmorgy.com"
+                                          "qdot@mmorgy.com"
+                                          "tips@mmorgy.com"
+                                          "qdot@numberporn.com"
+                                          "qdot@opendildonics.org"
+                                          "kyle@openyou.org"
+                                          "qdot@slashdong.org"
+                                          "tips@slashdong.org"
+                                          "mage@ou.edu"
+                                          "mage@gothic.net"
+                                          "mage@ionet.net"
+                                          "mage@galstar.net"))
+
+  ;; setup some handy shortcuts
+  (setq mu4e-maildir-shortcuts
+        '(("/nonpolynomial/INBOX"                 . ?i)
+          ("/mozilla/INBOX"                       . ?m)
+          ("/nonpolynomial/Mozilla.bugzilla"      . ?b)
+          ("/nonpolynomial/MailArchive.Kelly"     . ?k)
+          ("/nonpolynomial/MailArchive.Personal"  . ?p)
+          ("/nonpolynomial/MailArchive.Receipts"  . ?r)
+          ("/[Gmail].Sent Mail"                   . ?s)
+          ("/[Gmail].Trash"                       . ?t)))
+
+  (setq qdot/mu4e-account-alist
+        '(("nonpolynomial"
+           (mu4e-sent-folder "/nonpolynomial/[Gmail].Sent Mail")
+           (mu4e-drafts-folder "/nonpolynomial/[Gmail].Drafts")
+           (user-mail-address "kyle@nonpolynomial.com")
+           (smtpmail-default-smtp-server "smtp.gmail.com")
+           (smtpmail-local-domain "nonpolynomial.com")
+           (smtpmail-smtp-server "smtp.gmail.com")
+           (smtpmail-stream-type starttls)
+           (smtpmail-smtp-service 587))
+          ("mozilla"
+           (mu4e-sent-folder "/mozilla/Sent")
+           (mu4e-drafts-folder "/mozilla/Drafts")
+           (user-mail-address "kmachulis@mozilla.com")
+           (smtpmail-default-smtp-server "smtp.")
+           (smtpmail-local-domain "mozilla.com")
+           (smtpmail-smtp-server "smtp.gmail.com")
+           (smtpmail-stream-type starttls)
+           (smtpmail-smtp-service 587))))
+
+  (add-to-list 'mu4e-bookmarks
+               '("maildir:/nonpolynomial/INBOX flag:unread" "Nonpolynomial Unread" ?n) t)
+  (add-to-list 'mu4e-bookmarks
+               '("maildir:/mozilla/INBOX flag:unread" "Mozilla Unread" ?m) t)
+#+END_SRC
+***** Provide Statement
+#+BEGIN_SRC emacs-lisp
+(provide 'qdot-mu4e-config)
 #+END_SRC
 *** smtpmail                                                      :package:
 #+BEGIN_SRC emacs-lisp  
@@ -898,9 +924,8 @@ My mail client of choice.
   ;; also, make sure the gnutls command line utils are installed
   ;; package 'gnutls-bin' in Debian/Ubuntu, 'gnutls' in Archlinux.
   (use-package smtpmail
-    :commands (mu4e)
-    :disabled t
-    :init
+    :commands (smtpmail-send-it)
+    :config
     (progn
       (setq message-send-mail-function 'smtpmail-send-it
             starttls-use-gnutls t
@@ -949,9 +974,8 @@ My mail client of choice.
 #+BEGIN_SRC emacs-lisp
   ;; add Cc and Bcc headers to the message buffer
   (use-package message-mode
-    :disabled t
     :commands message-mode
-    :init
+    :config
     (progn
       (setq message-default-mail-headers "Cc: \nBcc: \n")
       (setq message-kill-buffer-on-exit t)
