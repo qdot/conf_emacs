@@ -336,26 +336,26 @@ configurations without having to search through the org file.
 #+END_SRC
 ** Emacs Customization
 *** color-theme                                                   :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package color-theme
     :ensure color-theme
     :init
     (progn
       (color-theme-initialize)
       (color-theme-dark-laptop)))
-#+end_src
+#+END_SRC
 
 *** icomplete                                                     :package:
 Incremental minibuffer completion
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (icomplete-mode 1)
   (setq icomplete-compute-delay 0)
-#+end_src
+#+END_SRC
 
 *** recentf                                                       :package:
 http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (require 'recentf)
   
   ;; get rid of `find-file-read-only' and replace it with something
@@ -377,10 +377,10 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
   
   (add-hook 'eshell-preoutput-filter-functions
       'ansi-color-filter-apply)
-#+end_src
+#+END_SRC
 
 *** ido                                                           :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package ido
     :init
     (progn 
@@ -389,10 +389,10 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
       (setq ido-enable-flex-matching t)
       (setq ido-execute-command-cache nil)
       (setq ido-create-new-buffer 'always)))
-#+end_src
+#+END_SRC
 *** uniquify                                                      :package:
 Make buffer names unique, handy when opening files with similar names
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package uniquify
     :init
     (progn
@@ -400,19 +400,19 @@ Make buffer names unique, handy when opening files with similar names
             uniquify-separator "|"
             uniquify-after-kill-buffer-p t
             uniquify-ignore-buffers-re "^\\*")))
-#+end_src
+#+END_SRC
 *** saveplace                                                     :package:
 Make sure I always come back to the same place in a file
 http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq-default save-place t)
   ;; saveplace and org-mode do not play well together, reset the regexp to include
   ;; org and org_archive files
   (setq-default save-place-ignore-files-regexp "\\(?:COMMIT_EDITMSG\\|hg-editor-[[:alnum:]]+\\.txt\\|svn-commit\\.tmp\\|bzr_log\\.[[:alnum:]]+\\|.*\\.org\\|.*\\.org_archive\\)$")
   (require 'saveplace)
   
-#+end_src
+#+END_SRC
 
 
 *** ispell                                                        :package:
@@ -421,16 +421,16 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 #+END_SRC
 
 *** tramp                                                         :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package tramp
     :commands tramp
     :init
     (progn
       (setq tramp-default-method "ssh")))
-#+end_src
+#+END_SRC
 *** ibuffer                                                       :package:
 List buffers in a dired-ish way
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package ibuffer
     :commands ibuffer-other-window
     :init
@@ -460,9 +460,9 @@ List buffers in a dired-ish way
       (add-hook 'ibuffer-mode-hook
                 (lambda ()
                   (ibuffer-switch-to-saved-filter-groups "default")))))
-#+end_src
+#+END_SRC
 *** dired                                                         :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package dired
     :commands dired
     :init
@@ -507,7 +507,7 @@ List buffers in a dired-ish way
 
       (define-key dired-mode-map
         (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)))
-#+end_src
+#+END_SRC
 
 
 *** unicode-fonts                                                 :package:
@@ -524,7 +524,7 @@ Plus
 From http://www.quivira-font.com/downloads.php - Quivira
 From http://users.teilar.gr/~g1951d/ - Symbola
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package unicode-fonts
     :ensure unicode-fonts
     :init
@@ -536,7 +536,7 @@ From http://users.teilar.gr/~g1951d/ - Symbola
       ;;(add-hook 'twittering-mode-hook 'qdot/setup-unicode-fonts)
       ;;(add-hook 'erc-mode-hook 'qdot/setup-unicode-fonts)
       ))
-#+end_src
+#+END_SRC
 
 *** smex                                                          :package:
 #+BEGIN_SRC emacs-lisp
@@ -649,13 +649,13 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 
 *** windmove                                                      :package:
 Move between windows using shift-[arrow key]
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package windmove
     :init
     (progn
       (when (fboundp 'windmove-default-keybindings)
         (windmove-default-keybindings))))
-#+end_src
+#+END_SRC
 
 *** ace-window                                                    :package:
 #+BEGIN_SRC emacs-lisp
@@ -855,7 +855,7 @@ My mail client of choice.
   (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
 #+END_SRC
 *** smtpmail                                                      :package:
-#+begin_src emacs-lisp  
+#+BEGIN_SRC emacs-lisp  
   ;; sending mail -- replace USERNAME with your gmail username
   ;; also, make sure the gnutls command line utils are installed
   ;; package 'gnutls-bin' in Debian/Ubuntu, 'gnutls' in Archlinux.
@@ -905,9 +905,9 @@ My mail client of choice.
                             (format "--passwordeval=gpg --use-agent --batch --quiet -d /home/qdot/.passwd/%s.gpg" account)))))))
       (setq message-sendmail-envelope-from 'header)
       (add-hook 'message-send-mail-hook 'choose-msmtp-account)))
-#+end_src
+#+END_SRC
 *** message-mode                                                  :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   ;; add Cc and Bcc headers to the message buffer
   (use-package message-mode
     :disabled t
@@ -917,12 +917,12 @@ My mail client of choice.
       (setq message-default-mail-headers "Cc: \nBcc: \n")
       (setq message-kill-buffer-on-exit t)
       (add-hook 'message-mode-hook 'turn-on-flyspell 'append)))
-#+end_src
+#+END_SRC
 
 ** Productivity
 *** bbdb                                                          :package:
 Address book
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package bbdb
     :ensure bbdb
     :commands bbdb
@@ -965,7 +965,7 @@ Address book
 
        ;;'(( "From" . "no.?reply\\|DAEMON\\|daemon\\|facebookmail\\|twitter")))
        bbdb/mail-auto-create-p nil)))
-#+end_src
+#+END_SRC
 
 *** org-mode                                                      :package:
 **** org setup
@@ -1168,7 +1168,7 @@ Address book
    
    org-agenda-compact-blocks t)
 
-#+end_src
+#+END_SRC
 **** Hooks
 #+BEGIN_SRC emacs-lisp
   ;; flyspell mode for spell checking everywhere
@@ -1190,7 +1190,7 @@ Address book
   (add-hook 'org-agenda-mode-hook
             '(lambda () (hl-line-mode 1))
             'append)
-#+end_src
+#+END_SRC
 **** Clocking
 #+BEGIN_SRC emacs-lisp
   ;; Resume clocking tasks when emacs is restarted
@@ -1447,7 +1447,7 @@ Address book
 #+END_SRC
 ** Programming
 *** auto-complete                                                 :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package auto-complete
     :ensure auto-complete
     :init
@@ -1477,10 +1477,10 @@ Address book
       (define-key ac-menu-map "\C-n" 'ac-next)
       (define-key ac-menu-map "\C-p" 'ac-previous)
       (define-key ac-complete-mode-map [tab] 'ac-expand)))
-#+end_src
+#+END_SRC
 
 *** yasnippet                                                     :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure yasnippet
     :init
@@ -1490,7 +1490,7 @@ Address book
 #+end_src
 *** magit                                                         :package:
 git management in emacs
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure magit
     :commands magit
@@ -1534,7 +1534,7 @@ git management in emacs
       (eval-after-load "magit"
         '(mapc (apply-partially 'add-to-list 'magit-repo-dirs)
                '("~/code/mozbuild/gecko-dev" "~/code/mozbuild/gaia")))))
-#+end_src
+#+END_SRC
 
 *** smartparens                                                   :package:
 #+BEGIN_SRC emacs-lisp
@@ -1552,7 +1552,7 @@ git management in emacs
       (sp-local-pair 'erc-mode "'" nil :actions nil)))
 #+END_SRC
 *** prog-mode                                                     :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   ;; Set defaults we expect
   (setq-default c-basic-offset 2)
   (setq-default indent-tabs-mode nil)
@@ -1572,7 +1572,7 @@ git management in emacs
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   (add-hook 'prog-mode-hook 'show-smartparens-mode)
   (add-hook 'prog-mode-hook 'linum-mode)
-#+end_src
+#+END_SRC
 *** ielm                                                          :package:
 #+BEGIN_SRC emacs-lisp
   (defun ielm-auto-complete ()
@@ -1585,11 +1585,11 @@ git management in emacs
     (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
     (auto-complete-mode 1))
   (add-hook 'ielm-mode-hook 'ielm-auto-complete)
-#+end_src
+#+END_SRC
 
 *** flycheck                                                        :package:
 Using flycheck instead of flymake
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure flycheck
     :init
@@ -1607,7 +1607,7 @@ Using flycheck instead of flymake
                                :modes (js-mode js2-mode js3-mode))))
 #+end_src
 *** haskell-mode                                                  :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
     (use-package haskell-mode
       :ensure haskell-mode
       :mode ("\\.hs$" . haskell-mode)
@@ -1619,10 +1619,10 @@ Using flycheck instead of flymake
         (add-hook 'haskell-mode-hook 'font-lock-mode)
         (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
         (setq haskell-font-lock-symbols t)))
-#+end_src
+#+END_SRC
 *** smerge-mode                                                   :package:
 http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
-#+begin_src emacs-lisp  
+#+BEGIN_SRC emacs-lisp  
   (use-package smerge-mode
     :init
     (progn
@@ -1635,7 +1635,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
       (add-hook 'find-file-hook 'sm-try-smerge t)))
 #+end_src
 *** cc-mode                                                       :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (defun qdot/cc-mode-hook ()
     ;; (doxymacs-font-lock)
     (bind-key "C-m" 'newline-and-indent c-mode-map)
@@ -1651,9 +1651,9 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   ;; doxymacs mode for editing doxygen
   ;; doxymacs isn't in elpa. :(
   ;; (add-hook 'c-mode-common-hook 'doxymacs-mode)
-#+end_src
+#+END_SRC
 *** compilation                                                   :package:
-#+begin_src emacs-lisp  
+#+BEGIN_SRC emacs-lisp  
   (require 'compile)
   (setq compilation-disable-input nil)
   (setq compilation-auto-jump-to-first-error t)
@@ -1690,9 +1690,9 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   ;; (global-set-key (kbd "C-p") 'qdot/previous-error)
   
   (global-set-key [f5] 'qdot/recompile)
-#+end_src
+#+END_SRC
 *** cedet                                                         :package:
-#+begin_src emacs-lisp  
+#+BEGIN_SRC emacs-lisp  
   (use-package cedet
     :ensure cedet
     :disabled t
@@ -1749,9 +1749,9 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
         (local-set-key (kbd "C-c o") 'eassist-switch-h-cpp)
         (local-set-key (kbd "C-c C-r") 'semantic-symref))
       (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)))
-#+end_src  
+#+END_SRC  
 *** python-mode                                                   :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package python-mode
     :ensure python-mode
     :init
@@ -1774,7 +1774,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
       ;;   (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
       ;;   (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
       (add-hook 'python-mode-hook 'qdot/python-mode-hook)))
-#+end_src  
+#+END_SRC  
 *** nose                                                          :package:
 #+BEGIN_SRC emacs-lisp
   ;; (use-package nose
@@ -1787,7 +1787,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
     :interpreter ("python" . python-mode))
 #+END_SRC
 *** js3-mode                                                        :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package js3-mode
     :ensure js3-mode
     :mode (("\\.js\\'" . js3-mode)
@@ -1821,9 +1821,9 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
       ;;             (flycheck-mode)
       ;;             (flycheck-select-checker 'javascript-gjshint))))
       ))
-#+end_src
+#+END_SRC
 *** gdb                                                           :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   ;; Turn off non-stop by default. All or nothing, damnit.
   (setq gdb-non-stop-setting nil)
   ;; gdb/gud
@@ -1831,9 +1831,9 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (setq gdb-show-main t)
   (setq gud-chdir-before-run nil)
   (setq gud-tooltip-mode t)  
-#+end_src
+#+END_SRC
 *** emacs-lisp-mode                                               :package:
-#+begin_src emacs-lisp  
+#+BEGIN_SRC emacs-lisp  
   ;; eldoc mode for showing function calls in mode line
   (setq eldoc-idle-delay 0)
   (autoload 'turn-on-eldoc-mode "eldoc" nil t)
@@ -1983,7 +1983,7 @@ Q
 
 *** sauron                                                        :package:
 **** Variables
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package sauron
     :ensure sauron
     :commands sauron-start
@@ -2051,10 +2051,10 @@ Q
 #+end_src
 **** Monkeypatching IM status message
 #+BEGIN_SRC emacs-lisp
-#+end_src
+#+END_SRC
 
 *** twittering-mode                                               :package:
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package twittering-mode
     :ensure twittering-mode
     :commands twit
@@ -2069,11 +2069,11 @@ Q
             '(":home"
               ":mentions"
               ":direct_messages"))))
-#+end_src
+#+END_SRC
 
 *** erc-mode                                                      :package:
 **** Module and variable setup
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package erc
     :ensure erc-hl-nicks
     :commands erc
@@ -2422,13 +2422,13 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+END_SRC
 *** ansi-color                                                    :package:
 Turn on ansi in shells
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package ansi-color
     :ensure ansi-color
     :commands shell
     :init
     (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
-#+end_src
+#+END_SRC
 
 
 
@@ -2438,7 +2438,7 @@ Turn on ansi in shells
 ** Window Management
 *** workgroups                                                      :package:
 **** Basic Config
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package workgroups2
     :ensure workgroups2
     :commands workgroups-mode
@@ -2466,7 +2466,7 @@ Turn on ansi in shells
        ;; Turn buffer list handling back on
        wg-mess-with-buffer-list t
        wg-switch-to-first-workgroup-on-find-session-file nil)))
-#+end_src
+#+END_SRC
 **** uid-mismatch handling
 #+BEGIN_SRC emacs-lisp
   ;; Due to some buffers having issues when reloading (erc), uids start
@@ -2568,7 +2568,7 @@ Turn on ansi in shells
 
   ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
   ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))
-#+end_src
+#+END_SRC
 *** popwin                                                          :package:
 #+BEGIN_SRC emacs-lisp
 ()
@@ -2585,13 +2585,13 @@ Turn on ansi in shells
 #+END_SRC
 *** easy-pg                                                       :package:
 gpg file auto query/loading
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package epa-file
     :init
     (progn
       (epa-file-enable)
       (setq epa-file-cache-passphrase-for-symmetric-encryption t)))
-#+end_src
+#+END_SRC
 
 *** qdot-funcs                                                    :package:
 #+BEGIN_SRC emacs-lisp
@@ -2610,7 +2610,7 @@ gpg file auto query/loading
 #+END_SRC
 
 * Keybinds
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (bind-key "C-c r"   'revert-buffer)
   (bind-key "C-c v"   'visual-line-mode)
   (bind-key "C-c e"   'eval-and-replace)
@@ -2633,7 +2633,7 @@ gpg file auto query/loading
               (interactive)
               (join-line -1)))
 
-#+end_src
+#+END_SRC
 * Toggle Map
 #+BEGIN_SRC emacs-lisp
   ;; http://endlessparentheses.com/the-toggle-map-and-wizardry.html
