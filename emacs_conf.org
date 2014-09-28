@@ -968,6 +968,11 @@ Address book
        bbdb/mail-auto-create-p nil)))
 #+END_SRC
 
+*** htmlize                                                       :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize
+    :ensure htmlize)
+#+END_SRC
 *** org-mode                                                      :package:
 **** org setup
 #+BEGIN_SRC emacs-lisp
