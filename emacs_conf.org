@@ -704,15 +704,6 @@ Jump to a link in info/help windows.
     (ace-link-setup-default))
 #+END_SRC
 ** Email
-*** Setup
-Conditions under which mail apps and variables should be loaded.
-Current condition is to make sure mail dir is mounted.
-
-#+BEGIN_SRC emacs-lisp
-  (defvar qdot/mail-p
-    (file-exists-p "~/Mail/sent")
-    "Whether mail packages should be initialized")
-#+END_SRC
 *** mu4e                                                          :package:
 I use mu/mu4e for local mail handling, sync'd via offlineimap.
 
