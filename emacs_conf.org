@@ -705,7 +705,8 @@ My mail client of choice.
       (setq mu4e-view-show-images t)
       (setq mu4e-view-show-addresses t)
       (setq mail-user-agent 'mu4e-user-agent)
-
+      ;; No signature
+      (setq mu4e-compose-signature nil)
       ;; Make mu4e-maildirs-extension only show unread directories
       ;; (defun qdot/mu4e-maildirs-extension-propertize-func (item)
       ;;   (when (> (plist-get item :unread) 0)
