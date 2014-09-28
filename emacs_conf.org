@@ -2626,12 +2626,16 @@ Turn on ansi in shells
 ** Misc
 *** proced                                                        :package:
 #+BEGIN_SRC emacs-lisp
-  (setq proced-auto-update-interval 2)
+  (use-package proced
+    :commands (proced)
+    :init
+    (progn
+      (setq proced-auto-update-interval 2)
 
-  (defun qdot/proced-settings ()
-    (proced-toggle-auto-update t))
+      (defun qdot/proced-settings ()
+        (proced-toggle-auto-update t))
 
-  (add-hook 'proced-mode-hook 'qdot/proced-settings)
+      (add-hook 'proced-mode-hook 'qdot/proced-settings)))
 #+END_SRC
 *** easy-pg                                                       :package:
 gpg file auto query/loading
