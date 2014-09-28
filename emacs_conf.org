@@ -905,6 +905,14 @@ org-mode, which is kind of adorable, but hey, good intentions!
   (add-to-list 'mu4e-bookmarks
                '("maildir:/mozilla/INBOX flag:unread" "Mozilla Unread" ?m) t)
 #+END_SRC
+***** bbdb functions
+Taken from https://github.com/mardukbp/dotfiles/blob/master/emacs.d/mb-mu4e.el
+#+BEGIN_SRC emacs-lisp
+  (defun mu4e-add-sender-bbdb ()
+    (interactive)
+    (let ((from (mu4e-field-at-point :from)))
+      (bbdb-create-internal (car (car from)) nil (cdr (car from)) nil nil nil)))
+#+END_SRC
 ***** Provide Statement
 #+BEGIN_SRC emacs-lisp
 (provide 'qdot-mu4e-config)
