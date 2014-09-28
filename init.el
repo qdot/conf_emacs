@@ -9,7 +9,7 @@
              ;; untangled code
              (toggle-debug-on-error)
              ;; Make sure we load our org-mode checkout first, otherwise shit happens.
-             (add-to-list 'load-path "~/.emacs_files/packages/org-plus-contrib.20140407/lisp/")
+             (add-to-list 'load-path "~/.emacs_files/packages/org-plus-contrib.20140922/lisp/")
              (require 'cl)
              (require 'org)
              (require 'ob-tangle)
