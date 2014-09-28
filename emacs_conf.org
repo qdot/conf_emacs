@@ -2286,18 +2286,20 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
                (delete-process (get-buffer-process arg)))
            (kill-buffer))))
      (buffer-list)))
-  
+
   (defun qdot/kill-irc ()
     (interactive)
-    (qdot/kill-erc-buffers nil))
-  
+    (when (featurep 'erc)
+      (qdot/kill-erc-buffers nil)))
+
   (defun qdot/kill-bitlbee ()
     (interactive)
-    (qdot/kill-erc-buffers t))
-  
+    (when (featurep 'erc)
+      (qdot/kill-erc-buffers t)))
+
   (add-hook 'kill-emacs-hook 'qdot/kill-irc)
   (add-hook 'kill-emacs-hook 'qdot/kill-bitlbee)
-  
+
   (defalias 'qdot/kill-erc 'qdot/kill-irc)
 #+END_SRC  
 
