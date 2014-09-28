@@ -542,17 +542,18 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 #+BEGIN_SRC emacs-lisp
   (use-package smex
     :ensure smex
-    :init
-    (progn
-      ;; Bind smex over M-x, deals with sorting most used commands to front of IDO
-      (global-set-key (kbd "M-x") 'smex)
-      (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-      (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)))
+    ;; Bind smex over M-x, deals with sorting most used commands to front of IDO
+    :bind (("M-x" . smex)
+           ("M-X" . smex-major-mode-commands)
+           ("C-c C-c M-x" . execute-extended-command))
+    :commands (smex smex-major-mode-commands))
+
 #+END_SRC
 *** expand-region                                                 :package:
 #+BEGIN_SRC emacs-lisp
   (use-package expand-region
     :ensure expand-region
+    :commands (er/expand-region er/enable-mode-expansions)
     :init
     (progn
       (global-set-key (kbd "C-=") 'er/expand-region)))
@@ -562,12 +563,10 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 #+BEGIN_SRC emacs-lisp
   (use-package rect-mark
     :ensure rect-mark
-    :init
-    (progn
-      (global-set-key (kbd "C-x r C-SPC") 'rm-set-mark)
-      (global-set-key (kbd "C-x r C-x")   'rm-exchange-point-and-mark)
-      (global-set-key (kbd "C-x r C-w")   'rm-kill-region)
-      (global-set-key (kbd "C-x r M-w")   'rm-kill-ring-save)))
+    :bind (("C-x r C-SPC" . rm-set-mark)
+           ("C-x r C-x" . rm-exchange-point-and-mark)
+           ("C-x r C-w" . rm-kill-region)
+           ("C-x r M-w" . rm-kill-ring-save)))
 #+END_SRC
 *** smart-mode-line                                               :package:
 #+BEGIN_SRC emacs-lisp
@@ -597,9 +596,10 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 *** page-break-lines                                              :package:
 #+BEGIN_SRC emacs-lisp
   (use-package page-break-lines
+    :disabled t
     :ensure page-break-lines
     :init
-    (global-page-break-lines-mode))
+    (global-page-break-lines-mode t))
 #+END_SRC
 
 *** flx-ido                                                       :package:
@@ -661,15 +661,16 @@ Move between windows using shift-[arrow key]
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window
     :ensure ace-window
-    :init
+    :bind ("M-p" . ace-window)
+    :config
     (progn
-      (global-set-key (kbd "M-p") 'ace-window)
       (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
 #+END_SRC
 *** ace-link                                                      :package:
 #+BEGIN_SRC emacs-lisp
   (use-package ace-link
     :ensure ace-link
+    :disabled t
     :init
     (ace-link-setup-default))
 #+END_SRC
@@ -680,9 +681,8 @@ My mail client of choice.
 #+BEGIN_SRC emacs-lisp
   ;; mu4e is not avaialble on melpa since it's part of mu
   (use-package mu4e
-    :if qdot/mail-p
     :load-path "~/.emacs_files/dev-packages/mu/mu4e"
-    :commands mu4e
+    :commands (mu4e)
     :init
     (progn
       (require 'mu4e)
@@ -860,7 +860,8 @@ My mail client of choice.
   ;; also, make sure the gnutls command line utils are installed
   ;; package 'gnutls-bin' in Debian/Ubuntu, 'gnutls' in Archlinux.
   (use-package smtpmail
-    :if qdot/mail-p
+    :commands (mu4e)
+    :disabled t
     :init
     (progn
       (setq message-send-mail-function 'smtpmail-send-it
@@ -1483,11 +1484,11 @@ Address book
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure yasnippet
-    :init
+    :commands (yas-global-mode yas-minor-mode yas-expand)
+    :config
     (progn
-      (add-to-list 'yas-snippet-dirs qdot/emacs-snippets-dir)
-      (yas-global-mode 1)))
-#+end_src
+      (add-to-list 'yas-snippet-dirs qdot/emacs-snippets-dir)))
+#+END_SRC
 *** magit                                                         :package:
 git management in emacs
 #+BEGIN_SRC emacs-lisp
@@ -1592,20 +1593,21 @@ Using flycheck instead of flymake
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure flycheck
-    :init
-    (progn
-      (add-hook 'after-init-hook #'global-flycheck-mode)
+    :commands flycheck-mode)
+  ;;   :init
+  ;;   (progn
+  ;;     ;;(add-hook 'after-init-hook #'global-flycheck-mode)
 
-      (flycheck-define-checker javascript-gjshint
-                               "Google's Closure Linter for JS
+  ;;     (flycheck-define-checker javascript-gjshint
+  ;;       "Google's Closure Linter for JS
 
-  See URL `https://developers.google.com/closure/utilities/docs/linter_howto`"
-                               :command ("gjslint" source-inplace)
-                               :error-patterns
-                               ((error line-start "Line " line ", E:" (zero-or-more not-newline) ": "
-                                       (message) line-end))
-                               :modes (js-mode js2-mode js3-mode))))
-#+end_src
+  ;; See URL `https://developers.google.com/closure/utilities/docs/linter_howto`"
+  ;;       :command ("gjslint" source-inplace)
+  ;;       :error-patterns
+  ;;       ((error line-start "Line " line ", E:" (zero-or-more not-newline) ": "
+  ;;               (message) line-end))
+  ;;       :modes (js-mode js2-mode js3-mode))))
+#+END_SRC
 *** haskell-mode                                                  :package:
 #+BEGIN_SRC emacs-lisp
     (use-package haskell-mode
@@ -1624,16 +1626,16 @@ Using flycheck instead of flymake
 http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
 #+BEGIN_SRC emacs-lisp  
   (use-package smerge-mode
-    :init
-    (progn
-      (defun sm-try-smerge ()
-        (save-excursion
-          (goto-char (point-min))
-          (when (re-search-forward "^<<<<<<< " nil t)
-            (smerge-mode 1))))
+    :commands (smerge-mode))
 
-      (add-hook 'find-file-hook 'sm-try-smerge t)))
-#+end_src
+  (defun sm-try-smerge ()
+    (save-excursion
+      (goto-char (point-min))
+      (when (re-search-forward "^<<<<<<< " nil t)
+        (smerge-mode 1))))
+
+  (add-hook 'find-file-hook 'sm-try-smerge t)
+#+END_SRC
 *** cc-mode                                                       :package:
 #+BEGIN_SRC emacs-lisp
   (defun qdot/cc-mode-hook ()
@@ -1754,6 +1756,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 #+BEGIN_SRC emacs-lisp
   (use-package python-mode
     :ensure python-mode
+    :interpreter ("python" . python-mode)
     :init
     (progn
       (defun qdot/python-mode-hook()
@@ -1765,10 +1768,10 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
         (set-variable 'fill-paragraph-function 'py-fill-paragraph t)
         (setq ac-sources (append '(ac-source-yasnippet) ac-sources))
         (set-fill-column 79)
+        (bind-key "M-q" 'python-fill-paragraph python-mode-map)
+        (elpy-enable)
+        (setq elpy-rpc-backend "jedi")
         (subword-mode 1))
-      (bind-key "M-q" 'python-fill-paragraph python-mode-map)
-      (elpy-enable)
-      (setq elpy-rpc-backend "jedi")
       ;; use flycheck instead of flymake
       ;; (when (require 'flycheck nil t)
       ;;   (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
@@ -1862,15 +1865,17 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (define-key 'help-command (kbd "C-f") 'find-function)
   (define-key 'help-command (kbd "C-k") 'find-function-on-key)
   (define-key 'help-command (kbd "C-v") 'find-variable)
-#+end_src
-Q
-*** lilypond-mode                                                 :package:
+#+END_SRC
+*** lilypond-mode                                                   :package:
 #+BEGIN_SRC emacs-lisp
-  (require 'lilypond-mode)
-  (add-to-list 'auto-mode-alist '("\\.ly\\'" . LilyPond-mode))
-  ;; Having fancy-comments on seems to completely screw indentation of single %
-  ;; comments, which the mode uses for M-; comment blocks. Is fine to just be off.
-  (setq LilyPond-fancy-comments nil)
+  (use-package lilypond-mode
+    :mode (("\\.ly\\'" . LilyPond-mode))
+    :config
+    (progn
+      ;; Having fancy-comments on seems to completely screw indentation of single %
+      ;; comments, which the mode uses for M-; comment blocks. Is fine to just be off.
+      (setq LilyPond-fancy-comments nil)))
+
 #+END_SRC
 
 *** web-mode                                                      :package:
@@ -1904,7 +1909,8 @@ Q
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
     :ensure rainbow-delimiters
-    :init  
+    :commands (rainbow-delimiters-mode rainbow-delimiters-mode-enable)
+    :init
     (custom-set-faces
      '(rainbow-delimiters-depth-1-face ((t (:foreground "green" :weight extra-bold))))
      '(rainbow-delimiters-depth-2-face ((t (:foreground "forestgreen" :weight bold))))
@@ -1936,7 +1942,11 @@ Q
 *** edebug-x                                                      :package:
 #+BEGIN_SRC emacs-lisp
   (use-package edebug-x
-    :ensure edebug-x)
+    :ensure edebug-x
+    :commands (edebug-x-modify-breakpoint-wrapper
+               edebug-x-show-breakpoints
+               edebug-x-show-instrumented
+               edebug-x-show-data))
 #+END_SRC
 *** lua                                                           :package:
 #+BEGIN_SRC emacs-lisp
@@ -1946,13 +1956,25 @@ Q
 #+END_SRC
 *** git-timemachine                                               :package:
 #+BEGIN_SRC emacs-lisp
-    (use-package git-timemachine
-      :ensure git-timemachine)
+  (use-package git-timemachine
+    :commands (git-timemachine)
+    :ensure git-timemachine)
 #+END_SRC
 *** indent-guide                                                  :package:
 #+BEGIN_SRC emacs-lisp
   (use-package indent-guide
+    :commands (indent-guide-mode)
     :ensure indent-guide)
+
+#+END_SRC
+*** json-mode                                                     :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package json-mode
+    :ensure json-mode
+    :ensure json-reformat
+    :ensure json-snatcher
+    :mode ("\\.json\\'" . json-mode))
+
 #+END_SRC
 ** Writing
 *** adoc-mode                                                     :package:
@@ -1964,11 +1986,14 @@ Q
 *** markdown-mode                                                 :package:
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
+    :mode (("\\.markdown\\'" . markdown-mode)
+           ("\\.md\\'" . markdown-mode))
     :ensure markdown-mode)
 #+END_SRC
 *** pelican-mode                                                  :package:
 #+BEGIN_SRC emacs-lisp
   (use-package pelican-mode
+    :defer t
     :load-path "~/.emacs_files/dev-packages/pelican-mode")
 #+END_SRC
 ** Social (IRC, Twitter, Etc)
@@ -2076,7 +2101,7 @@ Q
 #+BEGIN_SRC emacs-lisp
   (use-package erc
     :ensure erc-hl-nicks
-    :commands erc
+    :commands (erc)
     :init
     (progn
       (require 'erc-fill)
@@ -2242,11 +2267,11 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
         (save-excursion
           (set-buffer channel)
           (kill-buffer)))))
-  
+
   ;; Walk all of the server buffers first
   ;; Close those first, which autodetaches us from channels
   ;; Then go back through and close everything
-  
+
   (defun qdot/kill-erc-buffers (bitlbee)
     (mapcar
      (lambda (arg)
@@ -2305,6 +2330,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+BEGIN_SRC emacs-lisp
   (use-package eshell
     :ensure eshell
+    :disabled t
     :commands eshell
     :init
     (progn
@@ -2587,6 +2613,7 @@ Turn on ansi in shells
 gpg file auto query/loading
 #+BEGIN_SRC emacs-lisp
   (use-package epa-file
+    :defer t
     :init
     (progn
       (epa-file-enable)
@@ -2606,6 +2633,7 @@ gpg file auto query/loading
 *** qblog                                                         :package:
 #+BEGIN_SRC emacs-lisp
   (use-package qblog
+    :defer t
     :load-path "~/.emacs_files/dev-packages/qblog")
 #+END_SRC
 
