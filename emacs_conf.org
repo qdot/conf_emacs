@@ -1,5 +1,12 @@
 #+TITLE: qDot's Emacs Configuration
-#+OPTIONS: toc:nil num:nil ^:nil
+#+AUTHOR:   Kyle Machulis
+#+EMAIL:    kyle at nonpolynomial dot com
+#+STARTUP:  align fold nodlcheck content
+#+OPTIONS:  H:4 num:nil toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t
+#+OPTIONS:  skip:nil d:(HIDE) tags:not-in-toc
+#+PROPERTY: header-args :results none :noweb yes
+#+HTML_HEAD: <link rel="stylesheet" href="org.css" type="text/css" />
+#+LANGUAGE: en
 #+PROPERTY: comments both
 * Startup Timing
 #+BEGIN_SRC emacs-lisp
