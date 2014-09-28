@@ -8,6 +8,24 @@
 #+HTML_HEAD: <link rel="stylesheet" href="org.css" type="text/css" />
 #+LANGUAGE: en
 #+PROPERTY: comments both
+* Init File
+:PROPERTIES:
+:header-args: :tangle init.el
+:END:
+I have my emacs configuration file set to tangle itself on save, so I
+can just load the output from that when needed.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook
+            `(lambda ()
+               ;; toggling on debug-on-error just in case there's issues in my
+               ;; untangled code
+               (setq debug-on-error t)
+               (org-babel-load-file "~/.emacs_files/emacs_conf.el")
+               ;; if we live through startup, return to normal error throwing
+               (setq debug-on-error nil)))
+#+END_SRC
+
 * Startup Timing
 #+BEGIN_SRC emacs-lisp
   (defconst emacs-start-time (current-time))
