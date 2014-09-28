@@ -3014,6 +3014,10 @@ Extra hooks to functions from the qdot-funcs modules
   
 #+END_SRC
 * Tasks
+** TODO Output tangled emacs config files to a subdirectory of config dir
+** TODO Write function to compile config files on tangling
+** TODO Fold functions file into base config file
+** TODO Fold bernt's org functions info base config file
 ** TODO Check out hungry-delete mode
 https://github.com/nflath/hungry-delete
 ** TODO Have org mode daily agenda show up on xmonad background (conky?)
