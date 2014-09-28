@@ -353,6 +353,7 @@ configurations without having to search through the org file.
   (setq use-package-verbose t)
   (require 'use-package)
 #+END_SRC
+
 ** Emacs Customization
 *** color-theme                                                   :package:
 #+BEGIN_SRC emacs-lisp
@@ -1016,6 +1017,7 @@ Address book
     :mode (("\\.org_archive\\'"  . org-mode)
            ("\\.org\\'"  . org-mode)))
 #+END_SRC
+
 **** org modules
 #+BEGIN_SRC emacs-lisp
   (require 'org-checklist)
@@ -1709,25 +1711,6 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
         (kill-buffer "*compilation*")) ; and kill the buffers
       (call-interactively 'compile)
       (enlarge-window 30)))
-  
-  (defun qdot/next-error ()
-    "Move point to next error and highlight it"
-    (interactive)
-    (progn
-      (next-error)
-      (end-of-line-nomark)
-      (beginning-of-line-mark)))
-  
-  (defun qdot/previous-error ()
-    "Move point to previous error and highlight it"
-    (interactive)
-    (progn
-      (previous-error)
-      (end-of-line-nomark)
-      (beginning-of-line-mark)))
-  
-  ;; (global-set-key (kbd "C-n") 'qdot/next-error)
-  ;; (global-set-key (kbd "C-p") 'qdot/previous-error)
   
   (global-set-key [f5] 'qdot/recompile)
 #+END_SRC
