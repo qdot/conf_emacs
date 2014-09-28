@@ -17,6 +17,13 @@ else. It sets up directory variables, loads package, use-package, and
 org, then calls org-babel-load-file on emacs_conf.org. That will load
 the rest of the packages and settings, re-tangling the org file before
 loading if there have been changes,
+** Startup Timing
+Take the time at the beginning of load, then use it at the end to see
+how long it took to load packages.
+#+BEGIN_SRC emacs-lisp
+  (defconst qdot/emacs-start-time (current-time))
+#+END_SRC
+
 ** Directory Configuration
 Setting up a few different variables for the different types of
 directories we have (configurations, locally stored versus el-get
@@ -124,12 +131,6 @@ during a session.
                (org-babel-load-file "~/.emacs_files/emacs_conf.org")
                ;; if we live through startup, return to normal error throwing
                (setq debug-on-error nil)))
-#+END_SRC
-* Startup Timing
-Take the time at the beginning of load, then use it at the end to see
-how long it took to load packages.
-#+BEGIN_SRC emacs-lisp
-  (defconst qdot/emacs-start-time (current-time))
 #+END_SRC
 * Basic Setup
 ** Variables
