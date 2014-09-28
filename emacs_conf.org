@@ -387,12 +387,12 @@ I tend to use dark themes everywhere, be it laptop or desktop.
 #+END_SRC
 
 *** icomplete                                                     :package:
-Incremental minibuffer completion
+Incremental minibuffer completion. Update per character, as it takes a
+lot to lag it.
 #+BEGIN_SRC emacs-lisp
   (icomplete-mode 1)
   (setq icomplete-compute-delay 0)
 #+END_SRC
-
 *** recentf                                                       :package:
 Use a list of most recent opened files instead of having to search through drive
 http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
@@ -439,8 +439,12 @@ Make buffer names unique, handy when opening files with similar names
             uniquify-ignore-buffers-re "^\\*")))
 #+END_SRC
 *** saveplace                                                     :package:
-Make sure I always come back to the same place in a file
+Make sure I always come back to the same place in a file after closing/opening.
 http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
+
+saveplace tends to screw with buffers that have automatically folded
+layouts, like org-mode. It'll open trees with none of the parents
+open, which causes weird problems. So org-mode is ignored.
 
 #+BEGIN_SRC emacs-lisp
   (use-package saveplace
@@ -452,7 +456,6 @@ http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
       (setq-default save-place-ignore-files-regexp "\\(?:COMMIT_EDITMSG\\|hg-editor-[[:alnum:]]+\\.txt\\|svn-commit\\.tmp\\|bzr_log\\.[[:alnum:]]+\\|.*\\.org\\|.*\\.org_archive\\)$")))
     
 #+END_SRC
-
 
 *** ispell                                                        :package:
 Turns out most spelling dictionaries don't contain "teledildonics".
@@ -471,7 +474,8 @@ I rarely use tramp these days, but usually use ssh when doing so.
       (setq tramp-default-method "ssh")))
 #+END_SRC
 *** ibuffer                                                       :package:
-List buffers in a dired-ish way
+List buffers in a dired-ish way. Try to group based on modes or what
+kind of project something may be related to.
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer
     :commands ibuffer-other-window
@@ -504,34 +508,28 @@ List buffers in a dired-ish way
                   (ibuffer-switch-to-saved-filter-groups "default")))))
 #+END_SRC
 *** dired                                                         :package:
+Set up dired with extensions, make sure beginning/end commands move
+inside directory listings instead of buffer.
+
+wdired allows text editing of the dired buffer to do things like
+changing permissions via string/regexp replacement.
 #+BEGIN_SRC emacs-lisp
   (use-package dired
     :commands dired
-    :init
+    :config
     (progn
-      ;; dired modifications
-
-      ;; taken from http://bitbucket.org/kcfelix/emacsd/src/tip/init.el
-      (defun qdot/dired-init ()
-        "Bunch of stuff to run for dired, either immediately or when it's
-            loaded."
-        (define-key dired-mode-map (kbd "C-s") 'dired-isearch-filenames-regexp)
-        (define-key dired-mode-map (kbd "C-M-s") 'dired-isearch-filenames))
-
-      ;; if dired's already loaded, then the keymap will be bound
-      (if (boundp 'dired-mode-map)
-          ;; we're good to go; just add our bindings
-          (qdot/dired-init)
-        ;; it's not loaded yet, so add our bindings to the load-hook
-        (add-hook 'dired-load-hook 'qdot/dired-init))
-
       ;; Additions to dired
       ;; http://nflath.com/2009/07/dired/
 
       (require 'dired-x)
       (require 'wdired)
       (setq wdired-allow-to-change-permissions 'advanced)
-      (define-key dired-mode-map                    (kbd "r")         'wdired-change-to-wdired-mode)
+
+      ;; dired modifications
+      (bind-keys :map dired-mode-map
+                 ("C-s" dired-isearch-filenames-regexp)
+                 ("C-M-s" dired-isearch-filenames)
+                 ("r" 'wdired-change-to-wdired-mode))
 
       ;; http://whattheemacsd.com//setup-dired.el-02.html
       (defun dired-back-to-top ()
@@ -550,37 +548,8 @@ List buffers in a dired-ish way
       (define-key dired-mode-map
         (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)))
 #+END_SRC
-
-
-*** unicode-fonts                                                 :package:
-Map unicode characters into the global character set. Really only
-needed in ERC/twitter, and takes a while to load, so making loads mode
-specific.
-
-On debian derivatives, this will also require some font packages:
-- ttf-indic-fonts
-- fonts-sil*
-- ttf-dejavu
-
-Plus
-From http://www.quivira-font.com/downloads.php - Quivira
-From http://users.teilar.gr/~g1951d/ - Symbola
-
-#+BEGIN_SRC emacs-lisp
-  (use-package unicode-fonts
-    :ensure unicode-fonts
-    :init
-    (progn
-      (defun qdot/setup-unicode-fonts ()
-        (when (not unicode-fonts-setup-done)
-          (unicode-fonts-setup)))
-  
-      ;;(add-hook 'twittering-mode-hook 'qdot/setup-unicode-fonts)
-      ;;(add-hook 'erc-mode-hook 'qdot/setup-unicode-fonts)
-      ))
-#+END_SRC
-
 *** smex                                                          :package:
+Smex is ido fuzzy matching for M-x.
 #+BEGIN_SRC emacs-lisp
   (use-package smex
     :ensure smex
@@ -592,16 +561,17 @@ From http://users.teilar.gr/~g1951d/ - Symbola
 
 #+END_SRC
 *** expand-region                                                 :package:
+Hit C-=, expand up to the next largest region based on mode-context
+sensitive scope.
 #+BEGIN_SRC emacs-lisp
   (use-package expand-region
     :ensure expand-region
-    :commands (er/expand-region er/enable-mode-expansions)
-    :init
-    (progn
-      (global-set-key (kbd "C-=") 'er/expand-region)))
+    :bind (("C-=" . er/expand-region))
+    :commands (er/expand-region er/enable-mode-expansions))
 #+END_SRC
 
 *** rect-mark                                                     :package:
+Make rectangular region marking easier.
 #+BEGIN_SRC emacs-lisp
   (use-package rect-mark
     :ensure rect-mark
@@ -611,10 +581,12 @@ From http://users.teilar.gr/~g1951d/ - Symbola
            ("C-x r M-w" . rm-kill-ring-save)))
 #+END_SRC
 *** smart-mode-line                                               :package:
+Makes the modeline easier to customize, in terms of both color themes
+and content.
 #+BEGIN_SRC emacs-lisp
   (use-package smart-mode-line
     :ensure smart-mode-line
-    :init
+    :config
     (progn
       ;; The two known hashes for the sml dark theme
       (add-to-list 'custom-safe-themes "025354235e98db5e7fd9c1a74622ff53ad31b7bde537d290ff68d85665213d85")
@@ -635,25 +607,19 @@ From http://users.teilar.gr/~g1951d/ - Symbola
               " Fly"))))
 #+END_SRC
 
-*** page-break-lines                                              :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package page-break-lines
-    :disabled t
-    :ensure page-break-lines
-    :init
-    (global-page-break-lines-mode t))
-#+END_SRC
-
 *** flx-ido                                                       :package:
+Make fuzzy matching for ido work better.
 #+BEGIN_SRC emacs-lisp
   (use-package flx-ido
     :ensure flx-ido
-    :init
-    (flx-ido-mode 1)
-    (setq ido-use-faces nil))
+    :config
+    (progn
+      (flx-ido-mode 1)
+      (setq ido-enable-flex-matching t)
+      (setq ido-use-faces nil)))
 #+END_SRC
-
 *** multiple-cursors                                              :package:
+Work with multiple cursors simultaneously.
 #+BEGIN_SRC emacs-lisp
   (use-package multiple-cursors
     :commands (mc/mark-next-like-this
@@ -665,21 +631,19 @@ From http://users.teilar.gr/~g1951d/ - Symbola
     :ensure multiple-cursors)
 #+END_SRC
 *** browse-kill-ring                                              :package:
+See and update/select kill ring history.
 #+BEGIN_SRC emacs-lisp
   (use-package browse-kill-ring
     :ensure browse-kill-ring
     :commands browse-kill-ring)
 #+END_SRC
 *** undo-tree                                                     :package:
+Allow undo to branch, and be visualized as a graph.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :ensure undo-tree
-    :commands undo-tree)
-#+END_SRC
-*** hidden-mode-line-mode                                         :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package hidden-mode-line-mode
-    :commands hidden-mode-line-mode)
+    :config
+    (global-undo-tree-mode 1))
 #+END_SRC
 *** paradox                                                       :package:
 Paradox makes the package list pretty and adds some stats to the listings.
@@ -689,7 +653,8 @@ Paradox makes the package list pretty and adds some stats to the listings.
     :commands (paradox-list-packages))
 #+END_SRC
 ** Emacs Navigation
-*** ace-jump-mode                                                   :package:
+*** ace-jump-mode                                                 :package:
+Jump to a specified character in the currently visible buffer area.
 #+BEGIN_SRC emacs-lisp
   (use-package ace-jump-mode
     :ensure ace-jump-mode
@@ -697,16 +662,17 @@ Paradox makes the package list pretty and adds some stats to the listings.
 #+END_SRC
 
 *** windmove                                                      :package:
-Move between windows using shift-[arrow key]
+Move between windows using shift-[arrow key].
 #+BEGIN_SRC emacs-lisp
   (use-package windmove
-    :init
+    :config
     (progn
       (when (fboundp 'windmove-default-keybindings)
         (windmove-default-keybindings))))
 #+END_SRC
 
 *** ace-window                                                    :package:
+Jump to a specified window by using [prefix-key] + letter
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window
     :ensure ace-window
@@ -716,11 +682,11 @@ Move between windows using shift-[arrow key]
       (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
 #+END_SRC
 *** ace-link                                                      :package:
+Jump to a link in info/help windows.
 #+BEGIN_SRC emacs-lisp
   (use-package ace-link
     :ensure ace-link
-    :disabled t
-    :init
+    :config
     (ace-link-setup-default))
 #+END_SRC
 ** Email
