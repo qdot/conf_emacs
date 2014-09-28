@@ -12,25 +12,11 @@
 :PROPERTIES:
 :header-args: :tangle init.el
 :END:
-I have my emacs configuration file set to tangle itself on save, so I
-can just load the output from that when needed.
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'after-init-hook
-            `(lambda ()
-               ;; toggling on debug-on-error just in case there's issues in my
-               ;; untangled code
-               (setq debug-on-error t)
-               (org-babel-load-file "~/.emacs_files/emacs_conf.el")
-               ;; if we live through startup, return to normal error throwing
-               (setq debug-on-error nil)))
-#+END_SRC
-
-* Startup Timing
-#+BEGIN_SRC emacs-lisp
-  (defconst qdot/emacs-start-time (current-time))
-#+END_SRC
-* Basic Setup
+This section generates our .emacs files, which then loads everything
+else. It sets up directory variables, loads package, use-package, and
+org, then calls org-babel-load-file on emacs_conf.org. That will load
+the rest of the packages and settings, re-tangling the org file before
+loading if there have been changes,
 ** Directory Configuration
 Setting up a few different variables for the different types of
 directories we have (configurations, locally stored versus el-get
@@ -39,7 +25,8 @@ fetched libs, etc...)
 - Set up the base configuration directory and filename
 #+BEGIN_SRC emacs-lisp
   (defconst qdot/emacs-conf-dir
-    (file-name-directory (or load-file-name (buffer-file-name)))
+    ;;(file-name-directory (or load-file-name (buffer-file-name)))
+    "~/.emacs_files/"
     "Directory for emacs configuration")
 
   (defconst qdot/emacs-conf-file
@@ -91,7 +78,60 @@ fetched libs, etc...)
   (add-to-list 'load-path (expand-file-name qdot/emacs-conf-dir))
   (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 #+END_SRC
-
+** Load Package Packages
+*** package.el                                                    :package:
+Just use the built-in package manager, but add melpa/elpa/bleeding
+edge package repos.
+#+BEGIN_SRC emacs-lisp
+  (setq package-enable-at-startup nil
+        package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("marmalade" . "http://marmalade-repo.org/packages/")
+                           ("melpa" . "http://melpa.milkbox.net/packages/")
+                           ("org" . "http://orgmode.org/elpa/")
+                           ("elpy" . "http://jorgenschaefer.github.io/packages/"))
+        package-user-dir qdot/emacs-package-dir)
+  (package-initialize)
+#+END_SRC
+*** use-package                                                   :package:
+use-package keeps packaging loading clean and delayed until the last
+possible second. Using the :ensure command means that this config file
+also works as a package manifest when bringing up a new config
+instance, though that rarely if ever happens.
+#+BEGIN_SRC emacs-lisp
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+  (setq use-package-verbose t)
+  (require 'use-package)
+#+END_SRC
+** Load org-mode
+We need org-mode here to run org-babel on the file. Loading this early
+is fine, as it's pretty much guaranteed that org-mode will get used
+during a session.
+#+BEGIN_SRC emacs-lisp
+  (use-package org
+    :ensure org-plus-contrib
+    :mode (("\\.org_archive\\'"  . org-mode)
+           ("\\.org\\'"  . org-mode)))
+#+END_SRC
+** Load org configuration file
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook
+            `(lambda ()
+               ;; toggling on debug-on-error just in case there's issues in my
+               ;; untangled code
+               (setq debug-on-error t)
+               (org-babel-load-file "~/.emacs_files/emacs_conf.org")
+               ;; if we live through startup, return to normal error throwing
+               (setq debug-on-error nil)))
+#+END_SRC
+* Startup Timing
+Take the time at the beginning of load, then use it at the end to see
+how long it took to load packages.
+#+BEGIN_SRC emacs-lisp
+  (defconst qdot/emacs-start-time (current-time))
+#+END_SRC
+* Basic Setup
 ** Variables
 Anything in this section relates to the core setup of emacs. At this
 point, there are no packages loaded, so this is just for setting up
@@ -332,27 +372,6 @@ configuration node tagged with the 'package' tag. Using the
 qdot/edit-org-package-config and qdot/edit-current-major-mode-config
 functions in the qdot-funcs module allows me to easily access
 configurations without having to search through the org file.
-** Package Packages (Need to be loaded first)
-*** package.el                                                    :package:
-#+BEGIN_SRC emacs-lisp
-  (setq package-enable-at-startup nil
-        package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("marmalade" . "http://marmalade-repo.org/packages/")
-                           ("melpa" . "http://melpa.milkbox.net/packages/")
-                           ("org" . "http://orgmode.org/elpa/")
-                           ("elpy" . "http://jorgenschaefer.github.io/packages/"))
-        package-user-dir qdot/emacs-package-dir)
-  (package-initialize)
-#+END_SRC
-*** use-package                                                   :package:
-#+BEGIN_SRC emacs-lisp
-  ;; Make sure we have use-package installed
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
-  (setq use-package-verbose t)
-  (require 'use-package)
-#+END_SRC
 
 ** Emacs Customization
 *** color-theme                                                   :package:
