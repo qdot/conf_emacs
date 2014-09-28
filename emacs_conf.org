@@ -28,7 +28,7 @@ can just load the output from that when needed.
 
 * Startup Timing
 #+BEGIN_SRC emacs-lisp
-  (defconst emacs-start-time (current-time))
+  (defconst qdot/emacs-start-time (current-time))
 #+END_SRC
 * Directory Configuration
 Setting up a few different variables for the different types of
@@ -2752,13 +2752,13 @@ https://github.com/jwiegley/dot-emacs/blob/master/init.el
 #+BEGIN_SRC emacs-lisp
   (when window-system
     (let ((elapsed (float-time (time-subtract (current-time)
-                                              emacs-start-time))))
+                                              qdot/emacs-start-time))))
       (message "Loading %s...done (%.3fs)" load-file-name elapsed))
 
     (add-hook 'after-init-hook
               `(lambda ()
                  (let ((elapsed (float-time (time-subtract (current-time)
-                                                           emacs-start-time))))
+                                                           qdot/emacs-start-time))))
                    (message "Loading %s...done (%.3fs) [after-init]"
                             ,load-file-name elapsed)))
               t))
