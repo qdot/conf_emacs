@@ -18,7 +18,7 @@ directories we have (configurations, locally stored versus el-get
 fetched libs, etc...)
 
 - Set up the base configuration directory and filename
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (defconst qdot/emacs-conf-dir
     (file-name-directory (or load-file-name (buffer-file-name)))
     "Directory for emacs configuration")
@@ -26,113 +26,101 @@ fetched libs, etc...)
   (defconst qdot/emacs-conf-file
     (expand-file-name (concat qdot/emacs-conf-dir "emacs_conf.org"))
     "Org-babel file for emacs configuration")
-#+end_src
+#+END_SRC
 
 - Manually installed/maintained elisp directory
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (defconst qdot/emacs-elisp-dir
     (expand-file-name (concat qdot/emacs-conf-dir "elisp/"))
     "Directory for manually installed/maintained elisp files")
-#+end_src
+#+END_SRC
 
 - package directory
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (defconst qdot/emacs-package-dir
     (expand-file-name (concat qdot/emacs-conf-dir "packages/"))
     "Directory for elisp packages from elpa/melpa")
-#+end_src
+#+END_SRC
 
 - packages that aren't in MELPA/ELPA/etc that we have to maintain
   repos for. Things like CEDET and mu, as well as packages I'm
   actively developing at the moment.
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (defconst qdot/emacs-dev-package-dir
     (expand-file-name (concat qdot/emacs-conf-dir "dev-packages/"))
     "Directory for elisp packages for which we pull and/or maintain repos")
-#+end_src
+#+END_SRC
 
 - yasnippets directory
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (defconst qdot/emacs-snippets-dir
     (expand-file-name (concat qdot/emacs-conf-dir "snippets/"))
     "Directory for snippets for yasnippet")
-#+end_src
+#+END_SRC
 
 - As of emacs 23, ~/.emacs.d is user-emacs-directory
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (setq custom-file (concat user-emacs-directory "emacs_conf_custom.el"))
   (if (not (file-exists-p custom-file))
       (with-temp-buffer
         (write-file custom-file)))
   (load-file custom-file)
-#+end_src
+#+END_SRC
 
 - Add configuration and scripts directories to proper variables
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path (expand-file-name qdot/emacs-conf-dir))
   (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
-#+end_src
+#+END_SRC
 
-* Basic Variables and Modes
-** Identity
-#+begin_src emacs-lisp
+* Basic Setup
+** Variables
+Anything in this section relates to the core setup of emacs. At this
+point, there are no packages loaded, so this is just for setting up
+emacs defaults.
+
+Set up basic identity
+
+#+BEGIN_SRC emacs-lisp
   (setq
    user-mail-address "kyle@nonpolynomial.com"
    user-full-name  "Kyle Machulis")
-#+end_src
-** Platform Variables
-Set up some simple platform finding variables that may or may not work
-#+begin_src emacs-lisp
+#+END_SRC
+
+Prefer UTF-8 everywhere
+
+#+BEGIN_SRC emacs-lisp
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-language-environment "UTF-8")
+  (prefer-coding-system 'utf-8)
+#+END_SRC
+
+Set up some simple platform finding variables
+
+#+BEGIN_SRC emacs-lisp
   (setq mswindows-p (eq system-type 'windows-nt))
   (setq macosx-p (eq system-type 'darwin))
   (setq linux-p (eq system-type 'gnu/linux))
-#+end_src
-** CEDET Loading
-Load cedet first, otherwise we'll conflict against the 1.1 repo stuff
+#+END_SRC
 
-#+begin_src emacs-lisp
-;;(load-file (concat qdot/emacs-package-dir "cedet/cedet-devel-load.el"))
-#+end_src
+Don't need startup screens
 
-** Start/Splash Inhibit
-#+begin_src emacs-lisp
-(setq inhibit-start-message t)
-(setq inhibit-splash-screen t)
-#+end_src
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-start-message t)
+  (setq inhibit-splash-screen t)
+#+END_SRC
 
-** Turn off Bell Functions
-#+begin_src emacs-lisp
-(setq visible-bell nil)
-(setq ring-bell-function 'ignore)
-#+end_src
+Turn off Bell Functions
 
-** Global font setup
-Use fonts we either know we have, or can check for. This is a function
-because it has caused crashes multiple times in the past, usually due
-to being run on startup before rendering was set up correctly or
-something.
+#+BEGIN_SRC emacs-lisp
+  (setq visible-bell nil)
+  (setq ring-bell-function 'ignore)
+#+END_SRC
 
-#+begin_src emacs-lisp
-  (defun qdot/set-platform-font ()
-    "Set the default font for the system type."
-    (interactive)
-    ;; If we have symbola on the system, use that to fill in as needed without
-    ;; having to use unicode-fonts package.
-    (when (member "Symbola" (font-family-list))
-      (set-fontset-font "fontset-default" nil 
-                    (font-spec :size 20 :name "Symbola")))
-    (when macosx-p
-      (set-face-font 'default "consolas-11"))
-    (when mswindows-p
-      (set-face-font 'default "consolas-10"))
-    (when linux-p
-      (when (member "Inconsolata" (font-family-list))
-        (set-face-font 'default "inconsolata-11"))))
-  (qdot/set-platform-font)
-#+end_src
+Set up meta on OS X/Linux to be where I expect them.
 
-** Platform specific meta keys
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 (when macosx-p
   ;;Change meta to alt
   (setq mac-command-modifier 'meta)
@@ -140,111 +128,52 @@ something.
   (setq mac-pass-command-to-system nil))
 (when linux-p
   (setq x-alt-keysym 'meta))
-#+end_src
-
-** Autosave setup
-Put autosave files (ie #foo#) in one place, *not* scattered all over
-the file system
-#+begin_src emacs-lisp
-  (defvar qdot/autosave-dir (concat user-emacs-directory "autosaves/"))
-  (make-directory qdot/autosave-dir t)
-  (defun qdot/auto-save-file-name-p (filename)
-    (string-match "^#.*#$" (file-name-nondirectory filename)))
-  (setq auto-save-file-name-transforms
-        `((".*" ,qdot/autosave-dir t)))
-#+end_src
-
-** Backup file setup
-Put backup files (ie foo~) in one place too. (The
-backup-directory-alist list contains regexp=>directory mappings;
-filenames matching a regexp are backed up in the corresponding
-directory. Emacs will mkdir it if necessary.)
-
-#+begin_src emacs-lisp
-  (setq qdot/backup-dir (expand-file-name (concat user-emacs-directory "backups/")))
-  (make-directory qdot/backup-dir t)
-  (setq
-     backup-by-copying t      ; don't clobber symlinks
-     backup-directory-alist
-      '(("." . "~/.emacs.d/backups"))    ; don't litter my fs tree
-     delete-old-versions t
-     kept-new-versions 6
-     kept-old-versions 2
-     version-control t)       ; use versioned backups
-#+end_src
-
-** Save History setup
-#+BEGIN_SRC emacs-lisp
-(setq savehist-file (concat user-emacs-directory "savehist"))
-(savehist-mode 1)
-(setq savehist-save-minibuffer-history 1)
-(setq savehist-additional-variables
-      '(kill-ring
-        search-ring
-        regexp-search-ring))
 #+END_SRC
-** Function enabling
-#+BEGIN_SRC emacs-lisp
-  (put 'erase-buffer 'disabled nil)
-#+END_SRC
-** Modeline and display setup
-Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/improving-performance-emacs-display-engine/
-#+begin_src emacs-lisp
-  (setq display-time-24hr-format t)
-  (setq display-time-day-and-date t)
-  (setq transient-mark-mode t)
-  (setq redisplay-dont-pause t)
-  (display-time)
-  (line-number-mode t)
-  (column-number-mode t)
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
-  (scroll-bar-mode -1)
-  (blink-cursor-mode -1)
-  (global-font-lock-mode 1)
-#+end_src
 
-** Other setup
-#+begin_src emacs-lisp
-  ;; period single space ends sentence
+Don't end sentences with a double space. This is important for fill
+functions.
+
+#+BEGIN_SRC emacs-lisp
   (setq sentence-end-double-space nil)
+#+END_SRC
+
+Even if we start the process in another directory, always set home to
+default.
+
+#+BEGIN_SRC emacs-lisp
   (setq default-directory "~")
+#+END_SRC
+
+Make sure message log is really, really big in case I screw something
+up.
+
+#+BEGIN_SRC emacs-lisp
   (setq message-log-max 5000)
-  
+#+END_SRC  
+
+Fix cut/paste on linux
+
+#+BEGIN_SRC emacs-lisp
   (when linux-p
     (setq
      ;; copy emacs clipboard to system
      x-select-enable-clipboard t
      interprogram-paste-function 'x-cut-buffer-or-selection-value))
-  
+#+END_SRC
+
+Always show when there's empty lines at the end of a buffer
+
+#+BEGIN_SRC emacs-lisp
   (set-default 'indicate-empty-lines t)
-  (global-auto-revert-mode t)
-  ;; Transparently open compressed files
-  (auto-compression-mode t)
-  ;; Save a list of recent files visited.
-  (recentf-mode 1)
-  ;; When region active, delete actually deletes it
-  (delete-selection-mode 1)
-  
-  (defvar qdot/mail-p
-    linux-p
-    "Whether mail packages should be initialized")
-    
-#+end_src
-** Package variables that need to be set before loading
-#+begin_src emacs-lisp
-  
-  ;; Variables for packages that need to be set before loading
-  (setq jedi:setup-keys t)
-  
-#+end_src
-** Reset yes-or-no-p to y-or-n-p
-#+begin_src emacs-lisp
-(fset 'yes-or-no-p 'y-or-n-p)
-#+end_src
-** No Dialog on yes-or-no-p
+#+END_SRC
+
+Reset yes-or-no-p to y-or-n-p, and make sure there's no dialog on
+platforms that might try to bring one up.
 https://superuser.com/questions/125569/how-to-fix-emacs-popup-dialogs-on-mac-os-x
-#+begin_src emacs-lisp
+
+#+BEGIN_SRC emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+
 (when macosx-p
  (defadvice yes-or-no-p (around prevent-dialog activate)
    "Prevent yes-or-no-p from activating a dialog"
@@ -255,22 +184,125 @@ https://superuser.com/questions/125569/how-to-fix-emacs-popup-dialogs-on-mac-os-
    "Prevent y-or-n-p from activating a dialog"
    (let ((use-dialog-box nil))
      ad-do-it)))
-#+end_src
-** Server Setup
-#+BEGIN_SRC emacs-lisp
-  ;;(setq server-use-tcp t)
-  ;;(setq server-host "localhost")
 #+END_SRC
-* Macros
-** eval-after-load macro
-Taken from https://github.com/milkypostman/dotemacs/blob/master/init.el
+
+Put autosave files (ie #foo#) in one place, *not* scattered all over
+the file system
+
 #+BEGIN_SRC emacs-lisp
-;;;; macros
-(defmacro after (mode &rest body)
-  "`eval-after-load' MODE evaluate BODY."
-  (declare (indent defun))
-  `(eval-after-load ,mode
-     '(progn ,@body)))
+  (defvar qdot/autosave-dir (concat user-emacs-directory "autosaves/"))
+  (make-directory qdot/autosave-dir t)
+  (defun qdot/auto-save-file-name-p (filename)
+    (string-match "^#.*#$" (file-name-nondirectory filename)))
+  (setq auto-save-file-name-transforms
+        `((".*" ,qdot/autosave-dir t)))
+#+END_SRC
+
+Put backup files (ie foo~) in one place too. (The
+backup-directory-alist list contains regexp=>directory mappings;
+filenames matching a regexp are backed up in the corresponding
+directory. Emacs will mkdir it if necessary.)
+
+#+BEGIN_SRC emacs-lisp
+  (setq qdot/backup-dir (expand-file-name (concat user-emacs-directory "backups/")))
+  (make-directory qdot/backup-dir t)
+  (setq
+     backup-by-copying t      ; don't clobber symlinks
+     backup-directory-alist
+      '(("." . "~/.emacs.d/backups"))    ; don't litter my fs tree
+     delete-old-versions t
+     kept-new-versions 6
+     kept-old-versions 2
+     version-control t)       ; use versioned backups
+#+END_SRC
+
+Enable erase-buffer, since it's handy for shell/irc/etc.
+
+#+BEGIN_SRC emacs-lisp
+  (put 'erase-buffer 'disabled nil)
+#+END_SRC
+** Global Minor Modes
+
+Save minibuffer history, so oft-used functions bubble to the top.
+
+#+BEGIN_SRC emacs-lisp
+(setq savehist-file (concat user-emacs-directory "savehist"))
+(savehist-mode 1)
+(setq savehist-save-minibuffer-history 1)
+(setq savehist-additional-variables
+      '(kill-ring
+        search-ring
+        regexp-search-ring))
+#+END_SRC
+
+Actually show the region we're selecting when marking.
+
+#+BEGIN_SRC emacs-lisp
+  (transient-mark-mode t)
+#+END_SRC
+
+If a file is reverted outside of emacs, and its buffer has NOT been
+edited inside emacs, automatically revert it.
+
+#+BEGIN_SRC emacs-lisp
+  (global-auto-revert-mode t)
+#+END_SRC
+
+Transparently open compressed files.
+
+#+BEGIN_SRC emacs-lisp
+  (auto-compression-mode t)
+#+END_SRC
+
+Save a list of recent files visited.
+
+#+BEGIN_SRC emacs-lisp
+  (recentf-mode 1)
+#+END_SRC
+
+When region active, delete actually deletes it.
+
+#+BEGIN_SRC emacs-lisp
+  (delete-selection-mode 1)
+#+END_SRC
+
+Just expect font lock to be on everywhere.
+
+#+BEGIN_SRC emacs-lisp
+  (global-font-lock-mode 1)
+#+END_SRC
+
+** Display, Font, and Modeline setup
+Use fonts we either know we have, or can check for. Symbola is used to
+fill in missing glyphs for odd emoticons that pop up on IRC/IM usually.
+
+#+BEGIN_SRC emacs-lisp
+  (when (member "Symbola" (font-family-list))
+    (set-fontset-font "fontset-default" nil
+                      (font-spec :size 20 :name "Symbola")))
+  (when macosx-p
+    (set-face-font 'default "consolas-11"))
+  (when mswindows-p
+    (set-face-font 'default "consolas-10"))
+  (when linux-p
+    (when (member "Inconsolata" (font-family-list))
+      (set-face-font 'default "inconsolata-11")))
+#+END_SRC
+
+Set up modeline and display variables. Removes all bars, be they scroll or menu, adds date/time to modeline, etc.
+Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/improving-performance-emacs-display-engine/
+
+#+BEGIN_SRC emacs-lisp
+  (setq display-time-24hr-format t)
+  (setq display-time-day-and-date t)
+  (setq redisplay-dont-pause t)
+  (display-time)
+  (line-number-mode t)
+  (column-number-mode t)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+  (blink-cursor-mode -1)
 #+END_SRC
 * Package Configuration
 This section contains installation and configuration information for
