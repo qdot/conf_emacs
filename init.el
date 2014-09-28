@@ -1,4 +1,14 @@
 
+;; Startup Timing
+;; Take the time at the beginning of load, then use it at the end to see
+;; how long it took to load packages.
+
+;; [[file:~/.emacs_files/emacs_conf.org::*Startup%20Timing][Startup\ Timing:1]]
+
+(defconst qdot/emacs-start-time (current-time))
+
+;; Startup\ Timing:1 ends here
+
 ;; Directory Configuration
 ;; Setting up a few different variables for the different types of
 ;; directories we have (configurations, locally stored versus el-get
@@ -83,6 +93,8 @@
 ;; Directory\ Configuration:1 ends here
 
 ;; package.el                                                    :package:
+;; Just use the built-in package manager, but add melpa/elpa/bleeding
+;; edge package repos.
 
 ;; [[file:~/.emacs_files/emacs_conf.org::*package.el][package\.el:1]]
 
@@ -98,10 +110,13 @@
 ;; package\.el:1 ends here
 
 ;; use-package                                                   :package:
+;; use-package keeps packaging loading clean and delayed until the last
+;; possible second. Using the :ensure command means that this config file
+;; also works as a package manifest when bringing up a new config
+;; instance, though that rarely if ever happens.
 
 ;; [[file:~/.emacs_files/emacs_conf.org::*use-package][use-package:1]]
 
-;; Make sure we have use-package installed
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -110,16 +125,19 @@
 
 ;; use-package:1 ends here
 
-;; Load org
+;; Load org-mode
+;; We need org-mode here to run org-babel on the file. Loading this early
+;; is fine, as it's pretty much guaranteed that org-mode will get used
+;; during a session.
 
-;; [[file:~/.emacs_files/emacs_conf.org::*Load%20org][Load\ org:1]]
+;; [[file:~/.emacs_files/emacs_conf.org::*Load%20org-mode][Load\ org-mode:1]]
 
 (use-package org
   :ensure org-plus-contrib
   :mode (("\\.org_archive\\'"  . org-mode)
          ("\\.org\\'"  . org-mode)))
 
-;; Load\ org:1 ends here
+;; Load\ org-mode:1 ends here
 
 ;; Load org configuration file
 

@@ -12,7 +12,7 @@
 :PROPERTIES:
 :header-args: :tangle init.el
 :END:
-This section generates our .emacs files, which then loads everything
+This section generates the .emacs file, which then loads everything
 else. It sets up directory variables, loads package, use-package, and
 org, then calls org-babel-load-file on emacs_conf.org. That will load
 the rest of the packages and settings, re-tangling the org file before
@@ -375,6 +375,7 @@ configurations without having to search through the org file.
 
 ** Emacs Customization
 *** color-theme                                                   :package:
+I tend to use dark themes everywhere, be it laptop or desktop.
 #+BEGIN_SRC emacs-lisp
   (use-package color-theme
     :ensure color-theme
@@ -392,36 +393,32 @@ Incremental minibuffer completion
 #+END_SRC
 
 *** recentf                                                       :package:
+Use a list of most recent opened files instead of having to search through drive
 http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
 
 #+BEGIN_SRC emacs-lisp
-  (require 'recentf)
-  
-  ;; get rid of `find-file-read-only' and replace it with something
-  ;; more useful.
-  (defun ido-recentf-open ()
-    "Use `ido-completing-read' to \\[find-file] a recent file"
-    (interactive)
-    (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-        (message "Opening file...")
-      (message "Aborting")))
-  
-  (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
-  
-  ;; enable recent files mode.
-  (recentf-mode t)
-  
-  ;; 50 files ought to be enough.
-  (setq recentf-max-saved-items 50)
-  
-  (add-hook 'eshell-preoutput-filter-functions
-      'ansi-color-filter-apply)
-#+END_SRC
+  (use-package recentf
+    :bind (("C-x C-r" . ido-recentf-open))
+    :init
+    (progn
+      ;; get rid of `find-file-read-only' and replace it with something
+      ;; more useful.
+      (defun ido-recentf-open ()
+        "Use `ido-completing-read' to \\[find-file] a recent file"
+        (interactive)
+        (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+            (message "Opening file...")
+          (message "Aborting")))
 
+      ;; 50 files ought to be enough.
+      (setq recentf-max-saved-items 50)))
+
+#+END_SRC
 *** ido                                                           :package:
+Make selecting files/buffers in minibuffer easier
 #+BEGIN_SRC emacs-lisp
   (use-package ido
-    :init
+    :config
     (progn 
       (ido-mode t)
       (ido-everywhere t)
@@ -433,7 +430,7 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 Make buffer names unique, handy when opening files with similar names
 #+BEGIN_SRC emacs-lisp
   (use-package uniquify
-    :init
+    :config
     (progn
       (setq uniquify-buffer-name-style 'reverse
             uniquify-separator "|"
@@ -445,25 +442,30 @@ Make sure I always come back to the same place in a file
 http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 
 #+BEGIN_SRC emacs-lisp
-  (setq-default save-place t)
-  ;; saveplace and org-mode do not play well together, reset the regexp to include
-  ;; org and org_archive files
-  (setq-default save-place-ignore-files-regexp "\\(?:COMMIT_EDITMSG\\|hg-editor-[[:alnum:]]+\\.txt\\|svn-commit\\.tmp\\|bzr_log\\.[[:alnum:]]+\\|.*\\.org\\|.*\\.org_archive\\)$")
-  (require 'saveplace)
-  
+  (use-package saveplace
+    :config
+    (progn
+      (setq-default save-place t)
+      ;; saveplace and org-mode do not play well together, reset the regexp to include
+      ;; org and org_archive files
+      (setq-default save-place-ignore-files-regexp "\\(?:COMMIT_EDITMSG\\|hg-editor-[[:alnum:]]+\\.txt\\|svn-commit\\.tmp\\|bzr_log\\.[[:alnum:]]+\\|.*\\.org\\|.*\\.org_archive\\)$")))
+    
 #+END_SRC
 
 
 *** ispell                                                        :package:
+Turns out most spelling dictionaries don't contain "teledildonics".
+What a horrid oversight.
 #+BEGIN_SRC emacs-lisp
   (setq ispell-personal-dictionary "~/.ispell-dict-personal")
 #+END_SRC
 
 *** tramp                                                         :package:
+I rarely use tramp these days, but usually use ssh when doing so.
 #+BEGIN_SRC emacs-lisp
   (use-package tramp
     :commands tramp
-    :init
+    :config
     (progn
       (setq tramp-default-method "ssh")))
 #+END_SRC
