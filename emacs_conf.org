@@ -1125,7 +1125,7 @@ Add markdown export backend.
 global STYLE property values for completion.
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-global-properties (quote (("STYLE_ALL" . "habit")))
+  (setq org-global-properties (quote (("STYLE_ALL" . "habit"))))
 #+END_SRC
 
 Use ~/emacs_org for storing files. Usually symlinked to Dropbox.
@@ -1373,7 +1373,7 @@ Don't lock to the week/month in the agenda, and always show ahead 7 days unless 
 Start agenda showing the next week by default.
    
 #+BEGIN_SRC emacs-lisp
-  (setq org-agenda-ndays 7)
+  (setq org-agenda-span 7)
 #+END_SRC
 
 Multiple pass pdf generation.
@@ -1544,7 +1544,7 @@ Enable auto clock resolution for finding open clocks
 
 Include current clocking task in clock reports
 #+BEGIN_SRC emacs-lisp
-  (setq org-clock-report-include-clocking-task t))
+  (setq org-clock-report-include-clocking-task t)
 #+END_SRC
 
 #+END_SRC
