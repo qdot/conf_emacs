@@ -2961,8 +2961,7 @@ Turn on ansi in shells
 
 
 ** Window Management
-*** workgroups                                                      :package:
-**** Basic Config
+*** workgroups                                                    :package:
 #+BEGIN_SRC emacs-lisp
   (use-package workgroups2
     :ensure workgroups2
@@ -2977,22 +2976,30 @@ Turn on ansi in shells
            ("<C-f6>"             . wg-switch-to-workgroup-at-index-6)
            ("<C-f7>"             . wg-switch-to-workgroup-at-index-7)
            ("C-x b"              . wg-switch-to-buffer))
-    :init
+    :config
     (progn
-      (setq
-       ;; Set the prefix key to tilde, what I normally use in screen
-       wg-prefix-key "`"
-       ;; Turn off animations
-       wg-morph-on nil
-       ;; Turn off saving on exit
-       wg-emacs-exit-save-behavior nil
-       ;; Turn off reloading of workgroup file lists
-       wg-restore-associated-buffers nil
-       ;; Turn buffer list handling back on
-       wg-mess-with-buffer-list t
-       wg-switch-to-first-workgroup-on-find-session-file nil)))
+      (require 'qdot-workgroups-config)))
 #+END_SRC
-**** uid-mismatch handling
+**** workgroups config
+:PROPERTIES:
+:header-args: :tangle tangle/qdot-workgroups-config.el
+:END:
+***** Variables
+#+BEGIN_SRC emacs-lisp
+  (setq
+   ;; Set the prefix key to tilde, what I normally use in screen
+   wg-prefix-key "`"
+   ;; Turn off animations
+   wg-morph-on nil
+   ;; Turn off saving on exit
+   wg-emacs-exit-save-behavior nil
+   ;; Turn off reloading of workgroup file lists
+   wg-restore-associated-buffers nil
+   ;; Turn buffer list handling back on
+   wg-mess-with-buffer-list t
+   wg-switch-to-first-workgroup-on-find-session-file nil)
+#+END_SRC
+***** uid-mismatch handling
 #+BEGIN_SRC emacs-lisp
   ;; Due to some buffers having issues when reloading (erc), uids start
   ;; to mismatch which massively trips up workgroups. This is function
@@ -3023,7 +3030,7 @@ Turn on ansi in shells
                        (buffer-name (current-buffer))))))
       (setq wg-buffer-uid uid)))
 #+END_SRC
-**** Personal usage setup function
+***** Personal usage setup function
 #+BEGIN_SRC emacs-lisp
   (defun qdot/personal-wg-setup ()
     ;;(workgroups-mode 1)
@@ -3094,10 +3101,11 @@ Turn on ansi in shells
   ;; (wg-filter-buffer-list-by-major-mode 'erc-mode (buffer-list))
   ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))
 #+END_SRC
-*** popwin                                                          :package:
+***** Provides Statement
 #+BEGIN_SRC emacs-lisp
-()
+(provide 'qdot-workgroups-config)
 #+END_SRC
+
 ** Misc
 *** proced                                                        :package:
 #+BEGIN_SRC emacs-lisp
