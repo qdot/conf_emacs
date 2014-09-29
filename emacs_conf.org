@@ -43,13 +43,23 @@ fetched libs, etc...)
 - Set up the base configuration directory and filename
 #+BEGIN_SRC emacs-lisp
   (defconst qdot/emacs-conf-dir
-    ;;(file-name-directory (or load-file-name (buffer-file-name)))
     "~/.emacs_files/"
     "Directory for emacs configuration")
 
   (defconst qdot/emacs-conf-file
     (expand-file-name (concat qdot/emacs-conf-dir "emacs_conf.org"))
     "Org-babel file for emacs configuration")
+#+END_SRC
+
+- config compilation directory
+#+BEGIN_SRC emacs-lisp
+  (defconst qdot/emacs-conf-tangle-dir
+    (expand-file-name (concat qdot/emacs-conf-dir "tangle/"))
+    "Directory for tangled, compiled configuration files")
+
+  (defconst qdot/emacs-conf-tangle-file
+    (expand-file-name (concat qdot/emacs-conf-dir "tangle/emacs_conf.el"))
+    "Directory for tangled, compiled configuration files")
 #+END_SRC
 
 - Manually installed/maintained elisp directory
@@ -94,7 +104,7 @@ fetched libs, etc...)
 - Add configuration and scripts directories to proper variables
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path (expand-file-name qdot/emacs-conf-dir))
-  (add-to-list 'load-path (expand-file-name (concat qdot/emacs-conf-dir "tangle/")))
+  (add-to-list 'load-path (expand-file-name qdot/emacs-conf-tangle-dir))
   (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 #+END_SRC
 ** Load Package Packages
