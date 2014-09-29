@@ -143,28 +143,59 @@ during a session.
     :mode (("\\.org_archive\\'"  . org-mode)
            ("\\.org\\'"  . org-mode)))
 #+END_SRC
+** Recompile Config Function
+
+This function tangles the config file, removes all old byte compiled
+files, and byte compiles all files that were tangled.
+
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/tangle-and-compile-config ()
+    (interactive)
+    (org-babel-tangle-file qdot/emacs-conf-file)
+    (mapcar
+     (lambda (file) (delete-file file))
+     (directory-files qdot/emacs-conf-tangle-dir t ".+\\.elc$" nil))
+    (mapcar
+     (lambda (file) (byte-compile-file file))
+     (directory-files qdot/emacs-conf-tangle-dir t "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)" nil)))
+#+END_SRC
+
+Unfortunately, trying to run org-babel-load-file on a file that
+tangles out to multiple files has some bugs. It tries to load all
+tangled files, based on the relative path of where org-babel-load-file
+was called from. Since I tangle to a subdirectory, this is wrong. Not
+only that, I want these files evaluated during requires. So, I ripped
+out the portion of org-babel-load-file that checks whether it should
+update the file, and use that to check whether or not I should run
+tangle-and-compile-config.
+
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/build-conf-if-needed ()
+    (let* ((file qdot/emacs-conf-file)
+           (exported-file qdot/emacs-conf-tangle-file)
+           (age (lambda (file)
+                  (float-time
+                   (time-subtract (current-time)
+                                  (nth 5 (or (file-attributes (file-truename file))
+                                             (file-attributes file))))))))
+      ;; tangle if the org-mode file is newer than the elisp file
+      (unless (and (file-exists-p exported-file)
+                   (> (funcall age file) (funcall age exported-file)))
+        (require 'ob-tangle)
+        (qdot/tangle-and-compile-config))))
+
+#+END_SRC
 ** Load org configuration file
+
+Debug on error is turned on during configuration file loading so
+backtraces pop up if something goes wrong.
+
 #+BEGIN_SRC emacs-lisp
   (add-hook 'after-init-hook
             `(lambda ()
-               ;; toggling on debug-on-error just in case there's issues in my
-               ;; untangled code
                (setq debug-on-error t)
-
-               (let* ((file "~/.emacs_files/emacs_conf.org")
-                      (exported-file "~/.emacs_files/tangle/emacs_conf.el")
-                      (age (lambda (file)
-                             (float-time
-                              (time-subtract (current-time)
-                                             (nth 5 (or (file-attributes (file-truename file))
-                                                        (file-attributes file))))))))
-                 ;; tangle if the org-mode file is newer than the elisp file
-                 (unless (and (file-exists-p exported-file)
-                              (> (funcall age file) (funcall age exported-file)))
-                   (require 'ob-tangle)
-                   (org-babel-tangle-file "~/.emacs_files/emacs_conf.org")))
-               (load-file "~/.emacs_files/tangle/emacs_conf.el")
-               ;; if we live through startup, return to normal error throwing
+               (qdot/build-conf-if-needed)
+               (load-file qdot/emacs-conf-tangle-file)
                (setq debug-on-error nil)))
 #+END_SRC
 * Basic Setup
