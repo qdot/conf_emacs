@@ -2601,74 +2601,62 @@ writing, and always bring up home, mentions, and dms
 #+END_SRC
 
 *** erc-mode                                                      :package:
-**** Module and variable setup
 #+BEGIN_SRC emacs-lisp
   (use-package erc
     :ensure erc-hl-nicks
-    :commands (erc)
     :init
     (progn
-      (require 'erc-fill)
-      (require 'erc-ring)
-      (require 'erc-match)
-      (require 'erc-nicklist)
-      (require 'erc-highlight-nicknames)
-      (add-to-list 'erc-modules 'highlight-nicknames)
-      (add-to-list 'erc-modules 'match)
-      (erc-update-modules)
-      (setq erc-timestamp-only-if-changed-flag nil
-            erc-timestamp-format "[%H:%M] "
-            erc-fill-prefix "      "
-            erc-max-buffer-size 50000
-            erc-truncate-buffer-on-save t
-            erc-interpret-mirc-color nil
-            erc-insert-timestamp-function 'erc-insert-timestamp-left
-            erc-kill-queries-on-quit nil
-            erc-auto-query 'bury
-            erc-keywords nil
-            erc-button-url-regexp "\\([-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]+\\.\\)+[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]*[-a-zA-Z0-9\\/]"
-            erc-fill-function 'erc-fill-static
-            erc-fill-static-center 0
-            ;; Don't track common events
-            erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
-                                      "324" "329" "332" "333" "353" "477")
-            erc-current-nick-highlight-type 'nick
-            erc-track-use-faces t
-            erc-track-faces-priority-list '(erc-current-nick-face erc-keyword-face)
-            erc-track-priority-faces-only 'all)
-
-      (defun qdot/erc-mode-hook ()
-        ;; Don't really need paren matching when I'm trying to chat
-        (setq blink-matching-paren nil)
-        ;; ERC should only pop comp buffers if REALLY needed
-        (setq completion-auto-help 'lazy))
-
-      (add-hook 'erc-mode-hook 'qdot/erc-mode-hook)
-
-      (setq erc-hide-list '("PART" "JOIN" "QUIT" "NICK"))
-
-      (add-hook 'erc-insert-post-hook
-                'erc-truncate-buffer)))
+      (require 'qdot-erc-config)))
 #+END_SRC
-**** Fill column resetting
+**** ERC Config
+:PROPERTIES:
+:header-args: :tangle tangle/qdot-erc-config.el
+:END:
+***** Module and variable setup
 #+BEGIN_SRC emacs-lisp
-  (make-variable-buffer-local 'erc-fill-column)
-  (defun qdot/erc-set-fill-columns ()
-    (interactive)
-    (save-excursion
-      (walk-windows
-       (lambda (w)
-         (let ((buffer (window-buffer w)))
-           (set-buffer buffer)
-           (when (eq major-mode 'erc-mode)
-             (message "Window size: %d" (window-width w))
-             (setq erc-fill-column (- (window-width w) 2))))))))
-  
-  ;;(setq window-configuration-change-hook (cddr window-configuration-change-hook))
-  
-  ;;(add-hook 'window-configuration-change-hook 'qdot/erc-set-fill-columns)
+  (require 'erc-fill)
+  (require 'erc-ring)
+  (require 'erc-match)
+  (require 'erc-nicklist)
+  (require 'erc-highlight-nicknames)
+  (add-to-list 'erc-modules 'highlight-nicknames)
+  (add-to-list 'erc-modules 'match)
+  (erc-update-modules)
+  (setq erc-timestamp-only-if-changed-flag nil
+        erc-timestamp-format "[%H:%M] "
+        erc-fill-prefix "      "
+        erc-max-buffer-size 50000
+        erc-truncate-buffer-on-save t
+        erc-interpret-mirc-color nil
+        erc-insert-timestamp-function 'erc-insert-timestamp-left
+        erc-kill-queries-on-quit nil
+        erc-auto-query 'bury
+        erc-keywords nil
+        erc-button-url-regexp "\\([-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]+\\.\\)+[-a-zA-Z0-9_=!?#$@~`%&*+\\/:;,]*[-a-zA-Z0-9\\/]"
+        erc-fill-function 'erc-fill-static
+        erc-fill-static-center 0
+        ;; Don't track common events
+        erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "MODE"
+                                  "324" "329" "332" "333" "353" "477")
+        erc-current-nick-highlight-type 'nick
+        erc-track-use-faces t
+        erc-track-faces-priority-list '(erc-current-nick-face erc-keyword-face)
+        erc-track-priority-faces-only 'all)
+
+  (defun qdot/erc-mode-hook ()
+    ;; Don't really need paren matching when I'm trying to chat
+    (setq blink-matching-paren nil)
+    ;; ERC should only pop comp buffers if REALLY needed
+    (setq completion-auto-help 'lazy))
+
+  (add-hook 'erc-mode-hook 'qdot/erc-mode-hook)
+
+  (setq erc-hide-list '("PART" "JOIN" "QUIT" "NICK"))
+
+  (add-hook 'erc-insert-post-hook
+            'erc-truncate-buffer)
 #+END_SRC
-**** Make join/part showing buffer local
+***** Make join/part showing buffer local
 Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+BEGIN_SRC emacs-lisp
   (defvar qdot/erc-status-allow-list nil
@@ -2694,7 +2682,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
               nil
             ad-do-it)))
 #+END_SRC
-**** ZNC Connection Setup
+***** ZNC Connection Setup
 #+BEGIN_SRC emacs-lisp
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;
@@ -2746,7 +2734,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
     (qdot/erc-znc-connect "bitlbee"))
   
 #+END_SRC
-**** defadvice buffer clearing
+***** defadvice buffer clearing
 #+BEGIN_SRC emacs-lisp
   (defun qdot/clear-irc-buffer ()
     "If the current buffer is and ERC buffer, clear all text out of
@@ -2762,7 +2750,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (defadvice erc-cmd-CLEAR (before qdot/erc-actually-clear last () activate)
     (qdot/clear-irc-buffer))
 #+END_SRC
-**** Kill all buffers
+***** Kill all buffers
 #+BEGIN_SRC emacs-lisp
   (defun qdot/erc-kill-all-channel-buffers ()
     (interactive)
@@ -2807,6 +2795,10 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
   (defalias 'qdot/kill-erc 'qdot/kill-irc)
 #+END_SRC  
 
+***** Provides Statement
+#+BEGIN_SRC emacs-lisp
+(provide 'qdot-erc-config)
+#+END_SRC
 ** Terminals
 *** multiterm                                                     :package:
 #+BEGIN_SRC emacs-lisp
