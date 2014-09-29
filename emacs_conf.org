@@ -2041,7 +2041,7 @@ Always check spelling in comments and documentation.
 Always show where whitespace is off.
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode-hook 'whitespace-mode)
+  ;;(add-hook 'prog-mode-hook 'whitespace-mode)
 #+END_SRC
 
 Highlight matching paren/bracket/etc pairs.
