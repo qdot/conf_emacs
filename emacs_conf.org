@@ -2451,12 +2451,15 @@ semantic-mode when loading C++ files. May just completely remove soon.
 #+END_SRC
 ** Writing
 *** adoc-mode                                                     :package:
+Asciidoc. I rarely use this format anymore, but it's handy for legacy
+stuff.
 #+BEGIN_SRC emacs-lisp
   (use-package adoc-mode
     :ensure adoc-mode
     :mode ("\\.asciidoc\\'" . adoc-mode))
 #+END_SRC
 *** markdown-mode                                                 :package:
+Markdown. Used mostly for blogging and README files.
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
     :mode (("\\.markdown\\'" . markdown-mode)
@@ -2464,6 +2467,8 @@ semantic-mode when loading C++ files. May just completely remove soon.
     :ensure markdown-mode)
 #+END_SRC
 *** pelican-mode                                                  :package:
+I use [[http://getpelican.com][pelican]] for blogs. This just wraps a few commands in to make
+compiling blogs from post buffers easier.
 #+BEGIN_SRC emacs-lisp
   (use-package pelican-mode
     :defer t
@@ -2479,6 +2484,8 @@ org-mode.
 
 ** Social (IRC, Twitter, Etc)
 *** bitlmacs                                                      :package:
+Utility package for using bitlbee through ERC. Currently breaks
+horribly if called before there's a message buffer.
 #+BEGIN_SRC emacs-lisp
   (use-package bitlmacs
     :load-path "~/.emacs_files/dev-packages/bitlmacs"
