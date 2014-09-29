@@ -14,12 +14,13 @@ This repository represents the deep, dark recesses of my soul, better
 known as my emacs configuration files.
 
 While it's gone through many different phases and layouts, I now use
-an org-babel config similar to emacs-starter-kit. This allows me to
-use literate programming with my config and keep it all in a single
-(rather large) file, in the hopes that someone other than me might
-actually understand why I do what I do.
+an org-babel config. This allows me to use literate programming with
+my config and keep it all in a single (rather large) file, in the
+hopes that someone other than me might actually understand why I do
+what I do. I've tried to provide descriptions to as many things as
+possible.
 
-** Package Management via el-get
+** Package Management
 
 Package management happens by way of package.el using ELPA/MELPA/etc.
 All packages that cannot be sync'd via that method are kept as git
