@@ -1,4 +1,3 @@
-emacs_conf.el
 *.elc
-elisp_auto
 packages
+tangle

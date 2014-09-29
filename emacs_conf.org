@@ -4,7 +4,7 @@
 #+STARTUP:  align fold nodlcheck content
 #+OPTIONS:  H:4 num:nil toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t
 #+OPTIONS:  skip:nil d:(HIDE) tags:not-in-toc
-#+PROPERTY: header-args :results none :noweb yes :tangle yes
+#+PROPERTY: header-args :results none :noweb yes :tangle tangle/emacs_conf.el
 #+HTML_HEAD: <link rel="stylesheet" href="org.css" type="text/css" />
 #+LANGUAGE: en
 #+PROPERTY: comments both
@@ -21,7 +21,7 @@ main org file, and call load-file on the tangled file from the config
 block of use-package.
 * Init File
 :PROPERTIES:
-:header-args: :tangle init.el
+:header-args: :tangle tangle/init.el
 :END:
 This section generates the .emacs file, which then loads everything
 else. It sets up directory variables, loads package, use-package, and
@@ -94,6 +94,7 @@ fetched libs, etc...)
 - Add configuration and scripts directories to proper variables
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'load-path (expand-file-name qdot/emacs-conf-dir))
+  (add-to-list 'load-path (expand-file-name (concat qdot/emacs-conf-dir "tangle/")))
   (add-to-list 'load-path (expand-file-name qdot/emacs-elisp-dir))
 #+END_SRC
 ** Load Package Packages
@@ -139,7 +140,20 @@ during a session.
                ;; toggling on debug-on-error just in case there's issues in my
                ;; untangled code
                (setq debug-on-error t)
-               (org-babel-load-file "~/.emacs_files/emacs_conf.org")
+
+               (let* ((file "~/.emacs_files/emacs_conf.org")
+                      (exported-file "~/.emacs_files/tangle/emacs_conf.el")
+                      (age (lambda (file)
+                             (float-time
+                              (time-subtract (current-time)
+                                             (nth 5 (or (file-attributes (file-truename file))
+                                                        (file-attributes file))))))))
+                 ;; tangle if the org-mode file is newer than the elisp file
+                 (unless (and (file-exists-p exported-file)
+                              (> (funcall age file) (funcall age exported-file)))
+                   (require 'ob-tangle)
+                   (org-babel-tangle-file "~/.emacs_files/emacs_conf.org")))
+               (load-file "~/.emacs_files/tangle/emacs_conf.el")
                ;; if we live through startup, return to normal error throwing
                (setq debug-on-error nil)))
 #+END_SRC
@@ -725,7 +739,7 @@ tangle to an external file.
 
 **** mu4e Configuration
 :PROPERTIES:
-:header-args: :tangle qdot-mu4e-config.el
+:header-args: :tangle tangle/qdot-mu4e-config.el
 :END:
 ***** Package variable setup
 Sets basic directories, how often to update, etc. Nothing special,
@@ -1062,7 +1076,7 @@ modules that I need.
 #+END_SRC
 **** org-mode configuration
 :PROPERTIES:
-:header-args: :tangle qdot-org-config.el
+:header-args: :tangle tangle/qdot-org-config.el
 :END:
 ***** Modules
 Modules I use:
