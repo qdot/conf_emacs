@@ -349,6 +349,12 @@ Enable erase-buffer, since it's handy for shell/irc/etc.
 #+BEGIN_SRC emacs-lisp
   (put 'erase-buffer 'disabled nil)
 #+END_SRC
+
+Enable narrow-to-region
+
+#+BEGIN_SRC emacs-lisp
+  (put 'narrow-to-region 'disabled nil)
+#+END_SRC
 ** Global Minor Modes
 
 Save minibuffer history, so oft-used functions bubble to the top.
@@ -1881,6 +1887,7 @@ load this config using require.
 
 ** Programming
 *** auto-complete                                                 :package:
+Completes. Automatically.
 #+BEGIN_SRC emacs-lisp
   (use-package auto-complete
     :ensure auto-complete
@@ -1907,13 +1914,15 @@ load this config using require.
             ac-dwim t
             ac-quick-help-delay 1)
       (setq ac-use-menu-map t)
-      ;; Default settings
-      (define-key ac-menu-map "\C-n" 'ac-next)
-      (define-key ac-menu-map "\C-p" 'ac-previous)
-      (define-key ac-complete-mode-map [tab] 'ac-expand)))
+      (bind-keys :map ac-menu-map
+                 ("C-n" ac-next)
+                 ("C-p" ac-previous))
+      (bind-keys :map ac-complete-mode-map
+                 ("tab" ac-expand))))
 #+END_SRC
 
 *** yasnippet                                                     :package:
+Provides fillable templates.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure yasnippet
@@ -1923,15 +1932,14 @@ load this config using require.
       (add-to-list 'yas-snippet-dirs qdot/emacs-snippets-dir)))
 #+END_SRC
 *** magit                                                         :package:
-git management in emacs
+git management in emacs. 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
     :ensure magit
-    :commands magit
-    :init
+    :bind (("M-g s" . magit-status))
+    :commands (magit magit-status)
+    :config
     (progn
-      ;; Turn on narrowing
-      (put 'narrow-to-region 'disabled nil)
       (setq magit-completing-read-function
             'magit-ido-completing-read)
 
@@ -1959,8 +1967,6 @@ git management in emacs
 
            (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
 
-      (global-set-key (kbd "M-g s") 'magit-status)
-
       ;; Don't require confirm to stage changes
       (setq magit-stage-all-confirm nil)
 
@@ -1971,14 +1977,18 @@ git management in emacs
 #+END_SRC
 
 *** smartparens                                                   :package:
+Smarter paren matching without going the paredit route. 
+
+Turning off deferred loading because this is useful almost everywhere.
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens
     :ensure smartparens
+    :defer nil
     :bind (("<C-right>"   . sp-forward-slurp-sexp)
            ("<C-left>"    . sp-forward-barf-sexp)
            ("<C-M-right>" . sp-backward-slurp-sexp)
            ("<C-M-left>"  . sp-backward-barf-sexp))
-    :init
+    :config
     (progn
       (require 'smartparens-config)
       (smartparens-global-mode t)
@@ -1986,28 +1996,68 @@ git management in emacs
       (sp-local-pair 'erc-mode "'" nil :actions nil)))
 #+END_SRC
 *** prog-mode                                                     :package:
-#+BEGIN_SRC emacs-lisp
-  ;; Set defaults we expect
-  (setq-default c-basic-offset 2)
-  (setq-default indent-tabs-mode nil)
-  (setq-default tab-width 2)
-  (setq linum-format "%4d")
+Set up defaults for all programming modes.
 
+Always indent 2.
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default c-basic-offset 2)
+  (setq-default tab-width 2)
+#+END_SRC
+
+Spaces, not tabs. Everywhere.
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
+
+Keep linum offset to expect thousands so we don't bounce when changing
+buffers.
+
+#+BEGIN_SRC emacs-lisp
+  (setq linum-format "%4d")
+#+END_SRC
+
+Set up fill column and whitespace-mode settings when starting
+programming mode.
+
+#+BEGIN_SRC emacs-lisp
   (defun qdot/programming-mode-hook ()
-    ;; No tabs. Or wire hangers.
     (set-fill-column 80)
 
     (add-to-list 'ac-sources 'ac-source-yasnippet)
-    (setq whitespace-line-column 80) ;; limit line length
+    (setq whitespace-line-column 80)
     (setq whitespace-style '(face lines-tail))
     (setq show-trailing-whitespace t))
-
   (add-hook 'prog-mode-hook 'qdot/programming-mode-hook)
+#+END_SRC
+
+Always check spelling in comments and documentation.
+
+#+BEGIN_SRC emacs-lisp
   (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+#+END_SRC
+
+Always show where whitespace is off.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode-hook 'whitespace-mode)
+#+END_SRC
+
+Highlight matching paren/bracket/etc pairs.
+
+#+BEGIN_SRC emacs-lisp
   (add-hook 'prog-mode-hook 'show-smartparens-mode)
+#+END_SRC
+
+Line numbers
+
+#+BEGIN_SRC emacs-lisp
   (add-hook 'prog-mode-hook 'linum-mode)
 #+END_SRC
 *** ielm                                                          :package:
+When using ielm mode, set up autocomplete sources accordingly.
+
 #+BEGIN_SRC emacs-lisp
   (defun ielm-auto-complete ()
     "Enables `auto-complete' support in \\[ielm]."
@@ -2021,7 +2071,7 @@ git management in emacs
   (add-hook 'ielm-mode-hook 'ielm-auto-complete)
 #+END_SRC
 
-*** flycheck                                                        :package:
+*** flycheck                                                      :package:
 Using flycheck instead of flymake
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
@@ -2043,23 +2093,25 @@ Using flycheck instead of flymake
 #+END_SRC
 *** haskell-mode                                                  :package:
 #+BEGIN_SRC emacs-lisp
-    (use-package haskell-mode
-      :ensure haskell-mode
-      :mode ("\\.hs$" . haskell-mode)
-      :init
-      (progn
-        (require 'inf-haskell)
-        (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-        (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-        (add-hook 'haskell-mode-hook 'font-lock-mode)
-        (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
-        (setq haskell-font-lock-symbols t)))
+  (use-package haskell-mode
+    :ensure haskell-mode
+    :mode ("\\.hs$" . haskell-mode)
+    :config
+    (progn
+      (require 'inf-haskell)
+      (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+      (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+      (add-hook 'haskell-mode-hook 'font-lock-mode)
+      (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
+      (setq haskell-font-lock-symbols t)))
 #+END_SRC
 *** smerge-mode                                                   :package:
+Adds commands for dealing with conflicted merge files (i.e. >>>>>>> and <<<<<<< files)
+
 http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
 #+BEGIN_SRC emacs-lisp  
   (use-package smerge-mode
-    :commands (smerge-mode))
+    :commands (smerge-mode sm-try-smerge))
 
   (defun sm-try-smerge ()
     (save-excursion
@@ -2070,15 +2122,20 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (add-hook 'find-file-hook 'sm-try-smerge t)
 #+END_SRC
 *** cc-mode                                                       :package:
+Settings for C/C++ modes.
+
+Doxymacs currently commented out because it doesn't have a related
+package.
 #+BEGIN_SRC emacs-lisp
   (defun qdot/cc-mode-hook ()
     ;; (doxymacs-font-lock)
-    (bind-key "C-m" 'newline-and-indent c-mode-map)
-    (bind-key "C-o" 'ff-find-other-file c-mode-map)
+    (bind-keys :map c-mode-map
+               ("C-m" newline-and-indent c-mode-map)
+               ("C-o" ff-find-other-file))
     (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 2)))
     (c-set-style "qdot/cc-code-style")
     (c-set-offset 'innamespace 0)
-    (semantic-mode 1)
+    ;;(semantic-mode 1)
     (subword-mode 1))
 
   (add-hook 'c-mode-common-hook 'qdot/cc-mode-hook)
@@ -2088,13 +2145,8 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   ;; (add-hook 'c-mode-common-hook 'doxymacs-mode)
 #+END_SRC
 *** compilation                                                   :package:
+Compilation mode.
 #+BEGIN_SRC emacs-lisp  
-  (require 'compile)
-  (setq compilation-disable-input nil)
-  (setq compilation-auto-jump-to-first-error t)
-  (setq compilation-scroll-output 'first-error)
-  (setq mode-compile-always-save-buffer-p t)
-  
   (defun qdot/recompile ()
     "Run compile and resize the compile window closing the old one if necessary"
     (interactive)
@@ -2104,10 +2156,20 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
         (kill-buffer "*compilation*")) ; and kill the buffers
       (call-interactively 'compile)
       (enlarge-window 30)))
-  
-  (global-set-key [f5] 'qdot/recompile)
+
+  (use-package compile
+    :commands (compile)
+    ;;:bind ("[f5]" . qdot/recompile)
+    :config
+    (setq compilation-disable-input nil)
+    (setq compilation-auto-jump-to-first-error t)
+    (setq compilation-scroll-output 'first-error)
+    (setq mode-compile-always-save-buffer-p t) )
+
 #+END_SRC
 *** cedet                                                         :package:
+CEDET. Didn't even realize this was being loaded as part of
+semantic-mode when loading C++ files. May just completely remove soon.
 #+BEGIN_SRC emacs-lisp  
   (use-package cedet
     :ensure cedet
@@ -2192,24 +2254,33 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
       ;;   (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
       (add-hook 'python-mode-hook 'qdot/python-mode-hook)))
 #+END_SRC  
-*** nose                                                          :package:
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package nose
-  ;;   :ensure nose)
-#+END_SRC
 *** elpy                                                          :package:
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
     :ensure elpy
     :interpreter ("python" . python-mode))
 #+END_SRC
-*** js3-mode                                                        :package:
+
+*** nose                                                          :package:
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package nose
+  ;;   :ensure nose)
+#+END_SRC
+*** js3-mode                                                      :package:
 #+BEGIN_SRC emacs-lisp
   (use-package js3-mode
     :ensure js3-mode
+    :commands (js3-mode)
     :mode (("\\.js\\'" . js3-mode)
            ("\\.jsm\\'" . js3-mode))
     :init
+      ;; Fix for .js files that have Java set as the mode (I'm looking at
+      ;; you, mozilla-central)
+      (add-hook 'java-mode-hook
+                (lambda ()
+                  (when (string-match "\\.js\\'" buffer-file-name)
+                    (js3-mode))))
+    :config
     (progn
       (defun qdot/js3-mode-hook ()
         (setq
@@ -2225,19 +2296,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
          js3-consistent-level-indent-inner-bracket t
          js3-square-indent-offset 4)
         (linum-mode))
-      (add-hook 'js3-mode-hook 'qdot/js3-mode-hook)
-
-      ;; Fix for .js files that have Java set as the mode (I'm looking at
-      ;; you, mozilla-central)
-      (add-hook 'java-mode-hook
-                (lambda ()
-                  (when (string-match "\\.js\\'" buffer-file-name)
-                    (js3-mode))))
-      ;; (add-hook 'js2-mode-hook
-      ;;           (lambda ()
-      ;;             (flycheck-mode)
-      ;;             (flycheck-select-checker 'javascript-gjshint))))
-      ))
+      (add-hook 'js3-mode-hook 'qdot/js3-mode-hook)))
 #+END_SRC
 *** gdb                                                           :package:
 #+BEGIN_SRC emacs-lisp
@@ -2280,7 +2339,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (define-key 'help-command (kbd "C-k") 'find-function-on-key)
   (define-key 'help-command (kbd "C-v") 'find-variable)
 #+END_SRC
-*** lilypond-mode                                                   :package:
+*** lilypond-mode                                                 :package:
 #+BEGIN_SRC emacs-lisp
   (use-package lilypond-mode
     :mode (("\\.ly\\'" . LilyPond-mode))
@@ -2304,7 +2363,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
            ("\\.erb\\'" . web-mode)
            ("\\.mustache\\'" . web-mode)
            ("\\.djhtml\\'" . web-mode))
-    :init
+    :config
     (progn
       (defun qdot/web-mode-hook ()
         (add-to-list 'ac-sources 'ac-source-yasnippet)
@@ -2316,7 +2375,7 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter-fringe
     :ensure git-gutter-fringe
-    :commands git-gutter git-gutter:toggle )
+    :commands (git-gutter git-gutter:toggle))
 #+END_SRC
 
 *** rainbow-delimiters                                            :package:
