@@ -1051,6 +1051,9 @@ modules that I need.
   (use-package org
     :ensure org-plus-contrib
     :commands (org-agenda)
+    :bind (("C-c l" . org-store-link)
+           ("C-c a" . org-agenda)
+           ("C-c b" . org-iswitchb))
     :mode (("\\.org_archive\\'"  . org-mode)
            ("\\.org\\'"  . org-mode))
     :config
@@ -1076,7 +1079,8 @@ Modules I use:
 - org-bh: Bernt Hansen's functions that I've stolen.
 - org-bibtex: Bibtex style bibliography output
 - org-crypt: gpg crypt'd org blocks
-- org-id: Creates unique identifiers for org nodes. Used by org-mobile
+- org-id: Creates unique identifiers for org nodes. Used by
+  org-mobile, as well as for certain clocking needs.
 - org-info: Support linking to info nodes
 - org-jsinfo: Export org files to html with info-like folding
 #+BEGIN_SRC emacs-lisp
@@ -1110,6 +1114,7 @@ Currently stored in elisp directory locally.
 #+BEGIN_SRC emacs-lisp
   (require 'org-next-spec-day)
 #+END_SRC
+
 ***** Variables
 Add markdown export backend.
 
@@ -1472,38 +1477,82 @@ Always hilight the current agenda line.
             'append)
 
 #+END_SRC
+
 ***** Clocking
+Resume clocking tasks when emacs is restarted
+
 #+BEGIN_SRC emacs-lisp
-  ;; Resume clocking tasks when emacs is restarted
   (org-clock-persistence-insinuate)
+#+END_SRC
+
+Set the ID for the base clock-in task, used when no other task is
+currently clocked.
+
+#+BEGIN_SRC emacs-lisp
   (setq bh/organization-task-id "6ef1b5e8-2a71-4aeb-8051-a2c22ba50665")
-  (setq
-   ;; Show lot of clocking history so it's easy to pick items off the C-F11 list
-   org-clock-history-length 23
-   ;; Resume clocking task on clock-in if the clock is open
-   org-clock-in-resume t
-   ;; Change tasks to NEXT when clocking in
-   org-clock-in-switch-to-state 'bh/clock-in-to-next
-   ;; Separate drawers for clocking and logs
-   org-drawers (quote ("PROPERTIES" "LOGBOOK"))
-   ;; Save clock data and state changes and notes in the LOGBOOK drawer
-   org-clock-into-drawer t
-   ;; Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
-   org-clock-out-remove-zero-time-clocks t
-   ;; Clock out when moving task to a done state
-   org-clock-out-when-done t
-   ;; Save the running clock and all clock history when exiting Emacs, load it on startup
-   org-clock-persist t
-   ;; Do not prompt to resume an active clock
-   org-clock-persist-query-resume nil
-   ;; Enable auto clock resolution for finding open clocks
-   org-clock-auto-clock-resolution (quote when-no-clock-is-running)
-   ;; Include current clocking task in clock reports
-   org-clock-report-include-clocking-task t)
+#+END_SRC
+
+Show lot of clocking history so it's easy to pick items off the C-F11 list
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-history-length 23)
+#+END_SRC
+
+Resume clocking task on clock-in if the clock is open
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-in-resume t)
+#+END_SRC
+
+Change tasks to NEXT when clocking in
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-in-switch-to-state 'bh/clock-in-to-next)
+#+END_SRC
+
+Separate drawers for clocking and logs
+#+BEGIN_SRC emacs-lisp
+  (setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
+#+END_SRC
+
+Save clock data and state changes and notes in the LOGBOOK drawer
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-into-drawer t)
+#+END_SRC
+
+Sometimes I change tasks I'm clocking quickly - this removes clocked tasks with 0:00 duration
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-out-remove-zero-time-clocks t)
+#+END_SRC
+
+Clock out when moving task to a done state
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-out-when-done t)
+#+END_SRC
+
+Save the running clock and all clock history when exiting Emacs, load it on startup
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-persist t)
+#+END_SRC
+
+Do not prompt to resume an active clock
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-persist-query-resume nil)
+#+END_SRC
+
+Enable auto clock resolution for finding open clocks
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
+#+END_SRC
+
+Include current clocking task in clock reports
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-report-include-clocking-task t))
+#+END_SRC
+
 #+END_SRC
 ***** Todo flow setup
+This is just Bernt's todo setup, copied verbatim. More information at
+http://doc.norang.ca/org-mode.html#TasksAndStates.
+
 #+BEGIN_SRC emacs-lisp
-  ;; Straight up copied from norang now
   (setq org-todo-keywords (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
                                   (sequence "WAITING(w@/!)" "HOLD(h!/!)" "|" "CANCELLED(c@/!)"))))
   (setq org-todo-state-tags-triggers
@@ -1515,20 +1564,23 @@ Always hilight the current agenda line.
                 ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 #+END_SRC
-***** Key bindings
-#+BEGIN_SRC emacs-lisp
-  ;; I use C-M-r to start org-remember
-  (global-set-key (kbd "C-M-R") 'org-capture)
-  ;; Most of this ripped from http://doc.norang.ca/org-mode.html
-  (global-set-key "\C-cl" 'org-store-link)
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-cb" 'org-iswitchb)
-#+END_SRC
+
 ***** Speed key bindings
+
+Using speedkeys, s will narrow to the subtree, but you have to call
+widen explicitly. Set capital S to widen.
+
 #+BEGIN_SRC emacs-lisp
   (setq org-speed-commands-user (quote (("S" . widen))))
 #+END_SRC
+
 ***** Capture
+
+Once again, stealing Bernt's ideas. Clock during capture, to either
+todos or notes.
+
+Added a reply capture for the mu4e reply capture action.
+
 #+BEGIN_SRC emacs-lisp
   ;; Once again, stolen from norang, except for the contacts one, which
   ;; was taken from the org-mode list.
@@ -1541,23 +1593,23 @@ Always hilight the current agenda line.
           ("r" "mu4e email reply" entry (file "~/emacs_org/email.org")
            "* %c" :immediate-finish t))))
 #+END_SRC
+
 ***** Agenda
+
+I only have one custom agenda at the moment, but it's huge. It
+contains everything happening for the next week, as well as tasks
+needed to refile, emails I should look at, and all my projects.
+
+Bet you can guess where I got the idea from.
+
+This agenda contains a LOT of functions relating to Bernt's project
+setup (stuck projects, next steps, etc). For more info on that, see
+http://doc.norang.ca/org-mode.html#CustomAgendaViews.
+
 #+BEGIN_SRC emacs-lisp
   ;; Personal agenda modes
-  (setq qdot/org-auto-exclude-tags '("hold" "habits"))
   (setq org-agenda-custom-commands
-        (quote (("h" "Tasks for home" tags-todo "+HOME-someday" nil)
-                ("5" "Tasks for work" tags-todo "+WORK-someday" nil)
-                ("p" "Tasks for personal projects" tags-todo "+PROJECTS-someday" nil)
-                ("X" agenda ""
-                 (;;(org-agenda-prefix-format " [ ] ")
-                  (org-agenda-with-colors nil)
-                  (org-agenda-remove-tags t))
-                 ("~/emacs_org/agenda.txt"))
-                ("w" agenda "Week with events and no daily/chores"
-                 ((org-agenda-ndays 14)
-                  (org-agenda-filter-preset '("-daily"))))
-                (" " "Agenda"
+        (quote ((" " "Agenda"
                  ((agenda "" nil)
                   (tags "REFILE"
                         ((org-agenda-overriding-header "Tasks to Refile")
@@ -1611,6 +1663,7 @@ Always hilight the current agenda line.
                          (org-tags-match-list-sublevels nil)))
                   nil)))))
 #+END_SRC
+
 ***** Appointment warning bindings
 Warn 15 min in advance of events.
 
@@ -1644,14 +1697,21 @@ use our func
   ;; update appt each time agenda opened
   (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 #+END_SRC
+
 ***** Faces
+
+Highlight the currently clocked in task.
+
 #+BEGIN_SRC emacs-lisp
-  ;; The following custom-set-faces create the highlights
+
   (custom-set-faces
    '(org-mode-line-clock ((t (:background "grey75" :foreground "red" :box (:line-width -1 :style released-button)))) t))
+#+END_SRC
 
-  ;; Sasha Chua's org done faces
-  ;; http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
+Sasha Chua's org done faces
+http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
+
+#+BEGIN_SRC emacs-lisp
   (setq org-fontify-done-headline t)
   (custom-set-faces
    '(org-done ((t (:foreground "PaleGreen"
@@ -1664,24 +1724,39 @@ use our func
   (set-face-background 'org-block-begin-line "#333")
   (set-face-background 'org-block-end-line "#333")
   (set-face-background 'org-block-background "#222")
+#+END_SRC
 
+Set up face colors for tags. Makes quickly scanning the agenda easier.
+
+#+BEGIN_SRC emacs-lisp
   (setq org-tag-faces
         '(("mozilla" . (:foreground "DarkOrange3"))
           ("habits" . (:foreground "slate gray"))
           ("projects" . (:foreground "blue violet"))
           ("addimation" . (:foreground "PaleGreen4"))
           ("event" . (:foreground "deep pink"))))
-
-
 #+END_SRC
+
 ***** Mobile Org
+
+I've tried using mobile-org many times, but the interface to the
+android app is so painfully bad that I never stick with it for long.
+Nonetheless, I keep the config around just in case I feel like trying
+again.
+
 #+BEGIN_SRC emacs-lisp
   (setq org-mobile-inbox-for-pull "~/emacs_org/refile.org")
   (setq org-mobile-directory "~/Dropbox/MobileOrg")
   (setq org-mobile-files '("~/emacs_org/events.org" "~/emacs_org/tasks.org"))
   (setq org-mobile-agendas '("w"))
 #+END_SRC
+
 ***** Disable org agenda window resizing
+
+The agenda is really horrible about resizing windows when I don't want
+it to, especially in a workgroups setup. Make sure that doesn't
+happen.
+
 #+BEGIN_SRC emacs-lisp
   (defvar org-agenda-no-resize nil
     "When non-nil, don't let org-mode resize windows for you")
@@ -1694,16 +1769,22 @@ use our func
     (when (not org-agenda-no-resize)
       ad-do-it))
 #+END_SRC
+
 ***** Habit reloading
+
+I usually turn off habits mid-day when most of them are done. If I
+leave emacs on over night, this turns them back on at 6am so I'll see
+them when I wake up.
+
 #+BEGIN_SRC emacs-lisp
-  ;; Turn habits on at 6am every morning
   (run-at-time "06:00" 86400 '(lambda () (setq org-habit-show-habits t)))
 #+END_SRC
+
 ***** Refile settings
+
+Don't allow refiling into anything that's set to DONE.
+
 #+BEGIN_SRC emacs-lisp
-  ;; Taken from http://doc.norang.ca/org-mode.html
-  ;; Refile settings
-  ;; Exclude DONE state tasks from refile targets
   (defun qdot/verify-refile-target ()
     "Exclude todo keywords with a done state from refile targets"
     (not (member (nth 2 (org-heading-components)) org-done-keywords)))
@@ -1712,6 +1793,11 @@ use our func
 #+END_SRC
 
 ***** Org Babel
+
+Set up languages that babel will handle. This includes lilypond, which
+I use for music. I also make sure that I don't have to confirm
+evaluation on a few languages.
+
 #+BEGIN_SRC emacs-lisp
   (require 'ob-lilypond)
   (org-babel-do-load-languages
@@ -1728,10 +1814,16 @@ use our func
          (not (string= lang "ditaa"))))
   (setq org-confirm-babel-evaluate 'qdot/org-confirm-babel-evaluate)
 #+END_SRC
+
 ***** Provide Statement
+
+This should always come last. It's the provide statement so we can
+load this config using require.
+
 #+BEGIN_SRC emacs-lisp
   (provide 'qdot-org-config)
 #+END_SRC
+
 ** Programming
 *** auto-complete                                                 :package:
 #+BEGIN_SRC emacs-lisp
