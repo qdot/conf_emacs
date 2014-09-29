@@ -2799,13 +2799,14 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+BEGIN_SRC emacs-lisp
 (provide 'qdot-erc-config)
 #+END_SRC
+
 ** Terminals
 *** multiterm                                                     :package:
 #+BEGIN_SRC emacs-lisp
   (use-package multi-term
     :ensure multi-term
     :disabled t
-    :init
+    :config
     (progn
       ;; Turn off yas otherwise tab screws up
       (add-hook 'term-mode-hook (lambda()
@@ -2830,7 +2831,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
     :ensure eshell
     :disabled t
     :commands eshell
-    :init
+    :config
     (progn
       ;; ;; Stealing from ESK, with some things removed
 
@@ -2950,7 +2951,7 @@ Turn on ansi in shells
   (use-package ansi-color
     :ensure ansi-color
     :commands shell
-    :init
+    :config
     (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on))
 #+END_SRC
 
