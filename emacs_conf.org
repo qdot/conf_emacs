@@ -2580,13 +2580,14 @@ I was away.
 #+BEGIN_SRC emacs-lisp
 (provide 'qdot-sauron-config)
 #+END_SRC
-
 *** twittering-mode                                               :package:
+Set up twitter. Update every 10 minutes, show icons, spellcheck when
+writing, and always bring up home, mentions, and dms
 #+BEGIN_SRC emacs-lisp
   (use-package twittering-mode
     :ensure twittering-mode
     :commands twit
-    :init
+    :config
     (progn
       (setq twittering-icon-mode t)
       (setq twittering-timer-interval 600)
