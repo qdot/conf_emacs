@@ -3247,10 +3247,14 @@ Extra hooks to functions from the qdot-funcs modules
   
 #+END_SRC
 * Tasks
-** TODO Output tangled emacs config files to a subdirectory of config dir
-** TODO Write function to compile config files on tangling
-** TODO Fold functions file into base config file
-** TODO Fold bernt's org functions info base config file
+** Emacs Config Cleanup Fall 2014
+*** TODO How to markup and load medium sized configs? eval-after-load or tangle to other files?
+*** TODO Sort out python mode settings
+*** TODO Decide whether or not to use CEDET
+*** TODO Output tangled emacs config files to a subdirectory of config dir
+*** TODO Write function to compile config files on tangling
+*** TODO Fold functions file into base config file
+*** TODO Fold bernt's org functions info base config file
 ** TODO Check out hungry-delete mode
 https://github.com/nflath/hungry-delete
 ** TODO Have org mode daily agenda show up on xmonad background (conky?)
