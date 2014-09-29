@@ -3111,7 +3111,7 @@ Turn on ansi in shells
 #+BEGIN_SRC emacs-lisp
   (use-package proced
     :commands (proced)
-    :init
+    :config
     (progn
       (setq proced-auto-update-interval 2)
 
@@ -3125,7 +3125,7 @@ gpg file auto query/loading
 #+BEGIN_SRC emacs-lisp
   (use-package epa-file
     :defer t
-    :init
+    :config
     (progn
       (epa-file-enable)
       (setq epa-file-cache-passphrase-for-symmetric-encryption t)))
