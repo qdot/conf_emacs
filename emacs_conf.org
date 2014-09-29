@@ -914,6 +914,10 @@ Taken from https://github.com/mardukbp/dotfiles/blob/master/emacs.d/mb-mu4e.el
       (bbdb-create-internal (car (car from)) nil (cdr (car from)) nil nil nil)))
 #+END_SRC
 ***** Provide Statement
+
+This should always come last. It's the provide statement so we can
+load this config using require.
+
 #+BEGIN_SRC emacs-lisp
 (provide 'qdot-mu4e-config)
 #+END_SRC
