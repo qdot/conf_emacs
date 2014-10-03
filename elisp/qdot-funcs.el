@@ -139,7 +139,8 @@
 
 (defun qdot/buffer-mode (buffer-or-string)
   "Returns the major mode associated with a buffer."
-  (with-current-buffer buffer-or-string
+  (save-excursion
+    (set-buffer buffer-or-string)
     major-mode))
 
 
@@ -186,7 +187,7 @@
   "Use uuidgen to insert a uuid at point"
   (interactive)
   (shell-command-on-region (point) (point) "uuidgen" t)
-  (delete-char -1))
+  (delete-backward-char 1))
 
 ;; Clear kill ring
 
