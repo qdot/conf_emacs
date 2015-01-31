@@ -1894,35 +1894,33 @@ load this config using require.
 Completes. Automatically.
 #+BEGIN_SRC emacs-lisp
   (use-package auto-complete
-    :ensure auto-complete
-    :init
-    (progn
-      (use-package ac-dabbrev
-        :ensure ac-dabbrev)
-      (use-package ac-etags
-        :ensure ac-etags)
-      (use-package ac-ispell
-        :ensure ac-ispell)
-      (use-package auto-complete-clang
-        :ensure auto-complete-clang)
-      (use-package auto-complete-c-headers
-        :ensure auto-complete-c-headers)
-      (use-package auto-complete-nxml
-        :ensure auto-complete-nxml)
-      (require 'auto-complete-config)
-      (ac-config-default)
-      (ac-flyspell-workaround)
-      (ac-linum-workaround)
-      (global-auto-complete-mode t)
-      (setq ac-auto-start 3
-            ac-dwim t
-            ac-quick-help-delay 1)
-      (setq ac-use-menu-map t)
-      (bind-keys :map ac-menu-map
-                 ("C-n" ac-next)
-                 ("C-p" ac-previous))
-      (bind-keys :map ac-complete-mode-map
-                 ("tab" ac-expand))))
+      :ensure auto-complete
+      :init
+      (progn
+        (use-package ac-dabbrev
+            :ensure ac-dabbrev)
+        (use-package ac-etags
+            :ensure ac-etags)
+        (use-package ac-ispell
+            :ensure ac-ispell)
+        (use-package auto-complete-clang
+            :ensure auto-complete-clang)
+        (use-package auto-complete-c-headers
+            :ensure auto-complete-c-headers)
+        (use-package auto-complete-nxml
+            :ensure auto-complete-nxml)
+        (require 'auto-complete-config)
+        (ac-config-default)
+        (ac-flyspell-workaround)
+        (ac-linum-workaround)
+        (global-auto-complete-mode t)
+        (setq ac-auto-start 3
+              ac-dwim t
+              ac-quick-help-delay 1)
+        (setq ac-use-menu-map t)
+        (bind-keys :map ac-menu-map
+                   ("C-n" ac-next)
+                   ("C-p" ac-previous))))
 #+END_SRC
 
 *** yasnippet                                                     :package:
