@@ -2144,6 +2144,33 @@ package.
     (subword-mode 1))
 
   (add-hook 'c-mode-common-hook 'qdot/cc-mode-hook)
+#+END_SRC
+
+http://stackoverflow.com/questions/3312114/how-to-tell-emacs-to-open-h-file-in-c-mode
+
+#+BEGIN_SRC emacs-lisp
+  ;; function decides whether .h file is C or C++ header, sets C++ by
+  ;; default because there's more chance of there being a .h without a
+  ;; .cc than a .h without a .c (ie. for C++ template files)
+  (defun qdot/c-c++-header ()
+    "sets either c-mode or c++-mode, whichever is appropriate for
+  header"
+    (interactive)
+    (let ((c-file (concat (substring (buffer-file-name) 0 -1) "c")))
+      (if (file-exists-p c-file)
+          (c-mode)
+        (c++-mode))))
+  (add-to-list 'auto-mode-alist '("\\.h\\'" . qdot/c-c++-header))
+
+  ;; and if that doesn't work, a function to toggle between c-mode and
+  ;; c++-mode
+  (defun qdot/toggle-c-mode ()
+    "toggles between c-mode and c++-mode"
+    (interactive)
+    (cond ((string= major-mode "c-mode")
+           (c++-mode))
+          ((string= major-mode "c++-mode")
+           (c-mode))))
 
   ;; doxymacs mode for editing doxygen
   ;; doxymacs isn't in elpa. :(
