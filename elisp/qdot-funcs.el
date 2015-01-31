@@ -139,8 +139,7 @@
 
 (defun qdot/buffer-mode (buffer-or-string)
   "Returns the major mode associated with a buffer."
-  (save-excursion
-    (set-buffer buffer-or-string)
+  (with-current-buffer buffer-or-string
     major-mode))
 
 
@@ -187,7 +186,7 @@
   "Use uuidgen to insert a uuid at point"
   (interactive)
   (shell-command-on-region (point) (point) "uuidgen" t)
-  (delete-backward-char 1))
+  (delete-char -1))
 
 ;; Clear kill ring
 
@@ -226,7 +225,7 @@
   (workgroups-mode 1)
   ;; (qdot/personal-wg-setup)
   (when linux-p
-    (wg-find-session-file "~/.emacs_workgroups"))
+    (wg-find-session-file "~/.emacs_files/workgroups/linux-wg.el"))
   (org-agenda nil " ")
   (sauron-start)
   ;; Only start mu4e when we have mail drive mounted.
