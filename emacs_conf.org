@@ -819,20 +819,20 @@ Slow, but works everywhere.
 
 Idea taken from the mu mailing list.
 #+BEGIN_SRC emacs-lisp
-  (defun qdot/mu4e-setup-html-mail ()
-    "Set up method for viewing HTML mail"
-    (setq shr-width fill-column)
-    (setq shr-bullet " ")
+  (require 'shr)
 
-    (defun shr-html2text ()
-      "Replacement for standard html2text using shr."
-      (interactive)
-      (let ((dom (libxml-parse-html-region (point-min) (point-max))))
-        (erase-buffer)
-        (shr-insert-document dom)
-        (goto-char (point-min))))
+  (setq shr-width fill-column)
+  (setq shr-bullet " ")
 
-    (setq mu4e-html2text-command 'shr-html2text))
+  (defun shr-html2text ()
+    "Replacement for standard html2text using shr."
+    (interactive)
+    (let ((dom (libxml-parse-html-region (point-min) (point-max))))
+      (erase-buffer)
+      (shr-insert-document dom)
+      (goto-char (point-min))))
+
+  (setq mu4e-html2text-command 'shr-html2text)
 #+END_SRC
 
 ***** Account selection
