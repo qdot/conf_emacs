@@ -2131,12 +2131,15 @@ package.
 #+BEGIN_SRC emacs-lisp
   (defun qdot/cc-mode-hook ()
     ;; (doxymacs-font-lock)
-    (bind-keys :map c-mode-map
-               ("C-m" newline-and-indent c-mode-map)
-               ("C-o" ff-find-other-file))
     (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 2)))
     (c-set-style "qdot/cc-code-style")
     (c-set-offset 'innamespace 0)
+    (bind-keys :map c-mode-map
+               ("C-m" . newline-and-indent)
+               ("C-o" . ff-find-other-file))
+    (bind-keys :map c++-mode-map
+               ("C-m" . newline-and-indent)
+               ("C-o" . ff-find-other-file))
     ;;(semantic-mode 1)
     (subword-mode 1))
 
