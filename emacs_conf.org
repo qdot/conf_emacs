@@ -2347,7 +2347,8 @@ semantic-mode when loading C++ files. May just completely remove soon.
   (autoload 'turn-on-eldoc-mode "eldoc" nil t)
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-
+  ;; default lisp indentation looks weird
+  (setq lisp-indent-function 'common-lisp-indent-function)
   ;; stealin' things from esk
   (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode-enable)
