@@ -803,7 +803,7 @@ except for turning off the damn "sent from my mu4e" default signature.
   (setq mu4e-view-prefer-html t)
   (setq mu4e-use-fancy-chars t)
   (setq mu4e-hide-index-messages t)
-  (setq mu4e-update-interval 300)
+  (setq mu4e-update-interval 600)
   (setq mu4e-attachment-dir  "~/Downloads")
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
