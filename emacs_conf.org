@@ -3334,6 +3334,8 @@ too but eh.
                                    (browse-url-firefox-sentinel process ,url)))))))
 #+END_SRC
 * Tasks
+** TODO bug-reference-mode
+http://www.lunaryorn.com/2014/12/23/bug-reference-mode.html
 ** Emacs Config Cleanup Fall 2014
 *** TODO How to markup and load medium sized configs? eval-after-load or tangle to other files?
 *** TODO Sort out python mode settings
