@@ -19,6 +19,9 @@ blocks for a package, I tangle large configs into their own files
 using properties in the org tree. I leave the use-package call in the
 main org file, and call load-file on the tangled file from the config
 block of use-package.
+** Config References
+- https://raw.githubusercontent.com/andreaswilm/my-dot-emacs/master/my-dot-emacs
+- http://p.writequit.org/org/settings.html
 * Init File
 :PROPERTIES:
 :header-args: :tangle tangle/init.el
