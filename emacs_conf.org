@@ -728,6 +728,14 @@ Paradox makes the package list pretty and adds some stats to the listings.
     :ensure paradox
     :commands (paradox-list-packages))
 #+END_SRC
+*** swiper                                                        :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper
+      :ensure swiper
+      :commands (swiper)
+      :bind (("C-s" . swiper)
+             ("C-r" . swiper)))
+#+END_SRC
 ** Emacs Navigation
 *** ace-jump-mode                                                 :package:
 Jump to a specified character in the currently visible buffer area.
