@@ -1937,206 +1937,6 @@ Completes. Automatically.
                    ("C-p" ac-previous))))
 #+END_SRC
 
-*** yasnippet                                                     :package:
-Provides fillable templates.
-#+BEGIN_SRC emacs-lisp
-  (use-package yasnippet
-    :ensure yasnippet
-    :commands (yas-global-mode yas-minor-mode yas-expand)
-    :config
-    (progn
-      (add-to-list 'yas-snippet-dirs qdot/emacs-snippets-dir)))
-#+END_SRC
-*** magit                                                         :package:
-git management in emacs. 
-#+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :ensure magit
-    :bind (("M-g s" . magit-status))
-    :commands (magit magit-status)
-    :config
-    (progn
-      (setq magit-completing-read-function
-            'magit-ido-completing-read)
-
-      (add-hook 'magit-log-edit-mode-hook 'turn-on-flyspell 'append)
-
-      ;; Set up diffing faces, and always full screen magit
-      (eval-after-load 'magit
-        '(progn
-           (set-face-foreground 'magit-diff-add "green1")
-           (set-face-foreground 'magit-diff-del "red1")
-           (set-face-background 'magit-diff-add "#004400")
-           (set-face-background 'magit-diff-del "#440000")
-           (set-face-background 'magit-item-highlight "#1f2727")
-           ;; full screen magit-status
-
-           (defadvice magit-status (around magit-fullscreen activate)
-             (window-configuration-to-register :magit-fullscreen)
-             ad-do-it
-             (delete-other-windows))
-           (defun magit-quit-session ()
-             "Restores the previous window configuration and kills the magit buffer"
-             (interactive)
-             (kill-buffer)
-             (jump-to-register :magit-fullscreen))
-
-           (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
-
-      ;; Don't require confirm to stage changes
-      (setq magit-stage-all-confirm nil)
-
-      ;; https://coderwall.com/p/s8agwq
-      (eval-after-load "magit"
-        '(mapc (apply-partially 'add-to-list 'magit-repo-dirs)
-               '("~/code/mozbuild/gecko-dev" "~/code/mozbuild/gaia")))))
-#+END_SRC
-
-*** smartparens                                                   :package:
-Smarter paren matching without going the paredit route. 
-
-Turning off deferred loading because this is useful almost everywhere.
-#+BEGIN_SRC emacs-lisp
-  (use-package smartparens
-    :ensure smartparens
-    :defer nil
-    :bind (("<C-right>"   . sp-forward-slurp-sexp)
-           ("<C-left>"    . sp-forward-barf-sexp)
-           ("<C-M-right>" . sp-backward-slurp-sexp)
-           ("<C-M-left>"  . sp-backward-barf-sexp))
-    :config
-    (progn
-      (require 'smartparens-config)
-      (smartparens-global-mode t)
-      ;; I start words with ' a lot when I chat apparently
-      (sp-local-pair 'erc-mode "'" nil :actions nil)))
-#+END_SRC
-*** prog-mode                                                     :package:
-Set up defaults for all programming modes.
-
-Always indent 2.
-
-#+BEGIN_SRC emacs-lisp
-  (setq-default c-basic-offset 2)
-  (setq-default tab-width 2)
-#+END_SRC
-
-Spaces, not tabs. Everywhere.
-
-#+BEGIN_SRC emacs-lisp
-  (setq-default indent-tabs-mode nil)
-#+END_SRC
-
-Keep linum offset to expect thousands so we don't bounce when changing
-buffers.
-
-#+BEGIN_SRC emacs-lisp
-  (setq linum-format "%4d")
-#+END_SRC
-
-Set up fill column and whitespace-mode settings when starting
-programming mode.
-
-#+BEGIN_SRC emacs-lisp
-  (defun qdot/programming-mode-hook ()
-    (set-fill-column 80)
-
-    (add-to-list 'ac-sources 'ac-source-yasnippet)
-    (setq whitespace-line-column 80)
-    (setq whitespace-style '(face lines-tail))
-    (setq show-trailing-whitespace t))
-  (add-hook 'prog-mode-hook 'qdot/programming-mode-hook)
-#+END_SRC
-
-Always check spelling in comments and documentation.
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-#+END_SRC
-
-Always show where whitespace is off.
-
-#+BEGIN_SRC emacs-lisp
-  ;;(add-hook 'prog-mode-hook 'whitespace-mode)
-#+END_SRC
-
-Highlight matching paren/bracket/etc pairs.
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode-hook 'show-smartparens-mode)
-#+END_SRC
-
-Line numbers
-
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode-hook 'linum-mode)
-#+END_SRC
-*** ielm                                                          :package:
-When using ielm mode, set up autocomplete sources accordingly.
-
-#+BEGIN_SRC emacs-lisp
-  (defun ielm-auto-complete ()
-    "Enables `auto-complete' support in \\[ielm]."
-    (setq ac-sources '(ac-source-functions
-                       ac-source-variables
-                       ac-source-features
-                       ac-source-symbols
-                       ac-source-words-in-same-mode-buffers))
-    (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
-    (auto-complete-mode 1))
-  (add-hook 'ielm-mode-hook 'ielm-auto-complete)
-#+END_SRC
-
-*** flycheck                                                      :package:
-Using flycheck instead of flymake
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck
-    :ensure flycheck
-    :commands flycheck-mode)
-  ;;   :init
-  ;;   (progn
-  ;;     ;;(add-hook 'after-init-hook #'global-flycheck-mode)
-
-  ;;     (flycheck-define-checker javascript-gjshint
-  ;;       "Google's Closure Linter for JS
-
-  ;; See URL `https://developers.google.com/closure/utilities/docs/linter_howto`"
-  ;;       :command ("gjslint" source-inplace)
-  ;;       :error-patterns
-  ;;       ((error line-start "Line " line ", E:" (zero-or-more not-newline) ": "
-  ;;               (message) line-end))
-  ;;       :modes (js-mode js2-mode js3-mode))))
-#+END_SRC
-*** haskell-mode                                                  :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package haskell-mode
-    :ensure haskell-mode
-    :mode ("\\.hs$" . haskell-mode)
-    :config
-    (progn
-      (require 'inf-haskell)
-      (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-      (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-      (add-hook 'haskell-mode-hook 'font-lock-mode)
-      (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
-      (setq haskell-font-lock-symbols t)))
-#+END_SRC
-*** smerge-mode                                                   :package:
-Adds commands for dealing with conflicted merge files (i.e. >>>>>>> and <<<<<<< files)
-
-http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
-#+BEGIN_SRC emacs-lisp  
-  (use-package smerge-mode
-    :commands (smerge-mode sm-try-smerge))
-
-  (defun sm-try-smerge ()
-    (save-excursion
-      (goto-char (point-min))
-      (when (re-search-forward "^<<<<<<< " nil t)
-        (smerge-mode 1))))
-
-  (add-hook 'find-file-hook 'sm-try-smerge t)
-#+END_SRC
 *** cc-mode                                                       :package:
 Settings for C/C++ modes.
 
@@ -2189,29 +1989,6 @@ http://stackoverflow.com/questions/3312114/how-to-tell-emacs-to-open-h-file-in-c
   ;; doxymacs mode for editing doxygen
   ;; doxymacs isn't in elpa. :(
   ;; (add-hook 'c-mode-common-hook 'doxymacs-mode)
-#+END_SRC
-*** compilation                                                   :package:
-Compilation mode.
-#+BEGIN_SRC emacs-lisp  
-  (defun qdot/recompile ()
-    "Run compile and resize the compile window closing the old one if necessary"
-    (interactive)
-    (progn
-      (when (get-buffer "*compilation*")  ; If old compile window exists
-        (delete-windows-on (get-buffer "*compilation*")) ; Delete the compilation windows
-        (kill-buffer "*compilation*")) ; and kill the buffers
-      (call-interactively 'compile)
-      (enlarge-window 30)))
-
-  (use-package compile
-    :commands (compile)
-    ;;:bind ("[f5]" . qdot/recompile)
-    :config
-    (setq compilation-disable-input nil)
-    (setq compilation-auto-jump-to-first-error nil)
-    (setq compilation-scroll-output 'first-error)
-    (setq mode-compile-always-save-buffer-p t) )
-
 #+END_SRC
 *** cedet                                                         :package:
 CEDET. Didn't even realize this was being loaded as part of
@@ -2274,32 +2051,43 @@ semantic-mode when loading C++ files. May just completely remove soon.
         (local-set-key (kbd "C-c C-r") 'semantic-symref))
       (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)))
 #+END_SRC  
-*** python-mode                                                   :package:
+*** change-log-mode                                               :package:
 #+BEGIN_SRC emacs-lisp
-  (use-package python-mode
-    :ensure python-mode
-    :interpreter ("python" . python-mode)
-    :init
+  (use-package change-log-mode
+    :mode ("ChangeLog\\.txt\\'" . change-log-mode))
+#+END_SRC
+*** compilation                                                   :package:
+Compilation mode.
+#+BEGIN_SRC emacs-lisp  
+  (defun qdot/recompile ()
+    "Run compile and resize the compile window closing the old one if necessary"
+    (interactive)
     (progn
-      (defun qdot/python-mode-hook()
-        (linum-mode)
-        (setq tab-width 4)
-        (setq py-indent-offset 4)
-        (setq python-indent-offset 4)
-        (set-variable 'python-indent-guess-indent-offset nil t)
-        (set-variable 'fill-paragraph-function 'py-fill-paragraph t)
-        (setq ac-sources (append '(ac-source-yasnippet) ac-sources))
-        (set-fill-column 79)
-        (bind-key "M-q" 'python-fill-paragraph python-mode-map)
-        (elpy-enable)
-        (setq elpy-rpc-backend "jedi")
-        (subword-mode 1))
-      ;; use flycheck instead of flymake
-      ;; (when (require 'flycheck nil t)
-      ;;   (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
-      ;;   (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
-      (add-hook 'python-mode-hook 'qdot/python-mode-hook)))
-#+END_SRC  
+      (when (get-buffer "*compilation*")  ; If old compile window exists
+        (delete-windows-on (get-buffer "*compilation*")) ; Delete the compilation windows
+        (kill-buffer "*compilation*")) ; and kill the buffers
+      (call-interactively 'compile)
+      (enlarge-window 30)))
+
+  (use-package compile
+    :commands (compile)
+    ;;:bind ("[f5]" . qdot/recompile)
+    :config
+    (setq compilation-disable-input nil)
+    (setq compilation-auto-jump-to-first-error nil)
+    (setq compilation-scroll-output 'first-error)
+    (setq mode-compile-always-save-buffer-p t) )
+
+#+END_SRC
+*** edebug-x                                                      :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package edebug-x
+    :ensure edebug-x
+    :commands (edebug-x-modify-breakpoint-wrapper
+               edebug-x-show-breakpoints
+               edebug-x-show-instrumented
+               edebug-x-show-data))
+#+END_SRC
 *** elpy                                                          :package:
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
@@ -2307,10 +2095,122 @@ semantic-mode when loading C++ files. May just completely remove soon.
     :interpreter ("python" . python-mode))
 #+END_SRC
 
-*** nose                                                          :package:
+*** emacs-lisp-mode                                               :package:
+#+BEGIN_SRC emacs-lisp  
+  ;; eldoc mode for showing function calls in mode line
+  (setq eldoc-idle-delay 0)
+  (autoload 'turn-on-eldoc-mode "eldoc" nil t)
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+  ;; default lisp indentation looks weird
+  (setq lisp-indent-function 'common-lisp-indent-function)
+  ;; stealin' things from esk
+  (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
+  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode-enable)
+
+  (defun esk-remove-elc-on-save ()
+    "If you're saving an elisp file, likely the .elc is no longer valid."
+    (make-local-variable 'after-save-hook)
+    (add-hook 'after-save-hook
+              (lambda ()
+                (if (file-exists-p (concat buffer-file-name "c"))
+                    (delete-file (concat buffer-file-name "c"))))))
+
+  (define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
+  (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+
+  ;; Enable jumping to elisp via help mode
+  ;; http://emacsredux.com/blog/2014/06/18/quickly-find-emacs-lisp-sources/
+
+  (define-key 'help-command (kbd "C-l") 'find-library)
+  (define-key 'help-command (kbd "C-f") 'find-function)
+  (define-key 'help-command (kbd "C-k") 'find-function-on-key)
+  (define-key 'help-command (kbd "C-v") 'find-variable)
+#+END_SRC
+*** flycheck                                                      :package:
+Using flycheck instead of flymake
 #+BEGIN_SRC emacs-lisp
-  ;; (use-package nose
-  ;;   :ensure nose)
+  (use-package flycheck
+    :ensure flycheck
+    :commands flycheck-mode)
+  ;;   :init
+  ;;   (progn
+  ;;     ;;(add-hook 'after-init-hook #'global-flycheck-mode)
+
+  ;;     (flycheck-define-checker javascript-gjshint
+  ;;       "Google's Closure Linter for JS
+
+  ;; See URL `https://developers.google.com/closure/utilities/docs/linter_howto`"
+  ;;       :command ("gjslint" source-inplace)
+  ;;       :error-patterns
+  ;;       ((error line-start "Line " line ", E:" (zero-or-more not-newline) ": "
+  ;;               (message) line-end))
+  ;;       :modes (js-mode js2-mode js3-mode))))
+#+END_SRC
+*** gdb                                                           :package:
+#+BEGIN_SRC emacs-lisp
+  ;; Turn off non-stop by default. All or nothing, damnit.
+  (setq gdb-non-stop-setting nil)
+  ;; gdb/gud
+  (setq gdb-many-windows t)
+  (setq gdb-show-main t)
+  (setq gud-chdir-before-run nil)
+  (setq gud-tooltip-mode t)  
+#+END_SRC
+*** git-gutter-fringe                                             :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter-fringe
+    :ensure git-gutter-fringe
+    :commands (git-gutter git-gutter:toggle))
+#+END_SRC
+
+*** git-timemachine                                               :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package git-timemachine
+    :commands (git-timemachine)
+    :ensure git-timemachine)
+#+END_SRC
+*** haskell-mode                                                  :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package haskell-mode
+    :ensure haskell-mode
+    :mode ("\\.hs$" . haskell-mode)
+    :config
+    (progn
+      (require 'inf-haskell)
+      (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+      (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+      (add-hook 'haskell-mode-hook 'font-lock-mode)
+      (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
+      (setq haskell-font-lock-symbols t)))
+#+END_SRC
+*** idl-mode                                                      :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package idl-mode
+    :mode ("\\.\\(idl\\|webidl\\)\\'" . idl-mode))
+#+END_SRC
+*** ielm                                                          :package:
+When using ielm mode, set up autocomplete sources accordingly.
+
+#+BEGIN_SRC emacs-lisp
+  (defun ielm-auto-complete ()
+    "Enables `auto-complete' support in \\[ielm]."
+    (setq ac-sources '(ac-source-functions
+                       ac-source-variables
+                       ac-source-features
+                       ac-source-symbols
+                       ac-source-words-in-same-mode-buffers))
+    (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
+    (auto-complete-mode 1))
+  (add-hook 'ielm-mode-hook 'ielm-auto-complete)
+#+END_SRC
+
+*** indent-guide                                                  :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package indent-guide
+    :commands (indent-guide-mode)
+    :ensure indent-guide)
+
 #+END_SRC
 *** js3-mode                                                      :package:
 #+BEGIN_SRC emacs-lisp
@@ -2344,47 +2244,14 @@ semantic-mode when loading C++ files. May just completely remove soon.
         (linum-mode))
       (add-hook 'js3-mode-hook 'qdot/js3-mode-hook)))
 #+END_SRC
-*** gdb                                                           :package:
+*** json-mode                                                     :package:
 #+BEGIN_SRC emacs-lisp
-  ;; Turn off non-stop by default. All or nothing, damnit.
-  (setq gdb-non-stop-setting nil)
-  ;; gdb/gud
-  (setq gdb-many-windows t)
-  (setq gdb-show-main t)
-  (setq gud-chdir-before-run nil)
-  (setq gud-tooltip-mode t)  
-#+END_SRC
-*** emacs-lisp-mode                                               :package:
-#+BEGIN_SRC emacs-lisp  
-  ;; eldoc mode for showing function calls in mode line
-  (setq eldoc-idle-delay 0)
-  (autoload 'turn-on-eldoc-mode "eldoc" nil t)
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-  ;; default lisp indentation looks weird
-  (setq lisp-indent-function 'common-lisp-indent-function)
-  ;; stealin' things from esk
-  (add-hook 'emacs-lisp-mode-hook 'esk-remove-elc-on-save)
-  (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode-enable)
+  (use-package json-mode
+    :ensure json-mode
+    :ensure json-reformat
+    :ensure json-snatcher
+    :mode ("\\.json\\'" . json-mode))
 
-  (defun esk-remove-elc-on-save ()
-    "If you're saving an elisp file, likely the .elc is no longer valid."
-    (make-local-variable 'after-save-hook)
-    (add-hook 'after-save-hook
-              (lambda ()
-                (if (file-exists-p (concat buffer-file-name "c"))
-                    (delete-file (concat buffer-file-name "c"))))))
-
-  (define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
-  (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
-
-  ;; Enable jumping to elisp via help mode
-  ;; http://emacsredux.com/blog/2014/06/18/quickly-find-emacs-lisp-sources/
-
-  (define-key 'help-command (kbd "C-l") 'find-library)
-  (define-key 'help-command (kbd "C-f") 'find-function)
-  (define-key 'help-command (kbd "C-k") 'find-function-on-key)
-  (define-key 'help-command (kbd "C-v") 'find-variable)
 #+END_SRC
 *** lilypond-mode                                                 :package:
 #+BEGIN_SRC emacs-lisp
@@ -2398,6 +2265,212 @@ semantic-mode when loading C++ files. May just completely remove soon.
 
 #+END_SRC
 
+*** lua                                                           :package:
+#+BEGIN_SRC emacs-lisp
+    (use-package lua-mode
+      :ensure lua-mode
+      :mode ("\\.lua\\'" . lua-mode))
+#+END_SRC
+*** magit                                                         :package:
+git management in emacs. 
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure magit
+    :bind (("M-g s" . magit-status))
+    :commands (magit magit-status)
+    :config
+    (progn
+      (setq magit-completing-read-function
+            'magit-ido-completing-read)
+
+      (add-hook 'magit-log-edit-mode-hook 'turn-on-flyspell 'append)
+
+      ;; Set up diffing faces, and always full screen magit
+      (eval-after-load 'magit
+        '(progn
+           (set-face-foreground 'magit-diff-add "green1")
+           (set-face-foreground 'magit-diff-del "red1")
+           (set-face-background 'magit-diff-add "#004400")
+           (set-face-background 'magit-diff-del "#440000")
+           (set-face-background 'magit-item-highlight "#1f2727")
+           ;; full screen magit-status
+
+           (defadvice magit-status (around magit-fullscreen activate)
+             (window-configuration-to-register :magit-fullscreen)
+             ad-do-it
+             (delete-other-windows))
+           (defun magit-quit-session ()
+             "Restores the previous window configuration and kills the magit buffer"
+             (interactive)
+             (kill-buffer)
+             (jump-to-register :magit-fullscreen))
+
+           (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
+
+      ;; Don't require confirm to stage changes
+      (setq magit-stage-all-confirm nil)
+
+      ;; https://coderwall.com/p/s8agwq
+      (eval-after-load "magit"
+        '(mapc (apply-partially 'add-to-list 'magit-repo-dirs)
+               '("~/code/mozbuild/gecko-dev" "~/code/mozbuild/gaia")))))
+#+END_SRC
+
+*** nose                                                          :package:
+#+BEGIN_SRC emacs-lisp
+  ;; (use-package nose
+  ;;   :ensure nose)
+#+END_SRC
+*** nxml-mode                                                     :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package nxml-mode
+    :mode ("\\.\\(xml\\|mxml\\)\\'" . nxml-mode))
+#+END_SRC
+*** prog-mode                                                     :package:
+Set up defaults for all programming modes.
+
+Always indent 2.
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default c-basic-offset 2)
+  (setq-default tab-width 2)
+#+END_SRC
+
+Spaces, not tabs. Everywhere.
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
+
+Keep linum offset to expect thousands so we don't bounce when changing
+buffers.
+
+#+BEGIN_SRC emacs-lisp
+  (setq linum-format "%4d")
+#+END_SRC
+
+Set up fill column and whitespace-mode settings when starting
+programming mode.
+
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/programming-mode-hook ()
+    (set-fill-column 80)
+
+    (add-to-list 'ac-sources 'ac-source-yasnippet)
+    (setq whitespace-line-column 80)
+    (setq whitespace-style '(face lines-tail))
+    (setq show-trailing-whitespace t))
+  (add-hook 'prog-mode-hook 'qdot/programming-mode-hook)
+#+END_SRC
+
+Always check spelling in comments and documentation.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+#+END_SRC
+
+Always show where whitespace is off.
+
+#+BEGIN_SRC emacs-lisp
+  ;;(add-hook 'prog-mode-hook 'whitespace-mode)
+#+END_SRC
+
+Highlight matching paren/bracket/etc pairs.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode-hook 'show-smartparens-mode)
+#+END_SRC
+
+Line numbers
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode-hook 'linum-mode)
+#+END_SRC
+*** projectile                                                    :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+      :ensure projectile)
+#+END_SRC
+*** python-mode                                                   :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package python-mode
+    :ensure python-mode
+    :interpreter ("python" . python-mode)
+    :init
+    (progn
+      (defun qdot/python-mode-hook()
+        (linum-mode)
+        (setq tab-width 4)
+        (setq py-indent-offset 4)
+        (setq python-indent-offset 4)
+        (set-variable 'python-indent-guess-indent-offset nil t)
+        (set-variable 'fill-paragraph-function 'py-fill-paragraph t)
+        (setq ac-sources (append '(ac-source-yasnippet) ac-sources))
+        (set-fill-column 79)
+        (bind-key "M-q" 'python-fill-paragraph python-mode-map)
+        (elpy-enable)
+        (setq elpy-rpc-backend "jedi")
+        (subword-mode 1))
+      ;; use flycheck instead of flymake
+      ;; (when (require 'flycheck nil t)
+      ;;   (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
+      ;;   (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
+      (add-hook 'python-mode-hook 'qdot/python-mode-hook)))
+#+END_SRC  
+*** rainbow-delimiters                                            :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :ensure rainbow-delimiters
+    :commands (rainbow-delimiters-mode rainbow-delimiters-mode-enable)
+    :init
+    (custom-set-faces
+     '(rainbow-delimiters-depth-1-face ((t (:foreground "green" :weight extra-bold))))
+     '(rainbow-delimiters-depth-2-face ((t (:foreground "forestgreen" :weight bold))))
+     '(rainbow-delimiters-depth-3-face ((t (:foreground "lightseagreen" :weight bold))))
+     '(rainbow-delimiters-depth-4-face ((t (:foreground "lightskyblue" :weight bold))))
+     '(rainbow-delimiters-depth-5-face ((t (:foreground "cyan" :weight bold))))
+     '(rainbow-delimiters-depth-6-face ((t (:foreground "steelblue" :weight bold))))
+     '(rainbow-delimiters-depth-7-face ((t (:foreground "orchid" :weight bold))))
+     '(rainbow-delimiters-depth-8-face ((t (:foreground "purple" :weight bold))))
+     '(rainbow-delimiters-depth-9-face ((t (:foreground "hotpink" :weight bold))))
+     '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
+#+END_SRC
+
+*** smartparens                                                   :package:
+Smarter paren matching without going the paredit route. 
+
+Turning off deferred loading because this is useful almost everywhere.
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :ensure smartparens
+    :defer nil
+    :bind (("<C-right>"   . sp-forward-slurp-sexp)
+           ("<C-left>"    . sp-forward-barf-sexp)
+           ("<C-M-right>" . sp-backward-slurp-sexp)
+           ("<C-M-left>"  . sp-backward-barf-sexp))
+    :config
+    (progn
+      (require 'smartparens-config)
+      (smartparens-global-mode t)
+      ;; I start words with ' a lot when I chat apparently
+      (sp-local-pair 'erc-mode "'" nil :actions nil)))
+#+END_SRC
+*** smerge-mode                                                   :package:
+Adds commands for dealing with conflicted merge files (i.e. >>>>>>> and <<<<<<< files)
+
+http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
+#+BEGIN_SRC emacs-lisp  
+  (use-package smerge-mode
+    :commands (smerge-mode sm-try-smerge))
+
+  (defun sm-try-smerge ()
+    (save-excursion
+      (goto-char (point-min))
+      (when (re-search-forward "^<<<<<<< " nil t)
+        (smerge-mode 1))))
+
+  (add-hook 'find-file-hook 'sm-try-smerge t)
+#+END_SRC
 *** web-mode                                                      :package:
 #+BEGIN_SRC emacs-lisp
   (use-package web-mode
@@ -2418,88 +2491,15 @@ semantic-mode when loading C++ files. May just completely remove soon.
       (add-hook 'web-mode-hook 'qdot/web-mode-hook)))
 #+END_SRC
 
-*** git-gutter-fringe                                             :package:
+*** yasnippet                                                     :package:
+Provides fillable templates.
 #+BEGIN_SRC emacs-lisp
-  (use-package git-gutter-fringe
-    :ensure git-gutter-fringe
-    :commands (git-gutter git-gutter:toggle))
-#+END_SRC
-
-*** projectile                                                    :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-      :ensure projectile)
-#+END_SRC
-*** rainbow-delimiters                                            :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters
-    :ensure rainbow-delimiters
-    :commands (rainbow-delimiters-mode rainbow-delimiters-mode-enable)
-    :init
-    (custom-set-faces
-     '(rainbow-delimiters-depth-1-face ((t (:foreground "green" :weight extra-bold))))
-     '(rainbow-delimiters-depth-2-face ((t (:foreground "forestgreen" :weight bold))))
-     '(rainbow-delimiters-depth-3-face ((t (:foreground "lightseagreen" :weight bold))))
-     '(rainbow-delimiters-depth-4-face ((t (:foreground "lightskyblue" :weight bold))))
-     '(rainbow-delimiters-depth-5-face ((t (:foreground "cyan" :weight bold))))
-     '(rainbow-delimiters-depth-6-face ((t (:foreground "steelblue" :weight bold))))
-     '(rainbow-delimiters-depth-7-face ((t (:foreground "orchid" :weight bold))))
-     '(rainbow-delimiters-depth-8-face ((t (:foreground "purple" :weight bold))))
-     '(rainbow-delimiters-depth-9-face ((t (:foreground "hotpink" :weight bold))))
-     '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
-#+END_SRC
-
-*** nxml-mode                                                     :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package nxml-mode
-    :mode ("\\.\\(xml\\|mxml\\)\\'" . nxml-mode))
-#+END_SRC
-*** idl-mode                                                      :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package idl-mode
-    :mode ("\\.\\(idl\\|webidl\\)\\'" . idl-mode))
-#+END_SRC
-*** change-log-mode                                               :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package change-log-mode
-    :mode ("ChangeLog\\.txt\\'" . change-log-mode))
-#+END_SRC
-*** edebug-x                                                      :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package edebug-x
-    :ensure edebug-x
-    :commands (edebug-x-modify-breakpoint-wrapper
-               edebug-x-show-breakpoints
-               edebug-x-show-instrumented
-               edebug-x-show-data))
-#+END_SRC
-*** lua                                                           :package:
-#+BEGIN_SRC emacs-lisp
-    (use-package lua-mode
-      :ensure lua-mode
-      :mode ("\\.lua\\'" . lua-mode))
-#+END_SRC
-*** git-timemachine                                               :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package git-timemachine
-    :commands (git-timemachine)
-    :ensure git-timemachine)
-#+END_SRC
-*** indent-guide                                                  :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package indent-guide
-    :commands (indent-guide-mode)
-    :ensure indent-guide)
-
-#+END_SRC
-*** json-mode                                                     :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package json-mode
-    :ensure json-mode
-    :ensure json-reformat
-    :ensure json-snatcher
-    :mode ("\\.json\\'" . json-mode))
-
+  (use-package yasnippet
+    :ensure yasnippet
+    :commands (yas-global-mode yas-minor-mode yas-expand)
+    :config
+    (progn
+      (add-to-list 'yas-snippet-dirs qdot/emacs-snippets-dir)))
 #+END_SRC
 ** Writing
 *** adoc-mode                                                     :package:
