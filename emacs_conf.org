@@ -253,8 +253,6 @@ Set up meta on OS X/Linux to be where I expect them.
 
 #+BEGIN_SRC emacs-lisp
 (when macosx-p
-  ;;Change meta to alt
-  (setq mac-command-modifier 'meta)
   ;;avoid hiding with M-h
   (setq mac-pass-command-to-system nil))
 (when linux-p
@@ -335,7 +333,7 @@ filenames matching a regexp are backed up in the corresponding
 directory. Emacs will mkdir it if necessary.)
 
 #+BEGIN_SRC emacs-lisp
-  (setq qdot/backup-dir (expand-file-name (concat user-emacs-directory "backups/")))
+  (defvar qdot/backup-dir (expand-file-name (concat user-emacs-directory "backups/")))
   (make-directory qdot/backup-dir t)
   (setq
      backup-by-copying t      ; don't clobber symlinks
@@ -363,8 +361,8 @@ Enable narrow-to-region
 Save minibuffer history, so oft-used functions bubble to the top.
 
 #+BEGIN_SRC emacs-lisp
-(setq savehist-file (concat user-emacs-directory "savehist"))
 (savehist-mode 1)
+(setq savehist-file (concat user-emacs-directory "savehist"))
 (setq savehist-save-minibuffer-history 1)
 (setq savehist-additional-variables
       '(kill-ring
@@ -469,7 +467,7 @@ Incremental minibuffer completion. Update per character, as it takes a
 lot to lag it.
 #+BEGIN_SRC emacs-lisp
   (icomplete-mode 1)
-  (setq icomplete-compute-delay 0)
+  (custom-set-variables '(icomplete-compute-delay 0.1))
 #+END_SRC
 *** recentf                                                       :package:
 Use a list of most recent opened files instead of having to search through drive
