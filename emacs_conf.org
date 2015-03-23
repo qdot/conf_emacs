@@ -2425,6 +2425,11 @@ semantic-mode when loading C++ files. May just completely remove soon.
     :commands (git-gutter git-gutter:toggle))
 #+END_SRC
 
+*** projectile                                                    :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+      :ensure projectile)
+#+END_SRC
 *** rainbow-delimiters                                            :package:
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
