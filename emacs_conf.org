@@ -238,7 +238,7 @@ Set up some simple platform finding variables
 Don't need startup screens
 
 #+BEGIN_SRC emacs-lisp
-  (setq inhibit-start-message t)
+  (setq inhibit-startup-message t)
   (setq inhibit-splash-screen t)
 #+END_SRC
 
