@@ -776,6 +776,11 @@ Jump to a link in info/help windows.
     :config
     (ace-link-setup-default))
 #+END_SRC
+*** hydra                                                         :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package hydra
+      :ensure hydra)
+#+END_SRC
 ** Email
 *** mu4e                                                          :package:
 I use mu/mu4e for local mail handling, sync'd via offlineimap.
