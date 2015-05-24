@@ -3592,21 +3592,9 @@ too but eh.
 * Tasks
 ** TODO bug-reference-mode
 http://www.lunaryorn.com/2014/12/23/bug-reference-mode.html
-** Emacs Config Cleanup Fall 2014
-*** TODO How to markup and load medium sized configs? eval-after-load or tangle to other files?
-*** TODO Sort out python mode settings
-*** TODO Decide whether or not to use CEDET
-*** TODO Output tangled emacs config files to a subdirectory of config dir
-*** TODO Write function to compile config files on tangling
-*** TODO Fold functions file into base config file
-*** TODO Fold bernt's org functions info base config file
 ** TODO Check out hungry-delete mode
 https://github.com/nflath/hungry-delete
 ** TODO Have org mode daily agenda show up on xmonad background (conky?)
-** DONE Redo workgroups so that org mode comes up in window 1
-CLOSED: [2014-09-28 Sun 00:31]
-** DONE Unbind erc privmsg/channels notifications from sauron
-CLOSED: [2014-09-28 Sun 00:31]
 ** TODO Have bitlmacs fix network bonding for IMs on reconnect (just /query again)
 :LOGBOOK:
 CLOCK: [2013-11-06 Wed 13:59]--[2013-11-06 Wed 14:00] =>  0:01
@@ -3639,6 +3627,84 @@ http://nullprogram.com/blog/2012/10/31/
 ** TODO Make mu4e delete drafts after they are sent
    [2013-07-05 Fri]
 
+** TODO Bitlmacs
+*** TODO ERC Nicklist rewrite
+**** DONE Create filter function to load things like lists of privmsg buffers
+CLOSED: [2013-10-29 Tue 20:54]
+**** CANCELLED Use hl-mode for hilighting per line             :CANCELLED:
+CLOSED: [2013-10-29 Tue 20:54]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:54] \\
+  Just propertize by hand, hl-mode doesn't work well for multiple non-consecutive lines
+:END:
+**** TODO Remove cursor rendering
+**** TODO Rewrite menu/query function
+**** TODO Group handling?
+**** TODO Host fetch handling
+**** DONE Change nick/line faces based on status or privmsg
+CLOSED: [2013-10-29 Tue 20:55]
+**** DONE Make nicklist buffer show up in buffer list
+CLOSED: [2013-10-29 Tue 20:55]
+**** DONE Create command to clear erc-nicklist
+CLOSED: [2013-10-29 Tue 20:55]
+  [2012-03-30 Fri]
+
+*** DONE Make keymap for last/next privmsg
+CLOSED: [2013-10-29 Tue 20:54]
+*** DONE Make trigger to clear erc-nicklist status on access
+CLOSED: [2013-10-29 Tue 20:54]
+*** TODO Gravatar image viewing?
+*** TODO Make ido only list IMs?
+*** TODO bitlmacs highlights IRC nicks when they talk in channels if they also have a privmsg open
+
+** TODO Aggressive Indent
+** TODO Collapse diminishes into use-package calls
+** TODO Sort out python mode settings
+** TODO Fold functions file into base config file
+** TODO Fold bernt's org functions info base config file
+
+** TODO mu4e/gnupg
+*** TODO Add mu notifications for sauron and xmonad
+*** TODO Add optional display of mu update status in minibuffer
+*** TODO Set up mail queuing in mu4e
+*** TODO Set up encryption/checking in mu4e
+*** TODO Figure out where to put maildir for transfer
+*** TODO Look at key sharing via ssss or libgfshare
+http://www.digital-scurf.org/software/libgfshare
+*** TODO Speedbar setup for xmonad (automatic frame sizing)?
+*** TODO Make autorefiling function for messages from Kelly
+*** DONE Set all past email address in mu4e-user-mail-address-list
+CLOSED: [2013-02-18 Mon 22:21]
+- State "DONE"       from "TODO"       [2013-02-18 Mon 22:21]
+*** DONE Set up gpg to not require passwords all the time
+CLOSED: [2013-02-18 Mon 22:25]
+- State "DONE"       from "TODO"       [2013-02-18 Mon 22:25]
+*** DONE Check out message actions ('a' in header view)
+CLOSED: [2013-02-21 Thu 18:51]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 18:51]
+*** DONE Change mu4e-view-show-addresses so I can see email addresses
+CLOSED: [2013-02-21 Thu 18:58]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 18:58]
+*** DONE Set up multiple account information for smtpmail
+CLOSED: [2013-02-21 Thu 21:26]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 21:26]
+*** DONE Set up bookmarks for oft used searches
+CLOSED: [2013-02-21 Thu 22:34]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 22:34]
+*** DONE Set up quick indexes to maildirs
+CLOSED: [2013-02-26 Tue 19:54]
+- State "DONE"       from "TODO"       [2013-02-26 Tue 19:54]
+*** DONE Set up msmtp
+CLOSED: [2013-02-26 Tue 21:32]
+- State "DONE"       from "TODO"       [2013-02-26 Tue 21:32]
+*** DONE Set up offlineimap to retrieve via mu4e
+CLOSED: [2015-05-23 Sat 20:38]
+*** DONE Encrypt maildir via truecrypt
+CLOSED: [2015-05-23 Sat 20:38]
+** DONE Redo workgroups so that org mode comes up in window 1
+CLOSED: [2014-09-28 Sun 00:31]
+** DONE Unbind erc privmsg/channels notifications from sauron
+CLOSED: [2014-09-28 Sun 00:31]
 ** DONE Read Julian Danjou's config
 CLOSED: [2014-09-28 Sun 00:28]
 http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
@@ -3816,6 +3882,56 @@ https://github.com/lewang/flx
 ** DONE Try mobileorg one more time
 CLOSED: [2014-06-17 Tue 19:19]
 
+** DONE Emacs Config Cleanup Fall 2014
+*** DONE How to markup and load medium sized configs? eval-after-load or tangle to other files?
+CLOSED: [2015-05-23 Sat 20:36]
+Tangle into other files
+*** DONE Decide whether or not to use CEDET
+CLOSED: [2015-05-23 Sat 20:36]
+Moved to using llvm
+*** DONE Output tangled emacs config files to a subdirectory of config dir
+CLOSED: [2015-05-23 Sat 20:37]
+*** DONE Write function to compile config files on tangling
+CLOSED: [2015-05-23 Sat 20:37]
+** DONE Package Switchover
+*** DONE Do we still need CEDET loader? Or CEDET at /all/?
+CLOSED: [2014-09-28 Sun 00:33]
+*** DONE Clean up mu4e config
+CLOSED: [2015-05-23 Sat 20:35]
+*** DONE Figure out how to hook up prog mode?
+CLOSED: [2015-05-23 Sat 20:34]
+*** DONE org-mode config + use-package?
+CLOSED: [2015-05-23 Sat 20:34]
+Tangling org-mode out into its own file
+*** DONE Modes missing from ELPA/MELPA
+CLOSED: [2015-05-23 Sat 20:33]
+- [X] pelican-mode
+- [X] cedet
+- [X] mu4e
+- [ ] doxymacs
+*** DONE Figure out how mu4e is going to work with no ELPA/MELPA
+CLOSED: [2014-04-12 Sat 15:28]
+*** DONE Figure out what to do about erc-highlight-nicks
+CLOSED: [2014-04-12 Sat 15:39]
+Just keeping it in elisp directory for now
+*** DONE Readd qblog and bitlmacs
+CLOSED: [2014-04-12 Sat 15:38]
+*** DONE Turn off redisplay hack to try and fix ERC privmsg updating?
+CLOSED: [2014-04-12 Sat 14:57]
+*** DONE Figure out packages needed for auto-complete
+CLOSED: [2014-04-12 Sat 14:57]
+*** DONE Redistribute keybinds into use-package calls
+CLOSED: [2014-04-11 Fri 22:48]
+*** DONE Move all automodes to :mode in use-package
+CLOSED: [2014-04-11 Fri 22:34]
+*** Timing and Memory
+| Type                             | Load Time | Memory |
+|----------------------------------+-----------+--------|
+| emacs -q                         |       0.0 |   13.4 |
+| Old el-get config                |     5.162 |   56.0 |
+| use-package, no opts             |     2.794 |   48.6 |
+| use-package, fixed delay loading |     1.615 |   34.6 |
+
 ** CANCELLED Figure out issues with schedule export               :CANCELLED:
 CLOSED: [2014-04-10 Thu 20:44]
 :LOGBOOK:
@@ -3936,36 +4052,6 @@ CLOSED: [2012-10-15 Mon 15:36]
 :ID: c315b3ab-448b-4134-af2f-0378af73dc24
 :END:
 
-** TODO Bitlmacs
-*** TODO ERC Nicklist rewrite
-**** DONE Create filter function to load things like lists of privmsg buffers
-CLOSED: [2013-10-29 Tue 20:54]
-**** CANCELLED Use hl-mode for hilighting per line             :CANCELLED:
-CLOSED: [2013-10-29 Tue 20:54]
-:LOGBOOK:
-- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:54] \\
-  Just propertize by hand, hl-mode doesn't work well for multiple non-consecutive lines
-:END:
-**** TODO Remove cursor rendering
-**** TODO Rewrite menu/query function
-**** TODO Group handling?
-**** TODO Host fetch handling
-**** DONE Change nick/line faces based on status or privmsg
-CLOSED: [2013-10-29 Tue 20:55]
-**** DONE Make nicklist buffer show up in buffer list
-CLOSED: [2013-10-29 Tue 20:55]
-**** DONE Create command to clear erc-nicklist
-CLOSED: [2013-10-29 Tue 20:55]
-  [2012-03-30 Fri]
-
-*** DONE Make keymap for last/next privmsg
-CLOSED: [2013-10-29 Tue 20:54]
-*** DONE Make trigger to clear erc-nicklist status on access
-CLOSED: [2013-10-29 Tue 20:54]
-*** TODO Gravatar image viewing?
-*** TODO Make ido only list IMs?
-*** TODO bitlmacs highlights IRC nicks when they talk in channels if they also have a privmsg open
-
 ** CANCELLED Workgroups Update
 Was going to start 
 *** CANCELLED Divide functionality into modules                 :CANCELLED:
@@ -3993,89 +4079,3 @@ CLOSED: [2014-09-28 Sun 00:32]
 :LOGBOOK:  
 - State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
 :END:      
-** mu4e/gnupg
-*** DONE Set all past email address in mu4e-user-mail-address-list
-CLOSED: [2013-02-18 Mon 22:21]
-- State "DONE"       from "TODO"       [2013-02-18 Mon 22:21]
-*** DONE Set up gpg to not require passwords all the time
-CLOSED: [2013-02-18 Mon 22:25]
-- State "DONE"       from "TODO"       [2013-02-18 Mon 22:25]
-*** DONE Check out message actions ('a' in header view)
-CLOSED: [2013-02-21 Thu 18:51]
-- State "DONE"       from "TODO"       [2013-02-21 Thu 18:51]
-*** DONE Change mu4e-view-show-addresses so I can see email addresses
-CLOSED: [2013-02-21 Thu 18:58]
-- State "DONE"       from "TODO"       [2013-02-21 Thu 18:58]
-*** DONE Set up multiple account information for smtpmail
-CLOSED: [2013-02-21 Thu 21:26]
-- State "DONE"       from "TODO"       [2013-02-21 Thu 21:26]
-*** DONE Set up bookmarks for oft used searches
-CLOSED: [2013-02-21 Thu 22:34]
-- State "DONE"       from "TODO"       [2013-02-21 Thu 22:34]
-*** DONE Set up quick indexes to maildirs
-CLOSED: [2013-02-26 Tue 19:54]
-- State "DONE"       from "TODO"       [2013-02-26 Tue 19:54]
-*** DONE Set up msmtp
-CLOSED: [2013-02-26 Tue 21:32]
-- State "DONE"       from "TODO"       [2013-02-26 Tue 21:32]
-*** TODO Add mu notifications for sauron and xmonad
-*** TODO Add optional display of mu update status in minibuffer
-*** TODO Set up offlineimap to retrieve via mu4e
-*** TODO Set up mail queuing in mu4e
-*** TODO Set up encryption/checking in mu4e
-*** TODO Encrypt maildir via truecrypt
-*** TODO Figure out where to put maildir for transfer
-*** TODO Look at key sharing via ssss or libgfshare
-http://www.digital-scurf.org/software/libgfshare
-*** TODO Speedbar setup for xmonad (automatic frame sizing)?
-*** TODO Make autorefiling function for messages from Kelly
-** Contexts
-*** Email
-**** TODO Fix files
-*** Compilation
-*** Scheduling
-**** DONE Move all org mode events to special events file?
-CLOSED: [2013-10-29 Tue 20:55]
-*** Communication
-*** Layout
-** Maintenance Checklist
-- Modes to add to smart-mode-line
-- Directories to add to smart-mode-line
-- Key bindings
-  - Workgroups changes
-** Package Switchover
-*** DONE Do we still need CEDET loader? Or CEDET at /all/?
-CLOSED: [2014-09-28 Sun 00:33]
-*** TODO Clean up mu4e config
-*** TODO Figure out how to hook up prog mode?
-*** TODO org-mode config + use-package?
-*** TODO Collapse diminishes into use-package calls
-*** TODO Modes missing from ELPA/MELPA
-- [X] pelican-mode
-- [X] cedet
-- [X] mu4e
-- [ ] doxymacs
-*** DONE Figure out how mu4e is going to work with no ELPA/MELPA
-CLOSED: [2014-04-12 Sat 15:28]
-*** DONE Figure out what to do about erc-highlight-nicks
-CLOSED: [2014-04-12 Sat 15:39]
-Just keeping it in elisp directory for now
-*** DONE Readd qblog and bitlmacs
-CLOSED: [2014-04-12 Sat 15:38]
-*** DONE Turn off redisplay hack to try and fix ERC privmsg updating?
-CLOSED: [2014-04-12 Sat 14:57]
-*** DONE Figure out packages needed for auto-complete
-CLOSED: [2014-04-12 Sat 14:57]
-*** DONE Redistribute keybinds into use-package calls
-CLOSED: [2014-04-11 Fri 22:48]
-*** DONE Move all automodes to :mode in use-package
-CLOSED: [2014-04-11 Fri 22:34]
-*** Timing and Memory
-| Type                             | Load Time | Memory |
-|----------------------------------+-----------+--------|
-| emacs -q                         |       0.0 |   13.4 |
-| Old el-get config                |     5.162 |   56.0 |
-| use-package, no opts             |     2.794 |   48.6 |
-| use-package, fixed delay loading |     1.615 |   34.6 |
-
-** TODO Aggressive Indent
