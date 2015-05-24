@@ -1,0 +1,42 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: mozdombindingheader
+# key: mozdombindingheader
+# binding: direct-keybinding
+# --
+/* -*- Mode: C++; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* vim:set ts=2 sw=2 sts=2 et cindent: */
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#ifndef ${1:mozilla_dom_`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`_h}
+#define $1
+
+#include "nsWrapperCache.h"
+
+class nsPIDOMWindow;
+
+namespace mozilla {
+namespace dom {
+
+class $2 final : public nsISupports,
+                                   public nsWrapperCache
+{
+public:
+  NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+  NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS($2)
+
+  explicit $2(JSContext* aCx,
+              nsPIDOMWindow* aParent,
+              ErrorResult& aRv);
+  nsPIDOMWindow* GetParentObject() const;
+  virtual JSObject* WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto) override;
+private:
+  virtual ~$2() {}
+  nsCOMPtr<nsPIDOMWindow> mParent;
+};
+
+} // namespace dom
+} // namespace mozilla
+
+#endif // $1

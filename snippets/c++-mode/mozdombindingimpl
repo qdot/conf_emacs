@@ -1,0 +1,47 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: mozdombindingimpl
+# key: mozdombindingimpl
+# binding: direct-keybinding
+# --
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "mozilla/dom/${1:`(file-name-nondirectory (file-name-sans-extension (buffer-file-name)))`}.h"
+#include "mozilla/dom/$1Binding.h"
+#include "nsPIDOMWindow.h"
+
+namespace mozilla {
+namespace dom {
+
+NS_IMPL_CYCLE_COLLECTION_WRAPPERCACHE($1, mParent)
+
+NS_IMPL_CYCLE_COLLECTING_ADDREF($1)
+NS_IMPL_CYCLE_COLLECTING_RELEASE($1)
+
+NS_INTERFACE_MAP_BEGIN_CYCLE_COLLECTION($1)
+  NS_WRAPPERCACHE_INTERFACE_MAP_ENTRY
+  NS_INTERFACE_MAP_ENTRY(nsISupports)
+NS_INTERFACE_MAP_END
+
+$1::$1(JSContext* aCx,
+                           nsPIDOMWindow* aParent,
+                           ErrorResult& aRv) : mParent(aParent)
+{
+}
+
+JSObject*
+$1::WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto)
+{
+  return $1Binding::Wrap(aCx, this, aGivenProto);
+}
+
+nsPIDOMWindow*
+$1::GetParentObject() const
+{
+  return mParent;
+}
+
+}
+}
