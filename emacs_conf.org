@@ -3463,10 +3463,10 @@ gpg file auto query/loading
 *** qdot-funcs                                                    :package:
 #+BEGIN_SRC emacs-lisp
   (require 'qdot-funcs)
-  (global-set-key (kbd "C-c C-s") 'qdot/sudo-edit-current-file)
-  (global-set-key (kbd "C-c C-r") 'qdot/reload-file)
+  (bind-key "C-c C-s" 'qdot/sudo-edit-current-file)
+  (bind-key "C-c C-r" 'qdot/reload-file)
   ;; remap C-a to `smarter-move-beginning-of-line'
-  (global-set-key [remap move-beginning-of-line]
+  (bind-key [remap move-beginning-of-line]
                   'qdot/smarter-move-beginning-of-line)
   
 #+END_SRC
