@@ -2752,6 +2752,11 @@ Line numbers
      '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
 #+END_SRC
 
+*** rust-mode                                                     :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package rust-mode
+      :ensure rust-mode)
+#+END_SRC
 *** smartparens                                                   :package:
 Smarter paren matching without going the paredit route. 
 
