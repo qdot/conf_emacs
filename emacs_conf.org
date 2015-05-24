@@ -1012,10 +1012,11 @@ Move between windows using shift-[arrow key].
 
 ** Email
 *** message-mode                                                  :package:
+Add Cc and Bcc headers to the message buffer
 #+BEGIN_SRC emacs-lisp
-  ;; add Cc and Bcc headers to the message buffer
   (use-package message-mode
     :commands message-mode
+    :no-require t
     :config
     (progn
       (setq message-default-mail-headers "Cc: \nBcc: \n")
@@ -2267,18 +2268,19 @@ semantic-mode when loading C++ files. May just completely remove soon.
 *** change-log-mode                                               :package:
 #+BEGIN_SRC emacs-lisp
   (use-package change-log-mode
+    :no-require t
     :mode ("ChangeLog\\.txt\\'" . change-log-mode))
 #+END_SRC
 *** company                                                       :package:
 #+BEGIN_SRC emacs-lisp
   (use-package company
       :ensure t
-      :init
+      :config
       (setq company-idle-delay 0.2)
       (setq comapny-minimum-prefix-length 2)
       (setq company-dabbrev-ignore-case t)
       (setq company-dabbrev-downcase nil)
-      ;;(add-to-list 'company-backends 'company-yasnippet)
+      (add-to-list 'company-backends 'company-yasnippet)
       ;; https://github.com/jorgenschaefer/elpy/wiki/FAQ
       ;; (defun company-yasnippet-or-completion ()
       ;;   "Solve company yasnippet conflicts."
@@ -2363,6 +2365,8 @@ Compilation mode.
         ;;(setq ac-sources (append '(ac-source-yasnippet) ac-sources))
         (set-fill-column 79)
         (bind-key "M-q" 'python-fill-paragraph python-mode-map)
+        (setq eldoc-idle-delay 2.0)
+        (setq flymake-no-changes-timeout 0.5)
         (elpy-enable)
         (setq elpy-rpc-backend "jedi")
         (subword-mode 1))
@@ -2469,6 +2473,7 @@ Using flycheck instead of flymake
 *** idl-mode                                                      :package:
 #+BEGIN_SRC emacs-lisp
   (use-package idl-mode
+    :no-require t
     :mode ("\\.\\(idl\\|webidl\\)\\'" . idl-mode))
 #+END_SRC
 *** ielm                                                          :package:
@@ -2580,6 +2585,9 @@ git management in emacs.
     :ensure magit
     :bind (("M-g s" . magit-status))
     :commands (magit magit-status)
+    :init
+    ;; omfg shut up magit I am fine with auto reverting
+    (setq magit-last-seen-setup-instructions "1.4.0")
     :config
     (progn
       (setq magit-completing-read-function
@@ -2658,10 +2666,10 @@ programming mode.
   (defun qdot/programming-mode-hook ()
     (set-fill-column 80)
 
-    ;; (add-to-list 'ac-sources 'ac-source-yasnippet)
     (setq whitespace-line-column 80)
     (setq whitespace-style '(face lines-tail))
     (setq show-trailing-whitespace t))
+ 
   (add-hook 'prog-mode-hook 'qdot/programming-mode-hook)
 #+END_SRC
 
@@ -2798,10 +2806,14 @@ Provides fillable templates.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
     :ensure yasnippet
-    :commands (yas-global-mode yas-minor-mode yas-expand)
+    :commands (yas-global-mode yas-minor-mode yas-minor-mode-on yas-expand)
     :config
-    (progn
-      (add-to-list 'yas-snippet-dirs qdot/emacs-snippets-dir)))
+    (add-to-list 'yas-snippet-dirs qdot/emacs-snippets-dir)
+    (add-hook 'prog-mode-hook 'yas-minor-mode-on)
+    (add-hook 'markdown-mode-hook 'yas-minor-mode-on)
+    ;; Turn off yas otherwise tab screws up
+    (add-hook 'term-mode-hook (lambda()
+                                (yas-minor-mode -1))))
 #+END_SRC
 ** Writing
 *** adoc-mode                                                     :package:
@@ -3246,10 +3258,6 @@ Turn on ansi in shells
     :disabled t
     :config
     (progn
-      ;; Turn off yas otherwise tab screws up
-      (add-hook 'term-mode-hook (lambda()
-                                  (yas-minor-mode -1)))
-  
       (setq multi-term-program "/bin/zsh") ;; or use zsh...
   
       (global-set-key (kbd "C-c t") 'multi-term-next)
