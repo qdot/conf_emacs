@@ -363,6 +363,14 @@ Enable narrow-to-region
 #+BEGIN_SRC emacs-lisp
   (put 'narrow-to-region 'disabled nil)
 #+END_SRC
+
+Make sure page up and page down are symmetric, so M-v undoes C-v
+perfectly.
+
+#+BEGIN_SRC emacs-lisp
+(setq scroll-preserve-screen-position 'always)
+#+END_SRC
+
 ** Global Minor Modes
 
 Save minibuffer history, so oft-used functions bubble to the top.
