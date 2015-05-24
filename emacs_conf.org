@@ -599,6 +599,11 @@ Make selecting files/buffers in minibuffer easier
       (setq ido-execute-command-cache nil)
       (setq ido-create-new-buffer 'always)))
 #+END_SRC
+*** info+                                                         :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package info+
+      :ensure t)
+#+END_SRC
 *** ispell                                                        :package:
 Turns out most spelling dictionaries don't contain "teledildonics".
 What a horrid oversight.
