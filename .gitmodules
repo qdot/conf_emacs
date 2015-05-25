@@ -28,3 +28,6 @@
 [submodule "dev-packages/pelican-mode"]
 	path = dev-packages/pelican-mode
 	url = git://github.com/qdot/pelican-mode
+[submodule "dev-packages/smex"]
+	path = dev-packages/smex
+	url = http://github.com/abo-abo/smex

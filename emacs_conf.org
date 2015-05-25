@@ -537,7 +537,7 @@ sensitive scope.
 
 *** flx-ido                                                       :package:
 Make fuzzy matching for ido work better.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package flx-ido
     :ensure flx-ido
     :config
@@ -583,13 +583,13 @@ kind of project something may be related to.
 *** icomplete                                                     :package:
 Incremental minibuffer completion. Update per character, as it takes a
 lot to lag it.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (icomplete-mode 1)
   (custom-set-variables '(icomplete-compute-delay 0.1))
 #+END_SRC
 *** ido                                                           :package:
 Make selecting files/buffers in minibuffer easier
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package ido
     :config
     (progn 
@@ -611,6 +611,28 @@ What a horrid oversight.
   (setq ispell-personal-dictionary "~/.ispell-dict-personal")
 #+END_SRC
 
+*** ivy-mode                                                      :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+      :ensure swiper
+      :init
+      (setq ivy-use-virtual-buffers t)
+      (ivy-mode)
+      (setq ivy-extra-directories nil)
+
+      (defun qdot/ivy-open-current-typed-path ()
+        (interactive)
+        (when ivy--directory
+          (let* ((dir ivy--directory)
+                 (text-typed ivy-text)
+                 (path (concat dir text-typed)))
+            (delete-minibuffer-contents)
+            (ivy--done path))))
+      ;; bind-keys isn't working here? No idea why.
+      (bind-key "C-w" 'ivy-backward-kill-word ivy-minibuffer-map)
+      (bind-key "<return>" 'ivy-alt-done ivy-minibuffer-map)
+      (bind-key "C-d" 'qdot/ivy-open-current-typed-path ivy-minibuffer-map))
+#+END_SRC
 *** multiple-cursors                                              :package:
 Work with multiple cursors simultaneously.
 #+BEGIN_SRC emacs-lisp
@@ -709,16 +731,22 @@ and content.
 #+END_SRC
 
 *** smex                                                          :package:
-Smex is ido fuzzy matching for M-x.
-#+BEGIN_SRC emacs-lisp
-  (use-package smex
-    :ensure smex
-    ;; Bind smex over M-x, deals with sorting most used commands to front of IDO
-    :bind (("M-x" . smex)
-           ("M-X" . smex-major-mode-commands)
-           ("C-c C-c M-x" . execute-extended-command))
-    :commands (smex smex-major-mode-commands))
+Smex is ido fuzzy matching for M-x. Deals with sorting most used
+commands to front of IDO.
 
+Instead of using the smex package off ELPA/MELPA, I'm using abo-abo's
+smex from https://github.com/abo-abo/smex in order to use smex and
+ivy-mode. So there's no ensure call here and I have to set the
+completion method.
+#+BEGIN_SRC emacs-lisp
+    (use-package smex
+      :load-path "~/.emacs_files/dev-packages/smex"
+      :bind (("M-x" . smex)
+             ("M-X" . smex-major-mode-commands)
+             ("C-c C-c M-x" . execute-extended-command))
+      :commands (smex smex-major-mode-commands)
+      :config
+      (setq smex-completion-method 'ivy))
 #+END_SRC
 *** swiper                                                        :package:
 #+BEGIN_SRC emacs-lisp
@@ -2618,6 +2646,9 @@ git management in emacs.
 
            (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
 
+      ;; use ivy for completing read if available
+      (setq magit-completing-read-function 'ivy-completing-read)
+
       ;; Don't require confirm to stage changes
       (setq magit-stage-all-confirm nil)
 
@@ -2699,14 +2730,15 @@ Line numbers
 #+END_SRC
 *** projectile                                                    :package:
 #+BEGIN_SRC emacs-lisp
-  (use-package projectile
-      :ensure projectile
-      :config
-      (projectile-global-mode)
-      (defun qdot/projectile-off ()
-        (projectile-mode -1))
-      ;; Don't want this on for IRC
-      (add-hook 'erc-mode 'qdot/projectile-off))
+    (use-package projectile
+        :ensure projectile
+        :config
+        (projectile-global-mode)
+        (setq projectile-completion-system 'ivy)
+        (defun qdot/projectile-off ()
+          (projectile-mode -1))
+        ;; Don't want this on for IRC
+        (add-hook 'erc-mode 'qdot/projectile-off))
 #+END_SRC
 *** python-mode                                                   :package:
 #+BEGIN_SRC emacs-lisp
@@ -3623,9 +3655,11 @@ too but eh.
                                    (browse-url-firefox-sentinel process ,url)))))))
 #+END_SRC
 * Tasks
+** TODO Replace ido with ivy
 ** TODO bug-reference-mode
 http://www.lunaryorn.com/2014/12/23/bug-reference-mode.html
-** TODO Check out hungry-delete mode
+** DONE Check out hungry-delete mode
+CLOSED: [2015-05-23 Sat 21:39]
 https://github.com/nflath/hungry-delete
 ** TODO Have org mode daily agenda show up on xmonad background (conky?)
 ** TODO Have bitlmacs fix network bonding for IMs on reconnect (just /query again)
