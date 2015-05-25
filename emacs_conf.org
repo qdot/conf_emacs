@@ -2479,6 +2479,14 @@ Using flycheck instead of flymake
     :commands (git-gutter git-gutter:toggle))
 #+END_SRC
 
+*** git-messanger                                                 :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package git-messenger
+      :ensure git-messenger
+      :commands (git-messenger:popup-message)
+      :init
+      (setq git-messenger:show-detail t))
+#+END_SRC
 *** git-timemachine                                               :package:
 #+BEGIN_SRC emacs-lisp
   (use-package git-timemachine
