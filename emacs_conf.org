@@ -755,9 +755,7 @@ completion method.
 #+BEGIN_SRC emacs-lisp
     (use-package smex
       :load-path "~/.emacs_files/dev-packages/smex"
-      :bind (("M-x" . smex)
-             ("M-X" . smex-major-mode-commands)
-             ("C-c C-c M-x" . execute-extended-command))
+      :bind (("C-c C-c M-x" . execute-extended-command))
       :commands (smex smex-major-mode-commands)
       :config
       (setq smex-completion-method 'ivy))
@@ -768,7 +766,17 @@ completion method.
       :ensure swiper
       :commands (swiper)
       :bind (("C-s" . swiper)
-             ("C-r" . swiper)))
+             ("C-r" . swiper)
+             ("M-x" . counsel-M-x)
+             ("C-x C-f" . counsel-find-file)
+             ("C-x b" . ivy-switch-buffer))
+      :config
+      ;; advise swiper to recenter on exit
+      ;; http://pragmaticemacs.com/emacs/dont-search-swipe/
+      (defun qdot/swiper-recenter (&rest args)
+        "recenter display after swiper"
+        (recenter))
+      (advice-add 'swiper :after #'qdot/swiper-recenter))
 #+END_SRC
 *** tramp                                                         :package:
 I rarely use tramp these days, but usually use ssh when doing so.
