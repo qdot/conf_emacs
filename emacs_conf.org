@@ -2325,6 +2325,7 @@ semantic-mode when loading C++ files. May just completely remove soon.
       (setq company-dabbrev-ignore-case t)
       (setq company-dabbrev-downcase nil)
       (add-to-list 'company-backends 'company-yasnippet)
+      (add-to-list 'company-backends 'company-elisp)
       ;; https://github.com/jorgenschaefer/elpy/wiki/FAQ
       ;; (defun company-yasnippet-or-completion ()
       ;;   "Solve company yasnippet conflicts."
