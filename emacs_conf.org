@@ -482,6 +482,14 @@ functions in the qdot-funcs module allows me to easily access
 configurations without having to search through the org file.
 
 ** Emacs Customization
+*** beacon                                                        :package:
+Highlight cursor/line when window scrolls
+#+BEGIN_SRC emacs-lisp
+  (use-package beacon
+      :ensure t
+      :config
+      (beacon-mode 1))
+#+END_SRC
 *** browse-kill-ring                                              :package:
 See and update/select kill ring history.
 #+BEGIN_SRC emacs-lisp
