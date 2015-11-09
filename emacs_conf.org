@@ -143,6 +143,14 @@ bring those in now.
   (require 'diminish)
   (require 'bind-key)
 #+END_SRC
+*** use-package-chords                                            :package:
+Add the ability to bind key chords using use-package :bind style.
+#+BEGIN_SRC emacs-lisp
+    (use-package use-package-chords
+        :ensure t
+        :config
+        (key-chord-mode 1))
+#+END_SRC
 ** Load org-mode
 We need org-mode here to run org-babel on the file. Loading this early
 is fine, as it's pretty much guaranteed that org-mode will get used
