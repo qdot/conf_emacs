@@ -1781,6 +1781,13 @@ Leave cruft out of agenda
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-compact-blocks t)
 #+END_SRC
+
+Set ellipsis to at least be slightly smaller. Could also be something
+like ⤵, ▼, ↴, ⬎, ⤷, and ⋱.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-ellipsis "…")
+#+END_SRC
 ***** Hooks
 
 Flyspell mode for spell checking everywhere.
@@ -2026,9 +2033,10 @@ use our func
   (setq appt-display-format 'nil)
 #+END_SRC
 
+Org mode notifications via aptp
+the appointment notification facility
+
 #+BEGIN_SRC emacs-lisp
-  ;; Org mode notifications via aptp
-  ;; the appointment notification facility
   (appt-activate 1)              ;; active appt (appointment notification)
   (display-time)                 ;; time display is required for this...
 
@@ -2061,7 +2069,6 @@ http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-
   ;; Set org babel backgrounds so we get nice blocks
   (set-face-background 'org-block-begin-line "#333")
   (set-face-background 'org-block-end-line "#333")
-  (set-face-background 'org-block-background "#222")
 #+END_SRC
 
 Set up face colors for tags. Makes quickly scanning the agenda easier.
