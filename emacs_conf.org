@@ -2916,7 +2916,8 @@ compiling blogs from post buffers easier.
     :defer t
     :load-path "~/.emacs_files/dev-packages/pelican-mode")
 #+END_SRC
-** Social (IRC, Twitter, Etc)
+*
+* Social (IRC, Twitter, Etc)
 *** bitlmacs                                                      :package:
 Utility package for using bitlbee through ERC. Currently breaks
 horribly if called before there's a message buffer.
