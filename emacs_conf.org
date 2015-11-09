@@ -2188,6 +2188,14 @@ Settings for C/C++ modes.
 Doxymacs currently commented out because it doesn't have a related
 package.
 #+BEGIN_SRC emacs-lisp
+  (custom-set-variables'(cc-search-directories
+                         '("."
+                           "/usr/include"
+                           "/usr/local/include/*"
+                           "../include"
+                           "../../include"
+                           "../src"
+                           "../../src")))
   (defun qdot/cc-mode-hook ()
     ;; (doxymacs-font-lock)
     (c-add-style "qdot/cc-code-style" '("bsd" (c-basic-offset . 2)))
