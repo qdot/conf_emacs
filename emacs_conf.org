@@ -2817,7 +2817,7 @@ Smarter paren matching without going the paredit route.
 
 Turning off deferred loading because this is useful almost everywhere.
 #+BEGIN_SRC emacs-lisp
-  (use-package smartparens
+  (use-package smartparens-config
     :ensure smartparens
     :defer nil
     :bind (("<C-right>"   . sp-forward-slurp-sexp)
@@ -2826,7 +2826,6 @@ Turning off deferred loading because this is useful almost everywhere.
            ("<C-M-left>"  . sp-backward-barf-sexp))
     :config
     (progn
-      (require 'smartparens-config)
       (smartparens-global-mode t)
       ;; I start words with ' a lot when I chat apparently
       (sp-local-pair 'erc-mode "'" nil :actions nil)))
