@@ -977,7 +977,8 @@ Jump to a specified window by using [prefix-key] + letter
   (bind-key "C-c m" hydra-transpose/body)
 #+END_SRC
 **** rectangle-mode
-Rectangle mode hydra. Disabled because I don't use rectangle-mode much, but handy to have around.
+Rectangle mode hydra. Disabled because I don't use rectangle-mode
+much, but handy to have around.
 #+BEGIN_SRC emacs-lisp :tangle no
   (defun ora-ex-point-mark ()
     (interactive)
