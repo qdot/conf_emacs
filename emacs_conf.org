@@ -2585,38 +2585,32 @@ When using ielm mode, set up autocomplete sources accordingly.
       (eval-after-load 'flycheck
         '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup)))
 #+END_SRC
-*** js3-mode                                                      :package:
+*** js2-mode                                                      :package:
 #+BEGIN_SRC emacs-lisp
-  (use-package js3-mode
-    :ensure js3-mode
-    :commands (js3-mode)
-    :mode (("\\.js\\'" . js3-mode)
-           ("\\.jsm\\'" . js3-mode))
-    :init
+  (use-package js2-mode
+      :ensure js2-mode
+      :commands (js2-mode)
+      :mode (("\\.js\\'" . js2-mode)
+             ("\\.jsm\\'" . js2-mode))
+      :init
       ;; Fix for .js files that have Java set as the mode (I'm looking at
       ;; you, mozilla-central)
       (add-hook 'java-mode-hook
                 (lambda ()
                   (when (string-match "\\.js\\'" buffer-file-name)
-                    (js3-mode))))
-    :config
-    (progn
-      (defun qdot/js3-mode-hook ()
-        (setq
-         js3-auto-indent-p t
-         js3-curly-indent-offset 0
-         js3-enter-indents-newline t
-         js3-expr-indent-offset 2
-         js3-indent-on-enter-key t
-         js3-lazy-commas t
-         js3-lazy-dots t
-         js3-lazy-operators t
-         js3-paren-indent-offset 2
-         js3-consistent-level-indent-inner-bracket t
-         js3-square-indent-offset 4)
-        (linum-mode)
-        (company-mode 1))
-      (add-hook 'js3-mode-hook 'qdot/js3-mode-hook)))
+                    (js2-mode))))
+      :config
+      (setq js-indent-level 2)
+      (setq js2-basic-offset 2)
+      (linum-mode)
+      (company-mode 1))
+#+END_SRC
+*** js2-refactor                                                  :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package js2-refactor
+      :ensure t
+      :config
+      (add-hook 'js2-mode-hook #'js2-refactor-mode))
 #+END_SRC
 *** json-mode                                                     :package:
 #+BEGIN_SRC emacs-lisp
