@@ -622,18 +622,6 @@ lot to lag it.
   (icomplete-mode 1)
   (custom-set-variables '(icomplete-compute-delay 0.1))
 #+END_SRC
-*** ido                                                           :package:
-Make selecting files/buffers in minibuffer easier
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package ido
-    :config
-    (progn 
-      (ido-mode t)
-      (ido-everywhere t)
-      (setq ido-enable-flex-matching t)
-      (setq ido-execute-command-cache nil)
-      (setq ido-create-new-buffer 'always)))
-#+END_SRC
 *** info+                                                         :package:
 #+BEGIN_SRC emacs-lisp
   (use-package info+
@@ -654,6 +642,7 @@ What a horrid oversight.
       (setq ivy-use-virtual-buffers t)
       (ivy-mode)
       (setq ivy-extra-directories nil)
+      (setq ivy-display-style 'fancy)
 
       (defun qdot/ivy-open-current-typed-path ()
         (interactive)
@@ -663,7 +652,9 @@ What a horrid oversight.
                  (path (concat dir text-typed)))
             (delete-minibuffer-contents)
             (ivy--done path))))
+      (setq ivy-count-format "(%d/%d) ")
       ;; bind-keys isn't working here? No idea why.
+      (bind-key "C-r" 'ivy-previous-line ivy-minibuffer-map)
       (bind-key "C-w" 'ivy-backward-kill-word ivy-minibuffer-map)
       (bind-key "<return>" 'ivy-alt-done ivy-minibuffer-map)
       (bind-key "C-d" 'qdot/ivy-open-current-typed-path ivy-minibuffer-map))
@@ -693,21 +684,9 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 
 #+BEGIN_SRC emacs-lisp
   (use-package recentf
-    :bind (("C-x C-r" . ido-recentf-open))
-    :init
-    (progn
-      ;; get rid of `find-file-read-only' and replace it with something
-      ;; more useful.
-      (defun ido-recentf-open ()
-        "Use `ido-completing-read' to \\[find-file] a recent file"
-        (interactive)
-        (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-            (message "Opening file...")
-          (message "Aborting")))
-
-      ;; 50 files ought to be enough.
-      (setq recentf-max-saved-items 50)))
-
+    :config
+    ;; 50 files ought to be enough.
+    (setq recentf-max-saved-items 50))
 #+END_SRC
 *** rect-mark                                                     :package:
 Make rectangular region marking easier.
