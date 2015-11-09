@@ -791,9 +791,10 @@ I rarely use tramp these days, but usually use ssh when doing so.
 Allow undo to branch, and be visualized as a graph.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
-    :ensure undo-tree
-    :config
-    (global-undo-tree-mode 1))
+      :ensure undo-tree
+      :chords (("Q_" . undo-tree-visualize))
+      :config
+      (global-undo-tree-mode 1))
 #+END_SRC
 *** uniquify                                                      :package:
 Make buffer names unique, handy when opening files with similar names
