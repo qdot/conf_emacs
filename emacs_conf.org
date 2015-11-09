@@ -3209,9 +3209,10 @@ I was away.
                      :msg    ,msg)))
       nil))
   ;; external module to handle special xmonad notifications setup
-  (require 'qdot-sauron-notifications)
+  (when linux-p
+    (require 'qdot-sauron-notifications)
+    (add-hook 'sauron-mode-hook 'qdot/add-notify-hooks))
   (add-hook 'sauron-mode-hook 'qdot/monkey-patch-sr)
-  (add-hook 'sauron-mode-hook 'qdot/add-notify-hooks)
 #+END_SRC
 ***** Provides Statement
 #+BEGIN_SRC emacs-lisp
