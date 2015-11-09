@@ -792,7 +792,6 @@ Allow undo to branch, and be visualized as a graph.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
       :ensure undo-tree
-      :chords (("Q_" . undo-tree-visualize))
       :config
       (global-undo-tree-mode 1))
 #+END_SRC
@@ -2645,6 +2644,7 @@ git management in emacs.
   (use-package magit
     :ensure magit
     :bind (("M-g s" . magit-status))
+    :chords (("qg" . magit-status))
     :commands (magit magit-status)
     :init
     ;; omfg shut up magit I am fine with auto reverting
@@ -2756,6 +2756,7 @@ Line numbers
       :ensure projectile
       :bind (("<f5>" . projectile-run-project)
              ("C-S-b" . projectile-compile-project))
+      :chords (("qp" . hydra-projectile/body))
       :config
       (projectile-global-mode)
       (setq projectile-completion-system 'ivy)
