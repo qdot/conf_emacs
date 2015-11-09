@@ -3421,7 +3421,7 @@ Turn on ansi in shells
       (setq wg-buffer-uid uid)))
 #+END_SRC
 ***** Personal usage setup function
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (defun qdot/personal-wg-setup ()
     ;;(workgroups-mode 1)
 
