@@ -3643,7 +3643,9 @@ Extra hooks to functions from the qdot-funcs modules
 #+END_SRC
 * Functions
 * Tasks
-** TODO Replace ido with ivy
+** DONE Replace ido with ivy
+CLOSED: [2015-05-24 Sun 23:13]
+** TODO Turn toggle-map into a hydra
 ** TODO bug-reference-mode
 http://www.lunaryorn.com/2014/12/23/bug-reference-mode.html
 ** DONE Check out hungry-delete mode
@@ -3672,7 +3674,7 @@ CLOCK: [2013-07-24 Wed 14:57]--[2013-07-24 Wed 14:58] =>  0:01
 :END:
 [2013-07-24 Wed]
 http://nullprogram.com/blog/2012/10/31/
-
+https://github.com/skeeto/skewer-mode
 ** TODO Fix agenda display of mozilla subtree in email task file
 ** TODO Make org date function that will show events on certain days AFTER a certain date
 ** TODO Make fill columns for ERC auto-set for workgroup sizes?
@@ -3717,7 +3719,6 @@ CLOSED: [2013-10-29 Tue 20:54]
 ** TODO Sort out python mode settings
 ** TODO Fold functions file into base config file
 ** TODO Fold bernt's org functions info base config file
-
 ** TODO mu4e/gnupg
 *** TODO Add mu notifications for sauron and xmonad
 *** TODO Add optional display of mu update status in minibuffer
