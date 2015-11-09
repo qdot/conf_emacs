@@ -565,26 +565,26 @@ kind of project something may be related to.
   (use-package ibuffer
       :commands ibuffer-other-window
       :init
-      (progn
-        (setq ibuffer-default-sorting-mode 'major-mode
-              ibuffer-always-show-last-buffer t
-              ibuffer-view-ibuffer t
-              ibuffer-expert t
-              ibuffer-show-empty-filter-groups nil
-              ;; Set up buffer groups based on file and mode types
-              ibuffer-saved-filter-groups
-              (quote (("default"
-                       ("Org" (mode . org-mode))
-                       ("ERC" (mode . erc-mode))
-                       ("Emacs Setup" (or
-                                       (filename . "/.emacs_files/")
-                                       (filename . "/.emacs_d/")
-                                       (filename . "/emacs_d/")))
-                       ("magit" (name . "magit"))
-                       ("dired" (mode . dired-mode))
-                       ("emacs" (or
-                                 (name . "^\\*scratch\\*$")
-                                 (name . "^\\*Messages\\*$")))))))))
+      (setq ibuffer-default-sorting-mode 'major-mode
+            ibuffer-always-show-last-buffer t
+            ibuffer-view-ibuffer t
+            ibuffer-expert t
+            ibuffer-show-empty-filter-groups nil
+            ;; Set up buffer groups based on file and mode types
+            ibuffer-saved-filter-groups
+            (quote (("default"
+                     ("IBuffer" (mode . ibuffer-mode))
+                     ("Org" (mode . org-mode))
+                     ("ERC" (mode . erc-mode))
+                     ("Emacs Setup" (or
+                                     (filename . "/.emacs_files/")
+                                     (filename . "/.emacs_d/")
+                                     (filename . "/emacs_d/")))
+                     ("magit" (name . "magit"))
+                     ("dired" (mode . dired-mode))
+                     ("emacs" (or
+                               (name . "^\\*scratch\\*$")
+                               (name . "^\\*Messages\\*$"))))))))
 #+END_SRC
 *** ibuffer-vc                                                    :package:
 Set up ibuffer groups via vc.
@@ -601,7 +601,8 @@ Set up ibuffer groups via vc.
       (add-hook 'ibuffer-hook
                 (lambda ()
                   (ibuffer-switch-to-saved-filter-groups "default")
-                  (ibuffer-vc-add-vc-filter-groups))))
+                  (ibuffer-vc-add-vc-filter-groups)
+                  (ibuffer-update nil))))
 #+END_SRC
 *** icomplete                                                     :package:
 Incremental minibuffer completion. Update per character, as it takes a
