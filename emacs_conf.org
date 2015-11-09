@@ -837,6 +837,12 @@ Jump to a specified window by using [prefix-key] + letter
        '(aw-leading-char-face
          ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 #+END_SRC
+*** avy                                                           :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package avy
+      :ensure avy
+      :bind ("M-g g" . avy-goto-line))
+#+END_SRC
 *** hydra                                                         :package:
 #+BEGIN_SRC emacs-lisp
   (use-package hydra
