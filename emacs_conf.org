@@ -125,10 +125,10 @@ edge package repos.
   (package-initialize)
 #+END_SRC
 *** use-package                                                   :package:
-use-package keeps packaging loading clean and delayed until the last
+use-package keeps package loading clean and delayed until the last
 possible second. Using the :ensure command means that this config file
 also works as a package manifest when bringing up a new config
-instance, though that rarely if ever happens.
+instance, though that rarely happens.
 
 As of version 2.0, use-package no longer needs to be loaded except
 when compiling, but diminish and bind-key will still be required, so
