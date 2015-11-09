@@ -3030,6 +3030,7 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
     (defvar qdot/erc-znc-password "doesnotmatter")
     (defvar qdot/erc-znc-networks '(("personal" . ("freenode"))
                                     ("work" . ("mozilla"))
+                                    ("hackint" . ("hackint"))
                                     ("furnet" . ("furnet"))))
     (defvar qdot/erc-znc-remote-server "localhost")
     (defvar qdot/erc-znc-port 9999)
