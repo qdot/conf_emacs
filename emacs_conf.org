@@ -2075,9 +2075,6 @@ http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-
      ((((class color) (min-colors 16) (background dark))
        (:foreground "LightSalmon" :strike-through t)))))
 
-  ;; Set org babel backgrounds so we get nice blocks
-  (set-face-background 'org-block-begin-line "#333")
-  (set-face-background 'org-block-end-line "#333")
 #+END_SRC
 
 Set up face colors for tags. Makes quickly scanning the agenda easier.
