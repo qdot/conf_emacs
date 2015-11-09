@@ -2377,12 +2377,12 @@ Compilation mode.
 
   (use-package compile
     :commands (compile)
-    ;;:bind ("[f5]" . qdot/recompile)
     :config
     (setq compilation-disable-input nil)
+    (setq compilation-read-command nil)
     (setq compilation-auto-jump-to-first-error nil)
     (setq compilation-scroll-output 'first-error)
-    (setq mode-compile-always-save-buffer-p t) )
+    (setq mode-compile-always-save-buffer-p t))
 
 #+END_SRC
 *** edebug-x                                                      :package:
