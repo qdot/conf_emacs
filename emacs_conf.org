@@ -575,34 +575,45 @@ List buffers in a dired-ish way. Try to group based on modes or what
 kind of project something may be related to.
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer
-    :commands ibuffer-other-window
-    :init
-    (progn
-      (setq ibuffer-default-sorting-mode 'major-mode
-            ibuffer-always-show-last-buffer t
-            ibuffer-view-ibuffer t
-            ibuffer-show-empty-filter-groups nil
-            ;; Set up buffer groups based on file and mode types
-            ibuffer-saved-filter-groups
-            (quote (("default"
-                     ("Org" (mode . org-mode))
-                     ("ERC" (mode . erc-mode))
-                     ("Emacs Setup" (or
-                                     (filename . "/.emacs_files/")
-                                     (filename . "/.emacs_d/")
-                                     (filename . "/emacs_d/")))
-                     ("magit" (name . "magit"))
-                     ("dired" (mode . dired-mode))
-                     ("work projects" (filename . "/mozbuild/"))
-                     ("home projects" (filename . "/git-projects/"))
-                     ("emacs" (or
-                               (name . "^\\*scratch\\*$")
-                               (name . "^\\*Messages\\*$")))))))
+      :commands ibuffer-other-window
+      :init
+      (progn
+        (setq ibuffer-default-sorting-mode 'major-mode
+              ibuffer-always-show-last-buffer t
+              ibuffer-view-ibuffer t
+              ibuffer-expert t
+              ibuffer-show-empty-filter-groups nil
+              ;; Set up buffer groups based on file and mode types
+              ibuffer-saved-filter-groups
+              (quote (("default"
+                       ("Org" (mode . org-mode))
+                       ("ERC" (mode . erc-mode))
+                       ("Emacs Setup" (or
+                                       (filename . "/.emacs_files/")
+                                       (filename . "/.emacs_d/")
+                                       (filename . "/emacs_d/")))
+                       ("magit" (name . "magit"))
+                       ("dired" (mode . dired-mode))
+                       ("emacs" (or
+                                 (name . "^\\*scratch\\*$")
+                                 (name . "^\\*Messages\\*$")))))))))
+#+END_SRC
+*** ibuffer-vc                                                    :package:
+Set up ibuffer groups via vc.
+#+BEGIN_SRC emacs-lisp
+  (use-package ibuffer-vc
+      :ensure t
+      :init
+      ;; loads version control groups (call on entering ibuffer)
+      (defun ibuffer-vc-add-vc-filter-groups ()
+        (interactive)
+        (dolist (group (ibuffer-vc-generate-filter-groups-by-vc-root))
+          (add-to-list 'ibuffer-filter-groups group t)))
 
-      ;; Make sure we're always using our buffer groups
-      (add-hook 'ibuffer-mode-hook
+      (add-hook 'ibuffer-hook
                 (lambda ()
-                  (ibuffer-switch-to-saved-filter-groups "default")))))
+                  (ibuffer-switch-to-saved-filter-groups "default")
+                  (ibuffer-vc-add-vc-filter-groups))))
 #+END_SRC
 *** icomplete                                                     :package:
 Incremental minibuffer completion. Update per character, as it takes a
