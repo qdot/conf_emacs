@@ -2752,15 +2752,18 @@ Line numbers
 #+END_SRC
 *** projectile                                                    :package:
 #+BEGIN_SRC emacs-lisp
-    (use-package projectile
-        :ensure projectile
-        :config
-        (projectile-global-mode)
-        (setq projectile-completion-system 'ivy)
-        (defun qdot/projectile-off ()
-          (projectile-mode -1))
-        ;; Don't want this on for IRC
-        (add-hook 'erc-mode 'qdot/projectile-off))
+  (use-package projectile
+      :ensure projectile
+      :bind (("<f5>" . projectile-run-project)
+             ("C-S-b" . projectile-compile-project))
+      :config
+      (projectile-global-mode)
+      (setq projectile-completion-system 'ivy)
+      (projectile-register-project-type 'gecko '("mach" "moz.build") "python mach --log-no-times build" "python mach mochitest" "python mach run")
+      (defun qdot/projectile-off ()
+        (projectile-mode -1))
+      ;; Don't want this on for IRC
+      (add-hook 'erc-mode 'qdot/projectile-off))
 #+END_SRC
 *** python-mode                                                   :package:
 #+BEGIN_SRC emacs-lisp
