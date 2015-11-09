@@ -293,7 +293,7 @@ Even if we start the process in another directory, always set home to
 default.
 
 #+BEGIN_SRC emacs-lisp
-  (setq default-directory "~")
+  (setq default-directory "~/")
 #+END_SRC
 
 Make sure message log is really, really big in case I screw something
