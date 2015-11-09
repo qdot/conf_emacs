@@ -2851,16 +2851,21 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 #+END_SRC
 *** web-mode                                                      :package:
 #+BEGIN_SRC emacs-lisp
-  (use-package web-mode
-    :ensure web-mode
-    :mode (("\\.html\\'" . web-mode)
-           ("\\.phtml\\'" . web-mode)
-           ("\\.tpl\\.php\\'" . web-mode)
-           ("\\.jsp\\'" . web-mode)
-           ("\\.as[cp]x\\'" . web-mode)
-           ("\\.erb\\'" . web-mode)
-           ("\\.mustache\\'" . web-mode)
-           ("\\.djhtml\\'" . web-mode)))
+    (use-package web-mode
+      :ensure web-mode
+      :mode (("\\.html\\'" . web-mode)
+             ("\\.phtml\\'" . web-mode)
+             ("\\.xul\\'" . web-mode)
+             ("\\.tpl\\.php\\'" . web-mode)
+             ("\\.jsp\\'" . web-mode)
+             ("\\.as[cp]x\\'" . web-mode)
+             ("\\.erb\\'" . web-mode)
+             ("\\.mustache\\'" . web-mode)
+             ("\\.djhtml\\'" . web-mode))
+      :config
+      (setq web-mode-markup-indent-offset 2)
+      (setq web-mode-css-indent-offset 2)
+      (setq web-mode-code-indent-offset 2))
 #+END_SRC
 
 *** yasnippet                                                     :package:
