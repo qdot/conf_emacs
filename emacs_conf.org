@@ -2211,7 +2211,7 @@ Completes. Automatically.
               ac-dwim t
               ac-quick-help-delay 1)
         (setq ac-use-menu-map t)
-        (bind-keys :map ac-menu-map
+        (bind-key :map ac-menu-map
                    ("C-n" ac-next)
                    ("C-p" ac-previous))))
 #+END_SRC
