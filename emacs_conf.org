@@ -829,7 +829,7 @@ Jump to a specified window by using [prefix-key] + letter
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window
     :ensure ace-window
-    :bind ("M-p" . ace-window)
+    :bind ("M-o" . ace-window)
     :config
     (progn
       (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
@@ -3531,7 +3531,6 @@ gpg file auto query/loading
   (bind-key "C-c C-m" 'execute-extended-command)
   (bind-key "C-c C-k" 'kill-region)
   (bind-key "C-M-g"   'goto-line)
-  (bind-key "M-o"     'other-window)
   (bind-key "C-w"     'backward-kill-word) ;; make this like shell.
   ;; Don't need backgrounding
   (bind-key "C-z" nil)
