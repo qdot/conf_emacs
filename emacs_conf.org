@@ -158,8 +158,16 @@ during a session.
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :ensure org-plus-contrib
+    :commands (org-agenda)
+    :bind (("C-c l" . org-store-link)
+           ("C-c a" . org-agenda)
+           ("C-M-r" . org-capture)
+           ("C-c b" . org-iswitchb))
     :mode (("\\.org_archive\\'"  . org-mode)
-           ("\\.org\\'"  . org-mode)))
+           ("\\.org\\'"  . org-mode))
+    :config
+    (progn
+      (require 'qdot-org-config)))
 #+END_SRC
 ** Recompile Config Function
 
@@ -1375,20 +1383,6 @@ I use the org-plus-contrib package out of melpa. This keeps me on the
 bleeding edge of org-mode (once again, usually stable, and useful
 things land constantly), as well as providing me with multiple contrib
 modules that I need.
-#+BEGIN_SRC emacs-lisp
-  (use-package org
-    :ensure org-plus-contrib
-    :commands (org-agenda)
-    :bind (("C-c l" . org-store-link)
-           ("C-c a" . org-agenda)
-           ("C-M-r" . org-capture)
-           ("C-c b" . org-iswitchb))
-    :mode (("\\.org_archive\\'"  . org-mode)
-           ("\\.org\\'"  . org-mode))
-    :config
-    (progn
-      (require 'qdot-org-config)))
-#+END_SRC
 **** org-mode configuration
 :PROPERTIES:
 :header-args: :tangle tangle/qdot-org-config.el
