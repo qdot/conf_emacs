@@ -3358,10 +3358,17 @@ Turn on ansi in shells
            ("<C-XF86AudioNext>"  . wg-switch-to-workgroup-at-index-5)
            ("<C-f6>"             . wg-switch-to-workgroup-at-index-6)
            ("<C-f7>"             . wg-switch-to-workgroup-at-index-7)
-           ("C-x b"              . wg-switch-to-buffer))
+           ("<M-f1>"             . wg-switch-to-workgroup-at-index-1)
+           ("<M-f2>"             . wg-switch-to-workgroup-at-index-2)
+           ("<M-f3>"             . wg-switch-to-workgroup-at-index-3)
+           ("<M-f4>"             . wg-switch-to-workgroup-at-index-4)
+           ("<M-XF86AudioPlay>"  . wg-switch-to-workgroup-at-index-4)
+           ("<M-f5>"             . wg-switch-to-workgroup-at-index-5)
+           ("<M-XF86AudioNext>"  . wg-switch-to-workgroup-at-index-5)
+           ("<M-f6>"             . wg-switch-to-workgroup-at-index-6)
+           ("<M-f7>"             . wg-switch-to-workgroup-at-index-7))
     :config
-    (progn
-      (require 'qdot-workgroups-config)))
+    (require 'qdot-workgroups-config))
 #+END_SRC
 **** workgroups config
 :PROPERTIES:
@@ -3379,7 +3386,7 @@ Turn on ansi in shells
    ;; Turn off reloading of workgroup file lists
    wg-restore-associated-buffers nil
    ;; Turn buffer list handling back on
-   wg-mess-with-buffer-list t
+   ;; wg-mess-with-buffer-list t
    wg-switch-to-first-workgroup-on-find-session-file nil)
 #+END_SRC
 ***** uid-mismatch handling
