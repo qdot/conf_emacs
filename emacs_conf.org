@@ -2951,6 +2951,7 @@ horribly if called before there's a message buffer.
   (add-to-list 'erc-modules 'highlight-nicknames)
   (add-to-list 'erc-modules 'match)
   (erc-update-modules)
+  ;; flyspell for erc
   (setq erc-timestamp-only-if-changed-flag nil
         erc-timestamp-format "[%H:%M] "
         erc-fill-prefix "      "
@@ -2975,11 +2976,11 @@ horribly if called before there's a message buffer.
   (defun qdot/erc-mode-hook ()
     ;; Don't really need paren matching when I'm trying to chat
     (setq blink-matching-paren nil)
+    (erc-spelling-mode 1)
     ;; ERC should only pop comp buffers if REALLY needed
     (setq completion-auto-help 'lazy))
 
   (add-hook 'erc-mode-hook 'qdot/erc-mode-hook)
-
   (setq erc-hide-list '("PART" "JOIN" "QUIT" "NICK"))
 
   (add-hook 'erc-insert-post-hook
