@@ -902,20 +902,26 @@ Jump to a specified window by using [prefix-key] + letter
 #+END_SRC
 **** apropos
 #+BEGIN_SRC emacs-lisp
-  (defhydra hydra-apropos (:color blue
-                           :hint nil)
-    "
-  _a_propos        _c_ommand
-  _d_ocumentation  _l_ibrary
-  _v_ariable       _u_ser-option
-  ^ ^          valu_e_"
-    ("a" apropos)
-    ("d" apropos-documentation)
-    ("v" apropos-variable)
-    ("c" apropos-command)
-    ("l" apropos-library)
-    ("u" apropos-user-option)
-    ("e" apropos-value))
+(defhydra hydra-apropos (:color blue)
+  "Apropos"
+  ("a" apropos "apropos")
+  ("c" apropos-command "cmd")
+  ("d" apropos-documentation "doc")
+  ("e" apropos-value "val")
+  ("l" apropos-library "lib")
+  ("o" apropos-user-option "option")
+  ("u" apropos-user-option "option")
+  ("v" apropos-variable "var")
+  ("i" info-apropos "info")
+  ("t" tags-apropos "tags")
+  ("z" hydra-customize-apropos/body "customize"))
+
+(defhydra hydra-customize-apropos (:color blue)
+  "Apropos (customize)"
+  ("a" customize-apropos "apropos")
+  ("f" customize-apropos-faces "faces")
+  ("g" customize-apropos-groups "groups")
+  ("o" customize-apropos-options "options"))
   (bind-key "C-c h" 'hydra-apropos/body)
 #+END_SRC
 **** org-block
