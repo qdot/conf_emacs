@@ -99,7 +99,7 @@
 ;;;                     (b) Add a 'mud-type' flag.
 ;;;
 ;;;                 Name        Host                     Port  Login
-(defvar mud-list '((furry ("muck.furry.com"             8888 t))
+(defvar mud-list '((furry ("furrymuck.com"             8888 t))
                    (taps   ("tapestries.fur.com" 2069 nil))
                    (st   ("tapestries.fur.com" 2069 nil))
                    )
@@ -128,7 +128,7 @@ excluding properties for buffers, windows and the mud process.")
 (defvar mud-default-page-beep t "*Should the mud make noise about pages?")
 (defvar mud-default-max-buffer 4096 "*Maximum size of a mud buffer.")
 (defvar mud-default-pong nil "*Should we react to pings from other users?")
-(defvar mud-default-keep-visible t
+(defvar mud-default-keep-visible nil
   "*Should the output buffer pop up on receiving mud text?")
 (defvar mud-default-quote ": quotes: " "*String to precede file quotes with")
 (defvar mud-default-show-urls t "*Should URLs appear in the minibuffer?")
@@ -254,7 +254,7 @@ sufficiently accurate to not bother you.")
   "Regular expression that matches 'whisper traffic'."
   )
 (defconst mud-page-regexp
-  "^\\(You page,\\|You page-pose\\|()\\|\\(() *\\S-+\\) pages:\\|\\(\\S-+\\) is looking for you in\\) \\([^\r\n]*\\).*$"
+  "^\\(You page,\\|You page-pose\\|()\\|\\(() *\\S-+\\) pages:\\|##p>\\|\\(\\S-+\\) is looking for you in\\) \\([^\r\n]*\\).*$"
   "Regular expression that matches 'page traffic'.")
 (defconst mud-scream-regexp
   "^\\(##s>\\) .*\\([\r\n]    .*\\)*"
@@ -1282,6 +1282,7 @@ c3        mud-wheight-diff)
               (setq start (point-min)))
 
           (save-excursion
+            (set-buffer (get mud-current 'mud-bout))
             (goto-char start)
             (setq maybe-end start
                   end start)
