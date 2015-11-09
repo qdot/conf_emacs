@@ -2577,6 +2577,14 @@ When using ielm mode, set up autocomplete sources accordingly.
       (add-hook 'irony-mode-hook 'my-irony-mode-hook)
       (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 #+END_SRC
+*** irony-flycheck                                                :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-irony
+      :ensure flycheck-irony
+      :config
+      (eval-after-load 'flycheck
+        '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup)))
+#+END_SRC
 *** js3-mode                                                      :package:
 #+BEGIN_SRC emacs-lisp
   (use-package js3-mode
