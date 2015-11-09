@@ -2385,6 +2385,12 @@ Compilation mode.
     (setq mode-compile-always-save-buffer-p t))
 
 #+END_SRC
+*** dxr                                                           :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package dxr
+      :load-path "~/.emacs_files/dev-packages/dxr.el/"
+      :commands (dxr dxr-browse-url dxr-kill-ring-save))
+#+END_SRC
 *** edebug-x                                                      :package:
 #+BEGIN_SRC emacs-lisp
   (use-package edebug-x
