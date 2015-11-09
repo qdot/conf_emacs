@@ -2160,6 +2160,18 @@ evaluation on a few languages.
   (setq org-confirm-babel-evaluate 'qdot/org-confirm-babel-evaluate)
 #+END_SRC
 
+***** ispell fix
+http://endlessparentheses.com/ispell-and-org-mode.html
+#+BEGIN_SRC emacs-lisp
+  (defun qdot/org-ispell ()
+    "Configure `ispell-skip-region-alist' for `org-mode'."
+    (make-local-variable 'ispell-skip-region-alist)
+    (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+    (add-to-list 'ispell-skip-region-alist '("~" "~"))
+    (add-to-list 'ispell-skip-region-alist '("=" "="))
+    (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+  (add-hook 'org-mode-hook #'qdot/org-ispell)
+#+END_SRC
 ***** Provide Statement
 
 This should always come last. It's the provide statement so we can
