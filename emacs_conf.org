@@ -2310,6 +2310,11 @@ semantic-mode when loading C++ files. May just completely remove soon.
     :no-require t
     :mode ("ChangeLog\\.txt\\'" . change-log-mode))
 #+END_SRC
+*** cmake-mode                                                    :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package cmake-mode
+      :ensure cmake-mode)
+#+END_SRC
 *** company                                                       :package:
 #+BEGIN_SRC emacs-lisp
   (use-package company
