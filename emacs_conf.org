@@ -558,18 +558,6 @@ sensitive scope.
     :bind (("C-=" . er/expand-region))
     :commands (er/expand-region er/enable-mode-expansions))
 #+END_SRC
-
-*** flx-ido                                                       :package:
-Make fuzzy matching for ido work better.
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package flx-ido
-    :ensure flx-ido
-    :config
-    (progn
-      (flx-ido-mode 1)
-      (setq ido-enable-flex-matching t)
-      (setq ido-use-faces nil)))
-#+END_SRC
 *** ibuffer                                                       :package:
 List buffers in a dired-ish way. Try to group based on modes or what
 kind of project something may be related to.
