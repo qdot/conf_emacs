@@ -2880,7 +2880,8 @@ Provides fillable templates.
     (add-hook 'markdown-mode-hook 'yas-minor-mode-on)
     ;; Turn off yas otherwise tab screws up
     (add-hook 'term-mode-hook (lambda()
-                                (yas-minor-mode -1))))
+                                (yas-minor-mode -1)))
+    (yas-reload-all))
 #+END_SRC
 ** Writing
 *** adoc-mode                                                     :package:
