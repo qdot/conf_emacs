@@ -1037,7 +1037,7 @@ Jump to a specified window by using [prefix-key] + letter
     ("p" transpose-paragraphs "paragraphs")
     ("t" org-table-transpose-table-at-point "Org mode table")
     ("q" nil "cancel" :color blue))
-  (bind-key "C-c m" hydra-transpose/body)
+  (bind-key "C-c m" 'hydra-transpose/body)
 #+END_SRC
 **** rectangle-mode
 Rectangle mode hydra. Disabled because I don't use rectangle-mode
