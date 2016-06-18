@@ -1,6 +1,6 @@
 #+TITLE: qDot's Emacs Configuration
 #+AUTHOR:   Kyle Machulis
-#+EMAIL:    kyle at nonpolynomial dot com
+#+EMAIL:    kyle at machul dot is
 #+STARTUP:  align fold nodlcheck content
 #+OPTIONS:  H:4 num:nil toc:t \n:nil @:t ::t |:t ^:{} -:t f:t *:t
 #+OPTIONS:  skip:nil d:(HIDE) tags:not-in-toc
