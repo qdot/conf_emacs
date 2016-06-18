@@ -1759,10 +1759,13 @@ is at beginning of a line for a node).
   (setq org-use-speed-commands t)
 #+END_SRC
 
-I like links being active ret.
+Return shouldn't follow links, as this causes weird issues with
+collapsed content where the last thing is a link (for instance, a node
+that only has a SCHEDULED/DEADLINE date, so the date is the last thing
+in the link)
 
 #+BEGIN_SRC emacs-lisp
-  (setq org-return-follows-link t)
+  (setq org-return-follows-link nil)
 #+END_SRC
 
 Make lists cycle whether they're nodes or plain.
