@@ -2474,9 +2474,10 @@ semantic-mode when loading C++ files. May just completely remove soon.
       :ensure t
       :config
       (setq company-idle-delay 0.2)
-      (setq comapny-minimum-prefix-length 2)
+      (setq company-minimum-prefix-length 1)
       (setq company-dabbrev-ignore-case t)
       (setq company-dabbrev-downcase nil)
+      (setq company-tooltip-align-annotations t)
       (add-to-list 'company-backends 'company-yasnippet)
       (add-to-list 'company-backends 'company-elisp)
       ;; https://github.com/jorgenschaefer/elpy/wiki/FAQ
