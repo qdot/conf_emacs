@@ -2638,6 +2638,13 @@ Using flycheck instead of flymake
   ;;               (message) line-end))
   ;;       :modes (js-mode js2-mode js3-mode))))
 #+END_SRC
+*** flycheck-rust                                                 :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-rust
+      :ensure flycheck-rust
+      :config
+      (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+#+END_SRC
 *** gdb                                                           :package:
 #+BEGIN_SRC emacs-lisp
   ;; Turn off non-stop by default. All or nothing, damnit.
