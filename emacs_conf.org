@@ -1538,7 +1538,7 @@ Modules I use:
 - org-info: Support linking to info nodes
 - org-jsinfo: Export org files to html with info-like folding
 #+BEGIN_SRC emacs-lisp
-  (require 'org-checklist)
+  ;;(require 'org-checklist)
   (require 'org-screen)
   (require 'org-protocol)
   (require 'org-mobile)
@@ -1569,7 +1569,7 @@ Currently stored in elisp directory locally.
   (require 'org-next-spec-day)
 #+END_SRC
 
-***** Variables
+**** Variables
 Add markdown export backend.
 
 #+BEGIN_SRC emacs-lisp
@@ -1904,7 +1904,7 @@ like ⤵, ▼, ↴, ⬎, ⤷, and ⋱.
 #+BEGIN_SRC emacs-lisp
   (setq org-ellipsis "…")
 #+END_SRC
-***** Hooks
+**** Hooks
 
 Flyspell mode for spell checking everywhere.
 
@@ -1939,7 +1939,7 @@ Always hilight the current agenda line.
 
 #+END_SRC
 
-***** Clocking
+**** Clocking
 Resume clocking tasks when emacs is restarted
 
 #+BEGIN_SRC emacs-lisp
@@ -2009,7 +2009,7 @@ Include current clocking task in clock reports
 #+END_SRC
 
 #+END_SRC
-***** Todo flow setup
+**** Todo flow setup
 This is just Bernt's todo setup, copied verbatim. More information at
 http://doc.norang.ca/org-mode.html#TasksAndStates.
 
@@ -2026,7 +2026,7 @@ http://doc.norang.ca/org-mode.html#TasksAndStates.
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 #+END_SRC
 
-***** Speed key bindings
+**** Speed key bindings
 
 Using speedkeys, s will narrow to the subtree, but you have to call
 widen explicitly. Set capital S to widen.
@@ -2035,7 +2035,7 @@ widen explicitly. Set capital S to widen.
   (setq org-speed-commands-user (quote (("S" . widen))))
 #+END_SRC
 
-***** Capture
+**** Capture
 
 Once again, stealing Bernt's ideas. Clock during capture, to either
 todos or notes.
@@ -2055,7 +2055,7 @@ Added a reply capture for the mu4e reply capture action.
            "* %c" :immediate-finish t))))
 #+END_SRC
 
-***** Agenda
+**** Agenda
 
 I only have one custom agenda at the moment, but it's huge. It
 contains everything happening for the next week, as well as tasks
@@ -2125,7 +2125,7 @@ http://doc.norang.ca/org-mode.html#CustomAgendaViews.
                   nil)))))
 #+END_SRC
 
-***** Appointment warning bindings
+**** Appointment warning bindings
 Warn 15 min in advance of events.
 
 #+BEGIN_SRC emacs-lisp
@@ -2160,7 +2160,7 @@ the appointment notification facility
   (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt)
 #+END_SRC
 
-***** Faces
+**** Faces
 
 Highlight the currently clocked in task.
 
@@ -2195,7 +2195,7 @@ Set up face colors for tags. Makes quickly scanning the agenda easier.
           ("event" . (:foreground "deep pink"))))
 #+END_SRC
 
-***** Mobile Org
+**** Mobile Org
 
 I've tried using mobile-org many times, but the interface to the
 android app is so painfully bad that I never stick with it for long.
@@ -2209,7 +2209,7 @@ again.
   (setq org-mobile-agendas '("w"))
 #+END_SRC
 
-***** Disable org agenda window resizing
+**** Disable org agenda window resizing
 
 The agenda is really horrible about resizing windows when I don't want
 it to, especially in a workgroups setup. Make sure that doesn't
@@ -2228,7 +2228,7 @@ happen.
       ad-do-it))
 #+END_SRC
 
-***** Habit reloading
+**** Habit reloading
 
 I usually turn off habits mid-day when most of them are done. If I
 leave emacs on over night, this turns them back on at 6am so I'll see
@@ -2238,7 +2238,7 @@ them when I wake up.
   (run-at-time "06:00" 86400 '(lambda () (setq org-habit-show-habits t)))
 #+END_SRC
 
-***** Refile settings
+**** Refile settings
 
 Don't allow refiling into anything that's set to DONE.
 
@@ -2250,7 +2250,7 @@ Don't allow refiling into anything that's set to DONE.
   (setq org-refile-target-verify-function 'qdot/verify-refile-target)
 #+END_SRC
 
-***** Org Babel
+**** org-babel
 
 Set up languages that babel will handle. This includes lilypond, which
 I use for music. I also make sure that I don't have to confirm
@@ -2273,7 +2273,7 @@ evaluation on a few languages.
   (setq org-confirm-babel-evaluate 'qdot/org-confirm-babel-evaluate)
 #+END_SRC
 
-***** ispell fix
+**** ispell fix
 http://endlessparentheses.com/ispell-and-org-mode.html
 #+BEGIN_SRC emacs-lisp
   (defun qdot/org-ispell ()
