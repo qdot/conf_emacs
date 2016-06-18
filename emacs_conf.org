@@ -2988,6 +2988,11 @@ Line numbers
      '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
 #+END_SRC
 
+*** rtags                                                         :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package rtags
+      :ensure t)
+#+END_SRC
 *** rust-mode                                                     :package:
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
