@@ -2804,15 +2804,14 @@ When using ielm mode, set up autocomplete sources accordingly.
 git management in emacs. 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :ensure magit
-    :bind (("M-g s" . magit-status))
-    :chords (("qg" . magit-status))
-    :commands (magit magit-status)
-    :init
-    ;; omfg shut up magit I am fine with auto reverting
-    (setq magit-last-seen-setup-instructions "1.4.0")
-    :config
-    (progn
+      :ensure magit
+      :bind (("M-g s" . magit-status))
+      :chords (("qg" . magit-status))
+      :commands (magit magit-status)
+      :init
+      ;; omfg shut up magit I am fine with auto reverting
+      (setq magit-last-seen-setup-instructions "1.4.0")
+      :config
       (setq magit-completing-read-function
             'magit-ido-completing-read)
 
@@ -2821,25 +2820,27 @@ git management in emacs.
       ;; Set up diffing faces, and always full screen magit
       (eval-after-load 'magit
         '(progn
-           ;; full screen magit-status
-           (defadvice magit-status (around magit-fullscreen activate)
-             (window-configuration-to-register :magit-fullscreen)
-             ad-do-it
-             (delete-other-windows))
-           (defun magit-quit-session ()
-             "Restores the previous window configuration and kills the magit buffer"
-             (interactive)
-             (kill-buffer)
-             (jump-to-register :magit-fullscreen))
+          ;; full screen magit-status
+          (defadvice magit-status (around magit-fullscreen activate)
+            (window-configuration-to-register :magit-fullscreen)
+            ad-do-it
+            (delete-other-windows))
+          (defun magit-quit-session ()
+            "Restores the previous window configuration and kills the magit buffer"
+            (interactive)
+            (kill-buffer)
+            (jump-to-register :magit-fullscreen))
 
-           (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
+          (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)))
 
       ;; use ivy for completing read if available
       (setq magit-completing-read-function 'ivy-completing-read)
 
       ;; Don't require confirm to stage changes
       (setq magit-stage-all-confirm nil)
-      (add-to-list 'magit-no-confirm 'stage-all-changes)))
+      (add-to-list 'magit-no-confirm 'stage-all-changes)
+      (if macosx-p
+          (setq magit-git-executable "/opt/homebrew/bin/git")))
 #+END_SRC
 
 *** nose                                                          :package:
