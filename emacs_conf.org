@@ -557,6 +557,16 @@ changing permissions via string/regexp replacement.
       (define-key dired-mode-map
         (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)))
 #+END_SRC
+*** exec-path-from-shell                                          :package:
+Pulls environment variable values from shell when emacs is run in GUI
+mode on Macs (otherwise system defaults are used).
+#+BEGIN_SRC emacs-lisp
+  (use-package exec-path-from-shell
+      :ensure t
+      :config
+      (when (memq window-system '(mac ns))
+        (exec-path-from-shell-initialize)))
+#+END_SRC
 *** expand-region                                                 :package:
 Hit C-=, expand up to the next largest region based on mode-context
 sensitive scope.
