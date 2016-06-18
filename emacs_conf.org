@@ -3815,8 +3815,6 @@ https://github.com/nflath/hungry-delete
 CLOCK: [2013-11-06 Wed 13:59]--[2013-11-06 Wed 14:00] =>  0:01
 :END:
 [2013-11-06 Wed]
-[[irc:/localhost:9999/&bitlbee][irc session 'localhost:9999/&bitlbee']]
-
 ** TODO Add repo search capability for magit-repo-dirs               :emacs:
 :LOGBOOK:
 CLOCK: [2014-03-02 Sun 14:17]--[2014-03-02 Sun 14:18] =>  0:01
