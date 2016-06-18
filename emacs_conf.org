@@ -1502,6 +1502,9 @@ Address book
 #+END_SRC
 
 *** org-mode                                                      :package:
+:PROPERTIES:
+:header-args: :tangle tangle/qdot-org-config.el
+:END:
 Without org-mode to remind me that I'm supposed to be doing something,
 I'd probably just look at porn all day.
 
@@ -1515,11 +1518,7 @@ I use the org-plus-contrib package out of melpa. This keeps me on the
 bleeding edge of org-mode (once again, usually stable, and useful
 things land constantly), as well as providing me with multiple contrib
 modules that I need.
-**** org-mode configuration
-:PROPERTIES:
-:header-args: :tangle tangle/qdot-org-config.el
-:END:
-***** Modules
+**** Modules
 Modules I use:
 
 - org-checklist: Allows you to clear/set all task internal checklists
