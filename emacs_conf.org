@@ -3032,6 +3032,13 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 
   (add-hook 'find-file-hook 'sm-try-smerge t)
 #+END_SRC
+*** toml-mode                                                     :package:
+toml files are usually used for Rust Cargo specifications.
+#+BEGIN_SRC emacs-lisp
+  (use-package toml-mode
+      :ensure toml-mode)
+#+END_SRC
+
 *** web-mode                                                      :package:
 #+BEGIN_SRC emacs-lisp
     (use-package web-mode
