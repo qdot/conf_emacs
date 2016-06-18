@@ -388,6 +388,13 @@ perfectly.
 (setq scroll-preserve-screen-position 'always)
 #+END_SRC
 
+When on a mac, make command meta.
+
+#+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'darwin)
+    (setq mac-command-modifier 'meta)
+    (setq mac-option-modifier nil))
+#+END_SRC
 ** Global Minor Modes
 
 Save minibuffer history, so oft-used functions bubble to the top.
