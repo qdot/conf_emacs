@@ -3799,7 +3799,7 @@ Extra hooks to functions from the qdot-funcs modules
   
 #+END_SRC
 * Functions
-* Tasks
+* Tasks                                                            :noexport:
 ** DONE Replace ido with ivy
 CLOSED: [2015-05-24 Sun 23:13]
 ** DONE Turn toggle-map into a hydra
