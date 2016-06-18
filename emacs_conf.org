@@ -1004,6 +1004,26 @@ Jump to a specified window by using [prefix-key] + letter
                                                  (hydra-org-template/body)
                                                  (self-insert-command 1))) org-mode-map)))
 #+END_SRC
+**** org-clock
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-org-clock (:color blue :hint nil)
+    "
+  Clock   In/out^     ^Edit^   ^Summary     (_?_)
+  -----------------------------------------
+          _i_n         _e_dit   _g_oto entry
+          _c_ontinue   _q_uit   _d_isplay
+          _o_ut        ^ ^      _r_eport
+        "
+    ("i" org-clock-in)
+    ("o" org-clock-out)
+    ("c" org-clock-in-last)
+    ("e" org-clock-modify-effort-estimate)
+    ("q" org-clock-cancel)
+    ("g" org-clock-goto)
+    ("d" org-clock-display)
+    ("r" org-clock-report)
+    ("?" (org-info "Clocking commands")))
+#+END_SRC
 **** transpose
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-transpose (:color red)
