@@ -3058,6 +3058,12 @@ toml files are usually used for Rust Cargo specifications.
       (setq web-mode-code-indent-offset 2))
 #+END_SRC
 
+*** yaml-mode                                                     :package:
+Used for Travis configs, sometimes for Pelican work
+#+BEGIN_SRC emacs-lisp
+  (use-package yaml-mode
+      :ensure yaml-mode)
+#+END_SRC
 *** yasnippet                                                     :package:
 Provides fillable templates.
 #+BEGIN_SRC emacs-lisp
