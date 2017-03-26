@@ -2784,6 +2784,7 @@ semantic-mode when loading C++ files. May just completely remove soon.
       (setq company-dabbrev-ignore-case t)
       (setq company-dabbrev-downcase nil)
       (setq company-tooltip-align-annotations t)
+      (setq company-clang-executable "clang-3.9")
       (add-to-list 'company-backends 'company-yasnippet)
       (add-to-list 'company-backends 'company-elisp)
       ;; https://github.com/jorgenschaefer/elpy/wiki/FAQ
