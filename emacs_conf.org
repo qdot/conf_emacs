@@ -2913,6 +2913,14 @@ Compilation mode.
 :ID:       fbe84c8a-0785-4b02-8c52-77ae20ae8f11
 :END:
 #+BEGIN_SRC emacs-lisp  
+  (defun esk-remove-elc-on-save ()
+    "If you're saving an elisp file, likely the .elc is no longer valid."
+    (make-local-variable 'after-save-hook)
+    (add-hook 'after-save-hook
+              (lambda ()
+		(if (file-exists-p (concat buffer-file-name "c"))
+                    (delete-file (concat buffer-file-name "c"))))))
+
   ;; eldoc mode for showing function calls in mode line
   (setq eldoc-idle-delay 0)
   (autoload 'turn-on-eldoc-mode "eldoc" nil t)
@@ -2925,14 +2933,6 @@ Compilation mode.
   (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode-enable)
 
   (add-hook 'emacs-lisp-mode-hook 'company-mode)
-
-  (defun esk-remove-elc-on-save ()
-    "If you're saving an elisp file, likely the .elc is no longer valid."
-    (make-local-variable 'after-save-hook)
-    (add-hook 'after-save-hook
-              (lambda ()
-                (if (file-exists-p (concat buffer-file-name "c"))
-                    (delete-file (concat buffer-file-name "c"))))))
 
   (define-key emacs-lisp-mode-map (kbd "C-c v") 'eval-buffer)
   (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
