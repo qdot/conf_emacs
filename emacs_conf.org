@@ -2860,7 +2860,7 @@ Compilation mode.
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package dxr
-      :load-path "~/.emacs_files/dev-packages/dxr.el/"
+      :ensure t
       :commands (dxr dxr-browse-url dxr-kill-ring-save))
 #+END_SRC
 *** edebug-x                                                      :package:
