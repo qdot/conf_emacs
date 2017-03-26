@@ -760,6 +760,10 @@ What a horrid oversight.
                  (path (concat dir text-typed)))
             (delete-minibuffer-contents)
             (ivy--done path))))
+
+      (setq ivy-re-builders-alist
+        '((t . ivy--regex-plus)))
+
       (setq ivy-count-format "(%d/%d) ")
       ;; bind-keys isn't working here? No idea why.
       (bind-key "C-r" 'ivy-previous-line ivy-minibuffer-map)
