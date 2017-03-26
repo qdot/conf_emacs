@@ -3012,6 +3012,31 @@ Using flycheck instead of flymake
       :init
       (setq git-messenger:show-detail t))
 #+END_SRC
+*** gitattributes-mode                                            :package:
+:PROPERTIES:
+:ID:       290f1482-0b08-4106-8083-21dad90075c4
+:END:
+#+BEGIN_SRC emacs-lisp
+  (use-package gitattributes-mode
+      :ensure t)
+#+END_SRC
+*** gitconfig-mode                                                :package:
+:PROPERTIES:
+:ID:       65a9a721-68b8-42c6-90d8-64fb9364b5cf
+:END:
+Modes for editing gitconfig, gitignore, etc.
+#+BEGIN_SRC emacs-lisp
+  (use-package gitconfig-mode
+      :ensure t)
+#+END_SRC
+*** gitignore-mode                                                :package:
+:PROPERTIES:
+:ID:       0bc4f962-9daf-46f0-bab1-2cc45b3921dd
+:END:
+#+BEGIN_SRC emacs-lisp
+  (use-package gitignore-mode
+      :ensure t)
+#+END_SRC
 *** git-timemachine                                               :package:
 :PROPERTIES:
 :ID:       5ee0aeb2-c943-4e54-816f-188e170d82a0
