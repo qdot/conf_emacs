@@ -3030,13 +3030,12 @@ Using flycheck instead of flymake
     :ensure haskell-mode
     :mode ("\\.hs$" . haskell-mode)
     :config
-    (progn
-      (require 'inf-haskell)
-      (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-      (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-      (add-hook 'haskell-mode-hook 'font-lock-mode)
-      (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
-      (setq haskell-font-lock-symbols t)))
+    (require 'inf-haskell)
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+    (add-hook 'haskell-mode-hook 'font-lock-mode)
+    (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode-enable)
+    (setq haskell-font-lock-symbols t))
 #+END_SRC
 *** idl-mode                                                      :package:
 :PROPERTIES:
