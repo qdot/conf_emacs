@@ -175,18 +175,16 @@ is fine, as it's pretty much guaranteed that org-mode will get used
 during a session.
 #+BEGIN_SRC emacs-lisp
   (use-package org
-    :ensure org-plus-contrib
-    :commands (org-agenda)
-    :bind (("C-c l" . org-store-link)
-           ("C-c a" . org-agenda)
-           ("C-M-r" . org-capture)
-           ("C-c b" . org-iswitchb))
-    :mode (("\\.org_archive\\'"  . org-mode)
-           ("\\.org\\'"  . org-mode)
-           ("\\.trello\\'"  . org-mode))
-    :config
-    (progn
-      (require 'qdot-org-config)))
+      :ensure org-plus-contrib
+      :commands (org-agenda)
+      :bind (("C-c l" . org-store-link)
+             ("C-c a" . org-agenda)
+             ("C-M-r" . org-capture))
+      :mode (("\\.org_archive\\'"  . org-mode)
+             ("\\.org\\'"  . org-mode)
+             ("\\.trello\\'"  . org-mode))
+      :config
+      (require 'qdot-org-config))
 #+END_SRC
 ** Recompile Config Function
 :PROPERTIES:
