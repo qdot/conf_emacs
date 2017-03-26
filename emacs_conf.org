@@ -554,6 +554,17 @@ I tend to use dark themes everywhere, be it laptop or desktop.
       (color-theme-dark-laptop)))
 #+END_SRC
 
+*** counsel                                                       :package:
+:PROPERTIES:
+:ID:       550e03f5-77bb-443d-a2f5-5a45acd9bc1b
+:END:
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+      :ensure t
+      :bind (("M-x" . counsel-M-x)
+             ("C-x C-f" . counsel-find-file)))
+
+#+END_SRC
 *** dired                                                         :package:
 :PROPERTIES:
 :ID:       7beed05f-7c79-420e-9633-12e25680360d
@@ -889,8 +900,6 @@ completion method.
       :commands (swiper)
       :bind (("C-s" . swiper)
              ("C-r" . swiper)
-             ("M-x" . counsel-M-x)
-             ("C-x C-f" . counsel-find-file)
              ("C-x b" . ivy-switch-buffer))
       :config
       ;; advise swiper to recenter on exit
