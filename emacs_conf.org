@@ -3166,8 +3166,11 @@ Use rtags for symbol lookup and jumps, irony-mode for completion.
       :config
       (setq js-indent-level 2)
       (setq js2-basic-offset 2)
-      (linum-mode)
-      (company-mode 1))
+      (add-hook 'js2-mode-hook
+                (lambda ()
+                  (linum-mode)
+                  (flycheck-mode)
+                  (company-mode 1))))
 #+END_SRC
 *** js2-refactor                                                  :package:
 :PROPERTIES:
