@@ -3131,6 +3131,7 @@ Use rtags for symbol lookup and jumps, irony-mode for completion.
           'irony-completion-at-point-async)
         (define-key irony-mode-map [remap complete-symbol]
           'irony-completion-at-point-async))
+      (setq irony-cdb-search-directory-list '("." "build" "obj-ff-test"))
       (add-hook 'irony-mode-hook 'my-irony-mode-hook)
       (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 #+END_SRC
