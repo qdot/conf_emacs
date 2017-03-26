@@ -32,6 +32,9 @@ org, then calls org-babel-load-file on emacs_conf.org. That will load
 the rest of the packages and settings, re-tangling the org file before
 loading if there have been changes,
 ** Startup Timing
+:PROPERTIES:
+:ID:       5c3536bb-87ad-4744-b60a-466e8032de01
+:END:
 Take the time at the beginning of load, then use it at the end to see
 how long it took to load packages.
 #+BEGIN_SRC emacs-lisp
@@ -39,6 +42,9 @@ how long it took to load packages.
 #+END_SRC
 
 ** Directory Configuration
+:PROPERTIES:
+:ID:       ec9353db-3243-4f6a-acad-c502c5209640
+:END:
 Setting up a few different variables for the different types of
 directories we have (configurations, locally stored versus el-get
 fetched libs, etc...)
@@ -112,6 +118,9 @@ fetched libs, etc...)
 #+END_SRC
 ** Load Package Packages
 *** package.el                                                    :package:
+:PROPERTIES:
+:ID:       f27a5bc9-06d7-4629-802d-1a19266ca486
+:END:
 Just use the built-in package manager, but add melpa/elpa/bleeding
 edge package repos.
 #+BEGIN_SRC emacs-lisp
@@ -125,6 +134,9 @@ edge package repos.
   (package-initialize)
 #+END_SRC
 *** use-package                                                   :package:
+:PROPERTIES:
+:ID:       3bf5b360-937f-45ce-b524-a582fd0a8a7a
+:END:
 use-package keeps package loading clean and delayed until the last
 possible second. Using the :ensure command means that this config file
 also works as a package manifest when bringing up a new config
@@ -144,6 +156,9 @@ bring those in now.
   (require 'bind-key)
 #+END_SRC
 *** use-package-chords                                            :package:
+:PROPERTIES:
+:ID:       588dc5e4-2a7b-419b-aaf4-ddf7f83d4131
+:END:
 Add the ability to bind key chords using use-package :bind style.
 #+BEGIN_SRC emacs-lisp
     (use-package use-package-chords
@@ -152,6 +167,9 @@ Add the ability to bind key chords using use-package :bind style.
         (key-chord-mode 1))
 #+END_SRC
 ** Load org-mode
+:PROPERTIES:
+:ID:       cf822e31-fd2d-42da-ac40-5a13cc550510
+:END:
 We need org-mode here to run org-babel on the file. Loading this early
 is fine, as it's pretty much guaranteed that org-mode will get used
 during a session.
@@ -171,6 +189,9 @@ during a session.
       (require 'qdot-org-config)))
 #+END_SRC
 ** Recompile Config Function
+:PROPERTIES:
+:ID:       de1064a9-9a9f-475b-88b5-ecf9b383568f
+:END:
 
 This function tangles the config file, removes all old byte compiled
 files, and byte compiles all files that were tangled.
@@ -213,6 +234,9 @@ tangle-and-compile-config.
 
 #+END_SRC
 ** Load org configuration file
+:PROPERTIES:
+:ID:       851beff4-dfe5-487a-b165-597c3cfb6cbd
+:END:
 
 Debug on error is turned on during configuration file loading so
 backtraces pop up if something goes wrong.
@@ -227,6 +251,9 @@ backtraces pop up if something goes wrong.
 #+END_SRC
 * Basic Setup
 ** Variables
+:PROPERTIES:
+:ID:       72ec9b7d-1bda-45e4-a54c-ecd6e2d99595
+:END:
 Anything in this section relates to the core setup of emacs. At this
 point, there are no packages loaded, so this is just for setting up
 emacs defaults.
@@ -396,6 +423,9 @@ When on a mac, make command meta.
     (setq mac-option-modifier nil))
 #+END_SRC
 ** Global Minor Modes
+:PROPERTIES:
+:ID:       ea0c032d-9615-4d07-8813-e47d225d0916
+:END:
 
 Save minibuffer history, so oft-used functions bubble to the top.
 
@@ -447,6 +477,9 @@ Just expect font lock to be on everywhere.
 #+END_SRC
 
 ** Display, Font, and Modeline setup
+:PROPERTIES:
+:ID:       f9259321-db74-433c-b3f2-a1956d33b39e
+:END:
 Use fonts we either know we have, or can check for. Symbola is used to
 fill in missing glyphs for odd emoticons that pop up on IRC/IM usually.
 
@@ -491,6 +524,9 @@ configurations without having to search through the org file.
 
 ** Emacs Customization
 *** beacon                                                        :package:
+:PROPERTIES:
+:ID:       a2002ed5-8d9a-49b6-b708-135c6891b327
+:END:
 Highlight cursor/line when window scrolls or focus changes
 #+BEGIN_SRC emacs-lisp
   (use-package beacon
@@ -499,6 +535,9 @@ Highlight cursor/line when window scrolls or focus changes
       (beacon-mode 1))
 #+END_SRC
 *** browse-kill-ring                                              :package:
+:PROPERTIES:
+:ID:       ab8ede0f-6d07-4c40-b15d-f332451e2be3
+:END:
 See and update/select kill ring history.
 #+BEGIN_SRC emacs-lisp
   (use-package browse-kill-ring
@@ -506,6 +545,9 @@ See and update/select kill ring history.
     :commands browse-kill-ring)
 #+END_SRC
 *** color-theme                                                   :package:
+:PROPERTIES:
+:ID:       7c99ab9c-17b5-410e-a715-57c75629ba40
+:END:
 I tend to use dark themes everywhere, be it laptop or desktop.
 #+BEGIN_SRC emacs-lisp
   (use-package color-theme
@@ -517,6 +559,9 @@ I tend to use dark themes everywhere, be it laptop or desktop.
 #+END_SRC
 
 *** dired                                                         :package:
+:PROPERTIES:
+:ID:       7beed05f-7c79-420e-9633-12e25680360d
+:END:
 Set up dired with extensions, make sure beginning/end commands move
 inside directory listings instead of buffer.
 
@@ -558,6 +603,9 @@ changing permissions via string/regexp replacement.
         (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)))
 #+END_SRC
 *** exec-path-from-shell                                          :package:
+:PROPERTIES:
+:ID:       ebfa1dc5-d67d-4cda-8533-eace92ddfc92
+:END:
 Pulls environment variable values from shell when emacs is run in GUI
 mode on Macs (otherwise system defaults are used).
 #+BEGIN_SRC emacs-lisp
@@ -568,6 +616,9 @@ mode on Macs (otherwise system defaults are used).
         (exec-path-from-shell-initialize)))
 #+END_SRC
 *** expand-region                                                 :package:
+:PROPERTIES:
+:ID:       811e48ae-92ca-4d2f-a343-3048b3c61ef7
+:END:
 Hit C-=, expand up to the next largest region based on mode-context
 sensitive scope.
 #+BEGIN_SRC emacs-lisp
@@ -577,6 +628,9 @@ sensitive scope.
     :commands (er/expand-region er/enable-mode-expansions))
 #+END_SRC
 *** hidden-mode-line-mode                                         :package:
+:PROPERTIES:
+:ID:       91aaa182-1bcd-4bdc-ac1e-63363ae5dd2e
+:END:
 http://emacs-doctor.com/emacs-hide-mode-line.html
 
 #+BEGIN_SRC emacs-lisp
@@ -602,6 +656,9 @@ http://emacs-doctor.com/emacs-hide-mode-line.html
   ;; (add-hook 'after-change-major-mode-hook 'hidden-mode-line-mode)
 #+END_SRC
 *** ibuffer                                                       :package:
+:PROPERTIES:
+:ID:       9e00f528-ec3f-49cb-aa84-29e87c926836
+:END:
 List buffers in a dired-ish way. Try to group based on modes or what
 kind of project something may be related to.
 #+BEGIN_SRC emacs-lisp
@@ -630,6 +687,9 @@ kind of project something may be related to.
                                (name . "^\\*Messages\\*$"))))))))
 #+END_SRC
 *** ibuffer-vc                                                    :package:
+:PROPERTIES:
+:ID:       c3efde47-d622-450d-849b-7fc897899898
+:END:
 Set up ibuffer groups via vc.
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer-vc
@@ -655,11 +715,17 @@ lot to lag it.
   (custom-set-variables '(icomplete-compute-delay 0.1))
 #+END_SRC
 *** info+                                                         :package:
+:PROPERTIES:
+:ID:       a5a984ab-3598-47cf-91a2-785668a994ad
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package info+
       :ensure t)
 #+END_SRC
 *** ispell                                                        :package:
+:PROPERTIES:
+:ID:       5116cf0e-24a6-4dce-8ecb-677ab27b2bdb
+:END:
 Turns out most spelling dictionaries don't contain "teledildonics".
 What a horrid oversight.
 #+BEGIN_SRC emacs-lisp
@@ -667,6 +733,9 @@ What a horrid oversight.
 #+END_SRC
 
 *** ivy-mode                                                      :package:
+:PROPERTIES:
+:ID:       1f6cd13a-7e88-4a99-a3ff-58afe7f06b26
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
       :ensure swiper
@@ -692,6 +761,9 @@ What a horrid oversight.
       (bind-key "C-d" 'qdot/ivy-open-current-typed-path ivy-minibuffer-map))
 #+END_SRC
 *** multiple-cursors                                              :package:
+:PROPERTIES:
+:ID:       c9c3fa7b-3e4f-454e-bd96-ee35eb43d475
+:END:
 Work with multiple cursors simultaneously.
 #+BEGIN_SRC emacs-lisp
   (use-package multiple-cursors
@@ -704,6 +776,10 @@ Work with multiple cursors simultaneously.
     :ensure multiple-cursors)
 #+END_SRC
 *** paradox                                                       :package:
+:PROPERTIES:
+:ID:       f94dc9c9-e3f0-430e-983f-88305859e101
+:END:
+
 Paradox makes the package list pretty and adds some stats to the listings.
 #+BEGIN_SRC emacs-lisp
   (use-package paradox
@@ -711,6 +787,9 @@ Paradox makes the package list pretty and adds some stats to the listings.
     :commands (paradox-list-packages))
 #+END_SRC
 *** recentf                                                       :package:
+:PROPERTIES:
+:ID:       611bcd05-ac88-4cfd-9f6a-c827eaaf05f6
+:END:
 Use a list of most recent opened files instead of having to search through drive
 http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files-package/
 
@@ -721,6 +800,9 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
     (setq recentf-max-saved-items 50))
 #+END_SRC
 *** rect-mark                                                     :package:
+:PROPERTIES:
+:ID:       d653d0e6-2d55-4c7d-a5bf-25aafb689b2f
+:END:
 Make rectangular region marking easier.
 #+BEGIN_SRC emacs-lisp
   (use-package rect-mark
@@ -731,6 +813,9 @@ Make rectangular region marking easier.
            ("C-x r M-w" . rm-kill-ring-save)))
 #+END_SRC
 *** saveplace                                                     :package:
+:PROPERTIES:
+:ID:       1b96890b-3d1b-4f6d-8fa3-d08d1972a795
+:END:
 Make sure I always come back to the same place in a file after closing/opening.
 http://groups.google.com/group/comp.emacs/browse_thread/thread/c5e4c18b77a18512
 
@@ -750,6 +835,9 @@ open, which causes weird problems. So org-mode is ignored.
 #+END_SRC
 
 *** smart-mode-line                                               :package:
+:PROPERTIES:
+:ID:       57eb5f10-ccf0-42bd-ba79-6d0836e83cc1
+:END:
 Makes the modeline easier to customize, in terms of both color themes
 and content.
 #+BEGIN_SRC emacs-lisp
@@ -777,6 +865,9 @@ and content.
 #+END_SRC
 
 *** smex                                                          :package:
+:PROPERTIES:
+:ID:       b5f0920c-16ac-4b8b-922d-cd3f9116ddaa
+:END:
 Smex is ido fuzzy matching for M-x. Deals with sorting most used
 commands to front of IDO.
 
@@ -793,6 +884,9 @@ completion method.
       (setq smex-completion-method 'ivy))
 #+END_SRC
 *** swiper                                                        :package:
+:PROPERTIES:
+:ID:       39c77f67-74b7-463c-9e26-fcfe976bd8c8
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
       :ensure swiper
@@ -811,6 +905,9 @@ completion method.
       (advice-add 'swiper :after #'qdot/swiper-recenter))
 #+END_SRC
 *** tramp                                                         :package:
+:PROPERTIES:
+:ID:       da803671-5167-44e9-bcba-11639c9344a5
+:END:
 I rarely use tramp these days, but usually use ssh when doing so.
 #+BEGIN_SRC emacs-lisp
   (use-package tramp
@@ -820,6 +917,9 @@ I rarely use tramp these days, but usually use ssh when doing so.
       (setq tramp-default-method "ssh")))
 #+END_SRC
 *** undo-tree                                                     :package:
+:PROPERTIES:
+:ID:       6376feb1-5dc9-4d62-b1d8-f4ce00d11c26
+:END:
 Allow undo to branch, and be visualized as a graph.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
@@ -828,6 +928,9 @@ Allow undo to branch, and be visualized as a graph.
       (global-undo-tree-mode 1))
 #+END_SRC
 *** uniquify                                                      :package:
+:PROPERTIES:
+:ID:       b8b6c9d3-4477-4717-b9a2-e393a7bcd35a
+:END:
 Make buffer names unique, handy when opening files with similar names
 #+BEGIN_SRC emacs-lisp
   (use-package uniquify
@@ -840,6 +943,9 @@ Make buffer names unique, handy when opening files with similar names
 #+END_SRC
 ** Emacs Navigation
 *** ace-jump-mode                                                 :package:
+:PROPERTIES:
+:ID:       4e7794bb-e8b7-4bbc-a673-9e851fc0b051
+:END:
 Jump to a specified character in the currently visible buffer area.
 #+BEGIN_SRC emacs-lisp
   (use-package ace-jump-mode
@@ -848,6 +954,9 @@ Jump to a specified character in the currently visible buffer area.
 #+END_SRC
 
 *** ace-link                                                      :package:
+:PROPERTIES:
+:ID:       fbcc787c-7a70-4abf-a883-b3cf04d52bb7
+:END:
 Jump to a link in info/help windows.
 #+BEGIN_SRC emacs-lisp
   (use-package ace-link
@@ -856,6 +965,9 @@ Jump to a link in info/help windows.
     (ace-link-setup-default))
 #+END_SRC
 *** ace-window                                                    :package:
+:PROPERTIES:
+:ID:       2ad2f615-1292-483b-8490-979780726985
+:END:
 Jump to a specified window by using [prefix-key] + letter
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window
@@ -869,17 +981,26 @@ Jump to a specified window by using [prefix-key] + letter
          ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 #+END_SRC
 *** avy                                                           :package:
+:PROPERTIES:
+:ID:       58a1bdee-66d7-47f1-a6d7-eaf4fc971cfc
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package avy
       :ensure avy
       :bind ("M-g g" . avy-goto-line))
 #+END_SRC
 *** hydra                                                         :package:
+:PROPERTIES:
+:ID:       4b8c4a4f-a9b7-4d92-81bd-81d06db3ba78
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package hydra
       :ensure hydra)
 #+END_SRC
 **** Yank
+:PROPERTIES:
+:ID:       4d816b60-3cbf-4d08-acf1-42de557dad46
+:END:
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-yank-pop ()
   "yank"
@@ -892,6 +1013,9 @@ Jump to a specified window by using [prefix-key] + letter
 (global-set-key (kbd "C-y") #'hydra-yank-pop/yank)
 #+END_SRC
 **** Projectile
+:PROPERTIES:
+:ID:       2cc86e37-c6a1-49bb-b84a-14f134b52182
+:END:
 #+BEGIN_SRC emacs-lisp
     (defhydra hydra-projectile-other-window (:color teal)
       "projectile-other-window"
@@ -944,6 +1068,9 @@ Jump to a specified window by using [prefix-key] + letter
     (bind-key "C-c M-p" 'hydra-projectile/body)
 #+END_SRC
 **** apropos
+:PROPERTIES:
+:ID:       25377036-1123-40b8-b2c5-0a75fe42ef0f
+:END:
 #+BEGIN_SRC emacs-lisp
 (defhydra hydra-apropos (:color blue)
   "Apropos"
@@ -968,6 +1095,9 @@ Jump to a specified window by using [prefix-key] + letter
   (bind-key "C-c h" 'hydra-apropos/body)
 #+END_SRC
 **** org-block
+:PROPERTIES:
+:ID:       7b0be15f-7b8f-4cc3-b4b5-34a9e597b345
+:END:
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-org-template (:color blue :hint nil)
     "
@@ -1005,6 +1135,9 @@ Jump to a specified window by using [prefix-key] + letter
                                                  (self-insert-command 1))) org-mode-map)))
 #+END_SRC
 **** org-clock
+:PROPERTIES:
+:ID:       75357128-0469-4d34-9975-19ccb40acff6
+:END:
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-org-clock (:color blue :hint nil)
     "
@@ -1025,6 +1158,9 @@ Jump to a specified window by using [prefix-key] + letter
     ("?" (org-info "Clocking commands")))
 #+END_SRC
 **** transpose
+:PROPERTIES:
+:ID:       9a861fdf-3610-457e-84d7-ed48c5c6bb99
+:END:
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-transpose (:color red)
     "Transpose"
@@ -1079,6 +1215,9 @@ much, but handy to have around.
   (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
 #+END_SRC
 **** info
+:PROPERTIES:
+:ID:       5aff3673-95aa-48a0-84cb-4524290bf122
+:END:
 #+BEGIN_SRC emacs-lisp
   (defun ora-open-info (topic bname)
     "Open info on TOPIC in BNAME."
@@ -1100,6 +1239,9 @@ much, but handy to have around.
   (define-key Info-mode-map "t" 'hydra-info-to/body)
 #+END_SRC
 **** toggle map
+:PROPERTIES:
+:ID:       e1af279e-417a-4706-a392-4e9a3e49cd49
+:END:
 http://endlessparentheses.com/the-toggle-map-and-wizardry.html
 #+BEGIN_SRC emacs-lisp
   ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
@@ -1133,6 +1275,9 @@ http://endlessparentheses.com/the-toggle-map-and-wizardry.html
   (bind-key "C-x t" 'hydra-toggle-map/body)
 #+END_SRC
 **** org-trello
+:PROPERTIES:
+:ID:       d79f5538-cf00-4449-b692-30f8bceea56e
+:END:
 Taken from https://github.com/yangchenyun/emacs-prelude/blob/master/setup-hydra.el
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-org-trello (:color blue :hint nil :idle 0.4)
@@ -1178,6 +1323,9 @@ Taken from https://github.com/yangchenyun/emacs-prelude/blob/master/setup-hydra.
                      (local-set-key (kbd "C-c o") 'hydra-org-trello/body)))))
 #+END_SRC
 *** windmove                                                      :package:
+:PROPERTIES:
+:ID:       045b3c37-402d-4eb2-9c5b-d01dd734b2e4
+:END:
 Move between windows using shift-[arrow key].
 #+BEGIN_SRC emacs-lisp
   (use-package windmove
@@ -1189,6 +1337,9 @@ Move between windows using shift-[arrow key].
 
 ** Email
 *** message-mode                                                  :package:
+:PROPERTIES:
+:ID:       616caed1-0a74-49fa-aa10-765f2005453b
+:END:
 Add Cc and Bcc headers to the message buffer
 #+BEGIN_SRC emacs-lisp
   (use-package message-mode
@@ -1202,6 +1353,9 @@ Add Cc and Bcc headers to the message buffer
 #+END_SRC
 
 *** mu4e                                                          :package:
+:PROPERTIES:
+:ID:       6b7e21a1-5cee-4c6a-9ee6-0b28664976fb
+:END:
 I use mu/mu4e for local mail handling, sync'd via offlineimap.
 
 I just use a checkout of the git repo instead of relying on a package.
@@ -1225,6 +1379,9 @@ tangle to an external file.
 :header-args: :tangle tangle/qdot-mu4e-config.el
 :END:
 ***** Package variable setup
+:PROPERTIES:
+:ID:       17b5d21e-31d3-4614-9f0b-c0da962e5b2d
+:END:
 Sets basic directories, how often to update, etc. Nothing special,
 except for turning off the damn "sent from my mu4e" default signature.
 #+BEGIN_SRC emacs-lisp
@@ -1247,6 +1404,9 @@ except for turning off the damn "sent from my mu4e" default signature.
 #+END_SRC
 
 ***** HTML Mail viewing
+:PROPERTIES:
+:ID:       2def9b42-2211-4f9b-a225-47e1507beb33
+:END:
 Use emacs's built in shr (simple html renderer) parsing for html mail.
 Slow, but works everywhere.
 
@@ -1269,6 +1429,9 @@ Idea taken from the mu mailing list.
 #+END_SRC
 
 ***** Account selection
+:PROPERTIES:
+:ID:       35065312-a147-455e-bce0-c126758c3a9b
+:END:
 When sending a new email, allow selection of which account it should
 be sent from based on the list of accounts provided.
 #+BEGIN_SRC emacs-lisp
@@ -1295,6 +1458,9 @@ be sent from based on the list of accounts provided.
 
 #+END_SRC
 ***** Attachments using dired
+:PROPERTIES:
+:ID:       31dc1d14-f835-4468-a5ba-aad7f9d22597
+:END:
 Select attachments to emails using dired
 #+BEGIN_SRC emacs-lisp
   (require 'gnus-dired)
@@ -1315,6 +1481,9 @@ Select attachments to emails using dired
   (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
 #+END_SRC
 ***** Header Actions
+:PROPERTIES:
+:ID:       c9afa567-23dd-435b-8275-48a3161a2955
+:END:
 In header view, create an mu4e action that will create a new org-mode
 task to remind me to reply to the email. This assumes I'll look at
 org-mode, which is kind of adorable, but hey, good intentions!
@@ -1338,6 +1507,9 @@ org-mode, which is kind of adorable, but hey, good intentions!
   (add-to-list 'mu4e-headers-actions '("mark all read" . mu4e-headers-mark-all-unread-read) t)
 #+END_SRC
 ***** Mail account information
+:PROPERTIES:
+:ID:       2695dee4-b396-454b-a4c5-29a0d2c5986f
+:END:
 #+BEGIN_SRC emacs-lisp
   (setq mu4e-user-mail-address-list (list "kyle@nonpolynomial.com"
                                           "kyle@knot-theory.com"
@@ -1403,6 +1575,9 @@ org-mode, which is kind of adorable, but hey, good intentions!
                '("maildir:/mozilla/INBOX flag:unread" "Mozilla Unread" ?m) t)
 #+END_SRC
 ***** bbdb functions
+:PROPERTIES:
+:ID:       0f2735e8-16b9-47fd-8aae-d84bad72c2f7
+:END:
 Taken from https://github.com/mardukbp/dotfiles/blob/master/emacs.d/mb-mu4e.el
 #+BEGIN_SRC emacs-lisp
   (defun mu4e-add-sender-bbdb ()
@@ -1411,6 +1586,9 @@ Taken from https://github.com/mardukbp/dotfiles/blob/master/emacs.d/mb-mu4e.el
       (bbdb-create-internal (car (car from)) nil (cdr (car from)) nil nil nil)))
 #+END_SRC
 ***** Provide Statement
+:PROPERTIES:
+:ID:       51d40913-15b0-4fe1-8e23-d488f8f63fb9
+:END:
 
 This should always come last. It's the provide statement so we can
 load this config using require.
@@ -1419,6 +1597,9 @@ load this config using require.
 (provide 'qdot-mu4e-config)
 #+END_SRC
 *** smtpmail                                                      :package:
+:PROPERTIES:
+:ID:       e784c386-61b7-44ff-a53d-efbd227ac880
+:END:
 #+BEGIN_SRC emacs-lisp  
   ;; sending mail -- replace USERNAME with your gmail username
   ;; also, make sure the gnutls command line utils are installed
@@ -1472,6 +1653,9 @@ load this config using require.
 #+END_SRC
 ** Productivity
 *** bbdb                                                          :package:
+:PROPERTIES:
+:ID:       2da3914c-de7e-4283-978f-583fd490cfef
+:END:
 Address book
 #+BEGIN_SRC emacs-lisp
   (use-package bbdb
@@ -1519,6 +1703,9 @@ bleeding edge of org-mode (once again, usually stable, and useful
 things land constantly), as well as providing me with multiple contrib
 modules that I need.
 **** Modules
+:PROPERTIES:
+:ID:       63de5529-45a1-48a4-b841-160b792f677c
+:END:
 Modules I use:
 
 - org-checklist: Allows you to clear/set all task internal checklists
@@ -1570,6 +1757,9 @@ Currently stored in elisp directory locally.
 #+END_SRC
 
 **** Variables
+:PROPERTIES:
+:ID:       d2917f45-4633-4a17-a152-4cb411f18925
+:END:
 Add markdown export backend.
 
 #+BEGIN_SRC emacs-lisp
@@ -1907,7 +2097,17 @@ like ⤵, ▼, ↴, ⬎, ⤷, and ⋱.
 #+BEGIN_SRC emacs-lisp
   (setq org-ellipsis "…")
 #+END_SRC
+
+Use UUIDs when creating header links. Keeps us from having to worry
+about keeping titles straight.
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-id-link-to-org-use-id t)
+#+END_SRC
 **** Hooks
+:PROPERTIES:
+:ID:       dc5b3f9d-9506-474c-b087-9fa9e0f89773
+:END:
 
 Flyspell mode for spell checking everywhere.
 
@@ -1943,6 +2143,9 @@ Always hilight the current agenda line.
 #+END_SRC
 
 **** Clocking
+:PROPERTIES:
+:ID:       7d743563-3451-42dc-81cf-517556d1372a
+:END:
 Resume clocking tasks when emacs is restarted
 
 #+BEGIN_SRC emacs-lisp
@@ -2013,6 +2216,9 @@ Include current clocking task in clock reports
 
 #+END_SRC
 **** Todo flow setup
+:PROPERTIES:
+:ID:       376fe72f-9a3d-43c4-b34c-a5dabc83c688
+:END:
 This is just Bernt's todo setup, copied verbatim. More information at
 http://doc.norang.ca/org-mode.html#TasksAndStates.
 
@@ -2030,6 +2236,9 @@ http://doc.norang.ca/org-mode.html#TasksAndStates.
 #+END_SRC
 
 **** Speed key bindings
+:PROPERTIES:
+:ID:       b8ac18c6-1b72-4c2b-92ce-102c95b79f73
+:END:
 
 Using speedkeys, s will narrow to the subtree, but you have to call
 widen explicitly. Set capital S to widen.
@@ -2039,6 +2248,9 @@ widen explicitly. Set capital S to widen.
 #+END_SRC
 
 **** Capture
+:PROPERTIES:
+:ID:       fdb2dd1b-4abc-46f4-a80e-da7a9295a67c
+:END:
 
 Once again, stealing Bernt's ideas. Clock during capture, to either
 todos or notes.
@@ -2059,6 +2271,9 @@ Added a reply capture for the mu4e reply capture action.
 #+END_SRC
 
 **** Agenda
+:PROPERTIES:
+:ID:       30553113-2bbb-4779-a999-ccdb931eb65f
+:END:
 
 I only have one custom agenda at the moment, but it's huge. It
 contains everything happening for the next week, as well as tasks
@@ -2129,6 +2344,9 @@ http://doc.norang.ca/org-mode.html#CustomAgendaViews.
 #+END_SRC
 
 **** Appointment warning bindings
+:PROPERTIES:
+:ID:       8c5a9b1a-8523-42cc-9354-fad3db19b002
+:END:
 Warn 15 min in advance of events.
 
 #+BEGIN_SRC emacs-lisp
@@ -2164,6 +2382,9 @@ the appointment notification facility
 #+END_SRC
 
 **** Faces
+:PROPERTIES:
+:ID:       11eaa10c-c192-4afd-9a9e-44a21a9e591a
+:END:
 
 Highlight the currently clocked in task.
 
@@ -2199,6 +2420,9 @@ Set up face colors for tags. Makes quickly scanning the agenda easier.
 #+END_SRC
 
 **** Mobile Org
+:PROPERTIES:
+:ID:       00376626-e1d9-493d-8c5c-433d56907b8b
+:END:
 
 I've tried using mobile-org many times, but the interface to the
 android app is so painfully bad that I never stick with it for long.
@@ -2213,6 +2437,9 @@ again.
 #+END_SRC
 
 **** Disable org agenda window resizing
+:PROPERTIES:
+:ID:       a6b403f7-09a5-4b9b-9ad4-940355d5c1a0
+:END:
 
 The agenda is really horrible about resizing windows when I don't want
 it to, especially in a workgroups setup. Make sure that doesn't
@@ -2232,6 +2459,9 @@ happen.
 #+END_SRC
 
 **** Habit reloading
+:PROPERTIES:
+:ID:       7b4a17ee-ae43-4c86-a8bf-42d8e891ce89
+:END:
 
 I usually turn off habits mid-day when most of them are done. If I
 leave emacs on over night, this turns them back on at 6am so I'll see
@@ -2242,6 +2472,9 @@ them when I wake up.
 #+END_SRC
 
 **** Refile settings
+:PROPERTIES:
+:ID:       1c57ffd0-58dc-417b-a328-fda410b752e2
+:END:
 
 Don't allow refiling into anything that's set to DONE.
 
@@ -2254,6 +2487,9 @@ Don't allow refiling into anything that's set to DONE.
 #+END_SRC
 
 **** org-babel
+:PROPERTIES:
+:ID:       273a0ba1-4213-4c40-a828-ba03ca931139
+:END:
 
 Set up languages that babel will handle. This includes lilypond, which
 I use for music. I also make sure that I don't have to confirm
@@ -2277,6 +2513,9 @@ evaluation on a few languages.
 #+END_SRC
 
 **** ispell fix
+:PROPERTIES:
+:ID:       650555ef-1759-4c15-a021-4354dd732e70
+:END:
 http://endlessparentheses.com/ispell-and-org-mode.html
 #+BEGIN_SRC emacs-lisp
   (defun qdot/org-ispell ()
@@ -2289,6 +2528,9 @@ http://endlessparentheses.com/ispell-and-org-mode.html
   (add-hook 'org-mode-hook #'qdot/org-ispell)
 #+END_SRC
 **** org-trello
+:PROPERTIES:
+:ID:       53e19cb9-0d94-43e7-a08f-12b3e1008b4a
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package org-trello
       :ensure t
@@ -2305,6 +2547,9 @@ http://endlessparentheses.com/ispell-and-org-mode.html
                       (org-trello-mode))))))
 #+END_SRC
 **** org project exports
+:PROPERTIES:
+:ID:       cdb0bca2-7359-4055-a618-313496d81c68
+:END:
 #+BEGIN_SRC emacs-lisp
   (setq org-publish-project-alist
         '(("web-emacs-config"
@@ -2326,6 +2571,9 @@ http://endlessparentheses.com/ispell-and-org-mode.html
            )))
 #+END_SRC
 **** Provide Statement
+:PROPERTIES:
+:ID:       f725dca4-48e8-4839-a9d7-a0660262ca9d
+:END:
 
 This should always come last. It's the provide statement so we can
 load this config using require.
@@ -2336,6 +2584,9 @@ load this config using require.
 
 ** Programming
 *** cc-mode                                                       :package:
+:PROPERTIES:
+:ID:       49c62c49-51eb-4040-945f-e2619790e7a0
+:END:
 Settings for C/C++ modes.
 
 Doxymacs currently commented out because it doesn't have a related
@@ -2397,6 +2648,9 @@ http://stackoverflow.com/questions/3312114/how-to-tell-emacs-to-open-h-file-in-c
   ;; (add-hook 'c-mode-common-hook 'doxymacs-mode)
 #+END_SRC
 *** cedet                                                         :package:
+:PROPERTIES:
+:ID:       322ab735-8edc-448a-8262-9d6f99b58b87
+:END:
 CEDET. Didn't even realize this was being loaded as part of
 semantic-mode when loading C++ files. May just completely remove soon.
 #+BEGIN_SRC emacs-lisp  
@@ -2458,17 +2712,26 @@ semantic-mode when loading C++ files. May just completely remove soon.
       (add-hook 'c-mode-common-hook 'qdot/c-mode-cedet-hook)))
 #+END_SRC  
 *** change-log-mode                                               :package:
+:PROPERTIES:
+:ID:       152fd3ac-68a0-4288-9db0-b12db75694d8
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package change-log-mode
     :no-require t
     :mode ("ChangeLog\\.txt\\'" . change-log-mode))
 #+END_SRC
 *** cmake-mode                                                    :package:
+:PROPERTIES:
+:ID:       d0bf2227-a07b-4048-ae34-48caf3f5f287
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package cmake-mode
       :ensure cmake-mode)
 #+END_SRC
 *** company                                                       :package:
+:PROPERTIES:
+:ID:       d4ac7439-488d-43b1-9924-841c5f9f7b14
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package company
       :ensure t
@@ -2517,6 +2780,9 @@ semantic-mode when loading C++ files. May just completely remove soon.
                   (company-quickhelp-mode 1))))
 #+END_SRC
 *** compilation                                                   :package:
+:PROPERTIES:
+:ID:       78c819a6-403f-4df4-9b47-0a7c23b0f972
+:END:
 Compilation mode.
 #+BEGIN_SRC emacs-lisp  
   (defun qdot/recompile ()
@@ -2540,12 +2806,18 @@ Compilation mode.
 
 #+END_SRC
 *** dxr                                                           :package:
+:PROPERTIES:
+:ID:       a60f6592-65b6-4880-af67-3b9740a6b92b
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package dxr
       :load-path "~/.emacs_files/dev-packages/dxr.el/"
       :commands (dxr dxr-browse-url dxr-kill-ring-save))
 #+END_SRC
 *** edebug-x                                                      :package:
+:PROPERTIES:
+:ID:       3433d9a2-9b91-4534-b596-ae926b2cf355
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package edebug-x
     :ensure edebug-x
@@ -2555,6 +2827,9 @@ Compilation mode.
                edebug-x-show-data))
 #+END_SRC
 *** elpy                                                          :package:
+:PROPERTIES:
+:ID:       650ede78-345d-4379-b8de-19afe87b3618
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
       :ensure elpy
@@ -2585,6 +2860,9 @@ Compilation mode.
 #+END_SRC
 
 *** emacs-lisp-mode                                               :package:
+:PROPERTIES:
+:ID:       fbe84c8a-0785-4b02-8c52-77ae20ae8f11
+:END:
 #+BEGIN_SRC emacs-lisp  
   ;; eldoc mode for showing function calls in mode line
   (setq eldoc-idle-delay 0)
@@ -2619,6 +2897,9 @@ Compilation mode.
   (define-key 'help-command (kbd "C-v") 'find-variable)
 #+END_SRC
 *** flycheck                                                      :package:
+:PROPERTIES:
+:ID:       be9fa82d-b857-477b-a0d1-6101f1948876
+:END:
 Using flycheck instead of flymake
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
@@ -2639,6 +2920,9 @@ Using flycheck instead of flymake
   ;;       :modes (js-mode js2-mode js3-mode))))
 #+END_SRC
 *** flycheck-rust                                                 :package:
+:PROPERTIES:
+:ID:       1542ff9f-8621-46f0-92a9-6bd67acb81bb
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-rust
       :ensure flycheck-rust
@@ -2646,6 +2930,9 @@ Using flycheck instead of flymake
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 #+END_SRC
 *** gdb                                                           :package:
+:PROPERTIES:
+:ID:       57a92b27-4226-4333-8e53-eb7a1a9637ec
+:END:
 #+BEGIN_SRC emacs-lisp
   ;; Turn off non-stop by default. All or nothing, damnit.
   (setq gdb-non-stop-setting nil)
@@ -2656,6 +2943,9 @@ Using flycheck instead of flymake
   (setq gud-tooltip-mode t)  
 #+END_SRC
 *** git-gutter-fringe                                             :package:
+:PROPERTIES:
+:ID:       ed23e031-497d-40e6-b48f-bbbebe07e474
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter-fringe
     :ensure git-gutter-fringe
@@ -2663,6 +2953,9 @@ Using flycheck instead of flymake
 #+END_SRC
 
 *** git-messanger                                                 :package:
+:PROPERTIES:
+:ID:       3be94264-1108-419d-b18b-c5b0af99d8b8
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package git-messenger
       :ensure git-messenger
@@ -2671,12 +2964,18 @@ Using flycheck instead of flymake
       (setq git-messenger:show-detail t))
 #+END_SRC
 *** git-timemachine                                               :package:
+:PROPERTIES:
+:ID:       5ee0aeb2-c943-4e54-816f-188e170d82a0
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package git-timemachine
     :commands (git-timemachine)
     :ensure git-timemachine)
 #+END_SRC
 *** haskell-mode                                                  :package:
+:PROPERTIES:
+:ID:       663f7b28-d074-4d18-8f0d-b1e78b8e285d
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package haskell-mode
     :ensure haskell-mode
@@ -2691,12 +2990,18 @@ Using flycheck instead of flymake
       (setq haskell-font-lock-symbols t)))
 #+END_SRC
 *** idl-mode                                                      :package:
+:PROPERTIES:
+:ID:       be58be65-aa7f-4df6-9ba1-b6e4dea82b24
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package idl-mode
     :no-require t
     :mode ("\\.\\(idl\\|webidl\\)\\'" . idl-mode))
 #+END_SRC
 *** ielm                                                          :package:
+:PROPERTIES:
+:ID:       420e3cf4-5709-4ad5-8fd0-73a9a9e52ee3
+:END:
 When using ielm mode, set up autocomplete sources accordingly.
 
 #+BEGIN_SRC emacs-lisp
@@ -2713,6 +3018,9 @@ When using ielm mode, set up autocomplete sources accordingly.
 #+END_SRC
 
 *** indent-guide                                                  :package:
+:PROPERTIES:
+:ID:       dc86b022-2259-4c1a-88b5-1796267b9ff7
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package indent-guide
     :commands (indent-guide-mode)
@@ -2720,6 +3028,10 @@ When using ielm mode, set up autocomplete sources accordingly.
 
 #+END_SRC
 *** irony                                                         :package:
+:PROPERTIES:
+:ID:       3e048455-1017-4442-bf7c-3287febdb72c
+:END:
+Use rtags for symbol lookup and jumps, irony-mode for completion.
 #+BEGIN_SRC emacs-lisp
   (use-package irony
       :ensure t
@@ -2739,6 +3051,9 @@ When using ielm mode, set up autocomplete sources accordingly.
       (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 #+END_SRC
 *** irony-flycheck                                                :package:
+:PROPERTIES:
+:ID:       2d44d422-f74b-4d57-9888-ff7df2a5149c
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-irony
       :ensure flycheck-irony
@@ -2747,6 +3062,9 @@ When using ielm mode, set up autocomplete sources accordingly.
         '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup)))
 #+END_SRC
 *** js2-mode                                                      :package:
+:PROPERTIES:
+:ID:       13791349-b740-416c-8ec9-feef4f804ce9
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
       :ensure js2-mode
@@ -2767,6 +3085,9 @@ When using ielm mode, set up autocomplete sources accordingly.
       (company-mode 1))
 #+END_SRC
 *** js2-refactor                                                  :package:
+:PROPERTIES:
+:ID:       b847efad-0ee6-4959-b9a6-ea62c01183bb
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package js2-refactor
       :ensure t
@@ -2774,6 +3095,9 @@ When using ielm mode, set up autocomplete sources accordingly.
       (add-hook 'js2-mode-hook #'js2-refactor-mode))
 #+END_SRC
 *** json-mode                                                     :package:
+:PROPERTIES:
+:ID:       bfb36a5b-7f03-43cb-aa8a-d851f8e2d428
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package json-mode
     :ensure json-mode
@@ -2783,6 +3107,9 @@ When using ielm mode, set up autocomplete sources accordingly.
 
 #+END_SRC
 *** lilypond-mode                                                 :package:
+:PROPERTIES:
+:ID:       31dae26c-f2ab-4cf3-bb4a-ca5df9a6d828
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package lilypond-mode
     :mode (("\\.ly\\'" . LilyPond-mode))
@@ -2795,12 +3122,18 @@ When using ielm mode, set up autocomplete sources accordingly.
 #+END_SRC
 
 *** lua                                                           :package:
+:PROPERTIES:
+:ID:       27312d07-4ae5-484f-9089-e938158c1a72
+:END:
 #+BEGIN_SRC emacs-lisp
     (use-package lua-mode
       :ensure lua-mode
       :mode ("\\.lua\\'" . lua-mode))
 #+END_SRC
 *** magit                                                         :package:
+:PROPERTIES:
+:ID:       f6ea2635-681e-4169-8419-a1727c1cb28a
+:END:
 git management in emacs. 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -2844,16 +3177,25 @@ git management in emacs.
 #+END_SRC
 
 *** nose                                                          :package:
+:PROPERTIES:
+:ID:       e3077e70-173b-4d3e-8c98-bb561513ef8f
+:END:
 #+BEGIN_SRC emacs-lisp
   ;; (use-package nose
   ;;   :ensure nose)
 #+END_SRC
 *** nxml-mode                                                     :package:
+:PROPERTIES:
+:ID:       34ab4f97-8da9-40c3-9c4b-93b4024b2fa4
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package nxml-mode
     :mode ("\\.\\(xml\\|mxml\\)\\'" . nxml-mode))
 #+END_SRC
 *** prog-mode                                                     :package:
+:PROPERTIES:
+:ID:       82cf0d82-ba2c-4c36-9fe3-8d348e5e3e13
+:END:
 Set up defaults for all programming modes.
 
 Always indent 2.
@@ -2914,6 +3256,9 @@ Line numbers
   (add-hook 'prog-mode-hook 'linum-mode)
 #+END_SRC
 *** projectile                                                    :package:
+:PROPERTIES:
+:ID:       04732738-a291-4ef6-9f62-4554da385154
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package projectile
       :ensure projectile
@@ -2930,6 +3275,9 @@ Line numbers
       (add-hook 'erc-mode 'qdot/projectile-off))
 #+END_SRC
 *** python-mode                                                   :package:
+:PROPERTIES:
+:ID:       f441c829-0494-4021-9709-16b26e58c2b8
+:END:
 #+BEGIN_SRC emacs-lisp
   ;; (use-package python-mode
   ;; ;  :ensure python-mode
@@ -2956,6 +3304,9 @@ Line numbers
   ;;     (add-hook 'python-mode-hook 'qdot/python-mode-hook)))
 #+END_SRC  
 *** racer                                                         :package:
+:PROPERTIES:
+:ID:       31da4844-43d6-49dc-bea9-62d8336c9c41
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package racer
       :ensure racer
@@ -2989,16 +3340,25 @@ Line numbers
 #+END_SRC
 
 *** rtags                                                         :package:
+:PROPERTIES:
+:ID:       247e8e8f-dedb-4fad-9f41-9cb95d77e2cf
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package rtags
       :ensure t)
 #+END_SRC
 *** rust-mode                                                     :package:
+:PROPERTIES:
+:ID:       c1bc6012-e687-4c4c-8278-dce57eaf7a44
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
       :ensure rust-mode)
 #+END_SRC
 *** smartparens                                                   :package:
+:PROPERTIES:
+:ID:       6242c0f2-07e0-4c1b-81a0-b3ab3606d41d
+:END:
 Smarter paren matching without going the paredit route. 
 
 Turning off deferred loading because this is useful almost everywhere.
@@ -3017,6 +3377,9 @@ Turning off deferred loading because this is useful almost everywhere.
       (sp-local-pair 'erc-mode "'" nil :actions nil)))
 #+END_SRC
 *** smerge-mode                                                   :package:
+:PROPERTIES:
+:ID:       f795d7f6-7260-4468-91af-98cb3978fed7
+:END:
 Adds commands for dealing with conflicted merge files (i.e. >>>>>>> and <<<<<<< files)
 
 http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-kmacro/
@@ -3033,6 +3396,9 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (add-hook 'find-file-hook 'sm-try-smerge t)
 #+END_SRC
 *** toml-mode                                                     :package:
+:PROPERTIES:
+:ID:       b532ccd7-cd10-4f57-a10c-a0f904881722
+:END:
 toml files are usually used for Rust Cargo specifications.
 #+BEGIN_SRC emacs-lisp
   (use-package toml-mode
@@ -3040,6 +3406,9 @@ toml files are usually used for Rust Cargo specifications.
 #+END_SRC
 
 *** web-mode                                                      :package:
+:PROPERTIES:
+:ID:       cd21c7bf-6554-463f-95c8-806deac15f4b
+:END:
 #+BEGIN_SRC emacs-lisp
     (use-package web-mode
       :ensure web-mode
@@ -3059,12 +3428,18 @@ toml files are usually used for Rust Cargo specifications.
 #+END_SRC
 
 *** yaml-mode                                                     :package:
+:PROPERTIES:
+:ID:       46a9b080-a30b-42c4-bc43-785364ca3032
+:END:
 Used for Travis configs, sometimes for Pelican work
 #+BEGIN_SRC emacs-lisp
   (use-package yaml-mode
       :ensure yaml-mode)
 #+END_SRC
 *** yasnippet                                                     :package:
+:PROPERTIES:
+:ID:       ce903f75-1f82-4440-8e7a-f23ba161acc6
+:END:
 Provides fillable templates.
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
@@ -3081,6 +3456,9 @@ Provides fillable templates.
 #+END_SRC
 ** Writing
 *** adoc-mode                                                     :package:
+:PROPERTIES:
+:ID:       b5336356-8c0d-45ab-a944-0ba58ecb3abb
+:END:
 Asciidoc. I rarely use this format anymore, but it's handy for legacy
 stuff.
 #+BEGIN_SRC emacs-lisp
@@ -3089,6 +3467,9 @@ stuff.
     :mode ("\\.asciidoc\\'" . adoc-mode))
 #+END_SRC
 *** htmlize                                                       :package:
+:PROPERTIES:
+:ID:       7dc0d2d7-1bfd-4932-bdf8-f45b7f5e2f76
+:END:
 Used for HTMLizing buffers, but mostly for code block export in
 org-mode.
 #+BEGIN_SRC emacs-lisp
@@ -3097,6 +3478,9 @@ org-mode.
 #+END_SRC
 
 *** markdown-mode                                                 :package:
+:PROPERTIES:
+:ID:       4742cb15-fd37-4d32-a76f-2650087eed40
+:END:
 Markdown. Used mostly for blogging and README files.
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
@@ -3105,6 +3489,9 @@ Markdown. Used mostly for blogging and README files.
     :ensure markdown-mode)
 #+END_SRC
 *** pelican-mode                                                  :package:
+:PROPERTIES:
+:ID:       eea1f024-0dd5-4a36-a725-df39ca9eaef1
+:END:
 I use [[http://getpelican.com][pelican]] for blogs. This just wraps a few commands in to make
 compiling blogs from post buffers easier.
 #+BEGIN_SRC emacs-lisp
@@ -3115,6 +3502,9 @@ compiling blogs from post buffers easier.
 *
 ** Social (IRC, Twitter, Etc)
 *** bitlmacs                                                      :package:
+:PROPERTIES:
+:ID:       6477fddd-c1d1-4841-ba8b-d8ab721d5da3
+:END:
 Utility package for using bitlbee through ERC. Currently breaks
 horribly if called before there's a message buffer.
 #+BEGIN_SRC emacs-lisp
@@ -3126,6 +3516,9 @@ horribly if called before there's a message buffer.
 #+END_SRC
 
 *** erc-mode                                                      :package:
+:PROPERTIES:
+:ID:       5e690fcb-0012-4cdb-be17-fa708970575d
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package erc
     :ensure erc-hl-nicks
@@ -3138,6 +3531,9 @@ horribly if called before there's a message buffer.
 :header-args: :tangle tangle/qdot-erc-config.el
 :END:
 ***** Module and variable setup
+:PROPERTIES:
+:ID:       dd5d9592-de17-4202-8a52-91a33e6c83c9
+:END:
 #+BEGIN_SRC emacs-lisp
   (require 'erc-fill)
   (require 'erc-ring)
@@ -3183,6 +3579,9 @@ horribly if called before there's a message buffer.
             'erc-truncate-buffer)
 #+END_SRC
 ***** Make join/part showing buffer local
+:PROPERTIES:
+:ID:       83bba9a1-e636-49d3-93c9-019a3adb62a9
+:END:
 Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+BEGIN_SRC emacs-lisp
   (defvar qdot/erc-status-allow-list nil
@@ -3209,6 +3608,9 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
             ad-do-it)))
 #+END_SRC
 ***** ZNC Connection Setup
+:PROPERTIES:
+:ID:       e226ff99-ffc5-4e6f-bf8b-6909d7126e04
+:END:
 #+BEGIN_SRC emacs-lisp
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;;
@@ -3263,6 +3665,9 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
     
 #+END_SRC
 ***** defadvice buffer clearing
+:PROPERTIES:
+:ID:       1b53eb3d-e46c-4df6-939d-d83e0d50d764
+:END:
 #+BEGIN_SRC emacs-lisp
   (defun qdot/clear-irc-buffer ()
     "If the current buffer is and ERC buffer, clear all text out of
@@ -3279,6 +3684,9 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
     (qdot/clear-irc-buffer))
 #+END_SRC
 ***** Kill all buffers
+:PROPERTIES:
+:ID:       65e6ab10-999d-4507-9df5-23e2fbf09a2c
+:END:
 #+BEGIN_SRC emacs-lisp
   (defun qdot/erc-kill-all-channel-buffers ()
     (interactive)
@@ -3324,11 +3732,17 @@ Only show joins/hides/quits for channels we specify in qdot/erc-event-channels
 #+END_SRC  
 
 ***** Provides Statement
+:PROPERTIES:
+:ID:       4643f822-0e99-4898-bee9-88cc75619cd0
+:END:
 #+BEGIN_SRC emacs-lisp
 (provide 'qdot-erc-config)
 #+END_SRC
 
 *** sauron                                                        :package:
+:PROPERTIES:
+:ID:       33e5abcf-f2b8-4a6e-8245-fefcca6d3856
+:END:
 Notification system. Usually kept in its own window in a workgroup
 that also houses my org mode agenda. Handy way to see who msg'd while
 I was away.
@@ -3346,6 +3760,9 @@ I was away.
 :header-args: :tangle tangle/qdot-sauron-config.el
 :END:
 ***** Sauron Variables
+:PROPERTIES:
+:ID:       1ced4371-27da-4961-ac8f-927da07c04c6
+:END:
 #+BEGIN_SRC emacs-lisp
   (setq sauron-separate-frame nil
         sauron-modules '(sauron-erc
@@ -3365,6 +3782,9 @@ I was away.
         '("qDot_" "qDot" "aim-xiuvx" "aim-bokehcat" "aim-subgirl13"))
 #+END_SRC
 ***** Monkey patching notifications
+:PROPERTIES:
+:ID:       5f7300b1-6689-412e-8fa4-153180b24043
+:END:
 #+BEGIN_SRC emacs-lisp
   (defun qdot/monkey-patch-sr ()
     ;; Monkeypatching sauron's ERC hook until I write a msg string formatter for it
@@ -3412,10 +3832,16 @@ I was away.
   (add-hook 'sauron-mode-hook 'qdot/monkey-patch-sr)
 #+END_SRC
 ***** Provides Statement
+:PROPERTIES:
+:ID:       979ee629-51ea-45ac-985c-b90c503e9426
+:END:
 #+BEGIN_SRC emacs-lisp
 (provide 'qdot-sauron-config)
 #+END_SRC
 *** twittering-mode                                               :package:
+:PROPERTIES:
+:ID:       1da25656-9416-4f47-b038-ad028fa7476a
+:END:
 Set up twitter. Update every 10 minutes, show icons, spellcheck when
 writing, and always bring up home, mentions, and dms
 #+BEGIN_SRC emacs-lisp
@@ -3437,6 +3863,9 @@ writing, and always bring up home, mentions, and dms
 
 ** Terminals
 *** ansi-color                                                    :package:
+:PROPERTIES:
+:ID:       7f251497-74c8-461c-bf43-5b143dbe0799
+:END:
 Turn on ansi in shells
 #+BEGIN_SRC emacs-lisp
   (use-package ansi-color
@@ -3452,6 +3881,9 @@ Turn on ansi in shells
 
 
 *** eshell                                                        :package:
+:PROPERTIES:
+:ID:       46fa58de-6616-46f9-93a1-61bf365ed4c2
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package eshell
     :ensure eshell
@@ -3520,6 +3952,9 @@ Turn on ansi in shells
 
 #+END_SRC
 *** multiterm                                                     :package:
+:PROPERTIES:
+:ID:       f93a422e-efe2-4468-9afb-1b45f20e3780
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package multi-term
     :ensure multi-term
@@ -3541,6 +3976,9 @@ Turn on ansi in shells
 
 ** Window Management
 *** workgroups                                                    :package:
+:PROPERTIES:
+:ID:       7aee7658-a0a0-4b7e-a2e0-673fe0917017
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package workgroups2
     :ensure workgroups2
@@ -3571,6 +4009,9 @@ Turn on ansi in shells
 :header-args: :tangle tangle/qdot-workgroups-config.el
 :END:
 ***** Variables
+:PROPERTIES:
+:ID:       e0b54e24-95f8-4019-9c43-78baa89567d6
+:END:
 #+BEGIN_SRC emacs-lisp
   (setq
    ;; Set the prefix key to tilde, what I normally use in screen
@@ -3586,6 +4027,9 @@ Turn on ansi in shells
    wg-switch-to-first-workgroup-on-find-session-file nil)
 #+END_SRC
 ***** uid-mismatch handling
+:PROPERTIES:
+:ID:       5b5acfd8-6fdd-4013-a7e9-06adffbaacd9
+:END:
 #+BEGIN_SRC emacs-lisp
   ;; Due to some buffers having issues when reloading (erc), uids start
   ;; to mismatch which massively trips up workgroups. This is function
@@ -3688,12 +4132,18 @@ Turn on ansi in shells
   ;; (wg-filter-buffer-list-by-not-major-mode 'erc-mode (buffer-list))
 #+END_SRC
 ***** Provides Statement
+:PROPERTIES:
+:ID:       96796e2b-623c-4253-8d9f-8afdb12c5c6a
+:END:
 #+BEGIN_SRC emacs-lisp
 (provide 'qdot-workgroups-config)
 #+END_SRC
 
 ** Misc
 *** easy-pg                                                       :package:
+:PROPERTIES:
+:ID:       9e91eaaa-4868-4f9c-8b50-982337bbb2d0
+:END:
 gpg file auto query/loading
 #+BEGIN_SRC emacs-lisp
   (use-package epa-file
@@ -3705,6 +4155,9 @@ gpg file auto query/loading
 #+END_SRC
 
 *** proced                                                        :package:
+:PROPERTIES:
+:ID:       5e02cdea-930d-4304-b11b-dcc02285c93a
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package proced
     :commands (proced)
@@ -3718,6 +4171,9 @@ gpg file auto query/loading
       (add-hook 'proced-mode-hook 'qdot/proced-settings)))
 #+END_SRC
 *** qblog                                                         :package:
+:PROPERTIES:
+:ID:       3a106b89-a33b-42df-b642-d0b932693eae
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package qblog
       :defer t
@@ -3731,6 +4187,9 @@ gpg file auto query/loading
       (setq qblog/blog-file-extension ".markdown"))
 #+END_SRC
 *** qdot-funcs                                                    :package:
+:PROPERTIES:
+:ID:       3145e293-844a-473c-903c-31c1f7200af0
+:END:
 #+BEGIN_SRC emacs-lisp
   (require 'qdot-funcs)
   (bind-key "C-c C-s" 'qdot/sudo-edit-current-file)
@@ -3741,6 +4200,9 @@ gpg file auto query/loading
   
 #+END_SRC
 * Keybinds
+:PROPERTIES:
+:ID:       7f61df27-4dcc-46e6-916c-00e3ca7d6ce8
+:END:
 #+BEGIN_SRC emacs-lisp
   (bind-key "C-c r"   'revert-buffer)
   (bind-key "C-c v"   'visual-line-mode)
@@ -3765,10 +4227,16 @@ gpg file auto query/loading
 
 #+END_SRC
 * Function Warnings/Disables
+:PROPERTIES:
+:ID:       8dbbba25-07b7-4fe9-9130-03497b099275
+:END:
 #+BEGIN_SRC emacs-lisp
 (put 'downcase-region 'disabled nil)
 #+END_SRC
 * Startup Timing Output
+:PROPERTIES:
+:ID:       15d8cfb3-a1b6-4572-ad44-8f4541e0af71
+:END:
 Taken from jwiegley's conf
 https://github.com/jwiegley/dot-emacs/blob/master/init.el
 #+BEGIN_SRC emacs-lisp
@@ -3786,6 +4254,9 @@ https://github.com/jwiegley/dot-emacs/blob/master/init.el
               t))
 #+END_SRC
 * Hooks
+:PROPERTIES:
+:ID:       d11880e5-e8d6-4dcb-8216-5fc000b2ae08
+:END:
 Extra hooks to functions from the qdot-funcs modules
 #+BEGIN_SRC emacs-lisp
   ;; Make sure we want to quit
