@@ -2530,15 +2530,17 @@ evaluation on a few languages.
   (require 'ob-lilypond)
   (org-babel-do-load-languages
     'org-babel-load-languages
-    '(
-      (emacs-lisp . t)
-      (sh t)
-      (org t)
-      (lilypond t)))
+    '((emacs-lisp . t)
+      (shell . t)
+      (org . t)
+      (C . t)
+      (lilypond . t)))
 
   (defun qdot/org-confirm-babel-evaluate (lang body)
     (and (not (string= lang "emacs-lisp"))
          (not (string= lang "lilypond"))
+         (not (string= lang "sh"))
+         (not (string= lang "shell"))
          (not (string= lang "ditaa"))))
   (setq org-confirm-babel-evaluate 'qdot/org-confirm-babel-evaluate)
 #+END_SRC
