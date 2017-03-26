@@ -2822,6 +2822,11 @@ semantic-mode when loading C++ files. May just completely remove soon.
       (add-hook 'company-mode-hook
                 (lambda ()
                   (company-quickhelp-mode 1))))
+
+  (use-package company-racer
+      :ensure t
+      :init
+      (add-to-list 'company-backends '(company-racer)))
 #+END_SRC
 *** compilation                                                   :package:
 :PROPERTIES:
