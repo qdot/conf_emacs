@@ -3143,6 +3143,23 @@ Use rtags for symbol lookup and jumps, irony-mode for completion.
       :config
       (add-hook 'js2-mode-hook #'js2-refactor-mode))
 #+END_SRC
+*** js-doc                                                        :package:
+:PROPERTIES:
+:ID:       d37a0910-8c84-4e48-ab23-d2af97441e9b
+:END:
+#+BEGIN_SRC emacs-lisp
+  (use-package js-doc
+      :ensure t
+      :config
+      (setq js-doc-mail-address "kyle@machul.is"
+         js-doc-author (format "Kyle Machulis <%s>" js-doc-mail-address)
+         js-doc-url "http://kyle.machul.is"
+         js-doc-license "BSD 3-Clause")
+      (add-hook 'js2-mode-hook
+                #'(lambda ()
+                    (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
+                    (define-key js2-mode-map "@" 'js-doc-insert-tag))))
+#+END_SRC
 *** json-mode                                                     :package:
 :PROPERTIES:
 :ID:       bfb36a5b-7f03-43cb-aa8a-d851f8e2d428
