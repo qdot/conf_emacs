@@ -2616,6 +2616,16 @@ load this config using require.
 #+END_SRC
 
 ** Programming
+*** cargo                                                         :package:
+:PROPERTIES:
+:ID:       ed3f5961-5124-4fa0-83b4-299227bf57e1
+:END:
+#+BEGIN_SRC emacs-lisp
+  (use-package cargo
+      :ensure t
+      :config
+      (add-to-list 'rust-mode-hook 'cargo-minor-mode))
+#+END_SRC
 *** cc-mode                                                       :package:
 :PROPERTIES:
 :ID:       49c62c49-51eb-4040-945f-e2619790e7a0
