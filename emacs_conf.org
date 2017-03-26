@@ -2851,7 +2851,14 @@ Compilation mode.
     (setq compilation-read-command nil)
     (setq compilation-auto-jump-to-first-error nil)
     (setq compilation-scroll-output 'first-error)
-    (setq mode-compile-always-save-buffer-p t))
+    (setq mode-compile-always-save-buffer-p t)
+    ;; Turn on ansi colors in compilation buffers
+    (ignore-errors
+    (require 'ansi-color)
+    (defun my-colorize-compilation-buffer ()
+      (when (eq major-mode 'compilation-mode)
+        (ansi-color-apply-on-region compilation-filter-start (point-max))))
+    (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer)))
 
 #+END_SRC
 *** dxr                                                           :package:
