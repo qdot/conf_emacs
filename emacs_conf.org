@@ -3317,7 +3317,11 @@ Line numbers
       :config
       (projectile-global-mode)
       (setq projectile-completion-system 'ivy)
-      (projectile-register-project-type 'gecko '("mach" "moz.build") "python mach --log-no-times build" "python mach mochitest" "python mach run")
+      (projectile-register-project-type 'gecko
+                                        '("mach" "moz.build")
+                                        "NO_BUILDSTATUS_MESSAGES=1 python mach --log-no-times build"
+                                        "python mach mochitest"
+                                        "python mach run")
       (defun qdot/projectile-off ()
         (projectile-mode -1))
       ;; Don't want this on for IRC
