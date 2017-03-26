@@ -3241,6 +3241,14 @@ git management in emacs.
   (use-package nxml-mode
     :mode ("\\.\\(xml\\|mxml\\)\\'" . nxml-mode))
 #+END_SRC
+*** powershell                                                    :package:
+:PROPERTIES:
+:ID:       cae62b72-f698-4cbe-8056-11ec8baf44db
+:END:
+#+BEGIN_SRC emacs-lisp
+  (use-package powershell
+      :ensure t)
+#+END_SRC
 *** prog-mode                                                     :package:
 :PROPERTIES:
 :ID:       82cf0d82-ba2c-4c36-9fe3-8d348e5e3e13
