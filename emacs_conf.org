@@ -797,6 +797,28 @@ Paradox makes the package list pretty and adds some stats to the listings.
     :ensure paradox
     :commands (paradox-list-packages))
 #+END_SRC
+*** rainbow-delimiters                                            :package:
+:PROPERTIES:
+:ID:       7935f464-2554-4a49-ae81-866f0adb4aa2
+:END:
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :ensure rainbow-delimiters
+    :commands (rainbow-delimiters-mode rainbow-delimiters-mode-enable)
+    :init
+    (custom-set-faces
+     '(rainbow-delimiters-depth-1-face ((t (:foreground "green" :weight extra-bold))))
+     '(rainbow-delimiters-depth-2-face ((t (:foreground "forestgreen" :weight bold))))
+     '(rainbow-delimiters-depth-3-face ((t (:foreground "lightseagreen" :weight bold))))
+     '(rainbow-delimiters-depth-4-face ((t (:foreground "lightskyblue" :weight bold))))
+     '(rainbow-delimiters-depth-5-face ((t (:foreground "cyan" :weight bold))))
+     '(rainbow-delimiters-depth-6-face ((t (:foreground "steelblue" :weight bold))))
+     '(rainbow-delimiters-depth-7-face ((t (:foreground "orchid" :weight bold))))
+     '(rainbow-delimiters-depth-8-face ((t (:foreground "purple" :weight bold))))
+     '(rainbow-delimiters-depth-9-face ((t (:foreground "hotpink" :weight bold))))
+     '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
+#+END_SRC
+
 *** recentf                                                       :package:
 :PROPERTIES:
 :ID:       611bcd05-ac88-4cfd-9f6a-c827eaaf05f6
@@ -3329,25 +3351,6 @@ Line numbers
       (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
       (setq company-tooltip-align-annotations t))
 #+END_SRC
-*** rainbow-delimiters                                            :package:
-#+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters
-    :ensure rainbow-delimiters
-    :commands (rainbow-delimiters-mode rainbow-delimiters-mode-enable)
-    :init
-    (custom-set-faces
-     '(rainbow-delimiters-depth-1-face ((t (:foreground "green" :weight extra-bold))))
-     '(rainbow-delimiters-depth-2-face ((t (:foreground "forestgreen" :weight bold))))
-     '(rainbow-delimiters-depth-3-face ((t (:foreground "lightseagreen" :weight bold))))
-     '(rainbow-delimiters-depth-4-face ((t (:foreground "lightskyblue" :weight bold))))
-     '(rainbow-delimiters-depth-5-face ((t (:foreground "cyan" :weight bold))))
-     '(rainbow-delimiters-depth-6-face ((t (:foreground "steelblue" :weight bold))))
-     '(rainbow-delimiters-depth-7-face ((t (:foreground "orchid" :weight bold))))
-     '(rainbow-delimiters-depth-8-face ((t (:foreground "purple" :weight bold))))
-     '(rainbow-delimiters-depth-9-face ((t (:foreground "hotpink" :weight bold))))
-     '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
-#+END_SRC
-
 *** rtags                                                         :package:
 :PROPERTIES:
 :ID:       247e8e8f-dedb-4fad-9f41-9cb95d77e2cf
