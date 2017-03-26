@@ -485,8 +485,6 @@ fill in missing glyphs for odd emoticons that pop up on IRC/IM usually.
   (when (member "Symbola" (font-family-list))
     (set-fontset-font "fontset-default" nil
                       (font-spec :size 20 :name "Symbola")))
-  (when macosx-p
-    (set-face-font 'default "consolas-11"))
   (when mswindows-p
     (set-face-font 'default "consolas-10"))
   (when linux-p
