@@ -771,6 +771,7 @@ Set up ibuffer groups via vc.
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer-vc
       :ensure t
+      :commands ibuffer-other-window
       :init
       ;; loads version control groups (call on entering ibuffer)
       (defun ibuffer-vc-add-vc-filter-groups ()
