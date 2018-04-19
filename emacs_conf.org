@@ -2655,6 +2655,7 @@ http://endlessparentheses.com/ispell-and-org-mode.html
 #+BEGIN_SRC emacs-lisp
   (use-package org-trello
       :ensure t
+      :disabled t
       :config
       (custom-set-variables '(org-trello-files
                               '("~/emacs_org/trello-tasks.org"
