@@ -3605,6 +3605,12 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
         (setq company-tooltip-align-annotations t)))
   (flycheck-add-mode 'typescript-tslint 'web-mode)
 #+END_SRC
+*** twee-mode                                                     :package:
+Mode for editing twine files. File in elisp directory for the moment.
+#+BEGIN_SRC emacs-lisp
+  (use-package twee-mode
+      :mode (("\\.twee\\'" . twee-mode)))
+#+END_SRC
 *** typescript-mode                                               :package:
 #+BEGIN_SRC emacs-lisp
   (use-package typescript-mode
