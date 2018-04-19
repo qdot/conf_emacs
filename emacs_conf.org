@@ -423,7 +423,7 @@ perfectly.
 When on a mac, make command meta.
 
 #+BEGIN_SRC emacs-lisp
-  (when (eq system-type 'darwin)
+  (when macosx-p
     (setq mac-command-modifier 'meta)
     (setq mac-option-modifier nil))
 #+END_SRC
