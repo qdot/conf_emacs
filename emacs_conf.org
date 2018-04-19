@@ -234,6 +234,9 @@ tangle-and-compile-config.
 
 #+END_SRC
 ** Load exwm if needed
+:PROPERTIES:
+:ID:       2551c65d-6c7e-4041-9f0d-dcf3051222ca
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package exwm
       :ensure t)
@@ -524,6 +527,9 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (blink-cursor-mode -1)
 #+END_SRC
 ** exwm setup
+:PROPERTIES:
+:ID:       c64f8704-3af7-40c8-b9aa-cad0466eca70
+:END:
 Setup taken from https://github.com/technomancy/dotfiles/blob/master/.emacs.d/phil/wm.el
 
 #+BEGIN_SRC emacs-lisp
@@ -1044,6 +1050,9 @@ Make buffer names unique, handy when opening files with similar names
             uniquify-ignore-buffers-re "^\\*")))
 #+END_SRC
 *** visual-fill-column                                            :package:
+:PROPERTIES:
+:ID:       b582405f-9bd3-44da-a6f8-145b0a294c90
+:END:
 Sets a fill column limit in visual-line-mode, so it will wrap earlier
 than the window edge
 #+BEGIN_SRC emacs-lisp
@@ -1814,6 +1823,9 @@ bleeding edge of org-mode (once again, usually stable, and useful
 things land constantly), as well as providing me with multiple contrib
 modules that I need.
 **** Modules
+:PROPERTIES:
+:ID:       02f3dfd6-937a-4eac-91ea-ee7f6dafe86b
+:END:
 
 :PROPERTIES:
 :ID:       63de5529-45a1-48a4-b841-160b792f677c
@@ -1868,6 +1880,9 @@ Currently stored in elisp directory locally.
   (require 'org-next-spec-day)
 #+END_SRC
 **** Packages
+:PROPERTIES:
+:ID:       2a04a1bc-93df-4e2a-af2c-f10942506899
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package ox-gfm
       :ensure t
@@ -2693,6 +2708,9 @@ http://endlessparentheses.com/ispell-and-org-mode.html
            )))
 #+END_SRC
 **** export subtrees to different files
+:PROPERTIES:
+:ID:       81ee3946-fe0b-49cc-b664-255ec652d316
+:END:
 #+BEGIN_SRC emacs-lisp
   ;; export headlines to separate files
   ;; http://emacs.stackexchange.com/questions/2259/how-to-export-top-level-headings-of-org-mode-buffer-to-separate-files
@@ -2912,6 +2930,9 @@ Compilation mode.
 
 #+END_SRC
 *** csharp-mode                                                   :package:
+:PROPERTIES:
+:ID:       a4148006-be91-43fe-ab86-9b9320400652
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package csharp-mode
       :ensure t
@@ -3022,6 +3043,9 @@ Using flycheck instead of flymake
     (global-flycheck-mode))
 #+END_SRC
 *** flycheck-rtags                                                :package:
+:PROPERTIES:
+:ID:       c456737b-bd3a-42e3-99af-9c98b568135b
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-rtags
       :ensure t
@@ -3414,6 +3438,9 @@ Line numbers
       (add-hook 'erc-mode 'qdot/projectile-off))
 #+END_SRC
 *** pug-mode                                                      :package:
+:PROPERTIES:
+:ID:       e89b6ddd-8a0e-4e92-8b35-97e030df2e9f
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package pug-mode
       :ensure t
@@ -3529,6 +3556,9 @@ Turning off deferred loading because this is useful almost everywhere.
     (sp-local-pair 'erc-mode "'" nil :actions nil))
 #+END_SRC
 *** smerge-mode                                                   :package:
+:PROPERTIES:
+:ID:       04c2ad90-a2da-48dc-ac3f-069d58ffca33
+:END:
 
 :PROPERTIES:
 :ID:       f795d7f6-7260-4468-91af-98cb3978fed7
@@ -3549,6 +3579,9 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (add-hook 'find-file-hook 'sm-try-smerge t)
 #+END_SRC
 *** tide                                                          :package:
+:PROPERTIES:
+:ID:       1a791625-3882-41c6-b4d1-e72f56c504e3
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package tide
       :ensure t
@@ -3571,12 +3604,18 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
   (flycheck-add-mode 'typescript-tslint 'web-mode)
 #+END_SRC
 *** twee-mode                                                     :package:
+:PROPERTIES:
+:ID:       3651856a-e762-4ede-a997-d7e37a44eb27
+:END:
 Mode for editing twine files. File in elisp directory for the moment.
 #+BEGIN_SRC emacs-lisp
   (use-package twee-mode
       :mode (("\\.twee\\'" . twee-mode)))
 #+END_SRC
 *** typescript-mode                                               :package:
+:PROPERTIES:
+:ID:       81754e0a-2b2e-4728-a45a-3f53ccf6a9ad
+:END:
 #+BEGIN_SRC emacs-lisp
   (use-package typescript-mode
       :ensure t
