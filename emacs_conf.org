@@ -3209,7 +3209,7 @@ Use rtags for symbol lookup and jumps, irony-mode for completion.
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package js2-mode
-      :ensure js2-mode
+      :ensure t
       :commands (js2-mode)
       :mode (("\\.js\\'" . js2-mode)
              ("\\.jsm\\'" . js2-mode))
