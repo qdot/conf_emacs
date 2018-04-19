@@ -526,7 +526,8 @@ Setup taken from https://github.com/technomancy/dotfiles/blob/master/.emacs.d/ph
 
 #+BEGIN_SRC emacs-lisp
   (when (and window-system (require 'exwm nil t))
-    (use-package exwm-config)
+    (use-package exwm-config
+        :after exwm)
 
     (exwm-config-default)
 
