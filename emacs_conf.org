@@ -1814,6 +1814,7 @@ bleeding edge of org-mode (once again, usually stable, and useful
 things land constantly), as well as providing me with multiple contrib
 modules that I need.
 **** Modules
+
 :PROPERTIES:
 :ID:       63de5529-45a1-48a4-b841-160b792f677c
 :END:
@@ -1866,7 +1867,14 @@ Currently stored in elisp directory locally.
 #+BEGIN_SRC emacs-lisp
   (require 'org-next-spec-day)
 #+END_SRC
-
+**** Packages
+#+BEGIN_SRC emacs-lisp
+  (use-package ox-gfm
+      :ensure t
+      :init
+      (eval-after-load "org"
+        '(require 'ox-gfm nil t)))
+#+END_SRC
 **** Variables
 :PROPERTIES:
 :ID:       d2917f45-4633-4a17-a152-4cb411f18925
