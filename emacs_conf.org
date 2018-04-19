@@ -1390,7 +1390,7 @@ http://endlessparentheses.com/the-toggle-map-and-wizardry.html
 :ID:       d79f5538-cf00-4449-b692-30f8bceea56e
 :END:
 Taken from https://github.com/yangchenyun/emacs-prelude/blob/master/setup-hydra.el
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (defhydra hydra-org-trello (:color blue :hint nil :idle 0.4)
           "
                                                                             ╭────────────┐
