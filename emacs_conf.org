@@ -3489,7 +3489,10 @@ Use rtags for symbol lookup and jumps, irony-mode for completion.
                          (not (eq major-mode 'c-mode))) (rtags-has-filemanager))
                    (useFileManager (rtags-has-filemanager))
                    (t (rtags-is-indexed)))))
-
+      (setq rtags-display-result-backend 'ivy)
+      (setq rtags-autostart-diagnostics t)
+      (rtags-diagnostics)
+      (setq rtags-completions-enabled t)
       (defun tags-find-symbol-at-point (&optional prefix)
         (interactive "P")
         (if (and (not (rtags-find-symbol-at-point prefix)) rtags-last-request-not-indexed)
