@@ -3448,35 +3448,6 @@ Line numbers
       ;; Don't want this on for IRC
       (add-hook 'erc-mode 'qdot/projectile-off))
 #+END_SRC
-*** python-mode                                                   :package:
-:PROPERTIES:
-:ID:       f441c829-0494-4021-9709-16b26e58c2b8
-:END:
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package python-mode
-  ;; ;  :ensure python-mode
-  ;;   :interpreter ("python" . python-mode)
-  ;;   :init
-  ;;   (progn
-  ;;     (defun qdot/python-mode-hook()
-  ;;       (linum-mode)
-  ;;       (setq tab-width 4)
-  ;;       (setq py-indent-offset 4)
-  ;;       (setq python-indent-offset 4)
-  ;;       (set-variable 'python-indent-guess-indent-offset nil t)
-  ;;       (set-variable 'fill-paragraph-function 'py-fill-paragraph t)
-  ;;       (setq ac-sources (append '(ac-source-yasnippet) ac-sources))
-  ;;       (set-fill-column 79)
-  ;;       (bind-key "M-q" 'python-fill-paragraph python-mode-map)
-  ;;       (elpy-enable)
-  ;;       (setq elpy-rpc-backend "jedi")
-  ;;       (subword-mode 1))
-  ;;     ;; use flycheck instead of flymake
-  ;;     ;; (when (require 'flycheck nil t)
-  ;;     ;;   (setq elpy-default-minor-modes (delete 'flymake-mode elpy-default-minor-modes))
-  ;;     ;;   (add-to-list 'elpy-default-minor-modes 'flycheck-mode))
-  ;;     (add-hook 'python-mode-hook 'qdot/python-mode-hook)))
-#+END_SRC  
 *** racer                                                         :package:
 :PROPERTIES:
 :ID:       31da4844-43d6-49dc-bea9-62d8336c9c41
