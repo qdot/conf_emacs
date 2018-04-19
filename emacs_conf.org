@@ -3583,6 +3583,38 @@ http://atomized.org/2010/06/resolving-merge-conflicts-the-easy-way-with-smerge-k
 
   (add-hook 'find-file-hook 'sm-try-smerge t)
 #+END_SRC
+*** tide                                                          :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package tide
+      :ensure t
+      :diminish t
+      :init
+      (defun setup-tide-mode ()
+        (interactive)
+        (tide-setup)
+        (flycheck-mode +1)
+        (flycheck-add-next-checker 'typescript-tide '(t . typescript-tslint) 'append)
+        (setq flycheck-check-syntax-automatically '(save mode-enabled))
+        (eldoc-mode +1)
+        (tide-hl-identifier-mode +1)
+        ;; company is an optional dependency. You have to
+        ;; install it separately via package-install
+        ;; `M-x package-install [ret] company`
+        (company-mode +1)
+        ;; aligns annotation to the right hand side
+        (setq company-tooltip-align-annotations t)))
+  (flycheck-add-mode 'typescript-tslint 'web-mode)
+#+END_SRC
+*** typescript-mode                                               :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package typescript-mode
+      :ensure t
+      :init
+      ;; aligns annotation to the right hand side
+      (setq company-tooltip-align-annotations t
+            typescript-indent-level 2)
+      (add-hook 'typescript-mode-hook #'setup-tide-mode))
+#+END_SRC
 *** toml-mode                                                     :package:
 :PROPERTIES:
 :ID:       b532ccd7-cd10-4f57-a10c-a0f904881722
