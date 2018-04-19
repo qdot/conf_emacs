@@ -89,8 +89,8 @@ fetched libs, etc...)
 #+END_SRC
 
 - packages that aren't in MELPA/ELPA/etc that we have to maintain
-  repos for. Things like CEDET and mu, as well as packages I'm
-  actively developing at the moment.
+  repos for. Things like mu, as well as packages I'm actively
+  developing at the moment.
 #+BEGIN_SRC emacs-lisp
   (defconst qdot/emacs-dev-package-dir
     (expand-file-name (concat qdot/emacs-conf-dir "dev-packages/"))
