@@ -3628,6 +3628,7 @@ Mode for editing twine files. File in elisp directory for the moment.
 toml files are usually used for Rust Cargo specifications.
 #+BEGIN_SRC emacs-lisp
   (use-package toml-mode
+      :mode ("\\.toml$" . toml-mode)
       :ensure toml-mode)
 #+END_SRC
 
