@@ -3637,21 +3637,24 @@ toml files are usually used for Rust Cargo specifications.
 :ID:       cd21c7bf-6554-463f-95c8-806deac15f4b
 :END:
 #+BEGIN_SRC emacs-lisp
-    (use-package web-mode
-      :ensure web-mode
-      :mode (("\\.html\\'" . web-mode)
-             ("\\.phtml\\'" . web-mode)
-             ("\\.xul\\'" . web-mode)
-             ("\\.tpl\\.php\\'" . web-mode)
-             ("\\.jsp\\'" . web-mode)
-             ("\\.as[cp]x\\'" . web-mode)
-             ("\\.erb\\'" . web-mode)
-             ("\\.mustache\\'" . web-mode)
-             ("\\.djhtml\\'" . web-mode))
-      :config
-      (setq web-mode-markup-indent-offset 2)
-      (setq web-mode-css-indent-offset 2)
-      (setq web-mode-code-indent-offset 2))
+  (use-package web-mode
+    :ensure web-mode
+    :mode (("\\.html\\'" . web-mode)
+           ("\\.phtml\\'" . web-mode)
+           ("\\.xul\\'" . web-mode)
+           ("\\.tpl\\.php\\'" . web-mode)
+           ("\\.jsp\\'" . web-mode)
+           ("\\.as[cp]x\\'" . web-mode)
+           ("\\.erb\\'" . web-mode)
+           ("\\.mustache\\'" . web-mode)
+           ("\\.djhtml\\'" . web-mode)
+           ("\\.vue\\'" . web-mode))
+    :config
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    ;; Turn off flycheck-mode in webcode, as multiple language checking is broken.
+    (add-hook 'web-mode-hook (lambda () (flycheck-mode -1))))
 #+END_SRC
 
 *** yaml-mode                                                     :package:
