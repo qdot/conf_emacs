@@ -1043,6 +1043,15 @@ Make buffer names unique, handy when opening files with similar names
             uniquify-after-kill-buffer-p t
             uniquify-ignore-buffers-re "^\\*")))
 #+END_SRC
+*** visual-fill-column                                            :package:
+Sets a fill column limit in visual-line-mode, so it will wrap earlier
+than the window edge
+#+BEGIN_SRC emacs-lisp
+  (use-package visual-fill-column
+      :ensure t
+      :config
+      (setq visual-fill-column-width 80))
+#+END_SRC
 ** Emacs Navigation
 *** ace-jump-mode                                                 :package:
 :PROPERTIES:
