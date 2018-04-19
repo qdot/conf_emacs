@@ -232,6 +232,8 @@ tangle-and-compile-config.
 :PROPERTIES:
 :ID:       2551c65d-6c7e-4041-9f0d-dcf3051222ca
 :END:
+If emacs is coming up as a window manager, exwm will be loaded.
+Otherwise, the load will just throw silently and we'll continue on.
 #+BEGIN_SRC emacs-lisp
   (use-package exwm
       :ensure t)
