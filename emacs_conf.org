@@ -2826,7 +2826,8 @@ http://stackoverflow.com/questions/3312114/how-to-tell-emacs-to-open-h-file-in-c
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package cmake-mode
-      :ensure cmake-mode)
+      :ensure t
+      :mode ("\\.cmake$" . cmake-mode))
 #+END_SRC
 *** company                                                       :package:
 :PROPERTIES:
