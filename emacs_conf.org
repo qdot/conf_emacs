@@ -4617,6 +4617,9 @@ CLOSED: [2013-02-26 Tue 21:32]
 CLOSED: [2015-05-23 Sat 20:38]
 *** DONE Encrypt maildir via truecrypt
 CLOSED: [2015-05-23 Sat 20:38]
+** exwm
+*** TODO Check out gpastel
+https://gitlab.petton.fr/DamienCassou/gpastel
 ** DONE Redo workgroups so that org mode comes up in window 1
 CLOSED: [2014-09-28 Sun 00:31]
 ** DONE Unbind erc privmsg/channels notifications from sauron
