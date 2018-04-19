@@ -3017,20 +3017,24 @@ Using flycheck instead of flymake
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
     :ensure flycheck
-    :commands flycheck-mode)
-  ;;   :init
-  ;;   (progn
-  ;;     ;;(add-hook 'after-init-hook #'global-flycheck-mode)
-
-  ;;     (flycheck-define-checker javascript-gjshint
-  ;;       "Google's Closure Linter for JS
-
-  ;; See URL `https://developers.google.com/closure/utilities/docs/linter_howto`"
-  ;;       :command ("gjslint" source-inplace)
-  ;;       :error-patterns
-  ;;       ((error line-start "Line " line ", E:" (zero-or-more not-newline) ": "
-  ;;               (message) line-end))
-  ;;       :modes (js-mode js2-mode js3-mode))))
+    :commands flycheck-mode
+    :init
+    (global-flycheck-mode))
+#+END_SRC
+*** flycheck-rtags                                                :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package flycheck-rtags
+      :ensure t
+      :disabled t
+      :init
+      ;; c-mode-common-hook is also called by c++-mode
+      (defun setup-flycheck-rtags ()
+        (interactive)
+        (flycheck-select-checker 'rtags)
+        ;; RTags creates more accurate overlays.
+        (setq-local flycheck-highlighting-mode nil)
+        (setq-local flycheck-check-syntax-automatically nil))
+      (add-hook 'c-mode-common-hook #'setup-flycheck-rtags))
 #+END_SRC
 *** flycheck-rust                                                 :package:
 :PROPERTIES:
