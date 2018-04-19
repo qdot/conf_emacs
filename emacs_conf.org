@@ -155,7 +155,6 @@ bring those in now.
   (setq use-package-verbose t)
   (eval-when-compile
     (require 'use-package))
-  (require 'diminish)
   (require 'bind-key)
 #+END_SRC
 *** use-package-chords                                            :package:
