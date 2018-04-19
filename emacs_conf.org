@@ -3448,6 +3448,12 @@ Line numbers
       ;; Don't want this on for IRC
       (add-hook 'erc-mode 'qdot/projectile-off))
 #+END_SRC
+*** pug-mode                                                      :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package pug-mode
+      :ensure t
+      :mode (("\\.pug\\'" . pug-mode)))
+#+END_SRC
 *** racer                                                         :package:
 :PROPERTIES:
 :ID:       31da4844-43d6-49dc-bea9-62d8336c9c41
