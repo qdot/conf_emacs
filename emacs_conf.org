@@ -481,6 +481,12 @@ Just expect font lock to be on everywhere.
   (global-font-lock-mode 1)
 #+END_SRC
 
+If we want to delete something, mark+write should be fine.
+
+#+BEGIN_SRC emacs-lisp
+  (delete-selection-mode 1)
+#+END_SRC
+
 ** Display, Font, and Modeline setup
 :PROPERTIES:
 :ID:       f9259321-db74-433c-b3f2-a1956d33b39e
