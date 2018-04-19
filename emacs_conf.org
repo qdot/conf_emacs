@@ -156,17 +156,12 @@ bring those in now.
   (eval-when-compile
     (require 'use-package))
   (require 'bind-key)
-#+END_SRC
-*** use-package-chords                                            :package:
-:PROPERTIES:
-:ID:       588dc5e4-2a7b-419b-aaf4-ddf7f83d4131
-:END:
-Add the ability to bind key chords using use-package :bind style.
-#+BEGIN_SRC emacs-lisp
-    (use-package use-package-chords
-        :ensure t
-        :config
-        (key-chord-mode 1))
+  ;; Add the ability to bind key chords using use-package :bind style.
+  (use-package use-package-chords
+      :ensure t
+      :config
+      (key-chord-mode 1))
+
 #+END_SRC
 ** Load org-mode
 :PROPERTIES:
