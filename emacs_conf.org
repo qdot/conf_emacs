@@ -2743,6 +2743,7 @@ load this config using require.
 #+BEGIN_SRC emacs-lisp
   (use-package cargo
       :ensure t
+      :mode "\\.rs\\'"
       :config
       (add-to-list 'rust-mode-hook 'cargo-minor-mode))
 #+END_SRC
