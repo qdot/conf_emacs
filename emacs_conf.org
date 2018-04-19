@@ -3553,18 +3553,18 @@ Turning off deferred loading because this is useful almost everywhere.
 #+BEGIN_SRC emacs-lisp
   (use-package smartparens-config
     :ensure smartparens
-    :defer nil
+    :commands (smartparens-global-mode)
     :bind (("<C-right>"   . sp-forward-slurp-sexp)
            ("<C-left>"    . sp-forward-barf-sexp)
            ("<C-M-right>" . sp-backward-slurp-sexp)
            ("<C-M-left>"  . sp-backward-barf-sexp))
-    :config
-    (progn
-      (smartparens-global-mode t)
-      ;; I start words with ' a lot when I chat apparently
-      (sp-local-pair 'erc-mode "'" nil :actions nil)))
+    :init
+    (smartparens-global-mode t)
+    ;; I start words with ' a lot when I chat apparently
+    (sp-local-pair 'erc-mode "'" nil :actions nil))
 #+END_SRC
 *** smerge-mode                                                   :package:
+
 :PROPERTIES:
 :ID:       f795d7f6-7260-4468-91af-98cb3978fed7
 :END:
