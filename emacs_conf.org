@@ -755,6 +755,7 @@ Set up ibuffer groups via vc.
 #+BEGIN_SRC emacs-lisp
   (use-package ibuffer-vc
       :ensure t
+      :after ibuffer
       :commands ibuffer-other-window
       :init
       ;; loads version control groups (call on entering ibuffer)
@@ -801,9 +802,9 @@ What a horrid oversight.
 #+BEGIN_SRC emacs-lisp
   (use-package ivy
       :ensure swiper
+      :bind (("C-x b" . ivy-switch-buffer))
       :init
       (setq ivy-use-virtual-buffers t)
-      (ivy-mode)
       (setq ivy-extra-directories nil)
       (setq ivy-display-style 'fancy)
 
@@ -820,6 +821,8 @@ What a horrid oversight.
         '((t . ivy--regex-plus)))
 
       (setq ivy-count-format "(%d/%d) ")
+      :config
+      (ivy-mode)
       ;; bind-keys isn't working here? No idea why.
       (bind-key "C-r" 'ivy-previous-line ivy-minibuffer-map)
       (bind-key "C-w" 'ivy-backward-kill-word ivy-minibuffer-map)
@@ -833,24 +836,23 @@ What a horrid oversight.
 Work with multiple cursors simultaneously.
 #+BEGIN_SRC emacs-lisp
   (use-package multiple-cursors
-    :commands (mc/mark-next-like-this
-               mc/mark-previous-like-this
-               mc/mark-all-like-this)
-    :bind (("C->" . mc/mark-next-like-this)
-           ("C-<" . mc/mark-previous-like-this)
-           ("C-*" . mc/mark-all-like-this))
-    :ensure multiple-cursors)
+      :ensure t
+      :commands (mc/mark-next-like-this
+                 mc/mark-previous-like-this
+                 mc/mark-all-like-this)
+      :bind (("C->" . mc/mark-next-like-this)
+             ("C-<" . mc/mark-previous-like-this)
+             ("C-*" . mc/mark-all-like-this)))
 #+END_SRC
 *** paradox                                                       :package:
 :PROPERTIES:
 :ID:       f94dc9c9-e3f0-430e-983f-88305859e101
 :END:
-
 Paradox makes the package list pretty and adds some stats to the listings.
 #+BEGIN_SRC emacs-lisp
   (use-package paradox
-    :ensure paradox
-    :commands (paradox-list-packages))
+      :ensure t
+      :commands (paradox-list-packages))
 #+END_SRC
 *** rainbow-delimiters                                            :package:
 :PROPERTIES:
@@ -858,20 +860,20 @@ Paradox makes the package list pretty and adds some stats to the listings.
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package rainbow-delimiters
-    :ensure rainbow-delimiters
-    :commands (rainbow-delimiters-mode rainbow-delimiters-mode-enable)
-    :init
-    (custom-set-faces
-     '(rainbow-delimiters-depth-1-face ((t (:foreground "green" :weight extra-bold))))
-     '(rainbow-delimiters-depth-2-face ((t (:foreground "forestgreen" :weight bold))))
-     '(rainbow-delimiters-depth-3-face ((t (:foreground "lightseagreen" :weight bold))))
-     '(rainbow-delimiters-depth-4-face ((t (:foreground "lightskyblue" :weight bold))))
-     '(rainbow-delimiters-depth-5-face ((t (:foreground "cyan" :weight bold))))
-     '(rainbow-delimiters-depth-6-face ((t (:foreground "steelblue" :weight bold))))
-     '(rainbow-delimiters-depth-7-face ((t (:foreground "orchid" :weight bold))))
-     '(rainbow-delimiters-depth-8-face ((t (:foreground "purple" :weight bold))))
-     '(rainbow-delimiters-depth-9-face ((t (:foreground "hotpink" :weight bold))))
-     '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
+      :ensure t
+      :commands (rainbow-delimiters-mode rainbow-delimiters-mode-enable)
+      :init
+      (custom-set-faces
+       '(rainbow-delimiters-depth-1-face ((t (:foreground "green" :weight extra-bold))))
+       '(rainbow-delimiters-depth-2-face ((t (:foreground "forestgreen" :weight bold))))
+       '(rainbow-delimiters-depth-3-face ((t (:foreground "lightseagreen" :weight bold))))
+       '(rainbow-delimiters-depth-4-face ((t (:foreground "lightskyblue" :weight bold))))
+       '(rainbow-delimiters-depth-5-face ((t (:foreground "cyan" :weight bold))))
+       '(rainbow-delimiters-depth-6-face ((t (:foreground "steelblue" :weight bold))))
+       '(rainbow-delimiters-depth-7-face ((t (:foreground "orchid" :weight bold))))
+       '(rainbow-delimiters-depth-8-face ((t (:foreground "purple" :weight bold))))
+       '(rainbow-delimiters-depth-9-face ((t (:foreground "hotpink" :weight bold))))
+       '(rainbow-delimiters-unmatched-face ((t (:foreground "red" :weight bold))))))
 #+END_SRC
 
 *** recentf                                                       :package:
@@ -883,7 +885,7 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 
 #+BEGIN_SRC emacs-lisp
   (use-package recentf
-    :config
+    :init
     ;; 50 files ought to be enough.
     (setq recentf-max-saved-items 50))
 #+END_SRC
@@ -894,11 +896,11 @@ http://www.masteringemacs.org/articles/2011/01/27/find-files-faster-recent-files
 Make rectangular region marking easier.
 #+BEGIN_SRC emacs-lisp
   (use-package rect-mark
-    :ensure rect-mark
-    :bind (("C-x r C-SPC" . rm-set-mark)
-           ("C-x r C-x" . rm-exchange-point-and-mark)
-           ("C-x r C-w" . rm-kill-region)
-           ("C-x r M-w" . rm-kill-ring-save)))
+      :ensure t
+      :bind (("C-x r C-SPC" . rm-set-mark)
+             ("C-x r C-x" . rm-exchange-point-and-mark)
+             ("C-x r C-w" . rm-kill-region)
+             ("C-x r M-w" . rm-kill-ring-save)))
 #+END_SRC
 *** saveplace                                                     :package:
 :PROPERTIES:
@@ -913,15 +915,12 @@ open, which causes weird problems. So org-mode is ignored.
 
 #+BEGIN_SRC emacs-lisp
   (use-package saveplace
-    :config
-    (progn
-      (setq-default save-place t)
-      ;; saveplace and org-mode do not play well together, reset the regexp to include
-      ;; org and org_archive files
-      (setq-default save-place-ignore-files-regexp "\\(?:COMMIT_EDITMSG\\|hg-editor-[[:alnum:]]+\\.txt\\|svn-commit\\.tmp\\|bzr_log\\.[[:alnum:]]+\\|.*\\.org\\|.*\\.org_archive\\)$")))
-    
+    :init
+    (setq-default save-place t)
+    ;; saveplace and org-mode do not play well together, reset the regexp to include
+    ;; org and org_archive files
+    (setq-default save-place-ignore-files-regexp "\\(?:COMMIT_EDITMSG\\|hg-editor-[[:alnum:]]+\\.txt\\|svn-commit\\.tmp\\|bzr_log\\.[[:alnum:]]+\\|.*\\.org\\|.*\\.org_archive\\)$"))
 #+END_SRC
-
 *** smart-mode-line                                               :package:
 :PROPERTIES:
 :ID:       57eb5f10-ccf0-42bd-ba79-6d0836e83cc1
@@ -930,28 +929,29 @@ Makes the modeline easier to customize, in terms of both color themes
 and content.
 #+BEGIN_SRC emacs-lisp
   (use-package smart-mode-line
-    :ensure smart-mode-line
-    :config
-    (progn
+      :ensure t
+      :init
       ;; The two known hashes for the sml dark theme
       (add-to-list 'custom-safe-themes "025354235e98db5e7fd9c1a74622ff53ad31b7bde537d290ff68d85665213d85")
       (add-to-list 'custom-safe-themes "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f")
       (setq sml/theme "dark")
+      :config
       (sml/setup)
       ;; Black doesn't work as a background
       (custom-theme-set-faces
        'smart-mode-line-dark
        '(mode-line     ((t :foreground "gray60" :background "#202020"))))
+      (add-to-list 'sml/replacer-regexp-list '("^/share/code/git-projects/" ":GP:"))
       (add-to-list 'sml/replacer-regexp-list '("^~/code/git-projects/" ":GP:"))
       (add-to-list 'sml/replacer-regexp-list '("^~/.emacs_files/" ":EF:"))
       (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox/" ":DB:"))
+      (add-to-list 'sml/replacer-regexp-list '("^/share/code/mozbuild/" ":MOZ:"))
       (add-to-list 'sml/replacer-regexp-list '("^~/code/mozbuild/" ":MOZ:"))
       (setq sml/hidden-modes
             '(" yas"
               " SP"
-              " Fly"))))
+              " Fly")))
 #+END_SRC
-
 *** smex                                                          :package:
 :PROPERTIES:
 :ID:       b5f0920c-16ac-4b8b-922d-cd3f9116ddaa
@@ -964,7 +964,8 @@ smex from https://github.com/abo-abo/smex in order to use smex and
 ivy-mode. So there's no ensure call here and I have to set the
 completion method.
 #+BEGIN_SRC emacs-lisp
-    (use-package smex
+  (use-package smex
+      :after ivy
       :load-path "~/.emacs_files/dev-packages/smex"
       :bind (("C-c C-c M-x" . execute-extended-command))
       :commands (smex smex-major-mode-commands)
@@ -977,11 +978,10 @@ completion method.
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package swiper
-      :ensure swiper
+      :ensure t
       :commands (swiper)
       :bind (("C-s" . swiper)
-             ("C-r" . swiper)
-             ("C-x b" . ivy-switch-buffer))
+             ("C-r" . swiper))
       :config
       ;; advise swiper to recenter on exit
       ;; http://pragmaticemacs.com/emacs/dont-search-swipe/
@@ -998,9 +998,8 @@ I rarely use tramp these days, but usually use ssh when doing so.
 #+BEGIN_SRC emacs-lisp
   (use-package tramp
     :commands tramp
-    :config
-    (progn
-      (setq tramp-default-method "ssh")))
+    :init
+    (setq tramp-default-method "ssh"))
 #+END_SRC
 *** undo-tree                                                     :package:
 :PROPERTIES:
@@ -1009,7 +1008,7 @@ I rarely use tramp these days, but usually use ssh when doing so.
 Allow undo to branch, and be visualized as a graph.
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
-      :ensure undo-tree
+      :ensure t
       :config
       (global-undo-tree-mode 1))
 #+END_SRC
@@ -1020,12 +1019,11 @@ Allow undo to branch, and be visualized as a graph.
 Make buffer names unique, handy when opening files with similar names
 #+BEGIN_SRC emacs-lisp
   (use-package uniquify
-    :config
-    (progn
-      (setq uniquify-buffer-name-style 'reverse
-            uniquify-separator "|"
-            uniquify-after-kill-buffer-p t
-            uniquify-ignore-buffers-re "^\\*")))
+    :init
+    (setq uniquify-buffer-name-style 'reverse
+          uniquify-separator "|"
+          uniquify-after-kill-buffer-p t
+          uniquify-ignore-buffers-re "^\\*"))
 #+END_SRC
 *** visual-fill-column                                            :package:
 :PROPERTIES:
@@ -1036,7 +1034,7 @@ than the window edge
 #+BEGIN_SRC emacs-lisp
   (use-package visual-fill-column
       :ensure t
-      :config
+      :init
       (setq visual-fill-column-width 80))
 #+END_SRC
 ** Emacs Navigation
