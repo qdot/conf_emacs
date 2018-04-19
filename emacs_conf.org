@@ -4411,10 +4411,10 @@ gpg file auto query/loading
       :commands (qblog/new-blog-post)
       :load-path "~/.emacs_files/dev-packages/qblog"
       :init
-      (setq qblog/blog-base-dir (expand-file-name "~/code/git-projects"))
+      (setq qblog/blog-base-dir (expand-file-name "/share/code/git-projects"))
       (setq qblog/blog-post-dir "/content/posts/")
       (setq qblog/blog-list '("metafetish.com" "nonpolynomial.com" "openyou.org"))
-      (setq qblog/image-base-dir "~/Pictures/")
+      (setq qblog/image-base-dir "/share/code/git-projects/metafetish.com/content/images")
       (setq qblog/blog-file-extension ".markdown"))
 #+END_SRC
 *** qdot-funcs                                                    :package:
