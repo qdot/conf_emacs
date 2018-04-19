@@ -2911,6 +2911,13 @@ Compilation mode.
     (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer)))
 
 #+END_SRC
+*** csharp-mode                                                   :package:
+#+BEGIN_SRC emacs-lisp
+  (use-package csharp-mode
+      :ensure t
+      :mode (("\\.cs$" . csharp-mode)))
+
+#+END_SRC
 *** dxr                                                           :package:
 :PROPERTIES:
 :ID:       a60f6592-65b6-4880-af67-3b9740a6b92b
