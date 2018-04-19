@@ -3479,6 +3479,7 @@ Use rtags for symbol lookup and jumps, irony-mode for completion.
 #+BEGIN_SRC emacs-lisp
   (use-package rtags
       :ensure t
+      :disabled t
       :config
       (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
       (add-hook 'c++-mode-common-hook 'rtags-start-process-unless-running)
