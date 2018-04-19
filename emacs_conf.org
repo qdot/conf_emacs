@@ -491,18 +491,13 @@ If we want to delete something, mark+write should be fine.
 :PROPERTIES:
 :ID:       f9259321-db74-433c-b3f2-a1956d33b39e
 :END:
-Use fonts we either know we have, or can check for. Symbola is used to
-fill in missing glyphs for odd emoticons that pop up on IRC/IM usually.
+Use fonts we either know we have, or can check for.
 
 #+BEGIN_SRC emacs-lisp
-  (when (member "Symbola" (font-family-list))
-    (set-fontset-font "fontset-default" nil
-                      (font-spec :size 20 :name "Symbola")))
-  (when mswindows-p
-    (set-face-font 'default "consolas-10"))
-  (when linux-p
-    (when (member "Inconsolata" (font-family-list))
-      (set-face-font 'default "inconsolata-11")))
+  (when (member "Inconsolata" (font-family-list))
+    (set-face-font 'default "inconsolata-11"))
+  (when (member "Consolas" (font-family-list))
+    (set-face-font 'default "consolas-11"))
 #+END_SRC
 
 Set up modeline and display variables. Removes all bars, be they scroll or menu, adds date/time to modeline, etc.
