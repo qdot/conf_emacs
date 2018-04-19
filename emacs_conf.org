@@ -3463,7 +3463,7 @@ Line numbers
       :ensure racer
       :config
       (setq racer-cmd "~/.cargo/bin/racer")
-      (setq racer-rust-src-path "~/code/git-projects/rust/src/")
+      (setq racer-rust-src-path "/share/code/git-projects/rust/src/")
       (add-hook 'rust-mode-hook #'racer-mode)
       (add-hook 'racer-mode-hook #'eldoc-mode)
       (add-hook 'racer-mode-hook #'company-mode)
