@@ -3175,6 +3175,7 @@ When using ielm mode, set up autocomplete sources accordingly.
 Use rtags for symbol lookup and jumps, irony-mode for completion.
 #+BEGIN_SRC emacs-lisp
   (use-package irony
+      :disabled t
       :ensure t
       :config
       ;; (add-hook 'c++-mode-hook 'irony-mode)
@@ -3198,6 +3199,7 @@ Use rtags for symbol lookup and jumps, irony-mode for completion.
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-irony
+      :disabled t
       :ensure flycheck-irony
       :config
       (eval-after-load 'flycheck
