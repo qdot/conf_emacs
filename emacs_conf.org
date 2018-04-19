@@ -9,6 +9,9 @@
 #+LANGUAGE: en
 #+PROPERTY: comments both
 * Documentation
+:PROPERTIES:
+:EXPORT_FILE_NAME: ./build/Documentation
+:END:
 ** Introduction
 If you ever needed proof that I'm OCD, here you go.
 ** Handling Multiple Configuration Blocks
