@@ -231,6 +231,11 @@ tangle-and-compile-config.
         (qdot/tangle-and-compile-config))))
 
 #+END_SRC
+** Load exwm if needed
+#+BEGIN_SRC emacs-lisp
+  (use-package exwm
+      :ensure t)
+#+END_SRC
 ** Load org configuration file
 :PROPERTIES:
 :ID:       851beff4-dfe5-487a-b165-597c3cfb6cbd
@@ -506,6 +511,60 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
   (blink-cursor-mode -1)
+#+END_SRC
+** exwm setup
+Setup taken from https://github.com/technomancy/dotfiles/blob/master/.emacs.d/phil/wm.el
+
+#+BEGIN_SRC emacs-lisp
+  (when (and window-system (require 'exwm nil t))
+    (use-package exwm-config)
+
+    (exwm-config-default)
+
+    (require 'exwm-systemtray)
+    (exwm-systemtray-enable)
+    ;; If x-alt-keysym is set, M-x mysteriously stops working in applications.
+    (setq x-alt-keysym nil)
+
+    (add-hook 'exwm-manage-finish-hook
+              (defun qdot/exwm-manage-hook ()
+                (when (string= exwm-class-name "xterm")
+                  (exwm-input-release-keyboard))
+                (when (string-match "Chromium" exwm-class-name)
+                  (exwm-layout-hide-mode-line))
+                (when (string-match "Nightly" exwm-class-name)
+                  (exwm-layout-hide-mode-line))
+                (when (string-match "Google-chrome" exwm-class-name)
+                  (exwm-layout-hide-mode-line))
+                (when (string-match "slack" exwm-class-name)
+                  (exwm-layout-hide-mode-line))
+                (when (string-match "Discord" exwm-class-name)
+                  (exwm-layout-hide-mode-line))
+                (when (string-match "TelegramDesktop" exwm-class-name)
+                  (exwm-layout-hide-mode-line))
+                (when (string-match "Firefox" exwm-class-name)
+                  (exwm-layout-hide-mode-line))))
+    (exwm-input-set-simulation-keys
+     (mapcar (lambda (c) (cons (kbd (car c)) (cdr c)))
+             `(("C-b" . left)
+               ("C-f" . right)
+               ("C-p" . up)
+               ("C-n" . down)
+               ("C-a" . home)
+               ("C-e" . end)
+               ("M-v" . prior)
+               ("C-v" . next)
+               ("C-d" . delete)
+               ("C-m" . return)
+               ("C-i" . tab)
+               ("C-g" . escape)
+               ("C-s" . ?\C-f)
+               ("C-y" . ?\C-v)
+               ("M-w" . ?\C-c)
+               ("M-<" . C-home)
+               ("M->" . C-end)
+               ("C-M-a" . ?\C-a)
+               ("C-M-h" . C-backspace)))))
 #+END_SRC
 * Package Configuration
 This section contains installation and configuration information for
