@@ -3664,6 +3664,7 @@ toml files are usually used for Rust Cargo specifications.
 Used for Travis configs, sometimes for Pelican work
 #+BEGIN_SRC emacs-lisp
   (use-package yaml-mode
+      :mode ("\\.yaml$" . yaml-mode)
       :ensure yaml-mode)
 #+END_SRC
 *** yasnippet                                                     :package:
