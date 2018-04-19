@@ -3168,43 +3168,6 @@ When using ielm mode, set up autocomplete sources accordingly.
     :ensure indent-guide)
 
 #+END_SRC
-*** irony                                                         :package:
-:PROPERTIES:
-:ID:       3e048455-1017-4442-bf7c-3287febdb72c
-:END:
-Use rtags for symbol lookup and jumps, irony-mode for completion.
-#+BEGIN_SRC emacs-lisp
-  (use-package irony
-      :disabled t
-      :ensure t
-      :config
-      ;; (add-hook 'c++-mode-hook 'irony-mode)
-      ;; (add-hook 'c-mode-hook 'irony-mode)
-      ;; (add-hook 'objc-mode-hook 'irony-mode)
-
-      ;; replace the `completion-at-point' and `complete-symbol' bindings in
-      ;; irony-mode's buffers by irony-mode's function
-      (defun my-irony-mode-hook ()
-        (define-key irony-mode-map [remap completion-at-point]
-          'irony-completion-at-point-async)
-        (define-key irony-mode-map [remap complete-symbol]
-          'irony-completion-at-point-async))
-      (setq irony-cdb-search-directory-list '("." "build" "obj-ff-test"))
-      (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-      (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-#+END_SRC
-*** irony-flycheck                                                :package:
-:PROPERTIES:
-:ID:       2d44d422-f74b-4d57-9888-ff7df2a5149c
-:END:
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck-irony
-      :disabled t
-      :ensure flycheck-irony
-      :config
-      (eval-after-load 'flycheck
-        '(add-hook 'flycheck-mode-hook #'flycheck-irony-setup)))
-#+END_SRC
 *** js2-mode                                                      :package:
 :PROPERTIES:
 :ID:       13791349-b740-416c-8ec9-feef4f804ce9
