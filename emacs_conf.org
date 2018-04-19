@@ -3529,8 +3529,7 @@ Use rtags for symbol lookup and jumps, irony-mode for completion.
       (define-key global-map (kbd "C-.") (function tags-find-symbol))
       (define-key global-map (kbd "C-,") (function tags-find-references))
       (define-key global-map (kbd "C-<") (function rtags-find-virtuals-at-point))
-      (define-key global-map (kbd "M-i") (function tags-imenu))
-      )
+      (define-key global-map (kbd "M-i") (function tags-imenu)))
 #+END_SRC
 *** rust-mode                                                     :package:
 :PROPERTIES:
@@ -3538,10 +3537,11 @@ Use rtags for symbol lookup and jumps, irony-mode for completion.
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package rust-mode
-        :ensure rust-mode
-        :config
-        (add-hook 'rust-mode-hook (lambda ()
-                                         (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))))
+      :ensure t
+      :mode (("\\.rs$" . rust-mode))
+      :config
+      (add-hook 'rust-mode-hook (lambda ()
+                                  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))))
 #+END_SRC
 *** smartparens                                                   :package:
 :PROPERTIES:
