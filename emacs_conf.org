@@ -1045,8 +1045,8 @@ than the window edge
 Jump to a specified character in the currently visible buffer area.
 #+BEGIN_SRC emacs-lisp
   (use-package ace-jump-mode
-    :ensure ace-jump-mode
-    :bind  ("C-x SPC" . ace-jump-mode))
+      :ensure t
+      :bind  ("C-x SPC" . ace-jump-mode))
 #+END_SRC
 
 *** ace-link                                                      :package:
@@ -1056,7 +1056,7 @@ Jump to a specified character in the currently visible buffer area.
 Jump to a link in info/help windows.
 #+BEGIN_SRC emacs-lisp
   (use-package ace-link
-    :ensure ace-link
+    :ensure t
     :config
     (ace-link-setup-default))
 #+END_SRC
@@ -1067,14 +1067,14 @@ Jump to a link in info/help windows.
 Jump to a specified window by using [prefix-key] + letter
 #+BEGIN_SRC emacs-lisp
   (use-package ace-window
-    :ensure ace-window
+    :ensure t
     :bind ("M-o" . ace-window)
+    :init
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
     :config
-    (progn
-      (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-      (custom-set-faces
-       '(aw-leading-char-face
-         ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
 #+END_SRC
 *** avy                                                           :package:
 :PROPERTIES:
@@ -1082,7 +1082,7 @@ Jump to a specified window by using [prefix-key] + letter
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package avy
-      :ensure avy
+      :ensure t
       :bind ("M-g g" . avy-goto-line))
 #+END_SRC
 *** hydra                                                         :package:
@@ -1091,7 +1091,7 @@ Jump to a specified window by using [prefix-key] + letter
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package hydra
-      :ensure hydra)
+      :ensure t)
 #+END_SRC
 **** Yank
 :PROPERTIES:
@@ -1441,11 +1441,11 @@ Add Cc and Bcc headers to the message buffer
   (use-package message-mode
     :commands message-mode
     :no-require t
+    :init
+    (setq message-default-mail-headers "Cc: \nBcc: \n")
+    (setq message-kill-buffer-on-exit t)
     :config
-    (progn
-      (setq message-default-mail-headers "Cc: \nBcc: \n")
-      (setq message-kill-buffer-on-exit t)
-      (add-hook 'message-mode-hook 'turn-on-flyspell 'append)))
+    (add-hook 'message-mode-hook 'turn-on-flyspell 'append))
 #+END_SRC
 
 *** mu4e                                                          :package:
@@ -1862,9 +1862,7 @@ Currently stored in elisp directory locally.
 #+BEGIN_SRC emacs-lisp
   (use-package ox-gfm
       :ensure t
-      :init
-      (eval-after-load "org"
-        '(require 'ox-gfm nil t)))
+      :after org)
 #+END_SRC
 **** Variables
 :PROPERTIES:
