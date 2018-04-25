@@ -495,9 +495,17 @@ Use fonts we either know we have, or can check for.
 
 #+BEGIN_SRC emacs-lisp
   (when (member "Inconsolata" (font-family-list))
-    (set-face-font 'default "inconsolata-11"))
+    (set-face-font 'default "inconsolata-11")
+    (set-face-font 'mode-line "inconsolata-10")
+    (set-face-font 'mode-line-inactive "inconsolata-10")
+    (set-face-font 'mode-line-buffer-id "inconsolata-10")
+    (set-face-font 'header-line "inconsolata-10"))
   (when (member "Consolas" (font-family-list))
-    (set-face-font 'default "consolas-11"))
+    (set-face-font 'default "consolas-11")
+    (set-face-font 'mode-line "consolas-10")
+    (set-face-font 'mode-line-inactive "consolas-10")
+    (set-face-font 'mode-line-buffer-id "consolas-10")
+    (set-face-font 'header-line "consolas-10"))
 #+END_SRC
 
 Set up modeline and display variables. Removes all bars, be they scroll or menu, adds date/time to modeline, etc.
