@@ -2835,23 +2835,25 @@ http://stackoverflow.com/questions/3312114/how-to-tell-emacs-to-open-h-file-in-c
 #+BEGIN_SRC emacs-lisp
   (use-package company
       :ensure t
-      :config
+      :after yasnippet
+      :init
       (setq company-idle-delay 0.2)
       (setq company-minimum-prefix-length 1)
       (setq company-dabbrev-ignore-case t)
       (setq company-dabbrev-downcase nil)
       (setq company-tooltip-align-annotations t)
       (setq company-clang-executable "clang-6.0")
-      (add-to-list 'company-backends 'company-yasnippet)
-      (add-to-list 'company-backends 'company-elisp)
-      ;; https://github.com/jorgenschaefer/elpy/wiki/FAQ
       (defun company-yasnippet-or-completion ()
         "Solve company yasnippet conflicts."
         (interactive)
         (let ((yas-fallback-behavior
                (apply 'company-complete-common nil)))
           (yas-expand)))
-
+      :config
+      (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete))
+      (add-to-list 'company-backends 'company-yasnippet)
+      (add-to-list 'company-backends 'company-elisp)
+      ;; https://github.com/jorgenschaefer/elpy/wiki/FAQ
       (add-hook 'company-mode-hook
                 (lambda ()
                   (substitute-key-definition
@@ -2870,10 +2872,8 @@ http://stackoverflow.com/questions/3312114/how-to-tell-emacs-to-open-h-file-in-c
   (use-package company-rtags
       :ensure t
       :after company
-      :init;; company completion setup
-      (push 'company-rtags company-backends)
-      :config
-      (define-key c-mode-base-map (kbd "<C-tab>") (function company-complete)))
+      :init
+      (add-to-list 'company-backends '(company-rtags)))
 
   (use-package company-racer
       :ensure t
@@ -2899,12 +2899,13 @@ Compilation mode.
 
   (use-package compile
     :commands (compile)
-    :config
+    :init
     (setq compilation-disable-input nil)
     (setq compilation-read-command nil)
     (setq compilation-auto-jump-to-first-error nil)
     (setq compilation-scroll-output 'first-error)
     (setq mode-compile-always-save-buffer-p t)
+    :config
     ;; Turn on ansi colors in compilation buffers
     (ignore-errors
     (require 'ansi-color)
@@ -2924,26 +2925,17 @@ Compilation mode.
       :mode (("\\.cs$" . csharp-mode)))
 
 #+END_SRC
-*** dxr                                                           :package:
-:PROPERTIES:
-:ID:       a60f6592-65b6-4880-af67-3b9740a6b92b
-:END:
-#+BEGIN_SRC emacs-lisp
-  (use-package dxr
-      :ensure t
-      :commands (dxr dxr-browse-url dxr-kill-ring-save))
-#+END_SRC
 *** edebug-x                                                      :package:
 :PROPERTIES:
 :ID:       3433d9a2-9b91-4534-b596-ae926b2cf355
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package edebug-x
-    :ensure edebug-x
-    :commands (edebug-x-modify-breakpoint-wrapper
-               edebug-x-show-breakpoints
-               edebug-x-show-instrumented
-               edebug-x-show-data))
+      :ensure t
+      :commands (edebug-x-modify-breakpoint-wrapper
+                 edebug-x-show-breakpoints
+                 edebug-x-show-instrumented
+                 edebug-x-show-data))
 #+END_SRC
 *** elpy                                                          :package:
 :PROPERTIES:
@@ -2951,7 +2943,7 @@ Compilation mode.
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package elpy
-      :ensure elpy
+      :ensure t
       :interpreter ("python" . python-mode)
       :init
       (defun qdot/python-mode-hook()
@@ -3022,9 +3014,9 @@ Compilation mode.
 Using flycheck instead of flymake
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck
-    :ensure flycheck
+    :ensure t
     :commands flycheck-mode
-    :init
+    :config
     (global-flycheck-mode))
 #+END_SRC
 *** flycheck-rtags                                                :package:
@@ -3034,7 +3026,7 @@ Using flycheck instead of flymake
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-rtags
       :ensure t
-      :init
+      :config
       ;; c-mode-common-hook is also called by c++-mode
       (defun setup-flycheck-rtags ()
         (interactive)
@@ -3050,7 +3042,7 @@ Using flycheck instead of flymake
 :END:
 #+BEGIN_SRC emacs-lisp
   (use-package flycheck-rust
-      :ensure flycheck-rust
+      :ensure t
       :config
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
 #+END_SRC
@@ -3071,29 +3063,36 @@ Using flycheck instead of flymake
 :PROPERTIES:
 :ID:       ed23e031-497d-40e6-b48f-bbbebe07e474
 :END:
+Shows git status of current files in fringe.
 #+BEGIN_SRC emacs-lisp
   (use-package git-gutter-fringe
-    :ensure git-gutter-fringe
+    :ensure t
     :commands (git-gutter git-gutter:toggle))
 #+END_SRC
 
-*** git-messanger                                                 :package:
+*** git-messenger                                                 :package:
 :PROPERTIES:
 :ID:       3be94264-1108-419d-b18b-c5b0af99d8b8
 :END:
+Shows git commit corresponding to the current line
 #+BEGIN_SRC emacs-lisp
   (use-package git-messenger
-      :ensure git-messenger
+      :ensure t
       :commands (git-messenger:popup-message)
       :init
-      (setq git-messenger:show-detail t))
+      (setq git-messenger:show-detail t)
+      ;; Use magit-show-commit for showing status/diff commands
+      (custom-set-variables
+       '(git-messenger:use-magit-popup t)))
 #+END_SRC
 *** gitattributes-mode                                            :package:
 :PROPERTIES:
 :ID:       290f1482-0b08-4106-8083-21dad90075c4
 :END:
+Used for dealing with git attribute files
 #+BEGIN_SRC emacs-lisp
   (use-package gitattributes-mode
+      :mode ("\\.gitattributes$" . gitattributes-mode)
       :ensure t)
 #+END_SRC
 *** gitconfig-mode                                                :package:
@@ -3117,6 +3116,7 @@ Modes for editing gitconfig, gitignore, etc.
 :PROPERTIES:
 :ID:       5ee0aeb2-c943-4e54-816f-188e170d82a0
 :END:
+Step through git versions of the current file
 #+BEGIN_SRC emacs-lisp
   (use-package git-timemachine
     :commands (git-timemachine)
