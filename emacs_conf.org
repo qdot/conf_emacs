@@ -3637,7 +3637,8 @@ toml files are usually used for Rust Cargo specifications.
            ("\\.erb\\'" . web-mode)
            ("\\.mustache\\'" . web-mode)
            ("\\.djhtml\\'" . web-mode)
-           ("\\.vue\\'" . web-mode))
+           ("\\.vue\\'" . web-mode)
+           ("\\.ejs\\'" . web-mode))
     :config
     (setq web-mode-markup-indent-offset 2)
     (setq web-mode-css-indent-offset 2)
