@@ -3171,11 +3171,11 @@ When using ielm mode, set up autocomplete sources accordingly.
 :PROPERTIES:
 :ID:       dc86b022-2259-4c1a-88b5-1796267b9ff7
 :END:
+Shows indentation guides when in code blocks
 #+BEGIN_SRC emacs-lisp
-  (use-package indent-guide
-    :commands (indent-guide-mode)
-    :ensure indent-guide)
-
+    (use-package indent-guide
+        :ensure t
+        :commands (indent-guide-mode indent-guide-global-mode))
 #+END_SRC
 *** js2-mode                                                      :package:
 :PROPERTIES:
