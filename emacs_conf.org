@@ -3148,25 +3148,6 @@ Modes for editing gitconfig, gitignore, etc.
     :no-require t
     :mode ("\\.\\(idl\\|webidl\\)\\'" . idl-mode))
 #+END_SRC
-*** ielm                                                          :package:
-:PROPERTIES:
-:ID:       420e3cf4-5709-4ad5-8fd0-73a9a9e52ee3
-:END:
-When using ielm mode, set up autocomplete sources accordingly.
-
-#+BEGIN_SRC emacs-lisp
-  ;; (defun ielm-auto-complete ()
-  ;;   "Enables `auto-complete' support in \\[ielm]."
-  ;;   (setq ac-sources '(ac-source-functions
-  ;;                      ac-source-variables
-  ;;                      ac-source-features
-  ;;                      ac-source-symbols
-  ;;                      ac-source-words-in-same-mode-buffers))
-  ;;   (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
-  ;;   (auto-complete-mode 1))
-  ;; (add-hook 'ielm-mode-hook 'ielm-auto-complete)
-#+END_SRC
-
 *** indent-guide                                                  :package:
 :PROPERTIES:
 :ID:       dc86b022-2259-4c1a-88b5-1796267b9ff7
