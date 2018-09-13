@@ -1098,39 +1098,6 @@ Move between windows using shift-[arrow key].
 #+END_SRC
 
 ** Productivity
-*** bbdb                                                          :package:
-:PROPERTIES:
-:ID:       2da3914c-de7e-4283-978f-583fd490cfef
-:END:
-Address book
-#+BEGIN_SRC emacs-lisp
-  (use-package bbdb
-      :ensure bbdb
-      :commands bbdb
-      :config
-      (bbdb-initialize 'gnus 'message)
-      ;; (bbdb-mua-auto-update-init 'gnus 'message)
-      ;; Most of the following ripped from
-      ;; http://emacs-fu.blogspot.com/2009/08/managing-e-mail-addresses-with-bbdb.html
-      (setq
-       bbdb-offer-save 1
-       bbdb-phone-style 'nil
-       bbdb-use-pop-up t ;; allow popups for addresses
-       bbdb-electric-p t ;; be disposable with SPC
-       bbdb-popup-target-lines 1 ;; very small
-       bbdb-dwim-net-address-allow-redundancy t ;; always use full name
-       bbdb-quiet-about-name-mismatches 2 ;; show name-mismatches 2 secs
-       bbdb-north-american-phone-numbers-p nil ;; Make sure that telephone numbers are international
-       bbdb-always-add-address t ;; add new addresses to existing contacts automatically
-       bbdb-canonicalize-redundant-nets-p t ;; x@foo.bar.cx => x@bar.cx
-       bbdb-completion-type nil ;; complete on anything
-       bbdb-complete-name-allow-cycling t ;; cycle through matches
-       bbdb-message-caching-enabled t ;; be fast
-       bbdb-use-alternate-names t ;; use AKA
-       bbdb-elided-display t ;; single-line addressesq
-       bbdb/mail-auto-create-p nil))
-#+END_SRC
-
 *** org-mode                                                      :package:
 :PROPERTIES:
 :header-args: :tangle tangle/qdot-org-config.el
