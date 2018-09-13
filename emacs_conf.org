@@ -853,16 +853,6 @@ Work with multiple cursors simultaneously.
              ("C-<" . mc/mark-previous-like-this)
              ("C-*" . mc/mark-all-like-this)))
 #+END_SRC
-*** paradox                                                       :package:
-:PROPERTIES:
-:ID:       f94dc9c9-e3f0-430e-983f-88305859e101
-:END:
-Paradox makes the package list pretty and adds some stats to the listings.
-#+BEGIN_SRC emacs-lisp
-  (use-package paradox
-      :ensure t
-      :commands (paradox-list-packages))
-#+END_SRC
 *** rainbow-delimiters                                            :package:
 :PROPERTIES:
 :ID:       7935f464-2554-4a49-ae81-866f0adb4aa2
