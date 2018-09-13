@@ -3697,32 +3697,7 @@ Markdown. Used mostly for blogging and README files.
            ("\\.md\\'" . markdown-mode))
     :ensure markdown-mode)
 #+END_SRC
-*** pelican-mode                                                  :package:
-:PROPERTIES:
-:ID:       eea1f024-0dd5-4a36-a725-df39ca9eaef1
-:END:
-I use [[http://getpelican.com][pelican]] for blogs. This just wraps a few commands in to make
-compiling blogs from post buffers easier.
-#+BEGIN_SRC emacs-lisp
-  (use-package pelican-mode
-    :defer t
-    :load-path "~/.emacs_files/dev-packages/pelican-mode")
-#+END_SRC
 ** Social (IRC, Twitter, Etc)
-*** bitlmacs                                                      :package:
-:PROPERTIES:
-:ID:       6477fddd-c1d1-4841-ba8b-d8ab721d5da3
-:END:
-Utility package for using bitlbee through ERC. Currently breaks
-horribly if called before there's a message buffer.
-#+BEGIN_SRC emacs-lisp
-  (use-package bitlmacs
-    :load-path "~/.emacs_files/dev-packages/bitlmacs"
-    :disabled t
-    :init
-    (bitlmacs/init-bitlmacs-placeholder))
-#+END_SRC
-
 *** erc-mode                                                      :package:
 :PROPERTIES:
 :ID:       5e690fcb-0012-4cdb-be17-fa708970575d
