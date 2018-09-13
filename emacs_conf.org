@@ -4046,29 +4046,6 @@ I was away.
 #+BEGIN_SRC emacs-lisp
 (provide 'qdot-sauron-config)
 #+END_SRC
-*** twittering-mode                                               :package:
-:PROPERTIES:
-:ID:       1da25656-9416-4f47-b038-ad028fa7476a
-:END:
-Set up twitter. Update every 10 minutes, show icons, spellcheck when
-writing, and always bring up home, mentions, and dms
-#+BEGIN_SRC emacs-lisp
-  (use-package twittering-mode
-    :ensure twittering-mode
-    :commands twit
-    :config
-    (progn
-      (setq twittering-icon-mode t)
-      (setq twittering-timer-interval 600)
-      (setq twittering-url-show-status nil)
-      (add-hook 'twittering-edit-mode-hook 'turn-on-flyspell 'append)
-      (add-hook 'twittering-mode-hook (lambda () (visual-line-mode 1)))
-      (setq twittering-initial-timeline-spec-string
-            '(":home"
-              ":mentions"
-              ":direct_messages"))))
-#+END_SRC
-
 ** Terminals
 *** ansi-color                                                    :package:
 :PROPERTIES:
