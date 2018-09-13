@@ -538,6 +538,7 @@ Setup taken from https://github.com/technomancy/dotfiles/blob/master/.emacs.d/ph
         :after exwm)
 
     (exwm-config-default)
+    (exwm-input-set-key (kbd "s-b") #'ivy-switch-buffer)
 
     (require 'exwm-systemtray)
     (exwm-systemtray-enable)
