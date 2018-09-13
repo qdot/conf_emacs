@@ -3427,6 +3427,15 @@ Line numbers
       (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
       (setq company-tooltip-align-annotations t))
 #+END_SRC
+*** rg                                                            :package:
+:PROPERTIES:
+:ID:       8d0435cc-14af-48c8-ab84-44c6c4814052
+:END:
+Frontend for ripgrep
+#+BEGIN_SRC emacs-lisp
+  (use-package rg
+      :ensure t)
+#+END_SRC
 *** rtags                                                         :package:
 :PROPERTIES:
 :ID:       247e8e8f-dedb-4fad-9f41-9cb95d77e2cf
