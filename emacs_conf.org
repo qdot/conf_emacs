@@ -526,7 +526,7 @@ Redisplay trick taken from http://www.masteringemacs.org/articles/2011/10/02/imp
   (scroll-bar-mode -1)
   (blink-cursor-mode -1)
 #+END_SRC
-** exwm setup
+* exwm setup
 :PROPERTIES:
 :ID:       c64f8704-3af7-40c8-b9aa-cad0466eca70
 :END:
