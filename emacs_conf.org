@@ -1368,7 +1368,7 @@ http://endlessparentheses.com/the-toggle-map-and-wizardry.html
   (defhydra hydra-toggle-map (:hint nil :color red)
     ("c" column-number-mode "Column Number Mode")
     ("d" toggle-debug-on-error "Debug On Error")
-    ("l" linum-mode "Linum Mode")
+    ("l" display-line-numbers-mode "Display Line Numbers Mode")
     ("f" auto-fill-mode "Auto Fill Mode")
     ("m" hidden-mode-line-mode "Hidden Mode Line")
     ("v" visual-line-mode "Visual Line Mode")
@@ -2948,7 +2948,6 @@ Compilation mode.
       :interpreter ("python" . python-mode)
       :init
       (defun qdot/python-mode-hook()
-        (linum-mode)
         (setq tab-width 4)
         (setq py-indent-offset 4)
         (setq python-indent-offset 4)
@@ -3180,7 +3179,6 @@ Shows indentation guides when in code blocks
       (setq js2-basic-offset 2)
       (add-hook 'js2-mode-hook
                 (lambda ()
-                  (linum-mode)
                   (flycheck-mode)
                   (company-mode 1))))
 #+END_SRC
@@ -3378,7 +3376,7 @@ Highlight matching paren/bracket/etc pairs.
 Line numbers
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode-hook 'linum-mode)
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 #+END_SRC
 *** projectile                                                    :package:
 :PROPERTIES:
@@ -4589,9 +4587,10 @@ CLOSED: [2015-05-23 Sat 20:38]
 *** TODO Check out gpastel
 https://gitlab.petton.fr/DamienCassou/gpastel
 ** Programming mode tasks
+*** DONE Move from linum to display-line-number-mode
+CLOSED: [2018-09-13 Thu 16:15]
 *** TODO Clean up python/elpy configuration, split properly
 *** TODO Turn on git-gutter-fringe everywhere possible
-*** TODO Move from linum to display-line-number-mode
 *** TODO Make keybind for git-messenger?
 ** DONE Redo workgroups so that org mode comes up in window 1
 CLOSED: [2014-09-28 Sun 00:31]
