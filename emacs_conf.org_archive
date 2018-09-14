@@ -1,0 +1,1570 @@
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Replace ido with ivy :noexport:
+CLOSED: [2015-05-24 Sun 23:13]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:20
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Turn toggle-map into a hydra :noexport:
+CLOSED: [2015-11-08 Sun 22:14]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:20
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Check out hungry-delete mode :noexport:
+CLOSED: [2015-05-23 Sat 21:39]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:20
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+https://github.com/nflath/hungry-delete
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Move from linum to display-line-number-mode :noexport:
+CLOSED: [2018-09-13 Thu 16:15]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:20
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks/Programming mode tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Redo workgroups so that org mode comes up in window 1 :noexport:
+CLOSED: [2014-09-28 Sun 00:31]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Unbind erc privmsg/channels notifications from sauron :noexport:
+CLOSED: [2014-09-28 Sun 00:31]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Read Julian Danjou's config :noexport:
+CLOSED: [2014-09-28 Sun 00:28]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+http://git.naquadah.org/?p=~jd/emacs.d.git;a=tree
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Convert requires to use-package calls :noexport:
+CLOSED: [2014-04-11 Fri 21:31]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Fix git gutter mode? :noexport:
+CLOSED: [2014-04-10 Thu 20:58]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+https://github.com/syohex/emacs-git-gutter-fringe
+Seems to work now?
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Do more configuration on smart-mode-line :noexport:
+CLOSED: [2014-04-10 Thu 20:44]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+https://github.com/Bruce-Connor/smart-mode-line
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Make emacs autoblogging utility for blog and software sites :noexport:
+CLOSED: [2014-04-10 Thu 20:44]
+:PROPERTIES:
+:ID: 1ce4cdcc-ddbe-48d6-9eb6-2b363d5db90c
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+   [2011-01-08 Sat]
+
+   [[file:~/git-projects/nonpolynomial.com/libraries/index.html::<H2>libnifalcon</H2>]]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Add browse-kill-ring in el-get :noexport:
+CLOSED: [2014-04-10 Thu 20:21]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+[2013-07-22 Mon]
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE El-get page-break-lines :noexport:
+CLOSED: [2014-04-10 Thu 20:22]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+[2013-07-22 Mon]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Check out pretty-mode-plus :noexport:
+CLOSED: [2014-04-10 Thu 20:28]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+https://github.com/akatov/pretty-mode-plus
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Add next-spec-day for arbitrary scheduling updates in org-mode :noexport:
+CLOSED: [2014-04-10 Thu 20:19]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+https://github.com/chenfengyuan/elisp/blob/master/next-spec-day.el
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Find all package :noexport:
+CLOSED: [2014-04-10 Thu 20:07]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+Eh. m-c is good enough
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Find edit-list package :noexport:
+CLOSED: [2014-04-10 Thu 20:07]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+https://github.com/jaalto/emacs-epackage--edit-list/blob/master/edit-list.el
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Go through config :noexport:
+CLOSED: [2014-04-10 Thu 19:28]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+http://zeekat.nl/articles/making-emacs-work-for-me.html
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Add sachac's mc keybindings :noexport:
+CLOSED: [2014-04-10 Thu 19:09]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+("C->" . mc/mark-next-like-this)
+("C-<" . mc/mark-previous-like-this)
+("C-*" . mc/mark-all-like-this)
+("C-c SPC" . ace-jump-mode)
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Check out Sacha Chua's emacs config :noexport:
+CLOSED: [2014-04-10 Thu 18:37]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+https://github.com/sachac/.emacs.d/blob/gh-pages/Sacha.org
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Add bind-key recipe to el-get :noexport:
+CLOSED: [2014-04-10 Thu 18:52]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+https://github.com/emacsattic/bind-key
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Remove sauron dbus :noexport:
+CLOSED: [2014-04-10 Thu 18:36]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Modeline customization :noexport:
+CLOSED: [2013-11-02 Sat 16:09]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Use smartparens with highlighting :noexport:
+CLOSED: [2013-11-02 Sat 14:57]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+http://emacsredux.com/blog/2013/11/01/highlight-matching-delimiters-with-smartparens
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Make convenience function to edit config of current major mode :noexport:
+CLOSED: [2013-11-01 Fri 21:06]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Check out elpy :noexport:
+CLOSED: [2013-11-01 Fri 21:34]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+http://blog.jorgenschaefer.de/2013/04/elpy-10-released.html
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Fix IRC killing functions :noexport:
+CLOSED: [2013-05-03 Fri 21:39]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-03 Fri 21:39]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Fix IRC server buffer renaming functions :noexport:
+CLOSED: [2013-05-03 Fri 21:39]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-03 Fri 21:39]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Divide down large configurations into org subnodes :noexport:
+CLOSED: [2013-05-06 Mon 11:05]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-06 Mon 11:05]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Fix diminish mode sets :noexport:
+CLOSED: [2013-05-06 Mon 11:05]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-06 Mon 11:05]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE defadvise erc-hide-current-message-p instead of monkeypatching erc-display-message for buffer-local erc-hide-list :noexport:
+CLOSED: [2013-05-06 Mon 18:52]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-06 Mon 18:52]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Set up local el-get recipes directory so we don't have to track el-get perfectly :noexport:
+CLOSED: [2013-05-06 Mon 20:52]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-06 Mon 20:52]
+Used el-get-sources variable
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Fix workgroups layouts :noexport:
+CLOSED: [2013-10-29 Tue 20:56]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Fix ERC privmsgs :noexport:
+CLOSED: [2013-10-29 Tue 20:56]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Set up BufferTimer :noexport:
+CLOSED: [2013-05-04 Sat 00:54]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-04 Sat 00:54]
+https://github.com/hardaker/elisp-buffer-timer/
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Set up unicode fonts in emacs :noexport:
+CLOSED: [2013-05-04 Sat 00:31]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-04 Sat 00:31]
+https://github.com/rolandwalker/unicode-fonts
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Check out js2-refactor :noexport:
+CLOSED: [2013-05-03 Fri 23:57]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-03 Fri 23:57]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Think about non-fixed width for non-code buffers? :noexport:
+CLOSED: [2013-05-03 Fri 23:56]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "CLOSED"     from "TODO"       [2013-05-03 Fri 23:56] \\
+  No
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Make header action for mark all read (in mu4e-contrib) :noexport:
+CLOSED: [2013-05-03 Fri 23:49]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-03 Fri 23:49]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Go through commit list for mu, add new functions/actions :noexport:
+CLOSED: [2013-05-03 Fri 23:47]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-03 Fri 23:47]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Add new mailbox shortcuts for kelly, receipts, etc... :noexport:
+CLOSED: [2013-05-03 Fri 23:26]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-03 Fri 23:26]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Turn on semantic in C++ buffers :noexport:
+CLOSED: [2013-05-03 Fri 22:19]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-03 Fri 22:19]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Turn on flyspell in buffers that need it :noexport:
+CLOSED: [2013-05-03 Fri 22:14]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-03 Fri 22:14]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Load mu4e-unread-main as part of startup :noexport:
+CLOSED: [2013-05-03 Fri 22:03]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-05-03 Fri 22:03]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Import contacts into BBDB3 :noexport:
+CLOSED: [2012-08-25 Sat 21:23]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2012-08-25 Sat 21:23]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Move contacts into BBDB off iphone :noexport:
+CLOSED: [2012-08-25 Sat 21:24]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2012-08-25 Sat 21:24]
+:PROPERTIES:
+:ID: 74bfbc0a-3618-4567-a639-171aa0af2b24
+:END:
+   [2010-09-20 Mon]
+   [[file:~/emacs_org/vienna2010.org::*2010%2009%2010][2010-09-10]]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE See how sauron handles notifications for twitter/gnus :noexport:
+CLOSED: [2012-10-15 Mon 15:37]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2012-10-15 Mon 15:37]
+:PROPERTIES:
+:ID: 587c0a16-161f-482a-b950-f74c760dea78
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Rename emacs_files_24 to just emacs_files again :noexport:
+CLOSED: [2012-10-15 Mon 15:47]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2012-10-15 Mon 15:47]
+  [2012-04-27 Fri]
+  [[file:~/emacs_org/org-reorg.org::*Files][Files]]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Read up more on mail sync :noexport:
+CLOSED: [2013-02-26 Tue 19:48]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-02-26 Tue 19:48]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Override java-mode to be js2-mode on all .js files :noexport:
+CLOSED: [2013-04-17 Wed 21:27]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "DONE"       from "TODO"       [2013-04-17 Wed 21:27]
+  [2012-03-30 Fri]
+  [[file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power)%20{][file:~/code/mozbuild/gaia/apps/settings/js/bluetooth.js::if(BluetoothAdapter.power) {]]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Fix rope mode to always have ignore_bad_imports equal to True :noexport:
+CLOSED: [2013-04-17 Wed 21:23]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "CLOSED"     from "TODO"       [2013-04-17 Wed 21:23] \\
+  Not using rope anymore
+:PROPERTIES:
+:ID: 0757ee32-8d03-4745-8f00-74023cc739a2
+:END:
+   [2010-10-27 Wed]
+   [[file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application:%20%s\n",%20self.__class__.__name__)][file:~/build/build_sys/python/FiveTenBuilder/apps/base.py::self._log.info("Application: %s\n", self.__class__.__name__)]]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Fix platform font setting to autoset if face actually exists :noexport:
+CLOSED: [2013-11-27 Wed 17:07]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+[2013-10-25 Fri]
+[[file:~/code/git-projects/buttplug/todo.org::*How%20to%20deal%20with%20plugins%20like%20websocket,%20where%20we%20don't%20want%20process%20per%20device?][How to deal with plugins like websocket, where we don't want process per device?]]
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Check out flx :noexport:
+CLOSED: [2014-06-11 Wed 19:57]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+https://github.com/lewang/flx
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Try mobileorg one more time :noexport:
+CLOSED: [2014-06-17 Tue 19:19]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Emacs Config Cleanup Fall 2014 :noexport:
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+** DONE How to markup and load medium sized configs? eval-after-load or tangle to other files?
+CLOSED: [2015-05-23 Sat 20:36]
+Tangle into other files
+** DONE Decide whether or not to use CEDET
+CLOSED: [2015-05-23 Sat 20:36]
+Moved to using llvm
+** DONE Output tangled emacs config files to a subdirectory of config dir
+CLOSED: [2015-05-23 Sat 20:37]
+** DONE Write function to compile config files on tangling
+CLOSED: [2015-05-23 Sat 20:37]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Package Switchover :noexport:
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+** DONE Do we still need CEDET loader? Or CEDET at /all/?
+CLOSED: [2014-09-28 Sun 00:33]
+** DONE Clean up mu4e config
+CLOSED: [2015-05-23 Sat 20:35]
+** DONE Figure out how to hook up prog mode?
+CLOSED: [2015-05-23 Sat 20:34]
+** DONE org-mode config + use-package?
+CLOSED: [2015-05-23 Sat 20:34]
+Tangling org-mode out into its own file
+** DONE Modes missing from ELPA/MELPA
+CLOSED: [2015-05-23 Sat 20:33]
+- [X] pelican-mode
+- [X] cedet
+- [X] mu4e
+- [ ] doxymacs
+** DONE Figure out how mu4e is going to work with no ELPA/MELPA
+CLOSED: [2014-04-12 Sat 15:28]
+** DONE Figure out what to do about erc-highlight-nicks
+CLOSED: [2014-04-12 Sat 15:39]
+Just keeping it in elisp directory for now
+** DONE Readd qblog and bitlmacs
+CLOSED: [2014-04-12 Sat 15:38]
+** DONE Turn off redisplay hack to try and fix ERC privmsg updating?
+CLOSED: [2014-04-12 Sat 14:57]
+** DONE Figure out packages needed for auto-complete
+CLOSED: [2014-04-12 Sat 14:57]
+** DONE Redistribute keybinds into use-package calls
+CLOSED: [2014-04-11 Fri 22:48]
+** DONE Move all automodes to :mode in use-package
+CLOSED: [2014-04-11 Fri 22:34]
+** Timing and Memory
+| Type                             | Load Time | Memory |
+|----------------------------------+-----------+--------|
+| emacs -q                         |       0.0 |   13.4 |
+| Old el-get config                |     5.162 |   56.0 |
+| use-package, no opts             |     2.794 |   48.6 |
+| use-package, fixed delay loading |     1.615 |   34.6 |
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Figure out issues with schedule export :noexport:
+CLOSED: [2014-04-10 Thu 20:44]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2014-04-10 Thu 20:44] \\
+  Not using it anymore
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Check out UsePackage for emacs :noexport:
+CLOSED: [2014-04-10 Thu 20:42]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2014-04-10 Thu 20:42] \\
+  Gonna be hard to use with el-get. Eh.
+:END:
+https://github.com/jwiegley/use-package
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Fix org mode mailers :noexport:
+CLOSED: [2014-04-10 Thu 20:41]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2014-04-10 Thu 20:41] \\
+  Removed mailers. Need a cleaner method.
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Work on eshell :noexport:
+CLOSED: [2014-04-10 Thu 20:34]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2014-04-10 Thu 20:34] \\
+  Nope.
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Redo CEDET Setup :noexport:
+CLOSED: [2014-04-10 Thu 18:31]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2014-04-10 Thu 18:31] \\
+  Not happening. I give up.
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Divide out work setup from home setup :noexport:
+CLOSED: [2013-10-29 Tue 21:00]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 21:00] \\
+  Or not. This works well enough as is
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Make header/source search look at the buffer list first :noexport:
+CLOSED: [2013-10-29 Tue 20:59]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:59] \\
+  Or, you know, just use a better switcher routine.
+:END:
+   :PROPERTIES:
+   :ID:       831C60D2-5A9C-46C4-AFFD-D197F22E9731
+   :END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Extend jekyll script to deal with multiple blogs :noexport:
+CLOSED: [2013-10-29 Tue 20:58]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:58] \\
+  Moved to pelican.
+:END:
+   :PROPERTIES:
+   :ID:       6B223E71-B699-4B9D-836B-C9F061DC93AD
+   :END:
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Check out projectile for emacs projects :noexport:
+CLOSED: [2013-10-29 Tue 20:57]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:57] \\
+  Didn't really work out. Onto like eproject or something.
+:END:
+:PROPERTIES:
+:ID: 5c2bdb24-e177-45eb-a5c0-5b1ecacbbc45
+:END:
+https://github.com/bbatsov/projectile
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Check out ede which apparently now works with CMake? :noexport:
+CLOSED: [2013-10-29 Tue 20:57]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:57] \\
+  NONONONONONO
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Add C-c . to org-disputed-keys, change to C-c c for calendar bring-up versus cedet/ede :noexport:
+CLOSED: [2013-10-29 Tue 20:57]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:57] \\
+  No. We're never going to use ede. Fuck CEDET.
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Check out why rainbow delimiters don't like mozilla C++ files :noexport:
+CLOSED: [2013-10-29 Tue 20:56]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:56] \\
+  rainbow delimiters is just broken in c++
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Yank frame/window detection for emacs from rcirc/dbus script :noexport:
+CLOSED: [2013-10-29 Tue 20:56]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:56]
+:END:
+http://www.emacswiki.org/emacs/rcircDbusNotification
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Make python flymake deal with missing linters better :noexport:
+CLOSED: [2013-10-29 Tue 20:56]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:56] \\
+  Using flycheck now, which deals better anyways
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Make bitlbee workgroup regenerate whenever we get a new im :noexport:
+CLOSED: [2013-05-03 Fri 19:33]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "CLOSED"     from "TODO"       [2013-05-03 Fri 19:33] \\
+  No
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Create special ERC buffer to show query buffer list :noexport:
+CLOSED: [2012-10-15 Mon 15:47]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:47] \\
+  Implementing via erc-nicklist
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Make todochiku notification for twitter mentions :noexport:
+CLOSED: [2012-10-15 Mon 15:36]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:36] \\
+  Not using todochiku anymore
+:PROPERTIES:
+:ID: 8a309bfb-abc0-4492-9eb7-3f7af4a30bd1
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Make todochiku notification for inbox receives :noexport:
+CLOSED: [2012-10-15 Mon 15:36]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+- State "CANCELLED"  from "TODO"       [2012-10-15 Mon 15:36] \\
+  Not using todochiku anymore
+:PROPERTIES:
+:ID: c315b3ab-448b-4134-af2f-0378af73dc24
+:END:
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Workgroups Update :noexport:
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+Was going to start 
+** CANCELLED Divide functionality into modules                   :CANCELLED:
+CLOSED: [2014-09-28 Sun 00:32]
+:LOGBOOK:  
+- State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
+:END:      
+** CANCELLED Removing pickling, make configuration files human readable :CANCELLED:
+CLOSED: [2014-09-28 Sun 00:32]
+:LOGBOOK:  
+- State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
+:END:      
+** CANCELLED Make more features enable/disable-able              :CANCELLED:
+CLOSED: [2014-09-28 Sun 00:32]
+:LOGBOOK:  
+- State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
+:END:      
+** CANCELLED Per-workgroup buffer list implementations           :CANCELLED:
+CLOSED: [2014-09-28 Sun 00:32]
+:LOGBOOK:  
+- State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
+:END:      
+** CANCELLED Stop workgroups.el from reloading file lists for workgroups :CANCELLED:
+CLOSED: [2014-09-28 Sun 00:32]
+:LOGBOOK:  
+- State "CANCELLED"  from "TODO"       [2014-09-28 Sun 00:32]
+:END:      
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED mu4e/gnupg :noexport:
+CLOSED: [2018-09-13 Thu 17:21]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:21] \\
+  Not using mu4e anymore
+:END:
+** CANCELLED Add mu notifications for sauron and xmonad          :CANCELLED:
+CLOSED: [2018-09-13 Thu 17:21]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:21]
+:END:
+** TODO Add optional display of mu update status in minibuffer
+** TODO Set up mail queuing in mu4e
+** TODO Set up encryption/checking in mu4e
+** TODO Figure out where to put maildir for transfer
+** TODO Look at key sharing via ssss or libgfshare
+http://www.digital-scurf.org/software/libgfshare
+** TODO Speedbar setup for xmonad (automatic frame sizing)?
+** TODO Make autorefiling function for messages from Kelly
+** DONE Set all past email address in mu4e-user-mail-address-list
+CLOSED: [2013-02-18 Mon 22:21]
+- State "DONE"       from "TODO"       [2013-02-18 Mon 22:21]
+** DONE Set up gpg to not require passwords all the time
+CLOSED: [2013-02-18 Mon 22:25]
+- State "DONE"       from "TODO"       [2013-02-18 Mon 22:25]
+** DONE Check out message actions ('a' in header view)
+CLOSED: [2013-02-21 Thu 18:51]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 18:51]
+** DONE Change mu4e-view-show-addresses so I can see email addresses
+CLOSED: [2013-02-21 Thu 18:58]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 18:58]
+** DONE Set up multiple account information for smtpmail
+CLOSED: [2013-02-21 Thu 21:26]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 21:26]
+** DONE Set up bookmarks for oft used searches
+CLOSED: [2013-02-21 Thu 22:34]
+- State "DONE"       from "TODO"       [2013-02-21 Thu 22:34]
+** DONE Set up quick indexes to maildirs
+CLOSED: [2013-02-26 Tue 19:54]
+- State "DONE"       from "TODO"       [2013-02-26 Tue 19:54]
+** DONE Set up msmtp
+CLOSED: [2013-02-26 Tue 21:32]
+- State "DONE"       from "TODO"       [2013-02-26 Tue 21:32]
+** DONE Set up offlineimap to retrieve via mu4e
+CLOSED: [2015-05-23 Sat 20:38]
+** DONE Encrypt maildir via truecrypt
+CLOSED: [2015-05-23 Sat 20:38]
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Bitlmacs :noexport:
+CLOSED: [2018-09-13 Thu 17:21]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:21] \\
+  Not using bitlbee anymore
+:END:
+** TODO ERC Nicklist rewrite
+*** DONE Create filter function to load things like lists of privmsg buffers
+CLOSED: [2013-10-29 Tue 20:54]
+*** CANCELLED Use hl-mode for hilighting per line               :CANCELLED:
+CLOSED: [2013-10-29 Tue 20:54]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2013-10-29 Tue 20:54] \\
+  Just propertize by hand, hl-mode doesn't work well for multiple non-consecutive lines
+:END:
+*** TODO Remove cursor rendering
+*** TODO Rewrite menu/query function
+*** TODO Group handling?
+*** TODO Host fetch handling
+*** DONE Change nick/line faces based on status or privmsg
+CLOSED: [2013-10-29 Tue 20:55]
+*** DONE Make nicklist buffer show up in buffer list
+CLOSED: [2013-10-29 Tue 20:55]
+*** DONE Create command to clear erc-nicklist
+CLOSED: [2013-10-29 Tue 20:55]
+  [2012-03-30 Fri]
+
+** DONE Make keymap for last/next privmsg
+CLOSED: [2013-10-29 Tue 20:54]
+** DONE Make trigger to clear erc-nicklist status on access
+CLOSED: [2013-10-29 Tue 20:54]
+** TODO Gravatar image viewing?
+** TODO Make ido only list IMs?
+** TODO bitlmacs highlights IRC nicks when they talk in channels if they also have a privmsg open
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* TODO Make mu4e delete drafts after they are sent :noexport:
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:21
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: TODO
+:ARCHIVE_ITAGS: noexport
+:END:
+   [2013-07-05 Fri]
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Make mu4e delete drafts after they are sent :noexport:
+CLOSED: [2018-09-13 Thu 17:22]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:22
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:22] \\
+  Not using mu4e anymore
+:END:
+   [2013-07-05 Fri]
+
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Create named emacs instances, make them come up in correct xmonad desktops :noexport:
+CLOSED: [2018-09-13 Thu 17:22]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:22
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:22] \\
+  Now using exwm
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Make sauron only notify for twitter when mentions or PMs received. :noexport:
+CLOSED: [2018-09-13 Thu 17:22]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:22
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:22] \\
+  Unneeded
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Work on memacs :noexport:
+CLOSED: [2018-09-13 Thu 17:22]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:23
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:22] \\
+  Not building memacs anymore. Just don't care.
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Make fill columns for ERC auto-set for workgroup sizes? :noexport:
+CLOSED: [2018-09-13 Thu 17:23]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:23
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:23] \\
+  Not using erc or wg anymore
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* DONE Check out git-messenger :noexport:
+CLOSED: [2018-09-13 Thu 17:24]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:24
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: DONE
+:ARCHIVE_ITAGS: noexport
+:END:
+[2013-07-22 Mon]
+
+
+https://github.com/syohex/emacs-git-messenger
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Add ability to open transcribe project related to lilypond file :noexport:
+CLOSED: [2018-09-13 Thu 17:24]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:24
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:24] \\
+  Not using lilypond anymore
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Have org mode daily agenda show up on xmonad background (conky?) :noexport:
+CLOSED: [2018-09-13 Thu 17:24]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:25
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:24] \\
+  Now using exwm, can just keep agenda buffer open
+:END:
+
+Archived entries from file /home/qdot/.emacs_files/emacs_conf.org
+
+
+* CANCELLED Have bitlmacs fix network bonding for IMs on reconnect (just /query again) :noexport:
+CLOSED: [2018-09-13 Thu 17:25]
+:PROPERTIES:
+:ARCHIVE_TIME: 2018-09-13 Thu 17:25
+:ARCHIVE_FILE: ~/.emacs_files/emacs_conf.org
+:ARCHIVE_OLPATH: Tasks
+:ARCHIVE_CATEGORY: emacs_conf
+:ARCHIVE_TODO: CANCELLED
+:ARCHIVE_ITAGS: noexport
+:END:
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2018-09-13 Thu 17:25] \\
+  Not using bitlbee anymore
+CLOCK: [2013-11-06 Wed 13:59]--[2013-11-06 Wed 14:00] =>  0:01
+:END:
+[2013-11-06 Wed]
