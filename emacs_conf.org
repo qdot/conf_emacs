@@ -1913,18 +1913,15 @@ I use for music. I also make sure that I don't have to confirm
 evaluation on a few languages.
 
 #+BEGIN_SRC emacs-lisp
-  (require 'ob-lilypond)
   (org-babel-do-load-languages
     'org-babel-load-languages
     '((emacs-lisp . t)
       (shell . t)
       (org . t)
-      (C . t)
-      (lilypond . t)))
+      (C . t)))
 
   (defun qdot/org-confirm-babel-evaluate (lang body)
     (and (not (string= lang "emacs-lisp"))
-         (not (string= lang "lilypond"))
          (not (string= lang "sh"))
          (not (string= lang "shell"))
          (not (string= lang "ditaa"))))
@@ -2521,21 +2518,6 @@ Shows indentation guides when in code blocks
     :mode ("\\.json\\'" . json-mode))
 
 #+END_SRC
-*** lilypond-mode                                                 :package:
-:PROPERTIES:
-:ID:       31dae26c-f2ab-4cf3-bb4a-ca5df9a6d828
-:END:
-#+BEGIN_SRC emacs-lisp
-  (use-package lilypond-mode
-    :mode (("\\.ly\\'" . LilyPond-mode))
-    :config
-    (progn
-      ;; Having fancy-comments on seems to completely screw indentation of single %
-      ;; comments, which the mode uses for M-; comment blocks. Is fine to just be off.
-      (setq LilyPond-fancy-comments nil)))
-
-#+END_SRC
-
 *** lua                                                           :package:
 :PROPERTIES:
 :ID:       27312d07-4ae5-484f-9089-e938158c1a72
