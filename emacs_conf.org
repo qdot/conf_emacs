@@ -1152,18 +1152,6 @@ Modules I use:
                 org-jsinfo
                 org-protocol)))
 #+END_SRC
-
-next-spec-day allows you to add a PROPERTIES block that specifies the
-next scheduled day something should happen that may not be a proper
-numerical leap.
-
-Taken from https://raw.githubusercontent.com/chenfengyuan/elisp/master/next-spec-day.el.
-
-Currently stored in elisp directory locally.
-
-#+BEGIN_SRC emacs-lisp
-  (require 'org-next-spec-day)
-#+END_SRC
 **** Packages
 :PROPERTIES:
 :ID:       2a04a1bc-93df-4e2a-af2c-f10942506899
