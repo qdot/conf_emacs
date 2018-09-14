@@ -786,14 +786,6 @@ lot to lag it.
   (icomplete-mode 1)
   (custom-set-variables '(icomplete-compute-delay 0.1))
 #+END_SRC
-*** info+                                                         :package:
-:PROPERTIES:
-:ID:       a5a984ab-3598-47cf-91a2-785668a994ad
-:END:
-#+BEGIN_SRC emacs-lisp
-  (use-package info+
-      :ensure t)
-#+END_SRC
 *** ispell                                                        :package:
 :PROPERTIES:
 :ID:       5116cf0e-24a6-4dce-8ecb-677ab27b2bdb
