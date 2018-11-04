@@ -597,17 +597,6 @@ functions in the qdot-funcs module allows me to easily access
 configurations without having to search through the org file.
 
 ** Emacs Customization
-*** beacon                                                        :package:
-:PROPERTIES:
-:ID:       a2002ed5-8d9a-49b6-b708-135c6891b327
-:END:
-Highlight cursor/line when window scrolls or focus changes
-#+BEGIN_SRC emacs-lisp
-  (use-package beacon
-      :ensure t
-      :config
-      (beacon-mode 1))
-#+END_SRC
 *** browse-kill-ring                                              :package:
 :PROPERTIES:
 :ID:       ab8ede0f-6d07-4c40-b15d-f332451e2be3
