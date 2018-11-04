@@ -932,11 +932,9 @@ and content.
       (custom-theme-set-faces
        'smart-mode-line-dark
        '(mode-line     ((t :foreground "gray60" :background "#202020"))))
-      (add-to-list 'sml/replacer-regexp-list '("^/share/code/git-projects/" ":GP:"))
       (add-to-list 'sml/replacer-regexp-list '("^~/code/git-projects/" ":GP:"))
       (add-to-list 'sml/replacer-regexp-list '("^~/.emacs_files/" ":EF:"))
       (add-to-list 'sml/replacer-regexp-list '("^~/Dropbox/" ":DB:"))
-      (add-to-list 'sml/replacer-regexp-list '("^/share/code/mozbuild/" ":MOZ:"))
       (add-to-list 'sml/replacer-regexp-list '("^~/code/mozbuild/" ":MOZ:"))
       (setq sml/hidden-modes
             '(" yas"
@@ -2689,7 +2687,7 @@ Line numbers
       :ensure racer
       :config
       (setq racer-cmd "~/.cargo/bin/racer")
-      (setq racer-rust-src-path "/share/code/git-projects/rust/src/")
+      (setq racer-rust-src-path "~/code/git-projects/rust/src/")
       (add-hook 'rust-mode-hook #'racer-mode)
       (add-hook 'racer-mode-hook #'eldoc-mode)
       (add-hook 'racer-mode-hook #'company-mode)
@@ -3121,10 +3119,10 @@ gpg file auto query/loading
       :commands (qblog/new-blog-post)
       :load-path "~/.emacs_files/dev-packages/qblog"
       :init
-      (setq qblog/blog-base-dir (expand-file-name "/share/code/git-projects"))
+      (setq qblog/blog-base-dir (expand-file-name "~/code/git-projects"))
       (setq qblog/blog-post-dir "/content/posts/")
       (setq qblog/blog-list '("metafetish.com" "nonpolynomial.com" "openyou.org"))
-      (setq qblog/image-base-dir "/share/code/git-projects/metafetish.com/content/images")
+      (setq qblog/image-base-dir "~/code/git-projects/metafetish.com/content/images")
       (setq qblog/blog-file-extension ".markdown"))
 #+END_SRC
 *** qdot-funcs                                                    :package:
