@@ -1176,11 +1176,28 @@ Modules I use:
 :PROPERTIES:
 :ID:       2a04a1bc-93df-4e2a-af2c-f10942506899
 :END:
+
+Github Flavored Markdown backend for org exports
 #+BEGIN_SRC emacs-lisp
   (use-package ox-gfm
       :ensure t
       :after org)
 #+END_SRC
+
+Org Babel async shell (allows :async in sh code blocks)
+#+begin_src emacs-lisp
+  (use-package ob-async
+      :ensure t
+      :after org)
+#+end_src
+
+Replace all headline markers with unicode bullets
+#+begin_src emacs-lisp
+  (use-package org-bullets
+      :ensure t
+      :config
+      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+end_src
 **** Variables
 :PROPERTIES:
 :ID:       d2917f45-4633-4a17-a152-4cb411f18925
