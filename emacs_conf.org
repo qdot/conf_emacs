@@ -669,9 +669,9 @@ changing permissions via string/regexp replacement.
 
       ;; dired modifications
       (bind-keys :map dired-mode-map
-                 ("C-s" dired-isearch-filenames-regexp)
-                 ("C-M-s" dired-isearch-filenames)
-                 ("r" wdired-change-to-wdired-mode))
+                 ("C-s" . dired-isearch-filenames-regexp)
+                 ("C-M-s" . dired-isearch-filenames)
+                 ("r" . wdired-change-to-wdired-mode))
 
       ;; http://whattheemacsd.com//setup-dired.el-02.html
       (defun dired-back-to-top ()
