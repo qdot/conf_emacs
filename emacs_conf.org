@@ -1097,7 +1097,15 @@ Move between windows using shift-[arrow key].
       (when (fboundp 'windmove-default-keybindings)
         (windmove-default-keybindings))))
 #+END_SRC
-
+** Operations
+*** docker-mode                                                   :package:
+:PROPERTIES:
+:ID:       2c3f6fd2-ce23-4458-ae83-7c99b2e91e1c
+:END:
+#+begin_src emacs-lisp
+  (use-package docker
+      :ensure t)
+#+end_src
 ** Productivity
 *** org-mode                                                      :package:
 :PROPERTIES:
