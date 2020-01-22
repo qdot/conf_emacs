@@ -2305,7 +2305,7 @@ Compilation mode.
         ;;(setq ac-sources (append '(ac-source-yasnippet) ac-sources))
         (set-fill-column 79)
         (bind-key "M-q" 'python-fill-paragraph python-mode-map)
-        (setq eldoc-idle-delay 2.0)
+        (setq eldoc-idle-delay 1.0)
         (setq flymake-no-changes-timeout 0.5)
         (elpy-enable)
         (setq elpy-rpc-backend "jedi")
@@ -2333,7 +2333,7 @@ Compilation mode.
                     (delete-file (concat buffer-file-name "c"))))))
 
   ;; eldoc mode for showing function calls in mode line
-  (setq eldoc-idle-delay 0)
+  (setq eldoc-idle-delay 0.5)
   (autoload 'turn-on-eldoc-mode "eldoc" nil t)
   (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
   (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
