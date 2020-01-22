@@ -2356,6 +2356,30 @@ Compilation mode.
   (define-key 'help-command (kbd "C-k") 'find-function-on-key)
   (define-key 'help-command (kbd "C-v") 'find-variable)
 #+END_SRC
+*** lsp-mode                                                      :package:
+:PROPERTIES:
+:ID:       ffa32f27-adf0-46d9-9bf0-b47fb6364929
+:END:
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+      :ensure t)
+#+end_src
+*** lsp-ui                                                        :package:
+:PROPERTIES:
+:ID:       c0a24b20-938d-4334-aa33-a02a592ca82d
+:END:
+#+begin_src emacs-lisp
+  (use-package lsp-ui
+      :ensure t)
+#+end_src
+*** lsp-treemacs                                                  :package:
+:PROPERTIES:
+:ID:       32070190-a0dc-43e6-8b7f-74396c6bbbfe
+:END:
+#+begin_src emacs-lisp
+  (use-package lsp-treemacs
+      :ensure t)
+#+end_src
 *** flycheck                                                      :package:
 :PROPERTIES:
 :ID:       be9fa82d-b857-477b-a0d1-6101f1948876
