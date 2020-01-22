@@ -2786,6 +2786,15 @@ Line numbers
       ;; Don't want this on for IRC
       (add-hook 'erc-mode 'qdot/projectile-off))
 #+END_SRC
+*** protobuf-mode                                                 :package:
+:PROPERTIES:
+:ID:       2c1bedb5-6ba7-484b-967a-2f9a9416c7ff
+:END:
+#+BEGIN_SRC emacs-lisp
+  (use-package protobuf-mode
+      :ensure t
+      :mode (("\\.proto\\'" . protobuf-mode)))
+#+END_SRC
 *** pug-mode                                                      :package:
 :PROPERTIES:
 :ID:       e89b6ddd-8a0e-4e92-8b35-97e030df2e9f
