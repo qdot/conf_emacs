@@ -1581,8 +1581,13 @@ Always hilight the current agenda line.
   (add-hook 'org-agenda-mode-hook
             '(lambda () (hl-line-mode 1))
             'append)
-
 #+END_SRC
+
+Use visual-line mode.
+
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'visual-line-mode)
+#+end_src
 
 **** Clocking
 :PROPERTIES:
