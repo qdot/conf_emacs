@@ -2754,7 +2754,8 @@ Always show where whitespace is off.
 Highlight matching paren/bracket/etc pairs.
 
 #+BEGIN_SRC emacs-lisp
-  (add-hook 'prog-mode-hook 'show-smartparens-mode)
+  (eval-after-load 'smartparens-mode
+    (add-hook 'prog-mode-hook 'show-smartparens-mode))
 #+END_SRC
 
 Line numbers
