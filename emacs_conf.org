@@ -2288,6 +2288,14 @@ Compilation mode.
       :ensure t
       :interpreter ("python" . python-mode)
       :init
+      (if (file-exists-p "/usr/bin/python3")
+          (setq python-shell-interpreter "/usr/bin/python3"
+                python-shell-interpreter-args "-i"
+                  elpy-rpc-python-command "/usr/bin/python3"))
+      (if (file-exists-p "/opt/homebrew/bin/python3")
+          (setq python-shell-interpreter "/opt/homebrew/bin/python3"
+                python-shell-interpreter-args "-i"
+                elpy-rpc-python-command "/opt/homebrew/bin/python3"))
       (defun qdot/python-mode-hook()
         (setq tab-width 4)
         (setq py-indent-offset 4)
