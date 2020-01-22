@@ -795,7 +795,7 @@ Incremental minibuffer completion. Update per character, as it takes a
 lot to lag it.
 #+BEGIN_SRC emacs-lisp :tangle no
   (icomplete-mode 1)
-  (custom-set-variables '(icomplete-compute-delay 0.1))
+  (custom-set-variables '(icomplete-compute-delay 0.2))
 #+END_SRC
 *** ispell                                                        :package:
 :PROPERTIES:
