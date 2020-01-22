@@ -234,7 +234,8 @@ If emacs is coming up as a window manager, exwm will be loaded.
 Otherwise, the load will just throw silently and we'll continue on.
 #+BEGIN_SRC emacs-lisp
   (use-package exwm
-      :ensure t)
+      :ensure t
+      :disabled (not linux-p))
 #+END_SRC
 ** Load org configuration file
 :PROPERTIES:
