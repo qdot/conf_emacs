@@ -690,6 +690,14 @@ changing permissions via string/regexp replacement.
       (define-key dired-mode-map
         (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)))
 #+END_SRC
+*** edit-indirect                                                 :package:
+:PROPERTIES:
+:ID:       303c8e2d-155c-4aa5-9669-01a65ea2a5c7
+:END:
+#+begin_src emacs-lisp
+  (use-package edit-indirect
+      :ensure t)
+#+end_src
 *** exec-path-from-shell                                          :package:
 :PROPERTIES:
 :ID:       ebfa1dc5-d67d-4cda-8533-eace92ddfc92
