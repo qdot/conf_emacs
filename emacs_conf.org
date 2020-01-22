@@ -622,18 +622,17 @@ See and update/select kill ring history.
     :ensure browse-kill-ring
     :commands browse-kill-ring)
 #+END_SRC
-*** color-theme                                                   :package:
+*** color-theme-modern                                            :package:
 :PROPERTIES:
 :ID:       7c99ab9c-17b5-410e-a715-57c75629ba40
 :END:
 I tend to use dark themes everywhere, be it laptop or desktop.
 #+BEGIN_SRC emacs-lisp
-  (use-package color-theme
-    :ensure color-theme
-    :config
-    (progn
-      (color-theme-initialize)
-      (color-theme-dark-laptop)))
+  (use-package color-theme-modern
+      :ensure color-theme-modern
+      :config
+      (load-theme 'dark-laptop t t)
+      (enable-theme 'dark-laptop))
 #+END_SRC
 
 *** counsel                                                       :package:
