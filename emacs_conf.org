@@ -2398,7 +2398,13 @@ Using flycheck instead of flymake
     :ensure t
     :commands flycheck-mode
     :config
-    (global-flycheck-mode))
+    (global-flycheck-mode)
+    ;; Set Python3 executables for flycheck
+    (custom-set-variables
+     '(flycheck-python-flake8-executable "python3")
+     '(flycheck-python-pycompile-executable "python3")
+     '(flycheck-python-mypy-executable "python3")
+     '(flycheck-python-pylint-executable "python3")))
 #+END_SRC
 *** flycheck-inline                                               :package:
 :PROPERTIES:
