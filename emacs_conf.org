@@ -2051,6 +2051,25 @@ http://endlessparentheses.com/ispell-and-org-mode.html
              (set-buffer-modified-p modifiedp)))
          "-noexport" 'region-start-level))))
 #+END_SRC
+**** Add capf to org-mode
+:PROPERTIES:
+:ID:       833ae2a8-c3c3-4002-aace-946389199a79
+:END:
+#+BEGIN_SRC elisp
+  (defun add-pcomplete-to-capf ()
+    (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
+
+  (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
+#+END_SRC
+**** fix easy templates
+:PROPERTIES:
+:ID:       ecd18a94-6273-400f-b80e-b93ff51ec971
+:END:
+Easy templates were removed from defaults in Org 9.
+#+begin_src emacs-lisp
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+#+end_src
 **** Provide Statement
 :PROPERTIES:
 :ID:       f725dca4-48e8-4839-a9d7-a0660262ca9d
