@@ -469,6 +469,7 @@ Transparently open compressed files.
 Save a list of recent files visited.
 
 #+BEGIN_SRC emacs-lisp
+  (setq recentf-auto-cleanup 'never)
   (recentf-mode 1)
 #+END_SRC
 
