@@ -12,8 +12,6 @@
 :PROPERTIES:
 :EXPORT_FILE_NAME: ./build/Documentation
 :END:
-** Introduction
-If you ever needed proof that I'm OCD, here you go.
 ** Handling Multiple Configuration Blocks
 Some of the packages I use require a LOT of initialization. mu4e,
 org-mode, and erc all contain small novels worth of config. In order
