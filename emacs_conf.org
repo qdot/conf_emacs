@@ -2636,7 +2636,7 @@ Shows indentation guides when in code blocks
 git management in emacs. 
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-      :ensure magit
+      :ensure t
       :bind (("M-g s" . magit-status))
       :chords (("qg" . magit-status))
       :commands (magit magit-status)
