@@ -2258,6 +2258,15 @@ Compilation mode.
       :mode (("\\.cs$" . csharp-mode)))
 
 #+END_SRC
+*** dockerfile-mode                                               :package:
+:PROPERTIES:
+:ID:       94722701-20d5-449f-ae62-33cba7ef8bb3
+:END:
+#+begin_src emacs-lisp
+  (use-package dockerfile-mode
+      :ensure t
+      :mode (("Dockerfile\\'" . dockerfile-mode)))
+#+end_src
 *** edebug-x                                                      :package:
 :PROPERTIES:
 :ID:       3433d9a2-9b91-4534-b596-ae926b2cf355
