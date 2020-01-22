@@ -1157,9 +1157,12 @@ Modules I use:
   (require 'org-mobile)
   (require 'org-habit)
   (require 'org-bh)
+  ;; Easy templates were removed from defaults in Org 9.
+  (require 'org-tempo)
 
   (setq org-modules
         (quote (org-bbdb
+                org-tempo
                 org-bibtex
                 org-crypt
                 org-docview
