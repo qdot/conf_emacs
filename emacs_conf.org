@@ -498,18 +498,29 @@ If we want to delete something, mark+write should be fine.
 Use fonts we either know we have, or can check for.
 
 #+BEGIN_SRC emacs-lisp
-  (when (member "Inconsolata" (font-family-list))
-    (set-face-font 'default "inconsolata-11")
-    (set-face-font 'mode-line "inconsolata-10")
-    (set-face-font 'mode-line-inactive "inconsolata-10")
-    (set-face-font 'mode-line-buffer-id "inconsolata-10")
-    (set-face-font 'header-line "inconsolata-10"))
-  (when (member "Consolas" (font-family-list))
-    (set-face-font 'default "consolas-11")
-    (set-face-font 'mode-line "consolas-10")
-    (set-face-font 'mode-line-inactive "consolas-10")
-    (set-face-font 'mode-line-buffer-id "consolas-10")
-    (set-face-font 'header-line "consolas-10"))
+  (when (window-system)
+    (cond ((member "Fira Code" (font-family-list))
+           (progn
+             (set-face-font 'default "Fira Code-10")
+             (set-face-font 'mode-line "Fira Code-9")
+             (set-face-font 'mode-line-inactive "Fira Code-9")
+             (set-face-font 'mode-line-buffer-id "Fira Code-9")
+             (set-face-font 'header-line "Fira Code-9")))
+          ((member "Inconsolata" (font-family-list))
+           (progn
+             (set-face-font 'default "inconsolata-11")
+             (set-face-font 'mode-line "inconsolata-10")
+             (set-face-font 'mode-line-inactive "inconsolata-10")
+             (set-face-font 'mode-line-buffer-id "inconsolata-10")
+             (set-face-font 'header-line "inconsolata-10")))
+          ((member "Consolas" (font-family-list))
+           (progn
+             (set-face-font 'default "consolas-11")
+             (set-face-font 'mode-line "consolas-10")
+             (set-face-font 'mode-line-inactive "consolas-10")
+             (set-face-font 'mode-line-buffer-id "consolas-10")
+             (set-face-font 'header-line "consolas-10")))))
+
 #+END_SRC
 
 Set up modeline and display variables. Removes all bars, be they scroll or menu, adds date/time to modeline, etc.
