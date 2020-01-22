@@ -2380,6 +2380,14 @@ Compilation mode.
   (use-package lsp-treemacs
       :ensure t)
 #+end_src
+*** fish-mode                                                     :package:
+:PROPERTIES:
+:ID:       d32f1def-684e-459f-9762-484f7397bfb8
+:END:
+#+begin_src emacs-lisp
+  (use-package fish-mode
+      :ensure t)
+#+end_src
 *** flycheck                                                      :package:
 :PROPERTIES:
 :ID:       be9fa82d-b857-477b-a0d1-6101f1948876
