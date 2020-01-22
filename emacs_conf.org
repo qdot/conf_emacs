@@ -290,10 +290,14 @@ Set up some simple platform finding variables
     "True if using Linux, nil otherwise")
 #+END_SRC
 
-Don't need startup screens
+Don't need startup screens. Use both the regular and byte-compiled
+versions of inhibit-startup-echo-area-message.
 
 #+BEGIN_SRC emacs-lisp
   (setq inhibit-startup-message t)
+  ;; Leave both of these, they're needed for either regular or bytecode bringup.
+  (setq inhibit-startup-echo-area-message "qdot")
+  (eval '(setq inhibit-startup-echo-area-message "qdot"))
   (setq inhibit-splash-screen t)
 #+END_SRC
 
